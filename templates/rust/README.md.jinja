@@ -1,0 +1,28 @@
+# {{ project_name }}
+
+{{ description or 'Projeto criado com o devenv.' }}
+
+## Começar
+
+Com o [devenv](https://github.com/datanerdguy/devenv) (Nix e direnv), basta entrar na pasta: o direnv carrega o
+rustup, o cargo-nextest e o resto do `flake.nix`. Na primeira compilação o rustup baixa o Rust da versão do
+`rust-toolchain.toml`. Sem o direnv: `nix develop`.
+
+## Comandos
+
+| Comando | O que faz |
+| --- | --- |
+{%- if kind == 'bin' %}
+| `just dev --name Lucas` | roda o programa |
+| `just build` | compila otimizado |
+{%- endif %}
+| `just test` | testes (nextest) e exemplos da documentação |
+| `just fmt` | formata (rustfmt) |
+| `just ci` | tudo que o CI roda: rustfmt, clippy e testes |
+
+Dependências: `cargo add pacote`. O `Cargo.lock` vai para o git.
+
+## Commits
+
+[Conventional Commits](https://www.conventionalcommits.org/pt-br/): `cz commit` guia, e o hook do git confere
+(lefthook). `cz bump` sobe a versão no `Cargo.toml` e atualiza o CHANGELOG.

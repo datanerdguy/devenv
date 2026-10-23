@@ -1,0 +1,23 @@
+//! A lógica do programa, separada do `main.rs` para ser testada.
+
+/// Devolve uma saudação para `name` (ou para o mundo, se vazio).
+///
+/// ```
+/// assert_eq!({{ project_name | replace('-', '_') }}::hello("Lucas"), "Olá, Lucas!");
+/// ```
+#[must_use]
+pub fn hello(name: &str) -> String {
+    let name = name.trim();
+    let name = if name.is_empty() { "mundo" } else { name };
+    format!("Olá, {name}!")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::hello;
+
+    #[test]
+    fn empty_name_greets_the_world() {
+        assert_eq!(hello("  "), "Olá, mundo!");
+    }
+}

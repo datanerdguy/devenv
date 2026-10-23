@@ -14,6 +14,8 @@ new python meu-site fastapi-htmx    # linguagem, pasta e tipo
 new python minha-lib                # pergunta o tipo e o resto
 new python dados data --defaults    # sem perguntas, tudo no padrão
 new python api api -d postgres=true # responde uma pergunta direto
+new go meu-servico service
+new rust minha-ferramenta bin
 cd meu-site && just
 ```
 
@@ -52,6 +54,36 @@ pytest, código em `src/<pacote>/`.
   O CI do projeto também gera a imagem.
 - **Segredos**: no `.envrc.local` (fora do git), por exemplo `export OPENAI_API_KEY="$(rbw get openai)"`.
 
+## Go
+
+O Nix traz o Go, o gopls e o golangci-lint. Só a biblioteca padrão, sem frameworks: o programa fica em
+`cmd/<projeto>/`, o resto em `internal/`. O módulo é `github.com/<seu usuário>/<projeto>` (o `new` pega o usuário
+do `git config github.user` ou do `gh`).
+
+| Tipo | Para quê | Stack | Perguntas extras |
+| --- | --- | --- | --- |
+| `cli` | linha de comando | `flag` | |
+| `service` | serviço HTTP (API JSON) | `net/http` (rotas com método), `log/slog`, parada com calma no SIGTERM | Docker |
+| `htmx` | site com HTML do servidor | `html/template` e htmx, tudo embutido no binário (`embed`) | Docker |
+
+- **Lint**: golangci-lint v2 com os linters padrão e mais alguns que pegam bugs (gosec, errorlint, bodyclose,
+  gocritic); formatação com gofumpt e goimports (`just fmt`).
+- **Testes**: `go test -race`, em tabela, com `httptest` nos tipos web.
+- **Docker**: binário estático numa imagem distroless, sem shell e sem root.
+
+## Rust
+
+O Nix traz o rustup e o cargo-nextest; o rustup instala o Rust da versão do `rust-toolchain.toml` (estável, com
+rustfmt e clippy) na primeira compilação.
+
+| Tipo | Para quê | Stack |
+| --- | --- | --- |
+| `bin` | programa de linha de comando | clap (argumentos), anyhow (erros); a lógica em `src/lib.rs` |
+| `lib` | biblioteca (crate publicável) | só a biblioteca padrão |
+
+- **Lint**: rustfmt e clippy com os avisos como erro; `unsafe` proibido no `Cargo.toml`.
+- **Testes**: nextest (unidade e integração em `tests/`) e os exemplos da documentação (`cargo test --doc`).
+
 ## No projeto
 
 | Comando | O que faz |
@@ -63,8 +95,9 @@ pytest, código em `src/<pacote>/`.
 | `just template-update` | traz as mudanças do modelo do devenv (veja abaixo) |
 | `cz commit` | commit guiado no padrão Conventional Commits (o hook confere a mensagem) |
 
-O GitHub Actions do projeto não usa o Nix: instala o uv e o just e roda `just ci`, que é mais rápido.
-O Dependabot abre um PR por semana com as dependências novas (uv, actions e a imagem Docker).
+O GitHub Actions do projeto não usa o Nix, que é mais lento para instalar: no Python instala o uv e o just, no Go
+o Go e o golangci-lint, no Rust o Rust e o nextest, e roda os mesmos comandos. O Dependabot abre um PR por semana
+com as dependências novas (pacotes, actions e a imagem Docker).
 
 ## Atualizar a partir do modelo
 
@@ -81,7 +114,7 @@ limpa, para revisar com `git diff`.
 - Nomes com condição entram só quando ela vale: `{% if docker %}Dockerfile{% endif %}.jinja`. Cada tipo do Python
   tem as suas pastas `src` e `tests`, com nomes como `{% if kind == 'api' %}src{% endif %}`.
 - O que é igual em toda linguagem fica em [`templates/common/`](../templates/common/) e entra por link simbólico:
-  `.envrc`, `.editorconfig`, licença, `.cz.toml` e o htmx.
+  `flake.nix`, `.envrc`, `.editorconfig`, licença, `.cz.toml` e o htmx.
 
 ## Mudar ou adicionar um modelo
 
@@ -95,4 +128,4 @@ dependências no `pyproject.toml.jinja`. Para uma linguagem nova: some em `lang`
 
 ## Próximos
 
-Go (cli, service, htmx), Rust (bin, lib) e Phoenix entram nos próximos PRs.
+Phoenix entra no próximo PR.

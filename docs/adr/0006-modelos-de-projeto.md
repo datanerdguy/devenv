@@ -19,9 +19,11 @@ Opções avaliadas em detalhe: [documento da fase 7](https://claude.ai/artifact/
 - **Ambiente**: `flake.nix` com um devShell só de ferramentas, carregado pelo direnv (nix-direnv, com cache).
 - **Python**: o uv cuida do Python e das bibliotecas (o Nix não empacota bibliotecas Python); ruff, basedpyright e
   pytest. Oito tipos: lib, api, llm, data, ml, fastapi-htmx, django e streamlit.
-- **Web**: htmx com HTML do servidor (FastAPI + Jinja, Django), Streamlit para apps de dados; Phoenix e Go + htmx
-  nos próximos PRs. O htmx vem no projeto, sem CDN.
-- **Mesmo `just ci`** na máquina, no CI do projeto (GitHub Actions com uv, sem Nix) e no CI do devenv, que gera
+- **Go** (cli, service, htmx) só com a biblioteca padrão e golangci-lint; **Rust** (bin, lib) com rustup
+  (`rust-toolchain.toml`), clippy e nextest.
+- **Web**: htmx com HTML do servidor (FastAPI + Jinja, Django, Go `html/template`), Streamlit para apps de dados;
+  Phoenix no próximo PR. O htmx vem no projeto, sem CDN.
+- **Mesmo `just ci`** na máquina, no CI do projeto (GitHub Actions sem Nix) e no CI do devenv, que gera
   cada tipo com o `new` e roda esse comando (`tests/templates.sh`).
 - **Hooks com lefthook** (ruff no pre-commit, commitizen na mensagem).
 

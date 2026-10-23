@@ -10,6 +10,7 @@ if [ ${#cases[@]} -eq 0 ]; then
   cases=(
     python:lib python:api python:api:postgres python:llm python:data python:ml
     python:fastapi-htmx python:django python:streamlit
+    go:cli go:service go:htmx rust:bin rust:lib
   )
 fi
 

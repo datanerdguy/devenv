@@ -1,0 +1,5 @@
+# Versão do Rust do projeto: o rustup instala sozinho na primeira vez. Troque `stable` por uma versão
+# fixa (ex.: "1.90") se precisar de builds idênticos.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]

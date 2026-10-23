@@ -13,6 +13,8 @@ lang:
   help: Linguagem
   choices:
     Python (ML, LLM, dados, web): python
+    Go (CLI, serviço, web com htmx): go
+    Rust (binário, biblioteca): rust
 
 python_kind:
   type: str
@@ -29,10 +31,29 @@ python_kind:
     "django: site com Django e htmx": django
     "streamlit: app de dados com Streamlit": streamlit
 
+go_kind:
+  type: str
+  help: Tipo de projeto Go
+  when: "{{ lang == 'go' }}"
+  default: cli
+  choices:
+    "cli: linha de comando": cli
+    "service: serviço HTTP (API JSON)": service
+    "htmx: site com html/template e htmx": htmx
+
+rust_kind:
+  type: str
+  help: Tipo de projeto Rust
+  when: "{{ lang == 'rust' }}"
+  default: bin
+  choices:
+    "bin: programa (linha de comando)": bin
+    "lib: biblioteca (crate publicável)": lib
+
 kind:
   type: str
   when: false
-  default: "{{ python_kind if lang == 'python' else '' }}"
+  default: "{{ {'python': python_kind, 'go': go_kind, 'rust': rust_kind}[lang] }}"
 
 project_name:
   type: str
@@ -53,6 +74,18 @@ description:
   type: str
   help: Descrição em uma linha
   default: ""
+
+github_user:
+  type: str
+  help: Seu usuário no GitHub (para o caminho do módulo Go)
+  when: "{{ lang == 'go' }}"
+  default: ""
+
+go_module:
+  type: str
+  help: Caminho do módulo Go
+  when: "{{ lang == 'go' }}"
+  default: "{{ 'github.com/' ~ github_user ~ '/' ~ project_name if github_user else project_name }}"
 
 author_name:
   type: str
@@ -79,6 +112,12 @@ python_version:
   when: "{{ lang == 'python' }}"
   default: "3.13"
 
+go_version:
+  type: str
+  help: Versão do Go
+  when: "{{ lang == 'go' }}"
+  default: "1.26"
+
 gpu:
   type: bool
   help: Usar GPU NVIDIA (PyTorch com CUDA)?
@@ -94,5 +133,7 @@ postgres:
 docker:
   type: bool
   help: Dockerfile para o deploy?
-  when: "{{ lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django', 'streamlit'] }}"
+  when: >-
+    {{ (lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django', 'streamlit'])
+    or (lang == 'go' and go_kind in ['service', 'htmx']) }}
   default: true

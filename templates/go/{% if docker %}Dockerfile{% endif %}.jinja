@@ -1,0 +1,14 @@
+# Imagem para o deploy: binário estático numa imagem distroless, sem shell e sem root.
+# Gere com `just docker`.
+FROM golang:{{ go_version }} AS build
+WORKDIR /src
+COPY go.* ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/app ./cmd/{{ project_name }}
+
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=build /out/app /app
+ENV ADDR=:8080
+EXPOSE 8080
+ENTRYPOINT ["/app"]

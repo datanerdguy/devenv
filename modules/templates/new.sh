@@ -12,6 +12,8 @@ uso: new <linguagem> <pasta> [tipo] [opções do copier]
 
 linguagens e tipos:
   python  lib api llm data ml fastapi-htmx django streamlit
+  go      cli service htmx
+  rust    bin lib
 
 O projeto sai pronto: git com o primeiro commit, flake.lock com o mesmo nixpkgs do devenv,
 dependências travadas e hooks instalados. Depois: cd <pasta> e `just`.
@@ -51,6 +53,11 @@ author_name="$(git config user.name || true)"
 author_email="$(git config user.email || true)"
 [ -n "${author_name}" ] && args+=(--data "author_name=${author_name}")
 [ -n "${author_email}" ] && args+=(--data "author_email=${author_email}")
+if [ "${lang}" = go ]; then
+  # Para o caminho do módulo (github.com/<usuário>/<projeto>).
+  github_user="$(git config github.user || gh api user --jq .login 2>/dev/null || true)"
+  [ -n "${github_user}" ] && args+=(--data "github_user=${github_user}")
+fi
 
 copier "${args[@]}" "$@" "${repo}" "${dest}"
 cd "${dest}" || exit 1
@@ -65,6 +72,8 @@ git add --all # o Nix só enxerga os arquivos que estão no git
 echo "new: travando as dependências..."
 case "${lang}" in
   python) nix develop --command uv lock --quiet ;;
+  go) nix develop --command go mod tidy ;;
+  rust) nix develop --command cargo generate-lockfile --quiet ;;
 esac
 nix develop --command lefthook install >/dev/null
 

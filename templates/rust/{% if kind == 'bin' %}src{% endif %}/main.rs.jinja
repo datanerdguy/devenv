@@ -1,0 +1,19 @@
+//! {{ project_name }}{% if description %}: {{ description }}{% endif %}.
+
+use anyhow::Result;
+use clap::Parser;
+
+/// Os argumentos da linha de comando (`--help` mostra todos).
+#[derive(Parser)]
+#[command(version, about)]
+struct Args {
+    /// Quem cumprimentar
+    #[arg(short, long, default_value = "mundo")]
+    name: String,
+}
+
+fn main() -> Result<()> {
+    let args = Args::parse();
+    println!("{}", {{ project_name | replace('-', '_') }}::hello(&args.name));
+    Ok(())
+}

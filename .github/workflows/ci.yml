@@ -78,6 +78,11 @@ jobs:
           - python:fastapi-htmx
           - python:django
           - python:streamlit
+          - go:cli
+          - go:service
+          - go:htmx
+          - rust:bin
+          - rust:lib
     steps:
       - uses: actions/checkout@v4
         with:
