@@ -71,8 +71,9 @@ esperando. Um PR só de documentação roda só o `lint`.
 | `system` | Pacotes de sistema de cada distro (`system/<distro>.sh`) em Fedora, Ubuntu 24.04 e 26.04 | `system/`, `tests/system.sh` |
 | `template` | Gera cada modelo com o `new` e roda o `just ci` dele e o `docker build` (`tests/templates.sh`) | `templates/`, `copier.yml`, `modules/templates/`, `flake.lock` |
 
-Mudar o próprio `ci.yml` roda tudo. Cada job tem tempo máximo, e o Nix desiste em 5 s de um cache que não
-responde (e compila no lugar), para um serviço fora do ar não travar o CI.
+Mudar o próprio `ci.yml` roda tudo. Cada job tem tempo máximo. O `build` para em 15 min: com os caches no ar
+ele leva uns 3; passar disso quase sempre é o cache da numtide fora do ar e o Codex sendo compilado do zero
+(mais de 20 min). Nesse caso, rode o job de novo.
 
 `tests/smoke.sh` confere que os programas existem, que fish e starship iniciam, e que as configs de git, Ghostty, starship e direnv foram geradas. Para rodar localmente: `just test-container fedora:latest`.
 
