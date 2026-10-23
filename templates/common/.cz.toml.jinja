@@ -1,0 +1,13 @@
+# Commits no padrão Conventional Commits (commitizen): `cz commit` guia, o hook confere.
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+update_changelog_on_bump = true
+{%- if lang == 'python' %}
+version_provider = "pep621"
+{%- elif lang == 'rust' %}
+version_provider = "cargo"
+{%- else %}
+version_provider = "scm"
+version = "0.1.0"
+{%- endif %}

@@ -1,0 +1,23 @@
+# golangci-lint v2: `just lint` e `just fmt`. Linters: os padrão + alguns que pegam bugs comuns.
+version: "2"
+
+linters:
+  enable:
+    - bodyclose
+    - errorlint
+    - gocritic
+    - gosec
+    - nolintlint
+    - unconvert
+    - usestdlibvars
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      module-path: {{ go_module }}
+    goimports:
+      local-prefixes:
+        - {{ go_module }}

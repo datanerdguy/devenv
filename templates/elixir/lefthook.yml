@@ -1,0 +1,12 @@
+# Git hooks (lefthook). O `new` já instala; num clone novo rode `lefthook install`.
+pre-commit:
+  jobs:
+    - name: mix format
+      glob: "*.{ex,exs,heex}"
+      run: mix format {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitizen
+      run: cz check --allow-abort --commit-msg-file {1}

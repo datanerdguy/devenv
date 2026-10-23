@@ -1,0 +1,21 @@
+from pathlib import Path
+
+from streamlit.testing.v1 import AppTest
+
+import {{ package }}
+from {{ package }}.data import mean, sample
+
+APP = Path({{ package }}.__file__).parent / "app.py"
+
+
+def test_sample() -> None:
+    df = sample(4)
+    assert df.height == 4
+    assert abs(mean(df, "y")) < 1e-9
+
+
+def test_app_runs() -> None:
+    at = AppTest.from_file(str(APP)).run()
+    assert not at.exception
+    at.slider(key="rows").set_value(50).run()
+    assert at.metric[1].value == "50"

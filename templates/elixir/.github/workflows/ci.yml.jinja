@@ -1,0 +1,52 @@
+# CI: o mesmo `just ci` que você roda na sua máquina (formatação, compilação sem avisos e testes).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+{%- if postgres %}
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+{%- endif %}
+    env:
+      MIX_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "{{ otp_version }}"
+          elixir-version: "{{ elixir_version }}"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: {% raw %}mix-${{ runner.os }}-${{ hashFiles('mix.lock') }}{% endraw %}
+      - uses: extractions/setup-just@v3
+      - name: Dependências
+        run: mix deps.get
+      - name: Lint e testes
+        run: just ci
+{%- if docker %}
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gera a imagem
+        run: docker build -t {{ project_name }} .
+{%- endif %}

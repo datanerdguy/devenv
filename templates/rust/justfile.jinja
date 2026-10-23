@@ -1,0 +1,35 @@
+# Atalhos do projeto. Rode `just` para ver a lista.
+
+default:
+    @just --list
+{%- if kind == 'bin' %}
+
+# Roda o programa (ex.: just dev --name Lucas)
+dev *args:
+    cargo run -- {{ '{{' }} args {{ '}}' }}
+
+# Compila otimizado (target/release/{{ project_name }})
+build:
+    cargo build --release
+{%- endif %}
+
+# Formata (rustfmt)
+fmt:
+    cargo fmt
+
+# Formatação e clippy, com os avisos virando erro (o mesmo que o CI)
+lint:
+    cargo fmt --check
+    cargo clippy --all-targets --all-features -- -D warnings
+
+# Testes (nextest) e os exemplos da documentação (ex.: just test nome)
+test *args:
+    cargo nextest run {{ '{{' }} args {{ '}}' }}
+    cargo test --doc
+
+# Tudo que o CI roda
+ci: lint test
+
+# Traz as mudanças do modelo do devenv para este projeto
+template-update:
+    copier update --trust --skip-answered --vcs-ref HEAD

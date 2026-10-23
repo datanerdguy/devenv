@@ -1,0 +1,45 @@
+# Atalhos do projeto. Rode `just` para ver a lista.
+
+default:
+    @just --list
+
+{%- if kind == 'cli' %}
+
+# Roda o programa (ex.: just dev -name Lucas)
+dev *args:
+    go run ./cmd/{{ project_name }} {{ '{{' }} args {{ '}}' }}
+{%- else %}
+
+# Sobe o servidor (http://localhost:8080)
+dev:
+    go run ./cmd/{{ project_name }}
+{%- endif %}
+
+# Compila para bin/
+build:
+    go build -trimpath -o bin/{{ project_name }} ./cmd/{{ project_name }}
+
+# Formata (gofumpt e goimports)
+fmt:
+    golangci-lint fmt
+
+# Lint (o mesmo que o CI)
+lint:
+    golangci-lint run
+
+# Testes, com o detector de corrida (ex.: just test -run Nome)
+test *args:
+    go test -race ./... {{ '{{' }} args {{ '}}' }}
+
+# Tudo que o CI roda
+ci: lint test
+{%- if docker %}
+
+# Gera a imagem Docker
+docker:
+    docker build -t {{ project_name }} .
+{%- endif %}
+
+# Traz as mudanças do modelo do devenv para este projeto
+template-update:
+    copier update --trust --skip-answered --vcs-ref HEAD

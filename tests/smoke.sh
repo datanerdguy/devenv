@@ -74,6 +74,10 @@ for bin in kanata Vial wl-copy; do
   check "binário ${bin}" command -v "${bin}"
 done
 
+# Modelos de projeto: o `new` (a geração de cada modelo é testada no CI, em tests/templates.sh).
+check "comando new" new --help
+check "copier para o template-update" command -v copier
+
 # Temas: o switch aplica o padrão, e o `theme` troca e volta.
 check "comando theme" command -v theme
 check "tema atual aplicado" test -f "${HOME}/.local/state/devenv/theme/current/ghostty"

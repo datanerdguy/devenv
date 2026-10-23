@@ -1,0 +1,33 @@
+# CI: o mesmo `just ci` que você roda na sua máquina (formatação, lint, tipos e testes).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - uses: extractions/setup-just@v3
+      - name: Dependências (falha se o uv.lock estiver desatualizado)
+        run: uv sync --locked
+      - name: Lint, tipos e testes
+        run: just ci
+{%- if docker %}
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gera a imagem
+        run: docker build -t {{ project_name }} .
+{%- endif %}

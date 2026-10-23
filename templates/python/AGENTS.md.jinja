@@ -1,0 +1,40 @@
+# {{ project_name }}
+
+Instruções para agentes de código (Claude Code, Codex, Gemini, opencode). Complementam o AGENTS.md global.
+
+## Stack
+
+- Python {{ python_version }}, gerenciado pelo uv (`pyproject.toml`, `uv.lock`). Código em `src/{{ package }}/`, testes em `tests/`.
+{%- if kind == 'api' %}
+- API com FastAPI (`src/{{ package }}/main.py`); configuração por variáveis de ambiente com pydantic-settings.
+{%- elif kind == 'fastapi-htmx' %}
+- Site com FastAPI, templates Jinja (`src/{{ package }}/templates/`) e htmx (`static/htmx.min.js`, sem CDN).
+  As rotas que o htmx chama devolvem pedaços de HTML (templates que começam com `_`), não JSON.
+{%- elif kind == 'django' %}
+- Site com Django e htmx (django-htmx). Configuração em `src/{{ package }}/settings.py`, por variáveis de ambiente.
+  As views que o htmx chama devolvem pedaços de HTML (templates que começam com `_`).
+{%- elif kind == 'streamlit' %}
+- App com Streamlit (`src/{{ package }}/app.py`); a lógica fica fora do app, em módulos testáveis.
+{%- elif kind == 'llm' %}
+- Agente com pydantic-ai (`src/{{ package }}/agent.py`). Modelo em `LLM_MODEL`; testes usam `TestModel`, sem rede.
+{%- elif kind == 'data' %}
+- Dados com polars e duckdb. Notebooks do marimo em `notebooks/` (arquivos .py). A lógica fica em `src/`, testada.
+{%- elif kind == 'ml' %}
+- PyTorch ({% if gpu %}CUDA{% else %}CPU{% endif %}) e notebooks do marimo em `notebooks/`. Modelo e treino em `src/`, testados.
+{%- endif %}
+{%- if postgres %}
+- Postgres local: `just db`; conexão em `DATABASE_URL`.
+{%- endif %}
+
+## Comandos
+
+- `just ci` antes de dizer que terminou: ruff (formatação e lint), basedpyright e pytest.
+- `just test -k nome` para um teste; `just fmt` corrige a formatação.
+- Dependência nova: `uv add pacote` (nunca `pip install`).
+
+## Regras
+
+- Tipos em todas as funções públicas; o basedpyright tem que passar.
+- Todo comportamento novo vem com teste.
+- Segredos só no `.envrc.local` (fora do git), nunca no código.
+- Commits no padrão Conventional Commits (o hook confere).

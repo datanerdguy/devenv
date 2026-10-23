@@ -1,0 +1,6 @@
+# Ambiente local (o resto deste arquivo vem do mix phx.new)
+.direnv/
+.devenv/
+.envrc.local
+.env
+result

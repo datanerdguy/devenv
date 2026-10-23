@@ -1,0 +1,42 @@
+"""Site com FastAPI, Jinja e htmx. Rode com `just dev` (http://localhost:8000).
+
+As rotas que o htmx chama devolvem só o pedaço de HTML que muda (templates que começam com `_`).
+"""
+
+from pathlib import Path
+from typing import Annotated
+
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+from {{ package }}.settings import get_settings
+
+HERE = Path(__file__).parent
+
+app = FastAPI(title="{{ project_name }}")
+app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
+templates = Jinja2Templates(directory=HERE / "templates")
+
+# Exemplo em memória; troque por um banco de verdade.
+TODOS: list[str] = []
+
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request) -> HTMLResponse:
+    context = {"title": get_settings().app_name, "todos": TODOS}
+    return templates.TemplateResponse(request, "index.html", context)
+
+
+@app.post("/todos", response_class=HTMLResponse)
+def add_todo(request: Request, text: Annotated[str, Form(min_length=1)]) -> HTMLResponse:
+    TODOS.append(text)
+    return templates.TemplateResponse(request, "_todos.html", {"todos": TODOS})
+
+
+@app.delete("/todos/{index}", response_class=HTMLResponse)
+def delete_todo(request: Request, index: int) -> HTMLResponse:
+    if 0 <= index < len(TODOS):
+        TODOS.pop(index)
+    return templates.TemplateResponse(request, "_todos.html", {"todos": TODOS})

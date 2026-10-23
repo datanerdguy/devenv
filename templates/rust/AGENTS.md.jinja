@@ -1,0 +1,27 @@
+# {{ project_name }}
+
+Instruções para agentes de código (Claude Code, Codex, Gemini, opencode). Complementam o AGENTS.md global.
+
+## Stack
+
+- Rust estável (edição 2024), na versão do `rust-toolchain.toml`.
+{%- if kind == 'bin' %}
+- Programa de linha de comando com clap (`src/main.rs`) e erros com anyhow. A lógica fica em `src/lib.rs`, testada;
+  o `main.rs` só lê os argumentos e chama a biblioteca.
+{%- else %}
+- Biblioteca (`src/lib.rs`). Toda função pública tem documentação com exemplo (vira teste com `cargo test --doc`).
+{%- endif %}
+- Testes de unidade no próprio arquivo (`#[cfg(test)]`); de integração em `tests/`.
+
+## Comandos
+
+- `just ci` antes de dizer que terminou: rustfmt, clippy com avisos como erro e os testes.
+- `just test nome` para um teste; `just fmt` formata.
+- Dependência nova: `cargo add pacote`.
+
+## Regras
+
+- Sem `unsafe` (o `Cargo.toml` proíbe) e sem `unwrap()` fora dos testes: devolva `Result`.
+- Todo comportamento novo vem com teste.
+- Segredos só no `.envrc.local` (fora do git), nunca no código.
+- Commits no padrão Conventional Commits (o hook confere).

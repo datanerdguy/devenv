@@ -1,0 +1,160 @@
+# Modelos de projeto do devenv (docs/templates.md). Use pelo comando `new`:
+#   new python meu-projeto
+# Os arquivos ficam em templates/<linguagem>/; as partes comuns, em templates/common/ (por link).
+_subdirectory: "templates/{{ lang }}"
+_min_copier_version: "9.4"
+_answers_file: .copier-answers.yml
+# `new` passa os dados do git; os testes passam tudo com --defaults.
+_envops:
+  keep_trailing_newline: true
+
+lang:
+  type: str
+  help: Linguagem
+  choices:
+    Python (ML, LLM, dados, web): python
+    Go (CLI, serviço, web com htmx): go
+    Rust (binário, biblioteca): rust
+    Elixir (Phoenix e LiveView): elixir
+
+python_kind:
+  type: str
+  help: Tipo de projeto Python
+  when: "{{ lang == 'python' }}"
+  default: lib
+  choices:
+    "lib: biblioteca (pacote publicável)": lib
+    "api: API com FastAPI": api
+    "llm: app de LLM com pydantic-ai (Ollama ou qualquer provedor)": llm
+    "data: dados com polars, duckdb e marimo": data
+    "ml: machine learning com PyTorch e marimo": ml
+    "fastapi-htmx: site com FastAPI, Jinja e htmx": fastapi-htmx
+    "django: site com Django e htmx": django
+    "streamlit: app de dados com Streamlit": streamlit
+
+go_kind:
+  type: str
+  help: Tipo de projeto Go
+  when: "{{ lang == 'go' }}"
+  default: cli
+  choices:
+    "cli: linha de comando": cli
+    "service: serviço HTTP (API JSON)": service
+    "htmx: site com html/template e htmx": htmx
+
+rust_kind:
+  type: str
+  help: Tipo de projeto Rust
+  when: "{{ lang == 'rust' }}"
+  default: bin
+  choices:
+    "bin: programa (linha de comando)": bin
+    "lib: biblioteca (crate publicável)": lib
+
+elixir_kind:
+  type: str
+  help: Tipo de projeto Elixir
+  when: "{{ lang == 'elixir' }}"
+  default: phoenix
+  choices:
+    "phoenix: site com Phoenix e LiveView (gerado pelo mix phx.new)": phoenix
+
+kind:
+  type: str
+  when: false
+  default: "{{ {'python': python_kind, 'go': go_kind, 'rust': rust_kind, 'elixir': elixir_kind}[lang] }}"
+
+project_name:
+  type: str
+  help: Nome do projeto (pasta e repositório)
+  default: "{{ _copier_conf.dst_path | basename }}"
+  validator: >-
+    {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}
+    Use letras minúsculas, números e hífen, começando com uma letra.
+    {% endif %}
+
+package:
+  type: str
+  help: Nome do pacote no código
+  when: "{{ lang == 'python' }}"
+  default: "{{ project_name | replace('-', '_') }}"
+
+description:
+  type: str
+  help: Descrição em uma linha
+  default: ""
+
+github_user:
+  type: str
+  help: Seu usuário no GitHub (para o caminho do módulo Go)
+  when: "{{ lang == 'go' }}"
+  default: ""
+
+go_module:
+  type: str
+  help: Caminho do módulo Go
+  when: "{{ lang == 'go' }}"
+  default: "{{ 'github.com/' ~ github_user ~ '/' ~ project_name if github_user else project_name }}"
+
+author_name:
+  type: str
+  help: Seu nome
+  default: ""
+
+author_email:
+  type: str
+  help: Seu e-mail
+  default: ""
+
+license:
+  type: str
+  help: Licença
+  default: MIT
+  choices:
+    - MIT
+    - Apache-2.0
+    - none
+
+python_version:
+  type: str
+  help: Versão do Python
+  when: "{{ lang == 'python' }}"
+  default: "3.13"
+
+elixir_version:
+  type: str
+  help: Versão do Elixir (a do Erlang/OTP vai junto no CI)
+  when: "{{ lang == 'elixir' }}"
+  default: "1.18"
+
+otp_version:
+  type: str
+  help: Versão do Erlang/OTP
+  when: "{{ lang == 'elixir' }}"
+  default: "28"
+
+go_version:
+  type: str
+  help: Versão do Go
+  when: "{{ lang == 'go' }}"
+  default: "1.26"
+
+gpu:
+  type: bool
+  help: Usar GPU NVIDIA (PyTorch com CUDA)?
+  when: "{{ lang == 'python' and python_kind == 'ml' }}"
+  default: false
+
+postgres:
+  type: bool
+  help: Postgres local (just db)?
+  when: "{{ (lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django']) or lang == 'elixir' }}"
+  default: false
+
+docker:
+  type: bool
+  help: Dockerfile para o deploy?
+  when: >-
+    {{ (lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django', 'streamlit'])
+    or (lang == 'go' and go_kind in ['service', 'htmx']) or lang == 'elixir' }}
+  default: true

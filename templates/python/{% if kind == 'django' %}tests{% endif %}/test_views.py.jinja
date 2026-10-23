@@ -1,0 +1,26 @@
+import pytest
+from django.core.management import call_command
+from django.test import Client
+
+from {{ package }}.models import Todo
+
+pytestmark = pytest.mark.django_db
+
+
+def test_index(client: Client) -> None:
+    page = client.get("/")
+    assert page.status_code == 200
+    assert b"htmx.min.js" in page.content
+
+
+def test_add_and_delete(client: Client) -> None:
+    fragment = client.post("/todos/", {"text": "comprar café"})
+    assert "comprar café" in fragment.content.decode()
+    assert b"<html" not in fragment.content  # o htmx recebe só o pedaço que muda
+    todo = Todo.objects.get()
+    client.delete(f"/todos/{todo.pk}/")
+    assert not Todo.objects.exists()
+
+
+def test_migrations_are_up_to_date() -> None:
+    call_command("makemigrations", "--check", "--dry-run", verbosity=0)

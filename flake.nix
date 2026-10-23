@@ -63,8 +63,12 @@
       # `nix fmt` formata os arquivos .nix do repo.
       formatter.${system} = pkgs.nixfmt-tree;
 
-      # home-manager na mesma versão do flake.lock: `nix run .#home-manager -- switch --flake .#<host>`
-      packages.${system}.home-manager = home-manager.packages.${system}.home-manager;
+      packages.${system} = {
+        # home-manager na mesma versão do flake.lock: `nix run .#home-manager -- switch --flake .#<host>`
+        inherit (home-manager.packages.${system}) home-manager;
+        # Cria um projeto a partir dos modelos (templates/): `nix run .#new -- python meu-projeto api`
+        new = pkgs.callPackage ./modules/templates/new.nix { };
+      };
 
       # `nix develop` dá as ferramentas para mexer no próprio repo
       # e liga os git hooks (formatação, lint e mensagem de commit).

@@ -1,0 +1,34 @@
+# CI: lint (golangci-lint) e testes, os mesmos do `just ci`.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest
+      - uses: extractions/setup-just@v3
+      - name: Testes
+        run: just test
+{%- if docker %}
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gera a imagem
+        run: docker build -t {{ project_name }} .
+{%- endif %}

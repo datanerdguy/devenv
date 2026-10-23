@@ -1,0 +1,11 @@
+.git
+.venv
+.direnv
+.devenv
+.envrc.local
+.env
+**/__pycache__
+.pytest_cache
+.ruff_cache
+db.sqlite3
+staticfiles

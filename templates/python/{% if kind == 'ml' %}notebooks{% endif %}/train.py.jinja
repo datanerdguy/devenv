@@ -1,0 +1,35 @@
+import marimo
+
+app = marimo.App(width="medium")
+
+
+@app.cell
+def _():
+    import marimo as mo
+
+    from {{ package }}.model import best_device
+    from {{ package }}.train import train
+
+    return best_device, mo, train
+
+
+@app.cell
+def _(best_device, mo):
+    mo.md(f"""# Treino\n\nDispositivo: `{best_device()}`""")
+
+
+@app.cell
+def _(mo):
+    epochs = mo.ui.slider(50, 1000, value=300, step=50, label="Épocas")
+    epochs
+    return (epochs,)
+
+
+@app.cell
+def _(epochs, mo, train):
+    result = train(epochs=epochs.value)
+    mo.md(f"Loss: {result.first_loss:.4f} → {result.last_loss:.4f}")
+
+
+if __name__ == "__main__":
+    app.run()

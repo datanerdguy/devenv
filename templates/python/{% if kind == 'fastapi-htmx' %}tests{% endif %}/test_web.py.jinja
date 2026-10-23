@@ -1,0 +1,30 @@
+from collections.abc import Iterator
+
+import pytest
+from fastapi.testclient import TestClient
+
+from {{ package }}.main import TODOS, app
+
+
+@pytest.fixture
+def client() -> Iterator[TestClient]:
+    TODOS.clear()
+    with TestClient(app) as c:
+        yield c
+
+
+def test_index(client: TestClient) -> None:
+    page = client.get("/")
+    assert page.status_code == 200
+    assert "htmx.min.js" in page.text
+
+
+def test_add_and_delete(client: TestClient) -> None:
+    fragment = client.post("/todos", data={"text": "comprar café"})
+    assert "comprar café" in fragment.text
+    assert "<html" not in fragment.text  # o htmx recebe só o pedaço que muda
+    assert "comprar café" not in client.delete("/todos/0").text
+
+
+def test_static(client: TestClient) -> None:
+    assert client.get("/static/htmx.min.js").status_code == 200

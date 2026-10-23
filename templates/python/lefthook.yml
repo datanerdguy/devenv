@@ -1,0 +1,13 @@
+# Git hooks (lefthook). O `new` já instala; num clone novo rode `lefthook install`.
+pre-commit:
+  parallel: true
+  jobs:
+    - name: ruff
+      glob: "*.py"
+      run: uv run --frozen ruff format {staged_files} && uv run --frozen ruff check --fix {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitizen
+      run: cz check --allow-abort --commit-msg-file {1}

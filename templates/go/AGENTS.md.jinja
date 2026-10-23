@@ -1,0 +1,28 @@
+# {{ project_name }}
+
+Instruções para agentes de código (Claude Code, Codex, Gemini, opencode). Complementam o AGENTS.md global.
+
+## Stack
+
+- Go {{ go_version }}, módulo `{{ go_module }}`. Programa em `cmd/{{ project_name }}/`, o resto em `internal/`.
+{%- if kind == 'service' %}
+- Serviço HTTP só com a biblioteca padrão (`net/http`, rotas com método, `log/slog`). Rotas em `internal/server/`.
+{%- elif kind == 'htmx' %}
+- Site com `html/template` e htmx, só com a biblioteca padrão. Templates e o htmx ficam em `internal/web/`, embutidos
+  no binário (`embed`). As rotas que o htmx chama devolvem pedaços de HTML (templates que começam com `_`).
+{%- else %}
+- Linha de comando com o pacote `flag`. A lógica fica em `internal/`, testada.
+{%- endif %}
+
+## Comandos
+
+- `just ci` antes de dizer que terminou: golangci-lint e `go test -race`.
+- `just test -run Nome` para um teste; `just fmt` formata.
+- Dependência nova: `go get` e depois `go mod tidy`. Prefira a biblioteca padrão.
+
+## Regras
+
+- Erros sempre tratados ou devolvidos com contexto (`fmt.Errorf("...: %w", err)`).
+- Testes em tabela, no mesmo pacote (`_test.go`). Todo comportamento novo vem com teste.
+- Segredos só no `.envrc.local` (fora do git), nunca no código.
+- Commits no padrão Conventional Commits (o hook confere).
