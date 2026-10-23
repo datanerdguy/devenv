@@ -70,6 +70,10 @@ if [ ! -f /etc/apt/sources.list.d/wayscriber.list ]; then
   sudo apt-get update
 fi
 sudo apt-get install -y flatpak flameshot wayscriber zathura imv mpv
+# O pacote do Ubuntu só traz imv-wayland e imv-x11; o .desktop e o resto chamam `imv`.
+if ! command -v imv >/dev/null && command -v imv-wayland >/dev/null; then
+  sudo ln -sf "$(command -v imv-wayland)" /usr/local/bin/imv
+fi
 
 # GPU NVIDIA: só se a placa existir.
 if lspci | grep -qi 'nvidia'; then
