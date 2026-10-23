@@ -1,0 +1,2 @@
+# programs.x / programs.y separados é o estilo comum no home-manager e lê melhor.
+disabled = ["repeated_keys"]

@@ -1,1 +1,68 @@
 # devenv
+
+Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu e outras distros.
+
+Foco: ML/IA/LLM, dados, fluxo guiado pelo teclado (terminal, Neovim, niri), code agents. O plano completo está no documento de proposta; as decisões ficam em [`docs/adr/`](docs/adr/).
+
+## Máquina nova
+
+```bash
+git clone https://github.com/datanerdguy/devenv ~/devenv
+cd ~/devenv
+./bootstrap.sh fedora-laptop
+```
+
+O bootstrap faz três coisas:
+
+1. Instala pela distro o que precisa de root (`system/<distro>.sh`): Ghostty, fish e o driver NVIDIA se houver placa.
+2. Instala o Nix, se faltar.
+3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`.
+
+Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix).
+
+## Dia a dia
+
+| Comando | O que faz |
+| --- | --- |
+| `just switch` | Aplica a configuração |
+| `just diff` | Mostra o que mudaria, pacote a pacote, sem aplicar |
+| `just update` | Atualiza as versões fixadas no `flake.lock` |
+| `just lint` | Formatação, statix, shellcheck e actionlint (o mesmo do CI) |
+| `just check` | Valida o flake inteiro |
+| `just test-container` | Instala do zero num container e roda os testes |
+| `just commit` | Commit guiado no padrão Conventional Commits |
+| `just generations` | Lista as gerações para rollback |
+
+## Contribuindo
+
+Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora e Ubuntu. Detalhes em [`docs/workflow.md`](docs/workflow.md).
+
+Para trabalhar no repo: `nix develop` (ou `direnv allow`), que traz as ferramentas e liga os git hooks.
+
+## Estrutura
+
+```text
+flake.nix / flake.lock   entrada única, versões fixadas
+hosts/                   uma configuração por máquina (ci.nix é o host de teste)
+modules/                 módulos liga/desliga (devenv.<nome>.enable)
+  cli/                   ripgrep, fd, fzf, bat, eza, zoxide, atuin, direnv, yazi...
+  shell/                 fish + starship (bash continua como shell de login)
+  git/                   git, delta, lazygit, gh
+  terminal/              configuração do Ghostty
+system/                  scripts de root por distro
+tests/                   testes de fumaça e instalação em container
+.githooks/               hooks de lint e de mensagem de commit
+.github/workflows/       CI, release e atualização semanal do flake.lock
+docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
+```
+
+## Fases
+
+- [x] 1. Fundação: flake, home-manager, CLIs, git, fish, Ghostty
+- [ ] 2. Neovim (bob, config para a 0.13)
+- [ ] 3. tmux + sesh
+- [ ] 4. Desktop: niri + Noctalia, keyd, apps
+- [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula)
+- [ ] 6. Agentes: worktrees, `agent`, config versionada
+- [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)
+- [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops
