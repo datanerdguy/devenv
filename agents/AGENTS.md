@@ -15,7 +15,7 @@ e `~/.config/opencode/AGENTS.md`. O `AGENTS.md` de cada projeto completa estas r
 - Antes de mudar código, leia o que já existe e siga o estilo do projeto.
 - Mudanças pequenas e verificáveis. Rode os testes e o lint do projeto antes de dizer que terminou.
 - Commits no padrão Conventional Commits (`feat(escopo): ...`). Não faça push nem abra PR sem eu pedir.
-- Nunca coloque segredos em arquivos ou commits. Segredos vêm do Bitwarden (`rbw get <nome>`).
+- Nunca coloque segredos em arquivos ou commits. Segredos vêm do Bitwarden (`rbw get <nome>`) ou do sops (`secrets edit`, docs/secrets.md).
 - Python: `uv` (nunca `pip install` global). Go: módulos. Rust: cargo. Nix: `nix develop` / direnv.
 - Ferramentas disponíveis: `rg`, `fd`, `jq`, `yq`, `duckdb`, `gh`, `just`.
 

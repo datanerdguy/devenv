@@ -13,6 +13,7 @@ _: {
     ./apps
     ./theme
     ./templates
+    ./secrets
   ];
 
   # Fora do NixOS (Fedora, Ubuntu, Arch): ajusta variáveis e caminhos de sistema.

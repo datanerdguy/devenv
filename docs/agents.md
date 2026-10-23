@@ -16,7 +16,8 @@ Depois do `just switch`, faça login uma vez em cada agente que for usar:
 | opencode | `opencode` | `/connect` dentro dele; com modelos locais, nenhum |
 
 Segredos (chaves de API, tokens) vêm do Bitwarden: `rbw config set email <seu e-mail>`,
-`rbw login` e depois `rbw get <nome>`. Nunca no repo.
+`rbw login` e depois `rbw get <nome>`. Os que o ambiente precisa sempre (ex.: `HF_TOKEN`) podem ficar cifrados em
+`secrets/` ([secrets.md](secrets.md)). Nunca em texto puro no repo.
 
 ## Como a configuração funciona
 

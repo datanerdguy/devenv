@@ -25,6 +25,15 @@ check "abreviação ll no fish" fish -i -c 'abbr --query ll'
 check "starship gera prompt" starship prompt
 check "git com branch padrão main" test "$(git config --global init.defaultBranch)" = main
 check "git usa delta nos diffs" sh -c 'git config --global pager.diff | grep -q delta'
+# Segredos (host ci: chave e arquivo de teste em tests/secrets). Sem systemd no container, roda o que o
+# serviço sops-nix rodaria no login.
+unit="${HOME}/.config/systemd/user/sops-nix.service"
+if [ -f "${unit}" ]; then
+  check "sops-nix abre os segredos" sh -c "$(sed -n 's/^ExecStart=//p' "${unit}")"
+  check "git usa o e-mail dos segredos" test "$(cd && git config user.email)" = ci-secrets@example.com
+  # shellcheck disable=SC2016 # a variável é expandida pelo fish
+  check "fish lê o token dos segredos" test "$(fish -c 'echo $DEVENV_TEST_TOKEN')" = segredo-de-teste
+fi
 check "config do ghostty" test -f "${HOME}/.config/ghostty/config"
 check "config do starship" test -f "${HOME}/.config/starship.toml"
 check "neovim instalado pelo bob" "${HOME}/.local/share/bob/nvim-bin/nvim" --version

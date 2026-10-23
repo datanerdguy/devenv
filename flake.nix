@@ -18,6 +18,11 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     # Flatpaks declarados no home-manager (apps grandes do Flathub). Sem nixpkgs próprio.
     nix-flatpak.url = "git+https://github.com/gmodena/nix-flatpak?ref=refs/tags/v0.8.0";
+    # Segredos cifrados no repo (secrets/<host>.yaml), abertos no login (modules/secrets).
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -27,6 +32,7 @@
       home-manager,
       llm-agents,
       nix-flatpak,
+      sops-nix,
       ...
     }:
     let
@@ -41,6 +47,7 @@
           extraSpecialArgs.llmAgents = llm-agents.packages.${system};
           modules = [
             nix-flatpak.homeManagerModules.nix-flatpak
+            sops-nix.homeManagerModules.sops
             ./modules
             hostFile
           ];
