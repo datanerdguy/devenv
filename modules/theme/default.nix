@@ -22,6 +22,7 @@ let
       gawk
       procps
       gnugrep
+      gnused
       fzf
     ];
     text = ''

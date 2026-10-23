@@ -51,6 +51,8 @@ layout {
 // Variáveis para os apps abertos pelo niri.
 environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto"
+    // Apps Qt com as cores do tema (paleta gerada pelo Noctalia para o qt6ct).
+    QT_QPA_PLATFORMTHEME "qt6ct"
 }
 
 // Noctalia: barra, launcher, notificações, bloqueio, papel de parede e agente de polkit.

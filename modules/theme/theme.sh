@@ -69,6 +69,18 @@ pick() {
     --preview "theme __preview {}" --preview-window right,60%
 }
 
+# Troca (ou acrescenta) uma linha "chave<sep>valor" num arquivo de config, sem mexer no resto.
+set_key() {
+  local file="$1" key="$2" sep="$3" value="$4"
+  [ -n "${value}" ] || return 0
+  touch "${file}"
+  if grep -q "^${key}[[:space:]]*=" "${file}"; then
+    sed "s|^${key}[[:space:]]*=.*|${key}${sep}${value}|" "${file}" | write_atomic "${file}"
+  else
+    echo "${key}${sep}${value}" >>"${file}"
+  fi
+}
+
 write_atomic() {
   local dest="$1"
   cat >"${dest}.tmp"
@@ -141,9 +153,34 @@ directory = "$(wallpaper_dir "${id}")"
 transparency_mode = "$(panel_mode "${opacity}")"
 EOF
 
+  # btop: tema "devenv" na pasta de temas dele; o btop.conf é dele (ele grava ao sair).
+  local btop="${XDG_CONFIG_HOME:-${HOME}/.config}/btop"
+  mkdir -p "${btop}/themes"
+  write_atomic "${btop}/themes/devenv.theme" <"${dir}/btop.theme"
+  set_key "${btop}/btop.conf" color_theme ' = ' '"devenv"'
+  # Flameshot: cor da interface de captura (o resto do flameshot.ini é seu).
+  local flameshot="${XDG_CONFIG_HOME:-${HOME}/.config}/flameshot/flameshot.ini"
+  if [ -f "${flameshot}" ]; then
+    set_key "${flameshot}" uiColor = "$(sed -n 's/^uiColor=//p' "${dir}/flameshot")"
+    set_key "${flameshot}" contrastUiColor = "$(sed -n 's/^contrastUiColor=//p' "${dir}/flameshot")"
+  fi
+  # Obsidian: snippet de CSS no cofre de notas (se o cofre já foi aberto no app).
+  local vault="${DEVENV_NOTES:-${HOME}/notes}"
+  if [ -d "${vault}/.obsidian" ]; then
+    mkdir -p "${vault}/.obsidian/snippets"
+    write_atomic "${vault}/.obsidian/snippets/devenv-theme.css" <"${dir}/obsidian.css"
+  fi
+
   # Avisa os apps abertos. Nenhum desses passos falha o comando.
   pkill -USR2 -x ghostty 2>/dev/null || true # Ghostty recarrega a config
   pkill -USR1 -x nvim 2>/dev/null || true    # Neovim troca o colorscheme (lua/devenv/theme.lua)
+  pkill -USR2 -x btop 2>/dev/null || true     # btop relê o tema
+  if command -v swaymsg >/dev/null 2>&1 && swaymsg -t get_version >/dev/null 2>&1; then
+    swaymsg reload >/dev/null 2>&1 || true
+  fi
+  if command -v i3-msg >/dev/null 2>&1 && i3-msg -t get_version >/dev/null 2>&1; then
+    i3-msg reload >/dev/null 2>&1 || true
+  fi
   if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
     tmux source-file "${dir}/tmux.conf" 2>/dev/null || true
   fi

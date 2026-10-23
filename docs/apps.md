@@ -46,7 +46,7 @@ Os modelos (`zettel`, `conceito` com um diagrama Mermaid, `diario`) ficam no rep
 [`config/nvim/templates/notes`](../config/nvim/templates/notes/), e o `<leader>zt` usa eles.
 O cofre não vai para este repo: são dados seus. Para sincronizar, use o Obsidian Sync ou um repositório git só para o cofre.
 
-Na primeira vez, abra o app e escolha *Abrir pasta como cofre* → `~/notes`.
+Na primeira vez, abra o app e escolha *Abrir pasta como cofre* → `~/notes`. Para as cores seguirem o tema do sistema, ligue o trecho de CSS `devenv-theme` ([themes.md](themes.md#obsidian)).
 
 ## Histórico de cópias
 
@@ -60,7 +60,7 @@ não sair da lista (os fixados não contam nos 30).
   Para apagar tudo: `noctalia msg clipboard-clear`. Senhas copiadas do Bitwarden também entram; apague depois de usar.
 - Para mudar o tamanho: `clipboard_history_max_entries` em [`config/noctalia/devenv.toml`](../config/noctalia/devenv.toml).
 
-Só no niri: o Noctalia não roda no i3.
+Funciona no niri e no sway (`Super+Ctrl+v`); no i3 não, porque o Noctalia não roda em X11.
 
 ## Captura de tela
 

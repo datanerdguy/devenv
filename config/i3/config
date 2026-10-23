@@ -2,6 +2,9 @@
 # drivers antigos). Sem Noctalia (ele não roda em X11): barra i3status-rust, launcher rofi.
 # Ligada em ~/.config/i3. Recarregar: Super+Shift+c.
 include ~/.config/devenv/wm-common.conf
+# Cores do tema atual (comando `theme`); a barra usa as variáveis $theme_*.
+include ~/.local/state/devenv/theme/current/wm-colors.conf
+for_window [class="dev.devenv.theme"] floating enable, resize set 900 420
 
 font pango:JetBrainsMono Nerd Font 10
 
@@ -20,9 +23,10 @@ bar {
     position top
     status_command i3status-rs
     colors {
-        background #2d353b
-        statusline #d3c6aa
-        focused_workspace #a7c080 #a7c080 #2d353b
+        background $theme_bg
+        statusline $theme_fg
+        focused_workspace $theme_accent $theme_accent $theme_on_accent
+        inactive_workspace $theme_bg $theme_bg $theme_fg
     }
 }
 

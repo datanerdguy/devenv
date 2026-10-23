@@ -80,7 +80,7 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
 - [x] 3. tmux + sesh: veja [`docs/tmux.md`](docs/tmux.md)
 - [x] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) e [`docs/apps.md`](docs/apps.md)
-- [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): terminal, Neovim, tmux, niri e Noctalia prontos, veja [`docs/themes.md`](docs/themes.md); faltam GTK/Qt e apps
+- [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)
 - [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops

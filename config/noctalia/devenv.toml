@@ -15,6 +15,12 @@ niri_overview_close_on_launch_enabled = true
 # Fica criptografado em ~/.local/state/noctalia; para apagar tudo: `noctalia msg clipboard-clear`.
 clipboard_history_max_entries = 30
 
+# Cores do tema nos apps GTK e Qt: o Noctalia gera o CSS do GTK 3/4 e a paleta do qt6ct a cada troca.
+# Terminal, Neovim, tmux, niri e o resto ficam com o comando `theme` (docs/themes.md).
+[theme.templates]
+enable_builtin_templates = true
+builtin_ids = ["gtk3", "gtk4", "qt"]
+
 [lockscreen]
 lock_before_suspend = true
 

@@ -39,4 +39,7 @@ Opções avaliadas em detalhe: [documento da fase 5](https://claude.ai/artifact/
 
 - Mudar uma cor é editar o `palette.json` e rodar `just switch`.
 - Um tema novo precisa de três coisas: paleta, papéis de parede e o colorscheme do Neovim (passo a passo em `docs/themes.md`).
-- GTK/Qt, btop, Zen, Obsidian, zathura, Flameshot e as cores do i3 ficam para um segundo PR, pelos mesmos arquivos.
+- GTK e Qt usam os modelos do próprio Noctalia (CSS do GTK 3/4 e paleta do qt6ct), então só mudam com o Noctalia
+  rodando (niri ou sway). btop, zathura, Flameshot, Obsidian e as cores do sway e do i3 saem da mesma paleta,
+  pelo `theme`.
+- O Zen não troca sozinho: precisaria do Pywalfox e de um programa auxiliar, que não funcionam bem com o Flatpak.

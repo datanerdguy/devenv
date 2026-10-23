@@ -17,7 +17,8 @@ sudo dnf install -y bubblewrap socat
 
 # Desktop: niri + Noctalia v5 (repositórios oficiais; o noctalia existe a partir do Fedora 44),
 # portais (compartilhar tela, escolher arquivos) e xwayland-satellite (apps X11 no niri).
-desktop=(niri xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk)
+# adw-gtk3 e qt6ct: apps GTK3 e Qt com as cores do tema (docs/themes.md).
+desktop=(niri xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk adw-gtk3-theme qt6ct)
 if [ "$(rpm -E %fedora)" -ge 44 ]; then
   desktop+=(noctalia)
 else

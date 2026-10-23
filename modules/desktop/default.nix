@@ -21,6 +21,14 @@ let
     (defalias escctl (tap-hold ${toString cfg.kanata.tapMs} ${toString cfg.kanata.tapMs} esc lctl))
     (deflayer base @escctl)
   '';
+
+  # Semente do qt6ct (copiada só se não existir; a tela dele grava nela).
+  qt6ctConf = pkgs.writeText "qt6ct.conf" ''
+    [Appearance]
+    color_scheme_path=${config.xdg.configHome}/qt6ct/colors/noctalia.conf
+    custom_palette=true
+    style=Fusion
+  '';
 in
 {
   options.devenv.desktop = {
@@ -57,6 +65,23 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        # sway e i3 leem as cores das bordas (e o i3, as da barra) do tema atual.
+        assertions = [
+          {
+            assertion = (cfg.sway.enable || cfg.i3.enable) -> config.devenv.theme.enable;
+            message = "devenv.desktop.sway/i3 precisam de devenv.theme.enable = true (as cores vêm do tema).";
+          }
+        ];
+
+        # Apps Qt da distro (Flameshot) com as cores do tema: o Noctalia gera a paleta do qt6ct.
+        home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt6ct";
+        home.activation.devenvQt6ct = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          if [ ! -e ${config.xdg.configHome}/qt6ct/qt6ct.conf ]; then
+            run mkdir -p ${config.xdg.configHome}/qt6ct
+            run install -m 0644 ${qt6ctConf} ${config.xdg.configHome}/qt6ct/qt6ct.conf
+          fi
+        '';
+
         home.packages = with pkgs; [
           wl-clipboard
           playerctl

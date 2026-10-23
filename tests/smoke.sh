@@ -85,6 +85,10 @@ check "papéis de parede do tema" test -n "$(ls "${HOME}/.local/share/devenv/the
 # shellcheck disable=SC2329 # chamada pelo check
 theme_switch_ok() { theme dracula && [ "$(theme current)" = dracula ] && theme everforest; }
 check "theme troca e volta" theme_switch_ok
+check "btop com o tema" grep -q 'color_theme = "devenv"' "${HOME}/.config/btop/btop.conf"
+check "zathura inclui o tema" grep -q 'devenv/theme/current/zathurarc' "${HOME}/.config/zathura/zathurarc"
+check "flameshot com a cor do tema" grep -q '^uiColor=#a7c080' "${HOME}/.config/flameshot/flameshot.ini"
+check "semente do qt6ct" test -f "${HOME}/.config/qt6ct/qt6ct.conf"
 
 # Neovim: instala os plugins, carrega todos e mede a abertura.
 export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"

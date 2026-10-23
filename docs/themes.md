@@ -40,11 +40,30 @@ devenv.theme = {
 | tmux | cores da barra e das bordas |
 | niri | cor da borda da janela em foco |
 | Noctalia | paleta da barra e dos painéis, papel de parede e transparência dos painéis |
+| apps GTK (Rnote, GPU Screen Recorder, portais) | CSS do GTK 3 e 4 gerado pelo Noctalia; os abertos mudam em parte, os novos já abrem com o tema |
+| apps Qt da distro (Flameshot) | paleta do qt6ct gerada pelo Noctalia; vale ao reabrir |
+| btop | tema `devenv`; troca com ele aberto |
+| zathura | cores da interface; `Ctrl+R` pinta o PDF com as cores do tema. Vale ao reabrir |
+| Flameshot | cor da seleção e dos botões |
+| Obsidian | snippet de CSS no cofre (veja abaixo) |
+| sway e i3 | bordas das janelas e, no i3, a barra; recarregam sozinhos |
 
 A opacidade também decide os painéis do Noctalia: 1 é sólido, de 0.9 a 0.99 é suave e abaixo de 0.9 é vidro.
 
-Na sessão i3 o Noctalia não roda (ele é só Wayland). O terminal, o Neovim e o tmux trocam igual, e o Noctalia
-pega o tema na próxima vez que você entrar no niri.
+Na sessão i3 o Noctalia não roda (ele é só Wayland). Terminal, Neovim, tmux, btop e as bordas do i3 trocam igual;
+o Noctalia e os apps GTK e Qt pegam o tema na próxima vez que você entrar no niri ou no sway.
+
+### Obsidian
+
+O `theme` grava `~/notes/.obsidian/snippets/devenv-theme.css` (só depois que o cofre foi aberto no app uma vez).
+Ligue uma vez em *Ajustes → Aparência → Trechos de CSS → devenv-theme*, com o app no modo escuro.
+Daí em diante o Obsidian troca junto, na hora.
+
+### O que não muda
+
+- **Zen**: o Firefox não lê o tema do sistema sem uma extensão (Pywalfox) e um programa auxiliar, que não
+  funcionam bem com o Zen do Flatpak. Use o modo escuro dele; um tema do Zen à mão continua possível.
+- **Bitwarden, OBS** e outros apps Electron ou Qt do Flathub ficam com o tema escuro deles.
 
 ## Papéis de parede
 
@@ -63,16 +82,20 @@ Os arquivos de cada tema são gerados no build a partir de uma paleta só, `them
 (no formato de paleta do Noctalia, com as cores da interface e as 16 do terminal):
 
 ```text
-~/.local/share/devenv/themes/<tema>/   gerado pelo Nix: ghostty, tmux.conf, niri.kdl, palette.json, wallpapers/
+~/.local/share/devenv/themes/<tema>/   gerado pelo Nix: ghostty, tmux.conf, niri.kdl, btop.theme, zathurarc,
+                                       wm-colors.conf (sway/i3), obsidian.css, palette.json, wallpapers/
 ~/.local/state/devenv/theme/
   current -> ~/.local/share/devenv/themes/<tema>   o tema escolhido
   ghostty, niri.kdl, noctalia.toml                 gerados pelo `theme` (cores + opacidade)
+~/.config/btop/themes/devenv.theme               copiado pelo `theme` (o btop.conf continua seu)
   opacity                                          só se você mudou com `theme opacity`
 ```
 
-O `theme <nome>` troca o link `current`, gera esses três arquivos e avisa os apps abertos: o Ghostty recarrega
-a config (sinal `USR2`), o Neovim troca o colorscheme (sinal `USR1`), o tmux relê as cores e o Noctalia recebe
-a paleta e o papel de parede pelo `noctalia msg`. O niri recarrega sozinho quando o arquivo muda.
+O `theme <nome>` troca o link `current`, gera esses arquivos e avisa os apps abertos: o Ghostty recarrega
+a config (sinal `USR2`), o Neovim troca o colorscheme (sinal `USR1`), o btop também (`USR2`), o tmux relê as
+cores, o sway e o i3 recarregam, e o Noctalia recebe a paleta e o papel de parede pelo `noctalia msg`.
+O niri recarrega sozinho quando o arquivo muda. A cada paleta nova, o Noctalia regera o CSS do GTK e a paleta
+do qt6ct (`[theme.templates]` em `config/noctalia/devenv.toml`).
 
 O `just switch` roda `theme apply`, que regera os arquivos do tema salvo.
 

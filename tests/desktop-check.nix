@@ -1,6 +1,6 @@
 # Valida as configs do desktop com os próprios programas, sem abrir sessão gráfica:
 # niri, sway (backend headless), i3, kanata, o docs/keyboard.md gerado a partir dos .vil
-# e os quatro temas (Ghostty, niri e Noctalia com os arquivos que o `theme` gera).
+# e os quatro temas (Ghostty, niri, sway, i3, Noctalia, tmux e btop com os arquivos que o `theme` gera).
 {
   pkgs,
   src,
@@ -28,8 +28,6 @@ pkgs.runCommand "devenv-desktop-check"
     touch "$HOME/.config/devenv/sway-local.conf" "$HOME/.config/devenv/i3-local.conf"
 
     echo "niri";   niri validate -c ${src}/config/niri/config.kdl
-    echo "sway";   WLR_BACKENDS=headless WLR_RENDERER=pixman sway --validate -c ${src}/config/sway/config
-    echo "i3";     i3 -C -c ${src}/config/i3/config
     echo "kanata"; kanata --check --cfg ${kanataConfig}
     echo "teclado"; python3 ${src}/keyboard/render.py --check
 
@@ -44,6 +42,13 @@ pkgs.runCommand "devenv-desktop-check"
       ${theme.package}/bin/theme "$id" >/dev/null
       ghostty +validate-config --config-file="$DEVENV_THEME_STATE/ghostty"
       niri validate -c ${src}/config/niri/config.kdl
+      # sway e i3 incluem as cores do tema (a barra do i3 usa as variáveis $theme_*).
+      WLR_BACKENDS=headless WLR_RENDERER=pixman sway --validate -c ${src}/config/sway/config
+      i3 -C -c ${src}/config/i3/config
+      zathura_ok="$(grep -c '^set ' "$DEVENV_THEME_STATE/current/zathurarc")"
+      test "$zathura_ok" -gt 10
+      grep -q 'theme\[main_bg\]' "$HOME/.config/btop/themes/devenv.theme"
+      grep -q 'color_theme = "devenv"' "$HOME/.config/btop/btop.conf"
       noctalia config validate | grep -v '^WARN' || true
       noctalia config validate >/dev/null
       tmux -L check -f /dev/null new-session -d \; source-file "$DEVENV_THEME_STATE/current/tmux.conf" \; kill-server

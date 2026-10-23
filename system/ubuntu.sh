@@ -52,6 +52,9 @@ if dpkg --compare-versions "${VERSION_ID:-0}" ge 26.04 || [ "${ID}" = debian ]; 
   sudo apt-get update
   sudo apt-get install -y niri noctalia xdg-desktop-portal-gnome xdg-desktop-portal-gtk
   sudo apt-get install -y xwayland-satellite || echo "xwayland-satellite indisponível: apps X11 não abrem no niri."
+  # Apps GTK3 e Qt com as cores do tema (docs/themes.md).
+  sudo apt-get install -y qt6ct
+  sudo apt-get install -y adw-gtk3 || echo "adw-gtk3 indisponível: apps GTK3 ficam com o tema padrão."
   if [ "${DEVENV_SWAY:-0}" = 1 ]; then sudo apt-get install -y sway; fi
   if [ "${DEVENV_I3:-0}" = 1 ]; then sudo apt-get install -y i3 xserver-xorg; fi
   "$(dirname "${BASH_SOURCE[0]}")/desktop-common.sh"

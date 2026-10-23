@@ -89,7 +89,8 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 Volume, brilho e mídia funcionam pelas teclas do notebook, inclusive com a tela bloqueada.
 
 No sway e no i3 os atalhos básicos são os mesmos (`Super+Enter`, `Super+Q`, `h/j/k/l`, `Ctrl` move, `Super+1..9`);
-o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas). A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas, `Super+Shift+t` alterna a divisão;
+`Super+t` troca o tema, como no niri). No sway, `Super+Ctrl+v` também abre o histórico de cópias. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
 
 ## Monitores
 
