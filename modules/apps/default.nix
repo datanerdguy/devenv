@@ -35,7 +35,7 @@ in
       default = [
         "app.zen_browser.zen" # navegador (Firefox, com abas verticais e atalhos de teclado)
         "com.bitwarden.desktop"
-        "md.obsidian.Obsidian" # notas; o Neovim abre o mesmo cofre (docs/notes.md)
+        "md.obsidian.Obsidian" # notas; o Neovim abre o mesmo cofre (docs/apps.md)
         "com.obsproject.Studio" # gravação e transmissão com cenas
         "com.dec05eba.gpu_screen_recorder" # gravação leve pela GPU, com replay
         "com.github.flxzt.rnote" # desenho à mão (mesa digitalizadora)
