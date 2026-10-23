@@ -1,12 +1,17 @@
-# CI: roda em todo PR e em todo push para dev e main.
+# CI: roda em todo PR, toda semana e à mão (workflow_dispatch).
+# Não roda no push para dev e main: o que chega lá já passou pelo mesmo CI no PR, com a mesma árvore.
+# Num PR, cada job só faz o trabalho pesado se o PR mexe no que ele testa (job `changes`); os jobs sempre
+# aparecem, para as checagens obrigatórias das regras da branch não ficarem esperando.
 # As checagens que só fazem sentido em PR (origem e commits) ficam em pr.yml.
 name: ci
 
 on:
   pull_request:
-  push:
-    branches: [dev, main]
   workflow_dispatch:
+  # Toda segunda, depois da atualização do flake.lock: pega o que quebrou fora do repo
+  # (repositórios das distros, imagens, sites de download).
+  schedule:
+    - cron: "0 10 * * 1"
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -16,9 +21,53 @@ permissions:
   contents: read
 
 jobs:
+  # O que o PR mudou. Fora de PR (semanal, à mão), tudo roda.
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      nix: ${{ steps.filter.outputs.nix == 'true' || github.event_name != 'pull_request' }}
+      system: ${{ steps.filter.outputs.system == 'true' || github.event_name != 'pull_request' }}
+      templates: ${{ steps.filter.outputs.templates == 'true' || github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            nix:
+              - "**/*.nix"
+              - flake.lock
+              - bootstrap.sh
+              - modules/**
+              - hosts/**
+              - config/**
+              - themes/**
+              - agents/**
+              - keyboard/**
+              - system/**
+              - tests/**
+              - .github/workflows/ci.yml
+            system:
+              - system/**
+              - tests/system.sh
+              - .github/workflows/ci.yml
+            templates:
+              - copier.yml
+              - templates/**
+              - modules/templates/**
+              - tests/templates.sh
+              - flake.lock
+              - .github/workflows/ci.yml
+
   lint:
     name: lint
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
@@ -28,43 +77,65 @@ jobs:
 
   build:
     name: build
+    needs: changes
     runs-on: ubuntu-latest
+    # Com os caches no ar, leva uns 3 min. Passar disso quase sempre é o Codex sendo compilado porque o
+    # cache da numtide não respondeu: melhor falhar e rodar de novo do que esperar meia hora.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        if: needs.changes.outputs.nix == 'true'
       - uses: DeterminateSystems/nix-installer-action@main
+        if: needs.changes.outputs.nix == 'true'
         with:
-          # cache binário dos agentes (llm-agents.nix)
+          # Cache binário dos agentes (llm-agents.nix). Um cache que não conecta em 5 s é deixado de lado.
           extra-conf: |
             extra-substituters = https://cache.numtide.com
             extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
+            connect-timeout = 5
       - uses: DeterminateSystems/magic-nix-cache-action@main
+        if: needs.changes.outputs.nix == 'true'
       - name: nix flake check
+        if: needs.changes.outputs.nix == 'true'
         run: nix flake check --print-build-logs
       - name: Build de todos os hosts
+        if: needs.changes.outputs.nix == 'true'
         run: |
           for host in $(nix eval .#homeConfigurations --apply builtins.attrNames --json | jq -r '.[]'); do
             echo "::group::$host"
             nix build ".#homeConfigurations.$host.activationPackage" --print-build-logs
             echo "::endgroup::"
           done
+      - name: Nada a testar
+        if: needs.changes.outputs.nix != 'true'
+        run: echo "O PR não mexe em nada que este job testa."
 
   # Pacotes de sistema (system/<distro>.sh), sem o Nix: confere nomes e repositórios.
   system:
     name: system (${{ matrix.image }})
+    needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04"]
     steps:
       - uses: actions/checkout@v4
+        if: needs.changes.outputs.system == 'true'
       - name: Roda o script da distro num container limpo
+        if: needs.changes.outputs.system == 'true'
         run: tests/system.sh "${{ matrix.image }}"
+      - name: Nada a testar
+        if: needs.changes.outputs.system != 'true'
+        run: echo "O PR não mexe em nada que este job testa."
 
   # Modelos de projeto: gera cada um com o `new` e roda o CI do projeto gerado (tests/templates.sh).
   templates:
     name: template (${{ matrix.case }})
+    needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -86,24 +157,38 @@ jobs:
           - elixir:phoenix
     steps:
       - uses: actions/checkout@v4
+        if: needs.changes.outputs.templates == 'true'
         with:
           fetch-depth: 0 # o copier lê o histórico do repo dos modelos
       - uses: DeterminateSystems/nix-installer-action@main
+        if: needs.changes.outputs.templates == 'true'
       - uses: DeterminateSystems/magic-nix-cache-action@main
+        if: needs.changes.outputs.templates == 'true'
       - name: Gera o projeto, roda o just ci dele e gera a imagem Docker
+        if: needs.changes.outputs.templates == 'true'
         run: tests/templates.sh "${{ matrix.case }}"
         env:
           DEVENV_TEST_DOCKER: "1"
+      - name: Nada a testar
+        if: needs.changes.outputs.templates != 'true'
+        run: echo "O PR não mexe em nada que este job testa."
 
+  # Roda junto com o build (não depois): cada container instala tudo do zero de qualquer jeito.
   install:
     name: install (${{ matrix.image }})
-    needs: build
+    needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         image: ["fedora:latest", "ubuntu:24.04"]
     steps:
       - uses: actions/checkout@v4
+        if: needs.changes.outputs.nix == 'true'
       - name: Instala do zero num container limpo e roda os testes de fumaça
+        if: needs.changes.outputs.nix == 'true'
         run: tests/container.sh "${{ matrix.image }}"
+      - name: Nada a testar
+        if: needs.changes.outputs.nix != 'true'
+        run: echo "O PR não mexe em nada que este job testa."
