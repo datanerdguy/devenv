@@ -27,8 +27,9 @@ fmt:
 lint:
     nix fmt -- --ci
     statix check .
-    shellcheck bootstrap.sh system/*.sh tests/*.sh .githooks/*
+    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh .githooks/*
     actionlint
+    stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
 
 # Valida o flake inteiro
 check:
@@ -41,6 +42,16 @@ test-container image="fedora:latest":
 # Commit guiado no padrão Conventional Commits
 commit:
     cz commit
+
+# Atualiza o Neovim (bob) e os plugins (vim.pack, com revisão antes de aplicar)
+nvim-update:
+    bob update --all
+    nvim +PackUpdate
+
+# Testa a config do Neovim: carga de todos os plugins e tempo de abertura
+nvim-test:
+    DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua
+    tests/nvim/startup.sh
 
 # Lista as gerações (para rollback)
 generations:

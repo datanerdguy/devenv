@@ -1,0 +1,174 @@
+-- Interface: tema, ícones, statusline, snacks (picker, explorer, terminal...) e which-key.
+local pack = require("devenv.pack")
+local gh = function(x) return "https://github.com/" .. x end
+
+pack.add({
+  -- Tema provisório; a fase 5 troca pelo sistema de temas.
+  {
+    src = gh("sainnhe/everforest"),
+    config = function()
+      vim.g.everforest_background = "hard"
+      vim.g.everforest_better_performance = 1
+      vim.g.everforest_enable_italic = 1
+      vim.cmd.colorscheme("everforest")
+    end,
+  },
+
+  -- mini.nvim: ícones e statusline já na abertura (são leves); o resto sob demanda.
+  {
+    src = gh("nvim-mini/mini.nvim"),
+    config = function()
+      require("mini.icons").setup()
+      MiniIcons.mock_nvim_web_devicons()
+      require("mini.statusline").setup({ use_icons = true })
+      vim.api.nvim_create_autocmd({ "InsertEnter", "BufReadPost" }, {
+        once = true,
+        callback = function()
+          require("mini.ai").setup() -- textobjects extras: a( i" af if (função) etc.
+          require("mini.surround").setup() -- sa sd sr: adicionar/apagar/trocar em volta
+          require("mini.pairs").setup() -- fecha parênteses e aspas
+        end,
+      })
+    end,
+  },
+
+  -- snacks.nvim: carrega na abertura, mas cada módulo só é usado quando chamado.
+  {
+    src = gh("folke/snacks.nvim"),
+    config = function()
+      require("snacks").setup({
+        bigfile = { enabled = true }, -- arquivo grande: desliga o que pesa
+        quickfile = { enabled = true }, -- mostra o arquivo antes dos plugins
+        notifier = { enabled = true, timeout = 3000 },
+        input = { enabled = true },
+        indent = { enabled = true, animate = { enabled = false } },
+        scope = { enabled = true },
+        words = { enabled = true }, -- destaca a palavra sob o cursor (via LSP)
+        dashboard = {
+          enabled = true,
+          preset = {
+            keys = {
+              { icon = "\u{f002} ", key = "f", desc = "Buscar arquivo", action = ":lua Snacks.picker.files()" },
+              { icon = "\u{f0b0} ", key = "g", desc = "Buscar texto", action = ":lua Snacks.picker.grep()" },
+              { icon = "\u{f1da} ", key = "r", desc = "Recentes", action = ":lua Snacks.picker.recent()" },
+              { icon = "\u{f07b} ", key = "e", desc = "Explorer", action = ":lua Snacks.explorer()" },
+              { icon = "\u{f1e6} ", key = "p", desc = "Plugins", action = ":Pack" },
+              {
+                icon = "\u{f013} ",
+                key = "c",
+                desc = "Config",
+                action = ":lua Snacks.picker.files({ cwd = vim.fn.stdpath('config') })",
+              },
+              { icon = "\u{f011} ", key = "q", desc = "Sair", action = ":qa" },
+            },
+          },
+          sections = { { section = "keys", gap = 1, padding = 1 } },
+        },
+        explorer = { enabled = true, replace_netrw = true },
+        picker = {
+          enabled = true,
+          -- Mostra arquivos ocultos em tudo. Alt-h alterna ocultos, Alt-i alterna ignorados pelo git.
+          hidden = true,
+          sources = {
+            files = { hidden = true },
+            grep = { hidden = true },
+            explorer = { hidden = true, ignored = false },
+          },
+        },
+        terminal = { enabled = true },
+        lazygit = { enabled = true },
+        scratch = { enabled = true },
+        zen = { enabled = true },
+      })
+
+      local map = vim.keymap.set
+      local S = Snacks
+      -- Busca (f)
+      map("n", "<leader><space>", function() S.picker.smart() end, { desc = "Busca inteligente (arquivos)" })
+      map("n", "<leader>/", function() S.picker.grep() end, { desc = "Buscar texto no projeto" })
+      map("n", "<leader>ff", function() S.picker.files() end, { desc = "Arquivos (inclui ocultos)" })
+      map("n", "<leader>fg", function() S.picker.grep() end, { desc = "Texto no projeto" })
+      map({ "n", "x" }, "<leader>fw", function() S.picker.grep_word() end, { desc = "Palavra sob o cursor" })
+      map("n", "<leader>fb", function() S.picker.buffers() end, { desc = "Buffers abertos" })
+      map("n", "<leader>fr", function() S.picker.recent() end, { desc = "Arquivos recentes" })
+      map("n", "<leader>fh", function() S.picker.help() end, { desc = "Ajuda" })
+      map("n", "<leader>fk", function() S.picker.keymaps() end, { desc = "Atalhos" })
+      map(
+        "n",
+        "<leader>fc",
+        function() S.picker.files({ cwd = vim.fn.stdpath("config") }) end,
+        { desc = "Arquivos da config" }
+      )
+      map("n", "<leader>fp", function() S.picker.projects() end, { desc = "Projetos" })
+      map("n", "<leader>fs", function() S.picker.lsp_symbols() end, { desc = "Símbolos do arquivo" })
+      map("n", "<leader>fS", function() S.picker.lsp_workspace_symbols() end, { desc = "Símbolos do projeto" })
+      map("n", "<leader>f.", function() S.picker.resume() end, { desc = "Reabrir última busca" })
+      map("n", "<leader>xx", function() S.picker.diagnostics() end, { desc = "Diagnósticos do projeto" })
+      map("n", "<leader>xb", function() S.picker.diagnostics_buffer() end, { desc = "Diagnósticos do arquivo" })
+      map("n", "<leader>xq", function() S.picker.qflist() end, { desc = "Quickfix" })
+      map(
+        "n",
+        "<leader>xt",
+        function() S.picker.grep({ search = [[\b(TODO|FIXME|HACK|NOTE)\b]], regex = true }) end,
+        { desc = "TODOs" }
+      )
+
+      -- Explorer (e)
+      map("n", "<leader>e", function() S.explorer() end, { desc = "Explorer (alterna)" })
+      map("n", "<leader>E", function() S.explorer.reveal() end, { desc = "Explorer no arquivo atual" })
+
+      -- Git (g)
+      map("n", "<leader>gg", function() S.lazygit() end, { desc = "Lazygit" })
+      map("n", "<leader>gs", function() S.picker.git_status() end, { desc = "Arquivos alterados" })
+      map("n", "<leader>gl", function() S.picker.git_log() end, { desc = "Log do projeto" })
+      map("n", "<leader>gf", function() S.picker.git_log_file() end, { desc = "Log do arquivo" })
+      map("n", "<leader>gB", function() S.gitbrowse() end, { desc = "Abrir no GitHub" })
+
+      -- LSP com picker (o padrão do 0.11+ já tem grn, gra, grr, gri, gO, K)
+      map("n", "gd", function() S.picker.lsp_definitions() end, { desc = "Ir para definição" })
+      map("n", "gD", function() S.picker.lsp_declarations() end, { desc = "Ir para declaração" })
+      map("n", "gy", function() S.picker.lsp_type_definitions() end, { desc = "Ir para tipo" })
+      map("n", "gr", function() S.picker.lsp_references() end, { desc = "Referências", nowait = true })
+      map("n", "]]", function() S.words.jump(1, true) end, { desc = "Próxima ocorrência" })
+      map("n", "[[", function() S.words.jump(-1, true) end, { desc = "Ocorrência anterior" })
+
+      -- Terminal, buffers, extras
+      map({ "n", "t" }, "<C-/>", function() S.terminal() end, { desc = "Terminal flutuante" })
+      map("n", "<leader>bd", function() S.bufdelete() end, { desc = "Fechar buffer" })
+      map("n", "<leader>bo", function() S.bufdelete.other() end, { desc = "Fechar outros buffers" })
+      map("n", "<leader>.", function() S.scratch() end, { desc = "Rascunho" })
+      map("n", "<leader>uz", function() S.zen() end, { desc = "Modo zen" })
+      map("n", "<leader>un", function() S.notifier.show_history() end, { desc = "Histórico de notificações" })
+    end,
+  },
+
+  -- which-key: mostra as teclas possíveis depois do <leader>.
+  {
+    src = gh("folke/which-key.nvim"),
+    event = "UIEnter",
+    config = function()
+      local wk = require("which-key")
+      wk.setup({ preset = "helix", delay = 300 })
+      wk.add({
+        { "<leader>a", group = "IA / agentes" },
+        { "<leader>b", group = "buffers" },
+        { "<leader>c", group = "código" },
+        { "<leader>d", group = "debug" },
+        { "<leader>f", group = "buscar" },
+        { "<leader>g", group = "git" },
+        { "<leader>h", group = "hunks do git" },
+        { "<leader>n", group = "notebooks" },
+        { "<leader>p", group = "plugins" },
+        { "<leader>u", group = "alternar interface" },
+        { "<leader>x", group = "diagnósticos e listas" },
+        { "<leader>?", function() wk.show({ global = false }) end, desc = "Atalhos deste buffer" },
+      })
+    end,
+  },
+})
+
+-- Gerenciador de plugins (p)
+vim.keymap.set("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "Gerenciador de plugins" })
+vim.keymap.set("n", "<leader>pc", "<cmd>Pack!<cr>", { desc = "Verificar atualizações" })
+vim.keymap.set("n", "<leader>pu", "<cmd>PackUpdate<cr>", { desc = "Atualizar todos" })
+vim.keymap.set("n", "<leader>ps", "<cmd>PackStatus<cr>", { desc = "Resumo e tempo de carga" })

@@ -27,10 +27,12 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just switch` | Aplica a configuração |
 | `just diff` | Mostra o que mudaria, pacote a pacote, sem aplicar |
 | `just update` | Atualiza as versões fixadas no `flake.lock` |
-| `just lint` | Formatação, statix, shellcheck e actionlint (o mesmo do CI) |
+| `just lint` | Formatação, statix, shellcheck, actionlint e stylua (o mesmo do CI) |
 | `just check` | Valida o flake inteiro |
 | `just test-container` | Instala do zero num container e roda os testes |
 | `just commit` | Commit guiado no padrão Conventional Commits |
+| `just nvim-update` | Atualiza o Neovim (bob) e os plugins (com revisão) |
+| `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
 | `just generations` | Lista as gerações para rollback |
 
 ## Contribuindo
@@ -49,8 +51,10 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   shell/                 fish + starship (bash continua como shell de login)
   git/                   git, delta, lazygit, gh
   terminal/              configuração do Ghostty
+  nvim/                  Neovim pelo bob, LSPs e ferramentas, link da config
+config/nvim/             config do Neovim (Lua), ligada em ~/.config/nvim
 system/                  scripts de root por distro
-tests/                   testes de fumaça e instalação em container
+tests/                   testes de fumaça, do Neovim e instalação em container
 .githooks/               hooks de lint e de mensagem de commit
 .github/workflows/       CI, release e atualização semanal do flake.lock
 docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
@@ -59,7 +63,7 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 ## Fases
 
 - [x] 1. Fundação: flake, home-manager, CLIs, git, fish, Ghostty
-- [ ] 2. Neovim (bob, config para a 0.13)
+- [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
 - [ ] 3. tmux + sesh
 - [ ] 4. Desktop: niri + Noctalia, keyd, apps
 - [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula)

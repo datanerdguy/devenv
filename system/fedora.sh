@@ -3,7 +3,7 @@
 # Tudo o mais vem do Nix (home-manager).
 set -euo pipefail
 
-sudo dnf install -y dnf-plugins-core git curl
+sudo dnf install -y dnf-plugins-core git curl gcc make
 
 # Ghostty (COPR mantido pela comunidade).
 sudo dnf copr enable -y scottames/ghostty

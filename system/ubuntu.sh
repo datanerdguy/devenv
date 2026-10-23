@@ -3,7 +3,7 @@
 set -euo pipefail
 
 sudo apt-get update
-sudo apt-get install -y git curl fish pciutils
+sudo apt-get install -y git curl fish pciutils build-essential
 
 # Ghostty: pacote .deb da comunidade (https://github.com/mkasberg/ghostty-ubuntu).
 if ! command -v ghostty >/dev/null; then
