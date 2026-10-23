@@ -83,6 +83,7 @@
           stylua
           commitizen
           python3 # keyboard/render.py
+          keymap-drawer # imagens das camadas do teclado (just keyboard)
         ];
         shellHook = ''
           git config core.hooksPath .githooks

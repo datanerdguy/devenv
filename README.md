@@ -35,7 +35,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
 | `just agents-update` | Atualiza só os agentes de código |
 | `just desktop-check` | Valida as configs do niri, sway, i3 e kanata |
-| `just keyboard-doc` | Regenera o mapa do teclado depois de salvar no Vial |
+| `just keyboard` | Regenera as imagens das camadas do teclado depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia |
 | `theme <nome>` | Troca o tema de tudo (`Super+T` mostra a lista) |
 | `new python meu-projeto api` | Cria um projeto pronto a partir dos modelos ([`docs/templates.md`](docs/templates.md)) |
@@ -68,7 +68,7 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
 themes/                  as paletas e os papéis de parede de cada tema
 templates/ + copier.yml  modelos de projeto (Python, Go, Rust e Phoenix)
 config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
-keyboard/                layouts do Corne (Vial) e o gerador do docs/keyboard.md
+keyboard/                layout do Corne (Vial), imagens das camadas e o gerador (render.py)
 agents/                  AGENTS.md, skills e scripts dos agentes
 system/                  scripts de root por distro
 tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e instalação em container

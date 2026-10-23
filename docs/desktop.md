@@ -130,22 +130,9 @@ Avaliamos as alternativas: o QMK Configurator e o ZMK Studio exigem trocar o fir
 - O app `Vial` (o comando tem V maiúsculo) vem do Nix; a regra udev (`system/desktop-common.sh`) deixa ele abrir o teclado sem sudo.
   No navegador, [vial.rocks](https://vial.rocks) também funciona, só em navegadores baseados no Chromium.
 - O layout fica em [`keyboard/corne/corne.vil`](../keyboard/corne/corne.vil). Depois de mudar no Vial,
-  salve por cima dele (*File → Save current layout*), rode `just keyboard-doc` e faça commit.
-- [docs/keyboard.md](keyboard.md) mostra todas as camadas e combos, gerado a partir do `.vil`.
-
-#### Sugestão do devenv
-
-[`keyboard/corne/corne-devenv.vil`](../keyboard/corne/corne-devenv.vil) é uma proposta para você testar
-(*File → Load saved layout*). Seu layout continua salvo no outro arquivo. As mudanças:
-
-- **Super** no lugar do Caps Lock (canto inferior esquerdo da camada 0). O niri usa Super em tudo, e o layout atual não tem.
-- **Macros** na camada 2, linha de cima à esquerda: `->`, `=>`, `:=`, `|>` (Rust, Python, Go, Elixir).
-  Também `~` e `` ` `` na linha do meio.
-- **Camada 3 de funções e navegação**: F1–F12 nas duas linhas de cima à esquerda, mídia e brilho na de baixo,
-  PgUp/PgDn/Home/End/Del/Print à direita, ao lado das setas que já existiam.
-- **Combos**: `J+K` = Esc e `D+F` = Tab. O `Alt+1` = F1 que você tinha continua.
-
-As posições seguem a matriz do arquivo, que não é a ordem física das teclas; confira no Vial antes de gravar.
+  salve por cima dele (*File → Save current layout*), rode `just keyboard` e faça commit.
+- [keyboard/README.md](../keyboard/README.md) mostra cada camada em imagem (feitas pelo
+  [keymap-drawer](https://github.com/caksoylar/keymap-drawer)) e os combos, tudo gerado a partir do `.vil`.
 
 ### Teclado do notebook (kanata)
 
