@@ -69,6 +69,15 @@ in
           "noctalia/devenv.toml".source = link "config/noctalia/devenv.toml";
         };
 
+        # Até a fase 4, ~/.config/noctalia era um link para a pasta do repo; agora é uma pasta com um
+        # link por arquivo. Tira o link antigo antes, senão o home-manager acha que o devenv.toml é um
+        # arquivo de fora no caminho.
+        home.activation.devenvNoctaliaDir = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+          if [ -L ${config.xdg.configHome}/noctalia ]; then
+            run rm ${config.xdg.configHome}/noctalia
+          fi
+        '';
+
         # Pasta das capturas do niri.
         home.file."Pictures/Screenshots/.keep".text = "";
       }
