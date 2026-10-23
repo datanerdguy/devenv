@@ -91,10 +91,20 @@ in
 
     xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${cfg.repoPath}/config/nvim";
 
-    # Instala o Neovim pelo bob só na primeira vez. Depois: `just nvim-update`.
+    # Instala o Neovim pelo bob enquanto nenhuma versão estiver em uso. Depois: `just nvim-update`.
     home.activation.bobNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if [ ! -x "${config.xdg.dataHome}/bob/nvim-bin/nvim" ]; then
-        run ${pkgs.bob-nvim}/bin/bob use ${cfg.version} \
+      # O bob troca de pasta se vê SUDO_USER (ex.: `sudo -iu`) e usa a do usuário original.
+      # Sem essas variáveis e com os caminhos explícitos, ele instala para este usuário.
+      bob() {
+        env -u SUDO_USER -u SUDO_UID -u SUDO_GID -u SUDO_COMMAND \
+          HOME="${config.home.homeDirectory}" \
+          XDG_CONFIG_HOME="${config.xdg.configHome}" \
+          XDG_DATA_HOME="${config.xdg.dataHome}" \
+          XDG_CACHE_HOME="${config.xdg.cacheHome}" \
+          ${pkgs.bob-nvim}/bin/bob "$@"
+      }
+      if ! bob ls 2>/dev/null | grep -q Used; then
+        run bob use ${cfg.version} \
           || warnEcho "bob não conseguiu instalar o Neovim ${cfg.version}; rode 'bob use ${cfg.version}' depois"
       fi
     '';

@@ -27,7 +27,7 @@ check "git com branch padrão main" test "$(git config --global init.defaultBran
 check "git usa delta nos diffs" sh -c 'git config --global pager.diff | grep -q delta'
 check "config do ghostty" test -f "${HOME}/.config/ghostty/config"
 check "config do starship" test -f "${HOME}/.config/starship.toml"
-check "neovim instalado pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
+check "neovim instalado pelo bob" "${HOME}/.local/share/bob/nvim-bin/nvim" --version
 check "config do neovim ligada ao repo" test -f "${HOME}/.config/nvim/init.lua"
 for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; do
   check "ferramenta ${bin}" command -v "${bin}"
