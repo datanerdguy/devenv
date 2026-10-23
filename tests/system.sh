@@ -23,12 +23,17 @@ docker run --rm -e DEVENV_SWAY=1 -e DEVENV_I3=1 -v "${repo_dir}:/src:ro" "${imag
 
   . /etc/os-release
   bins="ghostty fish bwrap"
+  desktop=0
   # O desktop só existe no Fedora 44+ e no Ubuntu 26.04+.
   if { [ "${ID}" = fedora ] && [ "${VERSION_ID}" -ge 44 ]; } || { [ "${ID}" = ubuntu ] && dpkg --compare-versions "${VERSION_ID}" ge 26.04; }; then
     bins="${bins} niri noctalia sway i3"
+    desktop=1
   fi
   for b in ${bins}; do
     command -v "${b}" >/dev/null && echo "ok    ${b}" || { echo "FALHA ${b}"; exit 1; }
   done
-  test -f /etc/udev/rules.d/60-devenv-uinput.rules && echo "ok    regra udev do uinput"
+  if [ "${desktop}" = 1 ]; then
+    test -f /etc/udev/rules.d/60-devenv-uinput.rules
+    echo "ok    regra udev do uinput"
+  fi
 '
