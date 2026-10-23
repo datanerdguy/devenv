@@ -29,6 +29,9 @@ in
       tldr
       unzip
       wget
+      # segredos: cliente do Bitwarden (`rbw get <nome>`); configure com `rbw config set email ...`
+      rbw
+      pinentry-curses
     ];
 
     programs.fzf = {

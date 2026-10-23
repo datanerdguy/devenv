@@ -14,5 +14,8 @@ _: {
     };
     terminal.enable = true;
     nvim.enable = true;
+    tmux.enable = true;
+    agents.enable = true;
+    # localModels.enable = true; # Ollama; veja docs/agents.md
   };
 }

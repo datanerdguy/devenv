@@ -14,7 +14,7 @@ cd ~/devenv
 
 O bootstrap faz três coisas:
 
-1. Instala pela distro o que precisa de root (`system/<distro>.sh`): Ghostty, fish e o driver NVIDIA se houver placa.
+1. Instala pela distro o que precisa de root (`system/<distro>.sh`): Ghostty, fish, bubblewrap (sandbox dos agentes) e o driver NVIDIA se houver placa.
 2. Instala o Nix, se faltar.
 3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`.
 
@@ -33,6 +33,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just commit` | Commit guiado no padrão Conventional Commits |
 | `just nvim-update` | Atualiza o Neovim (bob) e os plugins (com revisão) |
 | `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
+| `just agents-update` | Atualiza só os agentes de código |
 | `just generations` | Lista as gerações para rollback |
 
 ## Contribuindo
@@ -52,7 +53,11 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   git/                   git, delta, lazygit, gh
   terminal/              configuração do Ghostty
   nvim/                  Neovim pelo bob, LSPs e ferramentas, link da config
+  tmux/                  tmux sem plugins + sesh
+  agents/                Claude Code, Codex, Gemini CLI, opencode, workmux, tokscale
+  local-models/          Ollama opcional (desligado por padrão)
 config/nvim/             config do Neovim (Lua), ligada em ~/.config/nvim
+agents/                  AGENTS.md, skills e scripts dos agentes
 system/                  scripts de root por distro
 tests/                   testes de fumaça, do Neovim e instalação em container
 .githooks/               hooks de lint e de mensagem de commit
@@ -64,9 +69,9 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 
 - [x] 1. Fundação: flake, home-manager, CLIs, git, fish, Ghostty
 - [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
-- [ ] 3. tmux + sesh
+- [x] 3. tmux + sesh: veja [`docs/tmux.md`](docs/tmux.md)
 - [ ] 4. Desktop: niri + Noctalia, keyd, apps
 - [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula)
-- [ ] 6. Agentes: worktrees, `agent`, config versionada
+- [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)
 - [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops
