@@ -161,6 +161,7 @@ pack.add({
         { "<leader>p", group = "plugins" },
         { "<leader>u", group = "alternar interface" },
         { "<leader>x", group = "diagnósticos e listas" },
+        { "<leader>z", group = "notas (Obsidian)" },
         { "<leader>?", function() wk.show({ global = false }) end, desc = "Atalhos deste buffer" },
       })
     end,

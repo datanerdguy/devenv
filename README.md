@@ -60,6 +60,7 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   agents/                Claude Code, Codex, Gemini CLI, opencode, workmux, tokscale
   local-models/          Ollama opcional (desligado por padrão)
   desktop/               niri, Noctalia, sway/i3 opcionais, kanata, Vial
+  apps/                  Flatpaks (nix-flatpak), Flameshot, apps padrão
 config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
 keyboard/                layouts do Corne (Vial) e o gerador do docs/keyboard.md
 agents/                  AGENTS.md, skills e scripts dos agentes
@@ -75,7 +76,7 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 1. Fundação: flake, home-manager, CLIs, git, fish, Ghostty
 - [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
 - [x] 3. tmux + sesh: veja [`docs/tmux.md`](docs/tmux.md)
-- [ ] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) (apps no próximo PR)
+- [x] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) e [`docs/apps.md`](docs/apps.md)
 - [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)

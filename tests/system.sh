@@ -22,7 +22,7 @@ docker run --rm -e DEVENV_SWAY=1 -e DEVENV_I3=1 -v "${repo_dir}:/src:ro" "${imag
   sudo -u dev env USER=dev DEVENV_SWAY=1 DEVENV_I3=1 bash "/src/system/${script}"
 
   . /etc/os-release
-  bins="ghostty fish bwrap"
+  bins="ghostty fish bwrap flatpak flameshot wayscriber zathura imv mpv"
   desktop=0
   # O desktop só existe no Fedora 44+ e no Ubuntu 26.04+.
   if { [ "${ID}" = fedora ] && [ "${VERSION_ID}" -ge 44 ]; } || { [ "${ID}" = ubuntu ] && dpkg --compare-versions "${VERSION_ID}" ge 26.04; }; then

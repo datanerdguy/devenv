@@ -55,6 +55,8 @@ environment {
 
 // Noctalia: barra, launcher, notificações, bloqueio, papel de parede e agente de polkit.
 spawn-at-startup "noctalia"
+// Desenho na tela fica pronto em segundo plano (Super+D mostra e esconde).
+spawn-at-startup "wayscriber" "--daemon"
 
 // Apps X11 rodam pelo xwayland-satellite, iniciado sozinho quando preciso (niri 25.08+).
 

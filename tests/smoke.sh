@@ -62,10 +62,14 @@ done
 check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"
 
 # Desktop: configs ligadas ao repo (o CI liga sway e i3) e o kanata.
-for f in niri/config.kdl niri/binds.kdl noctalia/devenv.toml sway/config i3/config devenv/wm-common.conf kanata/kanata.kbd; do
+for f in zathura/zathurarc niri/config.kdl niri/binds.kdl noctalia/devenv.toml sway/config i3/config devenv/wm-common.conf kanata/kanata.kbd; do
   check "config ${f}" test -f "${HOME}/.config/${f}"
 done
 check "serviço do kanata" test -f "${HOME}/.config/systemd/user/kanata.service"
+check "serviço dos flatpaks" test -f "${HOME}/.config/systemd/user/flatpak-managed-install.service"
+check "config do flameshot" test -f "${HOME}/.config/flameshot/flameshot.ini"
+check "apps padrão (mimeapps)" grep -q zen_browser "${HOME}/.config/mimeapps.list"
+check "lançador do navegador" command -v devenv-browser
 for bin in kanata Vial wl-copy; do
   check "binário ${bin}" command -v "${bin}"
 done

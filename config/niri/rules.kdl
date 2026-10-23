@@ -38,3 +38,10 @@ layer-rule {
     match namespace="^noctalia-wallpaper"
     place-within-backdrop true
 }
+
+// Flameshot: a tela de seleção cobre o monitor inteiro, sem virar coluna nem tela cheia.
+window-rule {
+    match app-id="flameshot"
+    open-floating true
+    open-fullscreen false
+}

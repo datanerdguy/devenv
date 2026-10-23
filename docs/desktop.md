@@ -3,7 +3,7 @@
 Sessão principal: **[niri](https://github.com/niri-wm/niri)** (janelas em colunas que rolam na horizontal) com o
 **[Noctalia Shell](https://noctalia.dev)** v5 (barra, launcher, notificações, central de controle, tela de bloqueio).
 **sway** e **i3** ficam como sessões opcionais, com os mesmos atalhos básicos.
-Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
+Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
 
 ## Instalação
 
@@ -21,8 +21,11 @@ Com placa NVIDIA, o perfil que reduz a VRAM presa pelo compositor ([guia do niri
 Para as sessões opcionais: `DEVENV_SWAY=1 DEVENV_I3=1 ./bootstrap.sh <host>` e, no host,
 `devenv.desktop.sway.enable = true;` / `devenv.desktop.i3.enable = true;`.
 
-Depois, saia da sessão e escolha **niri** na tela de login (GDM). O GNOME continua instalado: se algo der errado,
-é só escolher GNOME na mesma tela.
+Depois, saia da sessão e escolha **niri** na tela de login (LightDM no Fedora i3 Spin, GDM no Workstation e no
+Ubuntu). A sessão que você já tinha (i3 ou GNOME) continua lá: se algo der errado, é só escolher ela na mesma tela.
+
+No **Fedora i3 Spin** o i3 já vem configurado. O `devenv.desktop.i3.enable` troca o seu `~/.config/i3` pela config do
+repo (o home-manager guarda o antigo como `config.backup`), por isso fica desligado no host até você querer.
 
 ## Como a configuração funciona
 
@@ -71,7 +74,11 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 | `Super+C` | centraliza a coluna |
 | `Super+V`, `Super+Shift+V` | janela flutuante, alterna foco entre flutuantes e lado a lado |
 | `Super+W` | coluna em abas |
-| `Print`, `Ctrl+Print`, `Alt+Print` | captura de área, da tela, da janela (salva em `~/Pictures/Screenshots` e copia) |
+| `Super+B` | navegador |
+| `Super+N` | nota do dia no Neovim |
+| `Super+D` | desenhar na tela (wayscriber) |
+| `Print` | captura com anotação (Flameshot) |
+| `Super+Print`, `Ctrl+Print`, `Alt+Print` | captura nativa do niri: área, tela, janela (salva em `~/Pictures/Screenshots` e copia) |
 | `Super+Alt+L` | bloqueia a tela |
 | `Super+Escape` | libera os atalhos para o app em foco (VM, jogo) |
 | `Super+Shift+E` | sai do niri |
@@ -84,8 +91,10 @@ o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas). A lista 
 
 ## Monitores
 
-O niri acerta resolução e escala sozinho. Para fixar a posição do ultrawide e do notebook, veja os nomes com
-`niri msg outputs` e crie `~/.config/devenv/niri-local.kdl`:
+Não precisa configurar nada: a cada monitor conectado o niri lê a resolução, a taxa e a escala que ele anuncia e
+aplica na hora; ao desconectar, as janelas voltam para a tela que sobrou. Configure só para mudar a posição ou
+forçar uma escala. A regra vale sempre que aquele monitor aparecer. Veja os nomes com `niri msg outputs`
+e crie `~/.config/devenv/niri-local.kdl`:
 
 ```kdl
 output "eDP-1" {
@@ -98,6 +107,8 @@ output "DP-1" {
 }
 ```
 
+Em vez do conector (`DP-1`), dá para usar a marca, o modelo e o número de série que o `niri msg outputs` mostra
+(ex.: `output "Dell Inc. U3423WE ABC123"`): a regra segue o monitor em qualquer porta ou dock.
 Sem o monitor externo, as áreas de trabalho dele passam para o notebook e voltam quando ele é ligado.
 
 ## Mesa digitalizadora
@@ -146,16 +157,29 @@ Caps Lock vira Esc no toque e Ctrl segurando. O Corne não é afetado (ele já f
 O layout do sistema é `us` com a variante `altgr-intl` (acentos com AltGr, sem teclas mortas atrapalhando o código).
 Para mudar, edite `xkb` no `config.kdl`.
 
-## NVIDIA
+## GPU (NVIDIA, híbrida ou integrada)
 
-O bootstrap instala o driver e o perfil de VRAM. Se o niri abrir com tela preta, o modeset do kernel está desligado:
+Nada a configurar no caso comum. O bootstrap só instala o driver da NVIDIA se achar a placa, junto com o perfil de VRAM.
+O niri escolhe sozinho a placa que desenha a tela: com GPU híbrida, usa a integrada e a NVIDIA fica livre para
+CUDA e jogos (`__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia <app>` manda um app para ela).
+
+Se o niri abrir com tela preta, o modeset do kernel está desligado:
 
 ```bash
 sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   # Fedora
 ```
 
+Para forçar uma placa (ex.: o monitor externo ligado direto na NVIDIA ficar lento), veja as placas com
+`ls -l /dev/dri/by-path/` e ponha no `niri-local.kdl`:
+
+```kdl
+debug {
+    render-drm-device "/dev/dri/renderD129"
+}
+```
+
 ## Voltar atrás
 
-- Para não usar o niri: escolha GNOME na tela de login. Nada do GNOME é removido.
+- Para não usar o niri: escolha a sessão antiga (i3 ou GNOME) na tela de login. Nada dela é removido.
 - Para tirar a config: `devenv.desktop.enable = false;` e `just switch`.
 - Para voltar a uma versão anterior da config: `just generations` e ative a geração desejada.
