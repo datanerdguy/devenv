@@ -1,0 +1,59 @@
+{
+  description = "{{ description or project_name }}";
+
+  # O `new` fixa o nixpkgs na mesma versão do devenv (flake.lock), para aproveitar o que já está baixado.
+  # Atualize com `nix flake update`.
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs =
+    { nixpkgs, ... }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      forAll = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+    in
+    {
+      # Ferramentas do projeto.
+{%- if lang == 'python' %} O Python e as bibliotecas vêm do uv (pyproject.toml e uv.lock).
+{%- elif lang == 'rust' %} O Rust vem do rustup, na versão do rust-toolchain.toml.
+{%- elif lang == 'elixir' %} As bibliotecas vêm do mix (mix.exs e mix.lock).
+{%- endif %}
+      devShells = forAll (pkgs: {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+{%- if lang == 'python' %}
+            uv
+{%- elif lang == 'go' %}
+            go
+            gopls
+            golangci-lint
+{%- elif lang == 'rust' %}
+            rustup
+            cargo-nextest
+{%- elif lang == 'elixir' %}
+            elixir
+            erlang
+{%- endif %}
+            just
+            lefthook
+            commitizen
+{%- if lang == 'elixir' %}
+          ]
+          # o recarregamento automático do Phoenix usa o inotify no Linux
+          ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools
+          ++ [
+{%- endif %}
+{%- if postgres %}
+            postgresql
+            process-compose
+{%- endif %}
+          ];
+        };
+      });
+
+      formatter = forAll (pkgs: pkgs.nixfmt-tree);
+    };
+}

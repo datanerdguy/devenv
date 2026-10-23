@@ -23,6 +23,7 @@ _: {
     };
     apps.enable = true;
     theme.enable = true; # `theme <nome>` troca o tema; veja docs/themes.md
+    templates.enable = true; # `new python meu-projeto api`; veja docs/templates.md
     # localModels.enable = true; # Ollama; veja docs/agents.md
   };
 }

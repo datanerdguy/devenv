@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ title }}</h1>
+<form hx-post="/todos" hx-target="#todos" hx-on::after-request="this.reset()">
+  <input name="text" placeholder="Nova tarefa" required autofocus>
+  <button>Adicionar</button>
+</form>
+<div id="todos">{% include "_todos.html" %}</div>
+{% endblock %}

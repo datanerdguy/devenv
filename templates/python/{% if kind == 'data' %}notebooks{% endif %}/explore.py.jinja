@@ -1,0 +1,33 @@
+import marimo
+
+app = marimo.App(width="medium")
+
+
+@app.cell
+def _():
+    import marimo as mo
+
+    from {{ package }}.pipeline import load_sample, summary
+
+    return load_sample, mo, summary
+
+
+@app.cell
+def _(mo):
+    mo.md("""# Explorar os dados""")
+
+
+@app.cell
+def _(load_sample, mo):
+    df = load_sample()
+    mo.ui.table(df)
+    return (df,)
+
+
+@app.cell
+def _(df, summary):
+    summary(df)
+
+
+if __name__ == "__main__":
+    app.run()

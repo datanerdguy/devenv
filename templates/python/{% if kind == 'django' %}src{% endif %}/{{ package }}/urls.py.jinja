@@ -1,0 +1,11 @@
+from django.contrib import admin
+from django.urls import path
+
+from {{ package }} import views
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", views.index, name="index"),
+    path("todos/", views.add_todo, name="add_todo"),
+    path("todos/<int:pk>/", views.delete_todo, name="delete_todo"),
+]

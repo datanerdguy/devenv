@@ -1,0 +1,32 @@
+# {{ project_name }}
+
+{{ description or 'Projeto criado com o devenv.' }}
+
+## Começar
+
+Com o [devenv](https://github.com/datanerdguy/devenv) (Nix e direnv), basta entrar na pasta: o direnv carrega o Go,
+o golangci-lint e o resto do `flake.nix`. Sem o direnv: `nix develop`.
+
+## Comandos
+
+| Comando | O que faz |
+| --- | --- |
+{%- if kind == 'cli' %}
+| `just dev -name Lucas` | roda o programa |
+{%- else %}
+| `just dev` | sobe o servidor em http://localhost:8080 (`ADDR` muda a porta) |
+{%- endif %}
+| `just build` | compila para `bin/` |
+| `just test` | testes, com o detector de corrida |
+| `just fmt` | formata (gofumpt e goimports) |
+| `just ci` | tudo que o CI roda: golangci-lint e testes |
+{%- if docker %}
+| `just docker` | gera a imagem Docker (distroless, sem root) |
+{%- endif %}
+
+Dependências: `go get pacote` e `go mod tidy`. O `go.sum` vai para o git.
+
+## Commits
+
+[Conventional Commits](https://www.conventionalcommits.org/pt-br/): `cz commit` guia, e o hook do git confere
+(lefthook). `cz bump` cria a tag da versão e atualiza o CHANGELOG.

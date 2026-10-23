@@ -1,0 +1,24 @@
+[package]
+name = "{{ project_name }}"
+version = "0.1.0"
+edition = "2024"
+description = "{{ description }}"
+{%- if author_name %}
+authors = ["{{ author_name }}{% if author_email %} <{{ author_email }}>{% endif %}"]
+{%- endif %}
+{%- if license != 'none' %}
+license = "{{ license }}"
+{%- endif %}
+readme = "README.md"
+
+[dependencies]
+{%- if kind == 'bin' %}
+anyhow = "1"
+clap = { version = "4.5", features = ["derive"] }
+{%- endif %}
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }

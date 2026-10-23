@@ -1,0 +1,12 @@
+from pydantic_ai.models.test import TestModel
+
+from {{ package }}.agent import build_agent
+
+
+def test_agent_uses_tools() -> None:
+    # TestModel não chama nenhum provedor: chama as ferramentas e devolve um texto de teste.
+    model = TestModel()
+    result = build_agent(model).run_sync("Que dia é hoje?")
+    assert isinstance(result.output, str)
+    assert model.last_model_request_parameters is not None
+    assert [t.name for t in model.last_model_request_parameters.function_tools] == ["today"]

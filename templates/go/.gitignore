@@ -1,0 +1,12 @@
+# Go
+/bin/
+/tmp/
+coverage.out
+*.test
+
+# Ambiente local
+.direnv/
+.devenv/
+.envrc.local
+.env
+result

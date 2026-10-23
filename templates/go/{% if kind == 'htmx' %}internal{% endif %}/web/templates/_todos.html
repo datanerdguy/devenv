@@ -1,0 +1,7 @@
+<ul>
+  {{ range $i, $todo := . }}
+  <li>{{ $todo }} <button hx-delete="/todos/{{ $i }}" hx-target="#todos">×</button></li>
+  {{ else }}
+  <li>Nada por aqui.</li>
+  {{ end }}
+</ul>

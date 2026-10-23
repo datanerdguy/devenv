@@ -1,0 +1,13 @@
+import psycopg
+import pytest
+
+from {{ package }}.db import connect
+
+
+def test_connect() -> None:
+    try:
+        conn = connect()
+    except psycopg.OperationalError:
+        pytest.skip("Postgres fora do ar (suba com `just db`)")
+    with conn:
+        assert conn.execute("select 1").fetchone() == (1,)

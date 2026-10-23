@@ -1,0 +1,25 @@
+# {{ project_name }}
+
+Instruções para agentes de código (Claude Code, Codex, Gemini, opencode). Complementam o AGENTS.md global.
+
+## Stack
+
+- Elixir {{ elixir_version }} e Erlang/OTP {{ otp_version }}, Phoenix com LiveView, Ecto com
+  {% if postgres %}Postgres (`just db` sobe o banco local){% else %}SQLite{% endif %}, Tailwind e esbuild.
+- Código em `lib/{{ project_name | replace('-', '_') }}/` (regras do negócio) e `lib/{{ project_name | replace('-', '_') }}_web/`
+  (rotas, LiveViews e componentes). Testes em `test/`.
+
+## Comandos
+
+- `just ci` antes de dizer que terminou: formatação, compilação com avisos como erro e `mix test`.
+- `just test test/caminho_test.exs:12` para um teste; `just fmt` formata.
+- Dependência nova: em `deps` no `mix.exs`, depois `mix deps.get`.
+
+## Regras
+
+- Lógica nos contextos (`lib/{{ project_name | replace('-', '_') }}/`), não nos LiveViews.
+- Todo comportamento novo vem com teste.
+- Segredos só no `.envrc.local` (fora do git), nunca no código.
+- Commits no padrão Conventional Commits (o hook confere).
+
+As regras do Phoenix para agentes, geradas pelo `mix phx.new`, vêm logo abaixo.

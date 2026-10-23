@@ -1,0 +1,44 @@
+"""Treino de exemplo: aprende sin(x) com ruído. Rode com `python -m {{ package }}.train`."""
+
+from dataclasses import dataclass
+
+import torch
+from torch import nn
+
+from {{ package }}.model import MLP, best_device
+
+
+@dataclass
+class Result:
+    model: MLP
+    first_loss: float
+    last_loss: float
+
+
+def make_data(n: int = 256, seed: int = 0) -> tuple[torch.Tensor, torch.Tensor]:
+    gen = torch.Generator().manual_seed(seed)
+    x = torch.linspace(-3, 3, n).unsqueeze(1)
+    y = torch.sin(x) + 0.1 * torch.randn(x.shape, generator=gen)
+    return x, y
+
+
+def train(epochs: int = 300, lr: float = 1e-2, seed: int = 0) -> Result:
+    torch.manual_seed(seed)
+    device = best_device()
+    x, y = (t.to(device) for t in make_data(seed=seed))
+    model = MLP().to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.MSELoss()
+    losses: list[float] = []
+    for _ in range(epochs):
+        optimizer.zero_grad()
+        loss = loss_fn(model(x), y)
+        loss.backward()
+        optimizer.step()
+        losses.append(loss.item())
+    return Result(model=model, first_loss=losses[0], last_loss=losses[-1])
+
+
+if __name__ == "__main__":
+    result = train()
+    print(f"loss: {result.first_loss:.4f} -> {result.last_loss:.4f} ({best_device()})")

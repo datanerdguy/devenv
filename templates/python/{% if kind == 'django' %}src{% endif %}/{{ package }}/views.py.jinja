@@ -1,0 +1,33 @@
+"""Views.
+
+As que o htmx chama devolvem só o pedaço de HTML que muda (templates que começam com `_`).
+"""
+
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
+
+from {{ package }}.models import Todo
+
+
+def _todos(request: HttpRequest) -> HttpResponse:
+    return render(request, "_todos.html", {"todos": Todo.objects.all()})
+
+
+@require_GET
+def index(request: HttpRequest) -> HttpResponse:
+    return render(request, "index.html", {"todos": Todo.objects.all()})
+
+
+@require_POST
+def add_todo(request: HttpRequest) -> HttpResponse:
+    text = request.POST.get("text", "").strip()
+    if text:
+        Todo.objects.create(text=text)
+    return _todos(request)
+
+
+@require_http_methods(["DELETE"])
+def delete_todo(request: HttpRequest, pk: int) -> HttpResponse:
+    get_object_or_404(Todo, pk=pk).delete()
+    return _todos(request)

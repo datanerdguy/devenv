@@ -1,0 +1,41 @@
+# {{ project_name }}
+
+{{ description or 'Projeto criado com o devenv.' }}
+
+Site com [Phoenix](https://www.phoenixframework.org) e LiveView, gerado pelo `mix phx.new`, com
+{% if postgres %}Postgres{% else %}SQLite{% endif %}, Tailwind e esbuild.
+
+## Começar
+
+Com o [devenv](https://github.com/datanerdguy/devenv) (Nix e direnv), basta entrar na pasta: o direnv carrega o
+Elixir, o Erlang e o resto do `flake.nix`. Sem o direnv: `nix develop`.
+
+```sh
+{%- if postgres %}
+just db      # num terminal: Postgres local
+{%- endif %}
+just setup   # dependências, banco, Tailwind e esbuild
+just dev     # http://localhost:4000
+```
+
+## Comandos
+
+| Comando | O que faz |
+| --- | --- |
+| `just dev` | sobe o servidor com recarga automática, dentro do `iex` |
+| `just test` | testes |
+| `just fmt` | formata (mix format) |
+| `just ci` | tudo que o CI roda: formatação, compilação sem avisos e testes |
+{%- if postgres %}
+| `just db` | Postgres local (dados em `.devenv/pg`) |
+{%- endif %}
+{%- if docker %}
+| `just docker` | gera a imagem Docker (release do Phoenix, `rel/`) |
+{%- endif %}
+
+Dependências: edite `deps` no `mix.exs` e rode `mix deps.get`. O `mix.lock` vai para o git.
+
+## Commits
+
+[Conventional Commits](https://www.conventionalcommits.org/pt-br/): `cz commit` guia, e o hook do git confere
+(lefthook). `cz bump` cria a tag da versão e atualiza o CHANGELOG.

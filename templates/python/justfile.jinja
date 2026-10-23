@@ -1,0 +1,73 @@
+# Atalhos do projeto. Rode `just` para ver a lista.
+
+default:
+    @just --list
+
+# Instala as dependências (pyproject.toml e uv.lock)
+sync:
+    uv sync
+
+{%- if kind == 'api' or kind == 'fastapi-htmx' %}
+
+# Sobe o servidor com recarga automática (http://localhost:8000)
+dev:
+    uv run fastapi dev src/{{ package }}/main.py
+{%- elif kind == 'django' %}
+
+# Sobe o servidor com recarga automática (http://localhost:8000)
+dev:
+    uv run python manage.py runserver
+
+# Comandos do Django (ex.: just manage makemigrations)
+manage *args:
+    uv run python manage.py {{ '{{' }} args {{ '}}' }}
+{%- elif kind == 'streamlit' %}
+
+# Abre o app no navegador (http://localhost:8501)
+dev:
+    uv run streamlit run src/{{ package }}/app.py
+{%- elif kind in ['data', 'ml'] %}
+
+# Abre os notebooks no marimo (http://localhost:2718)
+dev:
+    uv run marimo edit notebooks
+{%- elif kind == 'llm' %}
+
+# Pergunta ao agente (ex.: just dev "o que é um LLM?")
+dev *prompt:
+    uv run python -m {{ package }} "{{ '{{' }} prompt {{ '}}' }}"
+{%- endif %}
+
+# Formata e corrige o que der
+fmt:
+    uv run ruff format .
+    uv run ruff check --fix .
+
+# Formatação, lint e tipos (o mesmo que o CI)
+lint:
+    uv run ruff format --check .
+    uv run ruff check .
+    uv run basedpyright
+
+# Testes (ex.: just test -k nome)
+test *args:
+    uv run pytest {{ '{{' }} args {{ '}}' }}
+
+# Tudo que o CI roda
+ci: lint test
+{%- if postgres %}
+
+# Postgres local em .devenv/pg (Ctrl+C para parar). O DATABASE_URL vem do .envrc
+db:
+    process-compose up
+{%- endif %}
+{%- if docker %}
+
+# Gera a imagem Docker
+docker:
+    docker build -t {{ project_name }} .
+{%- endif %}
+
+# Traz as mudanças do modelo do devenv para este projeto
+template-update:
+    copier update --trust --skip-answered --vcs-ref HEAD

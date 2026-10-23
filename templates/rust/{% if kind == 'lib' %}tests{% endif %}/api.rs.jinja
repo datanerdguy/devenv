@@ -1,0 +1,8 @@
+//! Testa a biblioteca pela API pública, como quem a usa.
+
+use {{ project_name | replace('-', '_') }}::hello;
+
+#[test]
+fn greets_by_name() {
+    assert_eq!(hello("Lucas"), "Olá, Lucas!");
+}
