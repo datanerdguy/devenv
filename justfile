@@ -27,7 +27,7 @@ fmt:
 lint:
     nix fmt -- --ci
     statix check .
-    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh modules/theme/theme.sh modules/templates/new.sh .githooks/*
+    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh modules/theme/theme.sh modules/templates/new.sh modules/secrets/secrets.sh .githooks/*
     actionlint
     stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
     python3 keyboard/render.py --check
@@ -62,8 +62,8 @@ agents-update:
 desktop-check:
     nix build .#checks.x86_64-linux.desktop --no-link --print-build-logs
 
-# Regenera docs/keyboard.md depois de salvar o .vil no Vial
-keyboard-doc:
+# Regenera as imagens das camadas e o keyboard/README.md depois de salvar o .vil no Vial
+keyboard:
     python3 keyboard/render.py
 
 # Mostra o que você mudou pela tela de ajustes do Noctalia (para trazer ao repo)

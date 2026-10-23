@@ -16,7 +16,7 @@ check() {
 
 export PATH="${HOME}/.nix-profile/bin:${HOME}/.local/state/nix/profile/bin:${PATH}"
 
-for bin in fish starship git delta lazygit gh rg fd fzf bat eza zoxide atuin direnv yazi jq duckdb just; do
+for bin in fish starship git delta lazygit gh rg fd fzf bat eza zoxide atuin direnv yazi jq duckdb harlequin tw pgcli litecli just; do
   check "binário ${bin}" command -v "${bin}"
 done
 
@@ -25,6 +25,15 @@ check "abreviação ll no fish" fish -i -c 'abbr --query ll'
 check "starship gera prompt" starship prompt
 check "git com branch padrão main" test "$(git config --global init.defaultBranch)" = main
 check "git usa delta nos diffs" sh -c 'git config --global pager.diff | grep -q delta'
+# Segredos (host ci: chave e arquivo de teste em tests/secrets). Sem systemd no container, roda o que o
+# serviço sops-nix rodaria no login.
+unit="${HOME}/.config/systemd/user/sops-nix.service"
+if [ -f "${unit}" ]; then
+  check "sops-nix abre os segredos" sh -c "$(sed -n 's/^ExecStart=//p' "${unit}")"
+  check "git usa o e-mail dos segredos" test "$(cd && git config user.email)" = ci-secrets@example.com
+  # shellcheck disable=SC2016 # a variável é expandida pelo fish
+  check "fish lê o token dos segredos" test "$(fish -c 'echo $DEVENV_TEST_TOKEN')" = segredo-de-teste
+fi
 check "config do ghostty" test -f "${HOME}/.config/ghostty/config"
 check "config do starship" test -f "${HOME}/.config/starship.toml"
 check "neovim instalado pelo bob" "${HOME}/.local/share/bob/nvim-bin/nvim" --version
@@ -32,6 +41,7 @@ check "config do neovim ligada ao repo" test -f "${HOME}/.config/nvim/init.lua"
 for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; do
   check "ferramenta ${bin}" command -v "${bin}"
 done
+check "yazi abre tabelas no tabiew" grep -q 'tw %s1' "${HOME}/.config/yazi/yazi.toml"
 check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
 
 # Agentes e tmux
@@ -70,7 +80,10 @@ check "serviço dos flatpaks" test -f "${HOME}/.config/systemd/user/flatpak-mana
 check "config do flameshot" test -f "${HOME}/.config/flameshot/flameshot.ini"
 check "apps padrão (mimeapps)" grep -q zen_browser "${HOME}/.config/mimeapps.list"
 check "lançador do navegador" command -v devenv-browser
-for bin in kanata Vial wl-copy; do
+for f in picom/picom.conf greenclip.toml; do
+  check "config ${f}" test -f "${HOME}/.config/${f}"
+done
+for bin in kanata Vial wl-copy greenclip dex xss-lock xclip; do
   check "binário ${bin}" command -v "${bin}"
 done
 

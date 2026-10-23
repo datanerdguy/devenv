@@ -79,6 +79,37 @@ pack.add({
     end,
   },
 
+  -- Fixa no topo a função/classe em que o cursor está (até 3 linhas). <leader>uc liga e desliga; [C vai até ela.
+  {
+    src = gh("nvim-treesitter/nvim-treesitter-context"),
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      local ctx = require("treesitter-context")
+      ctx.setup({ max_lines = 3, multiline_threshold = 1, trim_scope = "inner" })
+      vim.keymap.set("n", "<leader>uc", ctx.toggle, { desc = "Alternar contexto no topo" })
+      vim.keymap.set("n", "[C", function() ctx.go_to_context(vim.v.count1) end, { desc = "Ir ao contexto" })
+    end,
+  },
+
+  -- Fecha e renomeia a tag par em HTML, HEEx (Phoenix), templates do Django/Go e JSX.
+  {
+    src = gh("windwp/nvim-ts-autotag"),
+    ft = {
+      "html",
+      "heex",
+      "eex",
+      "htmldjango",
+      "gotmpl",
+      "templ",
+      "javascriptreact",
+      "typescriptreact",
+      "xml",
+      "svelte",
+      "vue",
+    },
+    config = function() require("nvim-ts-autotag").setup() end,
+  },
+
   {
     src = gh("lewis6991/gitsigns.nvim"),
     event = { "BufReadPre", "BufNewFile" },

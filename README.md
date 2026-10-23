@@ -1,6 +1,6 @@
 # devenv
 
-Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu e outras distros.
+Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu, Arch e derivadas.
 
 Foco: ML/IA/LLM, dados, fluxo guiado pelo teclado (terminal, Neovim, niri), code agents. O plano completo está no documento de proposta; as decisões ficam em [`docs/adr/`](docs/adr/).
 
@@ -18,7 +18,7 @@ O bootstrap faz três coisas:
 2. Instala o Nix, se faltar.
 3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`.
 
-Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix).
+Antes de rodar, ajuste o usuário em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix). Nome, e-mail e tokens ficam cifrados em `secrets/` ([`docs/secrets.md`](docs/secrets.md)).
 
 ## Dia a dia
 
@@ -35,7 +35,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
 | `just agents-update` | Atualiza só os agentes de código |
 | `just desktop-check` | Valida as configs do niri, sway, i3 e kanata |
-| `just keyboard-doc` | Regenera o mapa do teclado depois de salvar no Vial |
+| `just keyboard` | Regenera as imagens das camadas do teclado depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia |
 | `theme <nome>` | Troca o tema de tudo (`Super+T` mostra a lista) |
 | `new python meu-projeto api` | Cria um projeto pronto a partir dos modelos ([`docs/templates.md`](docs/templates.md)) |
@@ -43,7 +43,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 
 ## Contribuindo
 
-Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora e Ubuntu. Detalhes em [`docs/workflow.md`](docs/workflow.md).
+Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora, Ubuntu e Arch. Detalhes em [`docs/workflow.md`](docs/workflow.md).
 
 Para trabalhar no repo: `nix develop` (ou `direnv allow`), que traz as ferramentas e liga os git hooks.
 
@@ -68,13 +68,14 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
 themes/                  as paletas e os papéis de parede de cada tema
 templates/ + copier.yml  modelos de projeto (Python, Go, Rust e Phoenix)
 config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
-keyboard/                layouts do Corne (Vial) e o gerador do docs/keyboard.md
+keyboard/                layout do Corne (Vial), imagens das camadas e o gerador (render.py)
 agents/                  AGENTS.md, skills e scripts dos agentes
 system/                  scripts de root por distro
 tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e instalação em container
 .githooks/               hooks de lint e de mensagem de commit
 .github/workflows/       CI, release e atualização semanal do flake.lock
 docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
+AGENTS.md, CLAUDE.md     instruções para agentes de código que abrem este repo
 ```
 
 ## Fases
@@ -86,4 +87,5 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [x] 7. Modelos de projeto (`new`): Python (lib, api, llm, data, ml, fastapi-htmx, django, streamlit), Go (cli, service, htmx), Rust (bin, lib) e Phoenix. Veja [`docs/templates.md`](docs/templates.md)
-- [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops
+- [x] 8. Portabilidade: Arch e derivadas, Ubuntu 26.04 no CI, segredos com sops-nix: veja [`docs/secrets.md`](docs/secrets.md)
+- [x] Dados no terminal: harlequin, tabiew e DuckDB (também pelo Neovim): veja [`docs/data.md`](docs/data.md)

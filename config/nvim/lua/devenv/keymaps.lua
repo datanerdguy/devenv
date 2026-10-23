@@ -4,6 +4,7 @@
 local map = vim.keymap.set
 
 -- Básico
+map("i", "jk", "<Esc>", { desc = "Sair do modo de inserção" })
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Limpa destaque da busca" })
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Salvar" })
 map("n", "<leader>q", "<cmd>quit<cr>", { desc = "Fechar janela" })
@@ -28,6 +29,42 @@ map("x", ">", ">gv")
 
 -- Colar sem perder o que estava copiado
 map("x", "p", '"_dP', { desc = "Colar mantendo o registro" })
+
+-- Copiar o caminho do arquivo (para colar num agente, chat ou terminal).
+-- Vai para o clipboard do sistema; por SSH, o Neovim usa OSC 52 sozinho.
+local function copy_path(desc, fn)
+  return function()
+    local file = vim.api.nvim_buf_get_name(0)
+    if file == "" then return vim.notify("Buffer sem arquivo", vim.log.levels.WARN) end
+    local text = fn(file)
+    vim.fn.setreg("+", text)
+    vim.notify(desc .. ": " .. text)
+  end
+end
+local function relative(f) return vim.fn.fnamemodify(f, ":.") end
+map("n", "<leader>yp", copy_path("Caminho relativo", relative), { desc = "Copiar caminho relativo" })
+map("n", "<leader>yP", copy_path("Caminho absoluto", function(f) return f end), { desc = "Copiar caminho absoluto" })
+map(
+  "n",
+  "<leader>yn",
+  copy_path("Nome", function(f) return vim.fn.fnamemodify(f, ":t") end),
+  { desc = "Copiar nome do arquivo" }
+)
+map(
+  "n",
+  "<leader>yl",
+  copy_path("Caminho com linha", function(f) return relative(f) .. ":" .. vim.fn.line(".") end),
+  { desc = "Copiar caminho:linha" }
+)
+map("x", "<leader>yl", function()
+  local a, b = vim.fn.line("v"), vim.fn.line(".")
+  if a > b then
+    a, b = b, a
+  end
+  local text = relative(vim.api.nvim_buf_get_name(0)) .. ":" .. a .. (a ~= b and ("-" .. b) or "")
+  vim.fn.setreg("+", text)
+  vim.notify("Caminho com linhas: " .. text)
+end, { desc = "Copiar caminho:linhas da seleção" })
 
 -- Janelas (navegação C-h/j/k/l fica com o smart-splits, integrado ao tmux)
 map("n", "<leader>-", "<cmd>split<cr>", { desc = "Dividir abaixo" })

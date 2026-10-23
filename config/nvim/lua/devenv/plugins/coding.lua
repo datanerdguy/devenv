@@ -21,16 +21,13 @@ pack.add({
     event = { "InsertEnter", "CmdlineEnter", "BufReadPre", "BufNewFile" },
     config = function()
       require("blink.cmp").setup({
-        keymap = {
-          preset = "enter", -- Enter aceita; C-Space abre; C-e fecha
-          ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-          ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
-        },
+        -- Tab aceita (ou pula para o próximo campo do snippet); C-n/C-p escolhem; C-Space abre; C-e fecha.
+        keymap = { preset = "super-tab" },
         appearance = { nerd_font_variant = "mono" },
         completion = {
           documentation = { auto_show = true, auto_show_delay_ms = 200 },
           menu = { draw = { treesitter = { "lsp" } } },
-          list = { selection = { preselect = false, auto_insert = true } },
+          list = { selection = { preselect = true, auto_insert = false } }, -- o primeiro já vem marcado para o Tab
         },
         signature = { enabled = true },
         sources = { default = { "lsp", "path", "snippets", "buffer" } },

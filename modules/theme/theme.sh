@@ -123,6 +123,23 @@ sync_noctalia_on_start() {
   sync_noctalia
 }
 
+# i3 (X11): papel de parede do tema com o feh. Mantém o escolhido se já for do tema atual.
+# Chamado ao trocar de tema e pelo i3 ao iniciar (exec_always theme __wallpaper-x11).
+wallpaper_x11() {
+  [ -n "${DISPLAY:-}" ] && command -v feh >/dev/null 2>&1 || return 0
+  local walls current
+  walls="$(wallpaper_dir "$(current_id)")"
+  current="$(cat "${STATE}/x11-wallpaper" 2>/dev/null || true)"
+  case "${current}" in
+    "${walls}"/*) [ -f "${current}" ] || current="" ;;
+    *) current="" ;;
+  esac
+  [ -n "${current}" ] || current="$(find -L "${walls}" -maxdepth 1 -type f | sort | head -n 1)"
+  [ -n "${current}" ] || return 0
+  echo "${current}" | write_atomic "${STATE}/x11-wallpaper"
+  feh --no-fehbg --bg-fill "${current}" 2>/dev/null || true
+}
+
 apply() {
   local id="$1" dir opacity name
   dir="${THEMES}/${id}"
@@ -180,6 +197,7 @@ EOF
   fi
   if command -v i3-msg >/dev/null 2>&1 && i3-msg -t get_version >/dev/null 2>&1; then
     i3-msg reload >/dev/null 2>&1 || true
+    wallpaper_x11
   fi
   if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
     tmux source-file "${dir}/tmux.conf" 2>/dev/null || true
@@ -195,6 +213,7 @@ case "${cmd}" in
   apply) apply "$(current_id)" ;;
   __preview) preview "$2" ;;
   __sync-noctalia) sync_noctalia_on_start ;;
+  __wallpaper-x11) wallpaper_x11 ;;
   opacity)
     case "${2:-}" in
       "") current_opacity ;;

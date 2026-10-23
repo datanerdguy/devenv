@@ -14,6 +14,11 @@ O `./bootstrap.sh <host>` instala pela distro o que precisa de root:
 | Fedora 44+ | `niri`, `noctalia`, `xwayland-satellite` e os portais, todos dos repositórios oficiais |
 | Ubuntu 26.04+ | `niri` (do arquivo ou do PPA `avengemedia/danklinux`), `noctalia` do [repositório APT do projeto](https://docs.noctalia.dev) |
 | Ubuntu 24.04 | sem desktop (não há pacote do Noctalia); o resto do devenv funciona |
+| Arch (e derivadas) | tudo dos repositórios oficiais (`extra`) |
+
+Derivadas caem no script da distro-mãe pelo `ID_LIKE` do `/etc/os-release`: EndeavourOS, CachyOS e Manjaro usam o
+`system/arch.sh`; Nobara usa o `fedora.sh`; Pop!_OS e Mint, o `ubuntu.sh`. Na CachyOS, se o `noctalia-shell` dela já
+estiver instalado, o pacman pede para trocar pelo `noctalia` do Arch: aceite, ou remova o antigo antes.
 
 Também em todas: regra udev do uinput e grupo `input` (para o kanata) e a regra udev do Vial.
 Com placa NVIDIA, o perfil que reduz a VRAM presa pelo compositor ([guia do niri](https://github.com/niri-wm/niri/wiki/Nvidia)).
@@ -90,7 +95,12 @@ Volume, brilho e mídia funcionam pelas teclas do notebook, inclusive com a tela
 
 No sway e no i3 os atalhos básicos são os mesmos (`Super+Enter`, `Super+Q`, `h/j/k/l`, `Ctrl` move, `Super+1..9`);
 o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas, `Super+Shift+t` alterna a divisão;
-`Super+t` troca o tema, como no niri). No sway, `Super+Ctrl+v` também abre o histórico de cópias. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+`Super+t` troca o tema, como no niri). `Super+Ctrl+v` abre o histórico de cópias nos dois. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+
+No i3, ao entrar na sessão sobem: o `dex` (apps de autostart do XDG, inclusive o `nm-applet` do Wi-Fi), o
+`picom` (compositor: sem tearing e com a transparência do tema; config em [`config/picom/picom.conf`](../config/picom/picom.conf)),
+o `xss-lock` (bloqueia a tela ao suspender), o `greenclip` (histórico de cópias) e o papel de parede do tema, pelo `feh`.
+`Super+Shift+e` pergunta antes de sair. picom, nm-applet e feh vêm da distro com `DEVENV_I3=1 ./bootstrap.sh <host>`.
 
 ## Monitores
 
@@ -130,22 +140,9 @@ Avaliamos as alternativas: o QMK Configurator e o ZMK Studio exigem trocar o fir
 - O app `Vial` (o comando tem V maiúsculo) vem do Nix; a regra udev (`system/desktop-common.sh`) deixa ele abrir o teclado sem sudo.
   No navegador, [vial.rocks](https://vial.rocks) também funciona, só em navegadores baseados no Chromium.
 - O layout fica em [`keyboard/corne/corne.vil`](../keyboard/corne/corne.vil). Depois de mudar no Vial,
-  salve por cima dele (*File → Save current layout*), rode `just keyboard-doc` e faça commit.
-- [docs/keyboard.md](keyboard.md) mostra todas as camadas e combos, gerado a partir do `.vil`.
-
-#### Sugestão do devenv
-
-[`keyboard/corne/corne-devenv.vil`](../keyboard/corne/corne-devenv.vil) é uma proposta para você testar
-(*File → Load saved layout*). Seu layout continua salvo no outro arquivo. As mudanças:
-
-- **Super** no lugar do Caps Lock (canto inferior esquerdo da camada 0). O niri usa Super em tudo, e o layout atual não tem.
-- **Macros** na camada 2, linha de cima à esquerda: `->`, `=>`, `:=`, `|>` (Rust, Python, Go, Elixir).
-  Também `~` e `` ` `` na linha do meio.
-- **Camada 3 de funções e navegação**: F1–F12 nas duas linhas de cima à esquerda, mídia e brilho na de baixo,
-  PgUp/PgDn/Home/End/Del/Print à direita, ao lado das setas que já existiam.
-- **Combos**: `J+K` = Esc e `D+F` = Tab. O `Alt+1` = F1 que você tinha continua.
-
-As posições seguem a matriz do arquivo, que não é a ordem física das teclas; confira no Vial antes de gravar.
+  salve por cima dele (*File → Save current layout*), rode `just keyboard` e faça commit.
+- [keyboard/README.md](../keyboard/README.md) mostra cada camada em imagem (feitas pelo
+  [keymap-drawer](https://github.com/caksoylar/keymap-drawer)) e os combos, tudo gerado a partir do `.vil`.
 
 ### Teclado do notebook (kanata)
 
@@ -171,6 +168,9 @@ Se o niri abrir com tela preta, o modeset do kernel está desligado:
 ```bash
 sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   # Fedora
 ```
+
+No Arch, o bootstrap instala o driver aberto (`nvidia-open-dkms`, da GTX 16xx / RTX 20xx em diante), que já liga o
+modeset. Placas mais antigas precisam do driver legado do AUR; o bootstrap avisa e não instala nada.
 
 Para forçar uma placa (ex.: o monitor externo ligado direto na NVIDIA ficar lento), veja as placas com
 `ls -l /dev/dri/by-path/` e ponha no `niri-local.kdl`:

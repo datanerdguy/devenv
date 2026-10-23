@@ -119,7 +119,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04"]
+        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04", "archlinux:latest"]
     steps:
       - uses: actions/checkout@v4
         if: needs.changes.outputs.system == 'true'
@@ -182,12 +182,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ["fedora:latest", "ubuntu:24.04"]
+        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04", "archlinux:latest"]
     steps:
       - uses: actions/checkout@v4
         if: needs.changes.outputs.nix == 'true'
       - name: Instala do zero num container limpo e roda os testes de fumaça
         if: needs.changes.outputs.nix == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }} # o bob usa para não estourar o limite da API do GitHub
         run: tests/container.sh "${{ matrix.image }}"
       - name: Nada a testar
         if: needs.changes.outputs.nix != 'true'
