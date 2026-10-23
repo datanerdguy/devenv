@@ -22,7 +22,8 @@ median="$(printf '%s\n' "${times[@]}" | sort -n | awk '{ a[NR] = $1 } END { prin
 echo "abertura do neovim: mediana ${median}ms em ${runs} execuções (limite ${budget}ms)"
 
 # Os 5 trechos mais lentos da última execução, para achar o culpado.
-grep -E "require|sourcing" "$tmp/$runs.log" | sort -k2 -n -r | head -5 | awk '{ printf "  %sms  %s\n", $2, $NF }'
+# Sem `head`: com pipefail, o `sort` levava SIGPIPE quando o head fechava o pipe e o teste falhava à toa.
+grep -E "require|sourcing" "$tmp/$runs.log" | sort -k2 -n -r | awk 'NR <= 5 { printf "  %sms  %s\n", $2, $NF }'
 
 awk -v m="$median" -v b="$budget" 'BEGIN { exit !(m <= b) }' || {
   echo "FALHOU: abertura acima de ${budget}ms" >&2
