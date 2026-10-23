@@ -12,6 +12,9 @@ sudo dnf install -y ghostty
 # fish precisa estar no sistema para poder virar shell de login, se você quiser.
 sudo dnf install -y fish
 
+# Sandbox nativo do Claude Code (bubblewrap isola o disco, socat leva a rede ao proxy).
+sudo dnf install -y bubblewrap socat
+
 # GPU NVIDIA: só se a placa existir.
 if lspci | grep -qi 'nvidia'; then
   echo "GPU NVIDIA detectada: instalando driver via RPM Fusion."

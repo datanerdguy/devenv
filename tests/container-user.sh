@@ -11,7 +11,9 @@ curl -fsSL https://nixos.org/nix/install -o /tmp/nix-install
 sh /tmp/nix-install --no-daemon
 # shellcheck disable=SC1091
 . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
-export NIX_CONFIG="experimental-features = nix-command flakes"
+export NIX_CONFIG="experimental-features = nix-command flakes
+extra-substituters = https://cache.numtide.com
+extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
 
 cd "${HOME}/devenv"
 nix run .#home-manager -- switch --flake .#ci -b backup

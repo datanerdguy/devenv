@@ -117,3 +117,22 @@ pack.add({
     config = function() require("smart-splits").setup({ at_edge = "stop" }) end,
   },
 })
+
+-- Avisa o tmux que este painel é o Neovim, para Ctrl-h/j/k/l chegarem aqui (modules/tmux/tmux.conf).
+-- Feito aqui, sem carregar o smart-splits, que só carrega na primeira tecla.
+if vim.env.TMUX then
+  local function pane_is_vim(on)
+    local args = on and { "tmux", "set-option", "-pq", "@pane-is-vim", "1" }
+      or { "tmux", "set-option", "-pqu", "@pane-is-vim" }
+    vim.system(args, { detach = not on })
+  end
+  local group = vim.api.nvim_create_augroup("devenv.tmux", { clear = true })
+  vim.api.nvim_create_autocmd(
+    { "VimEnter", "VimResume" },
+    { group = group, callback = function() pane_is_vim(true) end }
+  )
+  vim.api.nvim_create_autocmd(
+    { "VimLeavePre", "VimSuspend" },
+    { group = group, callback = function() pane_is_vim(false) end }
+  )
+end

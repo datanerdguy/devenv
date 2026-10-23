@@ -6,6 +6,9 @@ _: {
     ./git
     ./terminal
     ./nvim
+    ./tmux
+    ./agents
+    ./local-models
   ];
 
   # Fora do NixOS (Fedora, Ubuntu, Arch): ajusta variáveis e caminhos de sistema.

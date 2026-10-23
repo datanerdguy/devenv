@@ -1,0 +1,30 @@
+# workmux: uma tarefa = um branch + um worktree + uma janela do tmux com o agente.
+# Gerado pelo devenv (modules/agents/workmux.yaml); o painel pode trocar o tema (tecla T).
+nerdfont: true
+agent: claude
+base_branch: auto # novas tarefas saem da main/dev, não do branch atual
+merge_strategy: rebase
+window_placement: after_current
+
+# Atalhos para `workmux add -a <nome>`.
+agents:
+  claude: "claude"
+  codex: "codex"
+  gemini: "gemini"
+  opencode: "opencode"
+
+# Agente à esquerda, shell embaixo para rodar testes.
+panes:
+  - command: <agent>
+    focus: true
+  - split: vertical
+    percentage: 25
+
+# Arquivos ignorados pelo git que o worktree precisa (o resto vem do git).
+# Ambientes (.venv, node_modules) não são compartilhados: cada worktree cria o seu (uv sync).
+files:
+  copy:
+    - .env
+
+dashboard:
+  merge: "/merge"

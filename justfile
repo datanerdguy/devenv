@@ -27,7 +27,7 @@ fmt:
 lint:
     nix fmt -- --ci
     statix check .
-    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh .githooks/*
+    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh .githooks/*
     actionlint
     stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
 
@@ -52,6 +52,10 @@ nvim-update:
 nvim-test:
     DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua
     tests/nvim/startup.sh
+
+# Atualiza só os agentes (Claude Code, Codex, Gemini CLI, opencode, workmux...)
+agents-update:
+    nix flake update llm-agents
 
 # Lista as gerações (para rollback)
 generations:
