@@ -75,6 +75,7 @@ tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e
 .githooks/               hooks de lint e de mensagem de commit
 .github/workflows/       CI, release e atualização semanal do flake.lock
 docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
+AGENTS.md, CLAUDE.md     instruções para agentes de código que abrem este repo
 ```
 
 ## Fases
