@@ -26,6 +26,14 @@ for _, name in ipairs(pack.order) do
   capture()
   pack.load(name)
 end
+-- Os quatro temas aplicam sem erro (o `theme` troca entre eles com o editor aberto).
+local theme = require("devenv.theme")
+for id in pairs(theme.schemes) do
+  capture()
+  vim.g.colors_name = nil
+  theme.apply(id)
+  if not vim.g.colors_name then table.insert(errors, "tema " .. id .. ": colorscheme não carregou") end
+end
 vim.wait(200) -- deixa rodar o que os plugins agendaram (alguns só avisam erro assim)
 vim.api.nvim_exec_autocmds("VimEnter", {})
 vim.api.nvim_exec_autocmds("UIEnter", {})

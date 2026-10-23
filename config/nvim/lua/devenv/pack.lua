@@ -22,6 +22,7 @@ local M = {}
 ---@field deps? string[] nomes de plugins que precisam carregar antes
 ---@field config? fun()
 ---@field build? fun(path: string) roda após instalar ou atualizar
+---@field lazy? boolean só carrega quando alguém chamar pack.load (ex.: o tema escolhido)
 ---@field loaded? boolean
 ---@field load_ms? number
 
@@ -58,7 +59,7 @@ function M.load(name)
   p.load_ms = (vim.uv.hrtime() - t) / 1e6
 end
 
-local function is_lazy(p) return p.event or p.ft or p.cmd or p.keys end
+local function is_lazy(p) return p.lazy or p.event or p.ft or p.cmd or p.keys end
 
 local function setup_triggers(p)
   local group = vim.api.nvim_create_augroup("devenv.pack." .. p.name, { clear = true })

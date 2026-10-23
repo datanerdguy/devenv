@@ -3,7 +3,7 @@
 Sessão principal: **[niri](https://github.com/niri-wm/niri)** (janelas em colunas que rolam na horizontal) com o
 **[Noctalia Shell](https://noctalia.dev)** v5 (barra, launcher, notificações, central de controle, tela de bloqueio).
 **sway** e **i3** ficam como sessões opcionais, com os mesmos atalhos básicos.
-Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
+Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Temas: [themes.md](themes.md). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
 
 ## Instalação
 
@@ -32,7 +32,7 @@ repo (o home-manager guarda o antigo como `config.backup`), por isso fica deslig
 | O quê | Fonte no repo | Onde fica |
 | --- | --- | --- |
 | niri | `config/niri/` (`config.kdl`, `binds.kdl`, `rules.kdl`) | `~/.config/niri` (link) |
-| Noctalia | `config/noctalia/*.toml` | `~/.config/noctalia` (link) |
+| Noctalia | `config/noctalia/devenv.toml` | `~/.config/noctalia/devenv.toml` (link); ao lado, a paleta e o `theme.toml` do tema atual |
 | sway / i3 | `config/sway/`, `config/i3/`, `config/wm/common.conf` | `~/.config/sway`, `~/.config/i3`, `~/.config/devenv/wm-common.conf` |
 | kanata | gerado pelo módulo | `~/.config/kanata/kanata.kbd` + serviço `kanata` do systemd do usuário |
 
@@ -57,6 +57,8 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 | `Super+E` | arquivos (yazi) |
 | `Super+S` | central de controle (Wi-Fi, som, energia) |
 | `Super+,` | ajustes do Noctalia |
+| `Super+T` | trocar o tema ([themes.md](themes.md)) |
+| `Super+Ctrl+V` | histórico de cópias ([apps.md](apps.md#histórico-de-cópias)) |
 | `Alt+Tab` | troca de janela |
 | `Super+Q` | fecha a janela |
 | `Super+O` | visão geral (digite para buscar um app) |
@@ -87,7 +89,8 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 Volume, brilho e mídia funcionam pelas teclas do notebook, inclusive com a tela bloqueada.
 
 No sway e no i3 os atalhos básicos são os mesmos (`Super+Enter`, `Super+Q`, `h/j/k/l`, `Ctrl` move, `Super+1..9`);
-o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas). A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas, `Super+Shift+t` alterna a divisão;
+`Super+t` troca o tema, como no niri). No sway, `Super+Ctrl+v` também abre o histórico de cópias. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
 
 ## Monitores
 

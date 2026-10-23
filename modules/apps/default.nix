@@ -39,6 +39,7 @@ in
         "com.obsproject.Studio" # gravação e transmissão com cenas
         "com.dec05eba.gpu_screen_recorder" # gravação leve pela GPU, com replay
         "com.github.flxzt.rnote" # desenho à mão (mesa digitalizadora)
+        "org.gtk.Gtk3theme.adw-gtk3-dark" # tema GTK3 escuro dos Flatpaks, pintado pelo Noctalia
       ];
       description = "Apps do Flathub instalados pelo devenv. Definir no host troca a lista inteira.";
     };
@@ -71,6 +72,12 @@ in
     services.flatpak = {
       enable = true;
       packages = cfg.flatpaks ++ cfg.extraFlatpaks;
+      # Apps GTK do Flathub (Rnote, GPU Screen Recorder) com as cores do tema: leem o CSS que o
+      # Noctalia gera em ~/.config/gtk-{3,4}.0 (docs/themes.md).
+      overrides.settings.global.Context.filesystems = [
+        "xdg-config/gtk-3.0:ro"
+        "xdg-config/gtk-4.0:ro"
+      ];
       # Atualiza os Flatpaks uma vez por semana, sem travar o switch.
       update.auto = {
         enable = true;
@@ -90,6 +97,10 @@ in
       set adjust-open width
       set recolor-keephue true
       map <C-r> recolor
+    ''
+    # Cores do tema atual; Ctrl+R pinta o PDF com elas (modo escuro).
+    + lib.optionalString config.devenv.theme.enable ''
+      include ${config.xdg.stateHome}/devenv/theme/current/zathurarc
     '';
 
     # Abrir arquivos e links com os apps certos.

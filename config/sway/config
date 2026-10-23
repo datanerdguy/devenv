@@ -1,6 +1,8 @@
 # sway: sessão alternativa ao niri, com o mesmo Noctalia e os mesmos atalhos.
 # Ligada em ~/.config/sway. Recarregar: Super+Shift+c.
 include ~/.config/devenv/wm-common.conf
+# Cores do tema atual (comando `theme`).
+include ~/.local/state/devenv/theme/current/wm-colors.conf
 
 input type:keyboard {
     xkb_layout us
@@ -19,6 +21,7 @@ exec noctalia
 bindsym $mod+space exec noctalia msg panel-toggle launcher
 bindsym $mod+s exec noctalia msg panel-toggle control-center
 bindsym $mod+comma exec noctalia msg settings-toggle
+bindsym $mod+Ctrl+v exec noctalia msg panel-toggle clipboard
 bindsym $mod+Alt+l exec noctalia msg session lock
 bindsym XF86AudioRaiseVolume exec noctalia msg volume-up
 bindsym XF86AudioLowerVolume exec noctalia msg volume-down
@@ -32,6 +35,7 @@ bindsym $mod+Shift+e exec swaymsg exit
 
 xwayland enable
 for_window [app_id="dev.noctalia.Noctalia"] floating enable
+for_window [app_id="dev.devenv.theme"] floating enable, resize set 900 420
 
 # Monitores e ajustes desta máquina (fora do git).
 include ~/.config/devenv/sway-local.conf

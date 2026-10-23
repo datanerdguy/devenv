@@ -45,7 +45,7 @@ Imagens (molten/image.nvim) passam pelo tmux com `allow-passthrough`.
 ## Barra de status
 
 No topo: sessão, janelas (com o ícone de status dos agentes do workmux), cota do Claude e hora.
-As cores são Everforest provisórias; a fase 5 liga a barra ao sistema de temas.
+As cores seguem o tema atual ([themes.md](themes.md)): `theme <nome>` troca a barra na hora.
 
 ## Por que sem plugins
 

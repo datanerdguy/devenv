@@ -20,8 +20,9 @@ config/nvim/
     autocmds.lua           automações (destaque ao copiar, voltar à última posição...)
     pack.lua               carga sob demanda + gerenciador :Pack
     lsp.lua                servidores LSP e diagnósticos
+    theme.lua              colorscheme do tema atual (segue o comando `theme`)
     plugins/
-      ui.lua               tema, mini, snacks, which-key
+      ui.lua               mini, snacks, which-key
       editor.lua           treesitter, gitsigns, smart-splits
       coding.lua           blink.cmp, tiny-inline-diagnostic, conform, nvim-lint, mason
       ai.lua               sidekick (qualquer CLI de agente), claudecode
@@ -34,7 +35,7 @@ config/nvim/
 
 | Plugin | Para que | Quando carrega |
 | --- | --- | --- |
-| everforest | tema (provisório até a fase 5) | abertura |
+| everforest, rose-pine, catppuccin, dracula.nvim | temas; só o escolhido pelo `theme` carrega ([themes.md](themes.md)) | abertura |
 | mini.nvim | ícones, statusline, textobjects, surround, pares | abertura (ícones e statusline); o resto no primeiro arquivo |
 | snacks.nvim | picker, explorer, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
 | which-key.nvim | mostra as teclas depois do `<leader>` | depois da interface abrir |
