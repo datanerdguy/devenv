@@ -48,6 +48,19 @@ jobs:
             echo "::endgroup::"
           done
 
+  # Pacotes de sistema (system/<distro>.sh), sem o Nix: confere nomes e repositórios.
+  system:
+    name: system (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Roda o script da distro num container limpo
+        run: tests/system.sh "${{ matrix.image }}"
+
   install:
     name: install (${{ matrix.image }})
     needs: build

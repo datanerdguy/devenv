@@ -16,6 +16,11 @@ _: {
     nvim.enable = true;
     tmux.enable = true;
     agents.enable = true;
+    desktop = {
+      enable = true;
+      sway.enable = false; # sessão alternativa; veja docs/desktop.md
+      i3.enable = false;
+    };
     # localModels.enable = true; # Ollama; veja docs/agents.md
   };
 }

@@ -20,6 +20,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
       llm-agents,
@@ -47,6 +48,13 @@
         ci = mkHome ./hosts/ci.nix; # usado pelos testes em container
       };
 
+      # `nix flake check` também valida as configs do desktop e o mapa do teclado (`just desktop-check`).
+      checks.${system}.desktop = import ./tests/desktop-check.nix {
+        inherit pkgs;
+        src = ./.;
+        kanataConfig = self.homeConfigurations.ci.config.xdg.configFile."kanata/kanata.kbd".source;
+      };
+
       # `nix fmt` formata os arquivos .nix do repo.
       formatter.${system} = pkgs.nixfmt-tree;
 
@@ -65,6 +73,7 @@
           actionlint
           stylua
           commitizen
+          python3 # keyboard/render.py
         ];
         shellHook = ''
           git config core.hooksPath .githooks

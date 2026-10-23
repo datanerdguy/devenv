@@ -61,6 +61,15 @@ for s in route second-opinion workmux merge; do
 done
 check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"
 
+# Desktop: configs ligadas ao repo (o CI liga sway e i3) e o kanata.
+for f in niri/config.kdl niri/binds.kdl noctalia/devenv.toml sway/config i3/config devenv/wm-common.conf kanata/kanata.kbd; do
+  check "config ${f}" test -f "${HOME}/.config/${f}"
+done
+check "serviço do kanata" test -f "${HOME}/.config/systemd/user/kanata.service"
+for bin in kanata Vial wl-copy; do
+  check "binário ${bin}" command -v "${bin}"
+done
+
 # Neovim: instala os plugins, carrega todos e mede a abertura.
 export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

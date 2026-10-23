@@ -1,0 +1,15 @@
+# Noctalia v5: config versionada, ligada em ~/.config/noctalia.
+# O que você muda pela tela de configurações (Super+,) vai para
+# ~/.local/state/noctalia/settings.toml, que vale por cima deste arquivo.
+# Para trazer um ajuste para o repo: `just noctalia-diff`.
+# Referência: https://docs.noctalia.dev/noctalia/configuration/
+
+[shell]
+# Pedidos de senha do polkit (Wi-Fi, montar disco) pelo próprio Noctalia.
+polkit_agent = true
+# Na visão geral do niri (Super+O), começar a digitar abre o launcher.
+niri_overview_type_to_launch_enabled = true
+niri_overview_close_on_launch_enabled = true
+
+[lockscreen]
+lock_before_suspend = true
