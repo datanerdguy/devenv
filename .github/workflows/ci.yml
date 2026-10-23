@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: Formatação, statix, shellcheck e actionlint
+      - name: Formatação, statix, shellcheck, actionlint e stylua
         run: nix develop --command just lint
 
   # PRs para a main só podem vir da dev (fluxo feature -> dev -> main).

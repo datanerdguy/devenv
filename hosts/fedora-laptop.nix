@@ -13,5 +13,6 @@ _: {
       email = "you@example.com"; # ajuste
     };
     terminal.enable = true;
+    nvim.enable = true;
   };
 }

@@ -16,12 +16,5 @@ docker run --rm -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
   echo "dev ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dev
   cp -r /src /home/dev/devenv && chown -R dev:dev /home/dev/devenv
 
-  sudo -iu dev bash -euo pipefail -c "
-    curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon
-    . ~/.nix-profile/etc/profile.d/nix.sh
-    export NIX_CONFIG=\"experimental-features = nix-command flakes\"
-    cd ~/devenv
-    nix run .#home-manager -- switch --flake .#ci -b backup
-    ./tests/smoke.sh
-  "
+  sudo -iu dev bash /home/dev/devenv/tests/container-user.sh
 '
