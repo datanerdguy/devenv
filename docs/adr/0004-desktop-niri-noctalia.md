@@ -37,6 +37,7 @@ dependem de PAM, GPU, polkit e sessão do sistema, que o home-manager sozinho n�
 ## Consequências
 
 - Ubuntu 24.04 fica sem desktop (sem pacote do Noctalia); o resto do devenv funciona.
-- A config do Noctalia não é validada no CI (o nixpkgs só tem o v4); `noctalia config validate` roda na máquina.
+- ~~A config do Noctalia não é validada no CI (o nixpkgs só tem o v4).~~ Atualização (fase 5): o nixpkgs ganhou o
+  pacote `noctalia` (v5), e o CI agora roda `noctalia config validate` com cada tema.
 - Mudanças feitas pela tela de ajustes do Noctalia ficam fora do repo até serem copiadas (`just noctalia-diff`).
 - O grupo `input` (kanata) só vale depois de um novo login.

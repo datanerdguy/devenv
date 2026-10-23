@@ -14,6 +14,14 @@ window-rule {
     default-window-height { fixed 920; }
 }
 
+// Lista de temas (Super+T): janela pequena, flutuando no meio.
+window-rule {
+    match app-id="^dev\\.devenv\\.theme$"
+    open-floating true
+    default-column-width { fixed 900; }
+    default-window-height { fixed 420; }
+}
+
 // Diálogos e janelas pequenas flutuando.
 window-rule {
     match title="^Picture-in-Picture$"

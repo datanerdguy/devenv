@@ -24,13 +24,21 @@ in
         window-padding-x = 8;
         window-padding-y = 6;
         window-decoration = false; # o compositor (niri) cuida das janelas
-        background-opacity = 0.95; # vai virar valor do tema na fase 5
         cursor-style = "block";
         shell-integration-features = "no-cursor,sudo,title";
         copy-on-select = "clipboard";
         confirm-close-surface = false;
-        theme = "Everforest Dark Hard"; # provisório até o sistema de temas
-      };
+      }
+      # Cores e opacidade vêm do tema atual (comando `theme`); sem o módulo de temas, um tema fixo.
+      // (
+        if config.devenv.theme.enable then
+          { config-file = "?${config.xdg.stateHome}/devenv/theme/ghostty"; }
+        else
+          {
+            theme = "Everforest Dark Hard";
+            background-opacity = 0.95;
+          }
+      );
     };
 
     fonts.fontconfig.enable = true;

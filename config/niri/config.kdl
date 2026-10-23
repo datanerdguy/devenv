@@ -75,5 +75,5 @@ debug {
 // Por último, para valer por cima do que está acima:
 // Monitores e ajustes desta máquina (fora do git; exemplo em docs/desktop.md).
 include optional=true "~/.config/devenv/niri-local.kdl"
-// Cores do tema atual, geradas pelo sistema de temas (fase 5).
+// Cores do tema atual, geradas pelo comando `theme` (docs/themes.md).
 include optional=true "~/.local/state/devenv/theme/niri.kdl"

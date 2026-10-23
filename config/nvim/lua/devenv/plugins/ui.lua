@@ -1,19 +1,8 @@
--- Interface: tema, ícones, statusline, snacks (picker, explorer, terminal...) e which-key.
+-- Interface (o tema fica em devenv/theme.lua): ícones, statusline, snacks (picker, explorer, terminal...) e which-key.
 local pack = require("devenv.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 pack.add({
-  -- Tema provisório; a fase 5 troca pelo sistema de temas.
-  {
-    src = gh("sainnhe/everforest"),
-    config = function()
-      vim.g.everforest_background = "hard"
-      vim.g.everforest_better_performance = 1
-      vim.g.everforest_enable_italic = 1
-      vim.cmd.colorscheme("everforest")
-    end,
-  },
-
   -- mini.nvim: ícones e statusline já na abertura (são leves); o resto sob demanda.
   {
     src = gh("nvim-mini/mini.nvim"),

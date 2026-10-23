@@ -57,6 +57,7 @@
         inherit pkgs;
         src = ./.;
         kanataConfig = self.homeConfigurations.ci.config.xdg.configFile."kanata/kanata.kbd".source;
+        theme = self.homeConfigurations.ci.config.devenv.theme;
       };
 
       # `nix fmt` formata os arquivos .nix do repo.

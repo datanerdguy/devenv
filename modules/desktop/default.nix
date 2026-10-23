@@ -65,7 +65,8 @@ in
 
         xdg.configFile = {
           "niri".source = link "config/niri";
-          "noctalia".source = link "config/noctalia";
+          # Arquivo a arquivo: o tema (modules/theme) põe a paleta e o theme.toml na mesma pasta.
+          "noctalia/devenv.toml".source = link "config/noctalia/devenv.toml";
         };
 
         # Pasta das capturas do niri.
