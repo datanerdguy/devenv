@@ -9,7 +9,9 @@ repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 docker run --rm -e DEVENV_SWAY=1 -e DEVENV_I3=1 -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
   if command -v dnf >/dev/null; then
-    dnf install -y -q sudo shadow-utils pciutils
+    # A imagem traz o systemd-standalone-tmpfiles no lugar do systemd, que conflita com o pipewire
+    # (dependência do noctalia). Numa instalação real o systemd já está lá.
+    dnf install -y -q --allowerasing sudo shadow-utils pciutils systemd
     script=fedora.sh
   else
     apt-get update -qq && apt-get install -y -qq sudo curl ca-certificates

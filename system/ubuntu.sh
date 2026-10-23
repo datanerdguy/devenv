@@ -10,6 +10,7 @@ sudo apt-get install -y bubblewrap socat
 # Ubuntu 24.04+: o AppArmor bloqueia os namespaces que o bubblewrap usa; libera só para o bwrap.
 if [ "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || echo 0)" = 1 ] \
   && [ ! -f /etc/apparmor.d/bwrap ]; then
+  sudo mkdir -p /etc/apparmor.d
   sudo tee /etc/apparmor.d/bwrap >/dev/null <<'PROFILE'
 abi <abi/4.0>,
 include <tunables/global>
@@ -19,7 +20,8 @@ profile bwrap /usr/bin/bwrap flags=(unconfined) {
   include if exists <local/bwrap>
 }
 PROFILE
-  sudo systemctl reload apparmor
+  # Sem systemd (container), o perfil vale no próximo boot.
+  if [ -d /run/systemd/system ]; then sudo systemctl reload apparmor; fi
 fi
 
 # Ghostty: pacote .deb da comunidade (https://github.com/mkasberg/ghostty-ubuntu).
