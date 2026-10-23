@@ -16,7 +16,7 @@ check() {
 
 export PATH="${HOME}/.nix-profile/bin:${HOME}/.local/state/nix/profile/bin:${PATH}"
 
-for bin in fish starship git delta lazygit gh rg fd fzf bat eza zoxide atuin direnv yazi jq duckdb just; do
+for bin in fish starship git delta lazygit gh rg fd fzf bat eza zoxide atuin direnv yazi jq duckdb harlequin tw pgcli litecli just; do
   check "binário ${bin}" command -v "${bin}"
 done
 
@@ -41,6 +41,7 @@ check "config do neovim ligada ao repo" test -f "${HOME}/.config/nvim/init.lua"
 for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; do
   check "ferramenta ${bin}" command -v "${bin}"
 done
+check "yazi abre tabelas no tabiew" grep -q 'tw %s1' "${HOME}/.config/yazi/yazi.toml"
 check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
 
 # Agentes e tmux
@@ -79,7 +80,10 @@ check "serviço dos flatpaks" test -f "${HOME}/.config/systemd/user/flatpak-mana
 check "config do flameshot" test -f "${HOME}/.config/flameshot/flameshot.ini"
 check "apps padrão (mimeapps)" grep -q zen_browser "${HOME}/.config/mimeapps.list"
 check "lançador do navegador" command -v devenv-browser
-for bin in kanata Vial wl-copy; do
+for f in picom/picom.conf greenclip.toml; do
+  check "config ${f}" test -f "${HOME}/.config/${f}"
+done
+for bin in kanata Vial wl-copy greenclip dex xss-lock xclip; do
   check "binário ${bin}" command -v "${bin}"
 done
 

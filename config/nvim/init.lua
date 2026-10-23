@@ -6,6 +6,7 @@ vim.loader.enable() -- cache de bytecode Lua: abre mais rápido
 
 require("devenv.options")
 require("devenv.keymaps")
+require("devenv.data")
 require("devenv.autocmds")
 require("devenv.plugins")
 require("devenv.lsp")

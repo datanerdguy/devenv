@@ -17,11 +17,14 @@ in
       ripgrep
       fd
       eza
-      # dados
+      # dados (fluxos em docs/data.md)
       jq
       yq-go
-      duckdb
-      visidata
+      duckdb # SQL em CSV/Parquet/JSON e bancos; `duckdb -ui` abre um notebook local
+      harlequin # IDE de SQL no terminal: DuckDB, SQLite, Postgres
+      tabiew # `tw`: ver CSV, Parquet, Excel e SQLite, com SQL em cima
+      pgcli # consulta rápida no Postgres
+      litecli # consulta rápida no SQLite
       # sistema e utilidades
       btop
       just
@@ -56,6 +59,27 @@ in
       nix-direnv.enable = true; # ativa o devShell do projeto ao entrar na pasta
     };
 
-    programs.yazi.enable = true;
+    programs.yazi = {
+      enable = true;
+      # Tabelas abrem no tabiew; o editor fica como segunda opção (tecla O).
+      settings = {
+        opener.tabiew = [
+          {
+            run = "tw %s1";
+            block = true;
+            desc = "tabiew";
+          }
+        ];
+        open.prepend_rules = [
+          {
+            url = "*.{csv,tsv,parquet,xlsx,xls,jsonl,arrow,sqlite,db}";
+            use = [
+              "tabiew"
+              "edit"
+            ];
+          }
+        ];
+      };
+    };
   };
 }

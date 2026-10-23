@@ -143,6 +143,7 @@ pack.add({
         { "<leader>b", group = "buffers" },
         { "<leader>c", group = "código" },
         { "<leader>d", group = "debug" },
+        { "<leader>D", group = "dados (SQL, tabelas)" },
         { "<leader>f", group = "buscar" },
         { "<leader>g", group = "git" },
         { "<leader>h", group = "hunks do git" },
@@ -150,6 +151,7 @@ pack.add({
         { "<leader>p", group = "plugins" },
         { "<leader>u", group = "alternar interface" },
         { "<leader>x", group = "diagnósticos e listas" },
+        { "<leader>y", group = "copiar caminho" },
         { "<leader>z", group = "notas (Obsidian)" },
         { "<leader>?", function() wk.show({ global = false }) end, desc = "Atalhos deste buffer" },
       })

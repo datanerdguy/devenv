@@ -56,7 +56,7 @@ if dpkg --compare-versions "${VERSION_ID:-0}" ge 26.04 || [ "${ID}" = debian ]; 
   sudo apt-get install -y qt6ct
   sudo apt-get install -y adw-gtk3 || echo "adw-gtk3 indisponível: apps GTK3 ficam com o tema padrão."
   if [ "${DEVENV_SWAY:-0}" = 1 ]; then sudo apt-get install -y sway; fi
-  if [ "${DEVENV_I3:-0}" = 1 ]; then sudo apt-get install -y i3 xserver-xorg; fi
+  if [ "${DEVENV_I3:-0}" = 1 ]; then sudo apt-get install -y i3 xserver-xorg picom network-manager-gnome feh; fi
   "$(dirname "${BASH_SOURCE[0]}")/desktop-common.sh"
 else
   echo "Ubuntu ${VERSION_ID}: sem pacotes do niri/Noctalia (precisa do 26.04). Pulando o desktop."

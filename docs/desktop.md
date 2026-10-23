@@ -95,7 +95,12 @@ Volume, brilho e mídia funcionam pelas teclas do notebook, inclusive com a tela
 
 No sway e no i3 os atalhos básicos são os mesmos (`Super+Enter`, `Super+Q`, `h/j/k/l`, `Ctrl` move, `Super+1..9`);
 o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas, `Super+Shift+t` alterna a divisão;
-`Super+t` troca o tema, como no niri). No sway, `Super+Ctrl+v` também abre o histórico de cópias. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+`Super+t` troca o tema, como no niri). `Super+Ctrl+v` abre o histórico de cópias nos dois. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+
+No i3, ao entrar na sessão sobem: o `dex` (apps de autostart do XDG, inclusive o `nm-applet` do Wi-Fi), o
+`picom` (compositor: sem tearing e com a transparência do tema; config em [`config/picom/picom.conf`](../config/picom/picom.conf)),
+o `xss-lock` (bloqueia a tela ao suspender), o `greenclip` (histórico de cópias) e o papel de parede do tema, pelo `feh`.
+`Super+Shift+e` pergunta antes de sair. picom, nm-applet e feh vêm da distro com `DEVENV_I3=1 ./bootstrap.sh <host>`.
 
 ## Monitores
 

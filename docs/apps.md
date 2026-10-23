@@ -61,7 +61,10 @@ não sair da lista (os fixados não contam nos 30).
   Para apagar tudo: `noctalia msg clipboard-clear`. Senhas copiadas do Bitwarden também entram; apague depois de usar.
 - Para mudar o tamanho: `clipboard_history_max_entries` em [`config/noctalia/devenv.toml`](../config/noctalia/devenv.toml).
 
-Funciona no niri e no sway (`Super+Ctrl+v`); no i3 não, porque o Noctalia não roda em X11.
+Funciona no niri e no sway (`Super+Ctrl+v`). No i3 (X11), onde o Noctalia não roda, quem faz o papel é o
+[greenclip](https://github.com/erebe/greenclip), pelo rofi, com o mesmo `Super+Ctrl+v`: 30 itens, texto e imagens.
+Senhas copiadas do app do Bitwarden ficam de fora. A lista fica em `~/.cache/greenclip.history`; para apagar,
+`greenclip clear`.
 
 ## Captura de tela
 
