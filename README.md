@@ -18,7 +18,7 @@ O bootstrap faz três coisas:
 2. Instala o Nix, se faltar.
 3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`.
 
-Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix).
+Antes de rodar, ajuste o usuário em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix). Nome, e-mail e tokens ficam cifrados em `secrets/` ([`docs/secrets.md`](docs/secrets.md)).
 
 ## Dia a dia
 
@@ -86,4 +86,4 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [x] 7. Modelos de projeto (`new`): Python (lib, api, llm, data, ml, fastapi-htmx, django, streamlit), Go (cli, service, htmx), Rust (bin, lib) e Phoenix. Veja [`docs/templates.md`](docs/templates.md)
-- [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops
+- [x] 8. Portabilidade: Arch e derivadas, Ubuntu 26.04 no CI, segredos com sops-nix: veja [`docs/secrets.md`](docs/secrets.md)
