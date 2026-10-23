@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Antes de cada commit: formatação e lint. Rode dentro do `nix develop` (ou com direnv).
+set -euo pipefail
+just lint

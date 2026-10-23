@@ -1,0 +1,46 @@
+# Release: cada push na main vira uma versão (tag + GitHub Release com as notas),
+# calculada pelo commitizen a partir dos commits desde a última tag.
+name: release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Calcula a próxima versão
+        id: version
+        run: |
+          if next=$(nix develop --command cz bump --get-next --yes 2>/dev/null); then
+            echo "next=$next" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhum commit que gere versão (feat/fix/breaking). Nada a publicar."
+          fi
+      - name: Gera as notas e publica a release
+        if: steps.version.outputs.next != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          # Notas só dos commits desde a última tag.
+          start=()
+          if prev=$(git describe --tags --abbrev=0 2>/dev/null); then start=(--start-rev "$prev"); fi
+          nix develop --command cz changelog --dry-run --unreleased-version "v$NEXT" "${start[@]}" > notes.md
+          git tag "v$NEXT"
+          git push origin "v$NEXT"
+          gh release create "v$NEXT" --title "v$NEXT" --notes-file notes.md

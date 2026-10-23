@@ -1,0 +1,10 @@
+# Mantém as GitHub Actions atualizadas, com PRs para a dev.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci

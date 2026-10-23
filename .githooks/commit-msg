@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Exige mensagens no padrão Conventional Commits (ex.: "feat(shell): adiciona abreviações").
+set -euo pipefail
+cz check --allow-abort --commit-msg-file "$1"

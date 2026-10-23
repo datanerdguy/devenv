@@ -1,0 +1,76 @@
+# CI: roda em todo PR e em todo push para dev e main.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Formatação, statix, shellcheck e actionlint
+        run: nix develop --command just lint
+
+  commits:
+    name: commits
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Título do PR no padrão Conventional Commits
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: nix develop --command cz check --message "$PR_TITLE"
+      - name: Commits do PR no padrão Conventional Commits
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: nix develop --command cz check --rev-range "$BASE_SHA..$HEAD_SHA"
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: nix flake check
+        run: nix flake check --print-build-logs
+      - name: Build de todos os hosts
+        run: |
+          for host in $(nix eval .#homeConfigurations --apply builtins.attrNames --json | jq -r '.[]'); do
+            echo "::group::$host"
+            nix build ".#homeConfigurations.$host.activationPackage" --print-build-logs
+            echo "::endgroup::"
+          done
+
+  install:
+    name: install (${{ matrix.image }})
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["fedora:latest", "ubuntu:24.04"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instala do zero num container limpo e roda os testes de fumaça
+        run: tests/container.sh "${{ matrix.image }}"
