@@ -34,6 +34,33 @@ for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; 
 done
 check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
 
+# Agentes e tmux
+for bin in claude codex gemini opencode workmux tokscale docs-mcp tmux sesh; do
+  check "binário ${bin}" command -v "${bin}"
+done
+# O tmux sai com 0 mesmo com erro na config; o erro aparece na saída.
+# shellcheck disable=SC2329 # chamada pelo check
+tmux_config_ok() {
+  local out
+  out="$(tmux -L smoke -f /dev/null new-session -d \; source-file "${HOME}/.config/tmux/tmux.conf" \; kill-server 2>&1)"
+  [ -z "${out}" ]
+}
+check "tmux carrega a config sem erro" tmux_config_ok
+for f in .claude/settings.json .claude.json .gemini/settings.json .config/opencode/opencode.json; do
+  check "config ${f} é JSON válido" jq -e . "${HOME}/${f}"
+done
+check "config do codex é TOML válido" taplo check --no-schema "${HOME}/.codex/config.toml"
+check "statusline do claude configurada" jq -e '.statusLine.command' "${HOME}/.claude/settings.json"
+check "MCPs context7 e docs no claude" jq -e '.mcpServers.context7 and .mcpServers.docs' "${HOME}/.claude.json"
+for f in .config/agents/AGENTS.md .codex/AGENTS.md .gemini/AGENTS.md .config/opencode/AGENTS.md .claude/CLAUDE.md; do
+  check "instruções ${f}" test -s "${HOME}/${f}"
+done
+for s in route second-opinion workmux merge; do
+  check "skill ${s}" test -f "${HOME}/.agents/skills/${s}/SKILL.md"
+  check "skill ${s} no claude" test -f "${HOME}/.claude/skills/${s}/SKILL.md"
+done
+check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"
+
 # Neovim: instala os plugins, carrega todos e mede a abertura.
 export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
