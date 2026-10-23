@@ -38,7 +38,7 @@ Sessões fixas ficam em `programs.sesh.settings.session` no módulo. Hoje há um
 
 ## Integração com o Neovim
 
-O Neovim marca o painel com `@pane-is-vim` ao abrir (`lua/devenv/plugins/editor.lua`). O tmux vê a marca e
+O Neovim marca o painel com `@pane-is-vim` ao abrir (`lua/pcastr/plugins/editor.lua`). O tmux vê a marca e
 repassa `Ctrl-h/j/k/l` ao Neovim, que usa o smart-splits para mudar de janela ou sair para o painel vizinho na borda.
 Imagens (molten/image.nvim) passam pelo tmux com `allow-passthrough`.
 

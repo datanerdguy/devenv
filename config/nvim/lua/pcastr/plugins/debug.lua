@@ -1,5 +1,5 @@
 -- Debug (DAP). Tudo carrega só ao usar uma tecla de <leader>d.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 local function dap(fn)

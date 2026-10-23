@@ -1,7 +1,7 @@
 -- Camada fina sobre o vim.pack: carregamento sob demanda + gerenciador (:Pack).
 --
 -- Uso:
---   local pack = require("devenv.pack")
+--   local pack = require("pcastr.pack")
 --   pack.add({
 --     src = "https://github.com/folke/flash.nvim",
 --     event = "BufReadPost",   -- ou ft = {...}, cmd = {...}, keys = {...}
@@ -11,7 +11,7 @@
 -- Sem event/ft/cmd/keys o plugin carrega na abertura.
 local M = {}
 
----@class devenv.Plugin
+---@class pcastr.Plugin
 ---@field name string
 ---@field src string
 ---@field version? string|vim.VersionRange
@@ -26,7 +26,7 @@ local M = {}
 ---@field loaded? boolean
 ---@field load_ms? number
 
----@type table<string, devenv.Plugin>
+---@type table<string, pcastr.Plugin>
 M.plugins = {}
 ---@type string[]
 M.order = {}
@@ -62,7 +62,7 @@ end
 local function is_lazy(p) return p.lazy or p.event or p.ft or p.cmd or p.keys end
 
 local function setup_triggers(p)
-  local group = vim.api.nvim_create_augroup("devenv.pack." .. p.name, { clear = true })
+  local group = vim.api.nvim_create_augroup("pcastr.pack." .. p.name, { clear = true })
   local function once()
     pcall(vim.api.nvim_del_augroup_by_id, group)
     M.load(p.name)
@@ -108,7 +108,7 @@ local function setup_triggers(p)
 end
 
 --- Registra e instala (se faltar) um ou mais plugins.
----@param specs devenv.Plugin|devenv.Plugin[]
+---@param specs pcastr.Plugin|pcastr.Plugin[]
 function M.add(specs)
   if specs.src then specs = { specs } end
   local to_add = {}
@@ -131,7 +131,7 @@ end
 
 -- Hooks de build (ex.: :UpdateRemotePlugins do molten) após instalar/atualizar.
 vim.api.nvim_create_autocmd("PackChanged", {
-  group = vim.api.nvim_create_augroup("devenv.pack.build", { clear = true }),
+  group = vim.api.nvim_create_augroup("pcastr.pack.build", { clear = true }),
   callback = function(ev)
     local d = ev.data
     local p = M.plugins[d.spec.name]

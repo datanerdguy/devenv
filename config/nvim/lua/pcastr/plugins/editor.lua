@@ -1,5 +1,5 @@
 -- Edição: treesitter, git na margem, navegação integrada ao tmux.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 -- Parsers instalados na primeira vez que o treesitter carrega (em segundo plano).
@@ -58,7 +58,7 @@ pack.add({
       end
 
       vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("devenv.treesitter", { clear = true }),
+        group = vim.api.nvim_create_augroup("pcastr.treesitter", { clear = true }),
         callback = function(ev)
           local lang = vim.treesitter.language.get_lang(ev.match)
           if not lang or not available[lang] then return end
@@ -157,7 +157,7 @@ if vim.env.TMUX then
       or { "tmux", "set-option", "-pqu", "@pane-is-vim" }
     vim.system(args, { detach = not on })
   end
-  local group = vim.api.nvim_create_augroup("devenv.tmux", { clear = true })
+  local group = vim.api.nvim_create_augroup("pcastr.tmux", { clear = true })
   vim.api.nvim_create_autocmd(
     { "VimEnter", "VimResume" },
     { group = group, callback = function() pane_is_vim(true) end }

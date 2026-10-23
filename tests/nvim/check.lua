@@ -20,14 +20,14 @@ local ok, err = pcall(dofile, vim.fn.stdpath("config") .. "/init.lua")
 if not ok then table.insert(errors, "init.lua: " .. tostring(err)) end
 
 if vim.v.errmsg ~= "" then table.insert(errors, "errmsg: " .. vim.v.errmsg) end
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 -- Carrega um a um, capturando de novo antes de cada plugin (um deles pode trocar o vim.notify).
 for _, name in ipairs(pack.order) do
   capture()
   pack.load(name)
 end
 -- Os quatro temas aplicam sem erro (o `theme` troca entre eles com o editor aberto).
-local theme = require("devenv.theme")
+local theme = require("pcastr.theme")
 for id in pairs(theme.schemes) do
   capture()
   vim.g.colors_name = nil

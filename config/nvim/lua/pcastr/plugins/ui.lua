@@ -1,5 +1,5 @@
--- Interface (o tema fica em devenv/theme.lua): ícones, statusline, snacks (picker, explorer, terminal...) e which-key.
-local pack = require("devenv.pack")
+-- Interface (o tema fica em pcastr/theme.lua): ícones, statusline, snacks (picker, explorer, terminal...) e which-key.
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 pack.add({

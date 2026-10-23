@@ -58,7 +58,7 @@ end
 -- Liga os servidores na primeira vez que um arquivo abre (não pesa na abertura do Neovim).
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   once = true,
-  group = vim.api.nvim_create_augroup("devenv.lsp.enable", { clear = true }),
+  group = vim.api.nvim_create_augroup("pcastr.lsp.enable", { clear = true }),
   callback = function() vim.lsp.enable(vim.tbl_filter(executable, servers)) end,
 })
 
@@ -72,7 +72,7 @@ end, { desc = "Lista os servidores LSP configurados e quais estão instalados" }
 
 -- Teclas e recursos quando um servidor se conecta ao buffer
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("devenv.lsp.attach", { clear = true }),
+  group = vim.api.nvim_create_augroup("pcastr.lsp.attach", { clear = true }),
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if not client then return end

@@ -1,9 +1,9 @@
 -- Código: completion, formatação, lint, diagnósticos inline e instalador de LSP.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 pack.add({
-  -- Configurações prontas de cada servidor (lsp/*.lua). Só dados: quem liga é lua/devenv/lsp.lua.
+  -- Configurações prontas de cada servidor (lsp/*.lua). Só dados: quem liga é lua/pcastr/lsp.lua.
   { src = gh("neovim/nvim-lspconfig") },
 
   -- Instalador fácil de LSPs, formatadores e linters (:Mason). O que o Nix já instala tem prioridade.
@@ -114,7 +114,7 @@ pack.add({
         end, names)
       end
       vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
-        group = vim.api.nvim_create_augroup("devenv.lint", { clear = true }),
+        group = vim.api.nvim_create_augroup("pcastr.lint", { clear = true }),
         callback = function(ev)
           -- actionlint só nos workflows do GitHub
           if vim.bo[ev.buf].filetype == "yaml" and not ev.file:match("%.github/workflows/") then return end
