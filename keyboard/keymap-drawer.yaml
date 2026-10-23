@@ -1,0 +1,10 @@
+# Aparência das imagens do keyboard/render.py (opções: https://github.com/caksoylar/keymap-drawer/blob/main/CONFIGURATION.md).
+draw_config:
+  dark_mode: auto # segue o tema claro/escuro de quem abre (GitHub, navegador)
+  key_w: 62
+  key_h: 58
+  split_gap: 30
+  combo_w: 34
+  combo_h: 24
+  append_colon_to_layer_header: false
+  footer_text: "Gerado a partir de keyboard/corne/corne.vil"

@@ -1,5 +1,5 @@
 # Valida as configs do desktop com os próprios programas, sem abrir sessão gráfica:
-# niri, sway (backend headless), i3, kanata, o docs/keyboard.md gerado a partir dos .vil
+# niri, sway (backend headless), i3, kanata, as imagens e o keyboard/README.md gerados a partir do .vil
 # e os quatro temas (Ghostty, niri, sway, i3, Noctalia, tmux e btop com os arquivos que o `theme` gera).
 {
   pkgs,
@@ -15,6 +15,7 @@ pkgs.runCommand "devenv-desktop-check"
       i3
       kanata
       python3
+      keymap-drawer
       noctalia
       ghostty
       tmux
