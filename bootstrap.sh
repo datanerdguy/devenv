@@ -9,11 +9,22 @@ repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 1. Pacotes que precisam de root, pela distro.
 # shellcheck disable=SC1091
 . /etc/os-release
-case "${ID}" in
-  fedora) "${repo_dir}/system/fedora.sh" ;;
-  ubuntu | debian | pop | linuxmint) "${repo_dir}/system/ubuntu.sh" ;;
-  *) echo "Distro '${ID}' sem script em system/. Pulando pacotes de sistema." ;;
-esac
+# Derivadas (EndeavourOS, CachyOS, Manjaro, Nobara, Pop!_OS, Mint...) caem no script da distro-mãe pelo ID_LIKE.
+script=""
+for id in ${ID} ${ID_LIKE:-}; do
+  case "${id}" in
+    fedora) script=fedora ;;
+    ubuntu | debian) script=ubuntu ;;
+    arch) script=arch ;;
+    *) continue ;;
+  esac
+  break
+done
+if [ -n "${script}" ]; then
+  "${repo_dir}/system/${script}.sh"
+else
+  echo "Distro '${ID}' sem script em system/. Pulando pacotes de sistema."
+fi
 
 # 2. Nix (instalador da Determinate Systems: flakes ligados, desinstalação limpa).
 if ! command -v nix >/dev/null; then

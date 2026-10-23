@@ -23,4 +23,5 @@ if [ -r "${modeset}" ] && [ "$(cat "${modeset}")" != Y ]; then
   echo "Aviso: nvidia-drm.modeset está desligado. Ligue com:"
   echo "  sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   (Fedora)"
   echo "  e adicione nvidia-drm.modeset=1 ao GRUB_CMDLINE_LINUX em /etc/default/grub (Ubuntu)"
+  echo "  No Arch o nvidia-utils já liga por padrão; confira /etc/modprobe.d e reinicie."
 fi

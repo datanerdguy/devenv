@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Instala o devenv do zero dentro de um container limpo da distro e roda os testes.
-# Uso: tests/container.sh fedora:latest | ubuntu:24.04
+# Uso: tests/container.sh fedora:latest | ubuntu:24.04 | ubuntu:26.04 | archlinux:latest
 set -euo pipefail
 
 image="${1:?informe a imagem, ex.: tests/container.sh fedora:latest}"
@@ -9,6 +9,8 @@ repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 docker run --rm -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
   if command -v dnf >/dev/null; then
     dnf install -y -q curl xz tar git sudo shadow-utils procps-ng
+  elif command -v pacman >/dev/null; then
+    pacman -Syu --noconfirm --needed curl xz tar git sudo procps-ng
   else
     apt-get update -qq && apt-get install -y -qq curl xz-utils git sudo procps
   fi
