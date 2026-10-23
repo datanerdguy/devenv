@@ -19,6 +19,7 @@
       # Ferramentas do projeto.
 {%- if lang == 'python' %} O Python e as bibliotecas vêm do uv (pyproject.toml e uv.lock).
 {%- elif lang == 'rust' %} O Rust vem do rustup, na versão do rust-toolchain.toml.
+{%- elif lang == 'elixir' %} As bibliotecas vêm do mix (mix.exs e mix.lock).
 {%- endif %}
       devShells = forAll (pkgs: {
         default = pkgs.mkShell {
@@ -32,10 +33,19 @@
 {%- elif lang == 'rust' %}
             rustup
             cargo-nextest
+{%- elif lang == 'elixir' %}
+            elixir
+            erlang
 {%- endif %}
             just
             lefthook
             commitizen
+{%- if lang == 'elixir' %}
+          ]
+          # o recarregamento automático do Phoenix usa o inotify no Linux
+          ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools
+          ++ [
+{%- endif %}
 {%- if postgres %}
             postgresql
             process-compose

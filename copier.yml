@@ -15,6 +15,7 @@ lang:
     Python (ML, LLM, dados, web): python
     Go (CLI, serviço, web com htmx): go
     Rust (binário, biblioteca): rust
+    Elixir (Phoenix e LiveView): elixir
 
 python_kind:
   type: str
@@ -50,10 +51,18 @@ rust_kind:
     "bin: programa (linha de comando)": bin
     "lib: biblioteca (crate publicável)": lib
 
+elixir_kind:
+  type: str
+  help: Tipo de projeto Elixir
+  when: "{{ lang == 'elixir' }}"
+  default: phoenix
+  choices:
+    "phoenix: site com Phoenix e LiveView (gerado pelo mix phx.new)": phoenix
+
 kind:
   type: str
   when: false
-  default: "{{ {'python': python_kind, 'go': go_kind, 'rust': rust_kind}[lang] }}"
+  default: "{{ {'python': python_kind, 'go': go_kind, 'rust': rust_kind, 'elixir': elixir_kind}[lang] }}"
 
 project_name:
   type: str
@@ -112,6 +121,18 @@ python_version:
   when: "{{ lang == 'python' }}"
   default: "3.13"
 
+elixir_version:
+  type: str
+  help: Versão do Elixir (a do Erlang/OTP vai junto no CI)
+  when: "{{ lang == 'elixir' }}"
+  default: "1.18"
+
+otp_version:
+  type: str
+  help: Versão do Erlang/OTP
+  when: "{{ lang == 'elixir' }}"
+  default: "28"
+
 go_version:
   type: str
   help: Versão do Go
@@ -127,7 +148,7 @@ gpu:
 postgres:
   type: bool
   help: Postgres local (just db)?
-  when: "{{ lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django'] }}"
+  when: "{{ (lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django']) or lang == 'elixir' }}"
   default: false
 
 docker:
@@ -135,5 +156,5 @@ docker:
   help: Dockerfile para o deploy?
   when: >-
     {{ (lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django', 'streamlit'])
-    or (lang == 'go' and go_kind in ['service', 'htmx']) }}
+    or (lang == 'go' and go_kind in ['service', 'htmx']) or lang == 'elixir' }}
   default: true

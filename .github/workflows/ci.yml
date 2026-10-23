@@ -83,6 +83,7 @@ jobs:
           - go:htmx
           - rust:bin
           - rust:lib
+          - elixir:phoenix
     steps:
       - uses: actions/checkout@v4
         with:

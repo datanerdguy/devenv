@@ -1,0 +1,45 @@
+# Atalhos do projeto. Rode `just` para ver a lista.
+
+default:
+    @just --list
+
+# Instala as dependências, cria o banco e baixa o Tailwind e o esbuild
+setup:
+    mix setup
+
+# Sobe o servidor com recarga automática (http://localhost:4000)
+dev:
+    iex -S mix phx.server
+
+# Formata (mix format)
+fmt:
+    mix format
+
+# Formatação, avisos do compilador como erro e dependências sem uso (o mesmo que o CI)
+lint:
+    mix format --check-formatted
+    MIX_ENV=test mix compile --warnings-as-errors
+    mix deps.unlock --check-unused
+
+# Testes (ex.: just test test/meu_app_web)
+test *args:
+    mix test {{ '{{' }} args {{ '}}' }}
+
+# Tudo que o CI roda
+ci: lint test
+{%- if postgres %}
+
+# Postgres local em .devenv/pg (Ctrl+C para parar). Depois: mix ecto.setup
+db:
+    process-compose up
+{%- endif %}
+{%- if docker %}
+
+# Gera a imagem Docker (release do Phoenix)
+docker:
+    docker build -t {{ project_name }} .
+{%- endif %}
+
+# Traz as mudanças do modelo do devenv para este projeto
+template-update:
+    copier update --trust --skip-answered --vcs-ref HEAD

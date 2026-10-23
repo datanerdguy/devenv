@@ -16,6 +16,7 @@ new python dados data --defaults    # sem perguntas, tudo no padrão
 new python api api -d postgres=true # responde uma pergunta direto
 new go meu-servico service
 new rust minha-ferramenta bin
+new elixir meu-app phoenix
 cd meu-site && just
 ```
 
@@ -84,6 +85,19 @@ rustfmt e clippy) na primeira compilação.
 - **Lint**: rustfmt e clippy com os avisos como erro; `unsafe` proibido no `Cargo.toml`.
 - **Testes**: nextest (unidade e integração em `tests/`) e os exemplos da documentação (`cargo test --doc`).
 
+## Elixir (Phoenix)
+
+O Nix traz o Elixir, o Erlang e o inotify-tools (recarga automática). O app é gerado pelo próprio `mix phx.new`
+(Phoenix com LiveView, Tailwind e esbuild), e os nossos arquivos entram por cima: flake, `.envrc`, justfile, CI,
+hooks e o `AGENTS.md`, que fica com as nossas regras e, logo abaixo, as que o Phoenix gera para agentes.
+
+- **Banco**: SQLite por padrão; com Postgres, `just db` sobe o banco local e o CI do projeto usa um Postgres de serviço.
+- **Primeira vez**: `just setup` (dependências, banco, Tailwind e esbuild) e `just dev` (http://localhost:4000).
+- **Lint**: `mix format`, compilação com os avisos como erro e dependências sem uso no `mix.lock`.
+- **Docker**: o release do Phoenix (`mix phx.gen.release --docker`), gerado pelo `new`.
+- A versão do gerador fica no `new` (`DEVENV_PHX_NEW_VERSION` troca). Depois de criado, o Phoenix do projeto é
+  atualizado pelo Dependabot, como qualquer dependência.
+
 ## No projeto
 
 | Comando | O que faz |
@@ -96,7 +110,7 @@ rustfmt e clippy) na primeira compilação.
 | `cz commit` | commit guiado no padrão Conventional Commits (o hook confere a mensagem) |
 
 O GitHub Actions do projeto não usa o Nix, que é mais lento para instalar: no Python instala o uv e o just, no Go
-o Go e o golangci-lint, no Rust o Rust e o nextest, e roda os mesmos comandos. O Dependabot abre um PR por semana
+o Go e o golangci-lint, no Rust o Rust e o nextest, no Elixir o Erlang e o Elixir (setup-beam), e roda os mesmos comandos. O Dependabot abre um PR por semana
 com as dependências novas (pacotes, actions e a imagem Docker).
 
 ## Atualizar a partir do modelo
@@ -125,7 +139,3 @@ limpa, para revisar com `git diff`.
 
 Para um tipo novo do Python: some a opção em `python_kind`, crie as pastas `src` e `tests` do tipo e ponha as
 dependências no `pyproject.toml.jinja`. Para uma linguagem nova: some em `lang` e crie `templates/<linguagem>/`.
-
-## Próximos
-
-Phoenix entra no próximo PR.

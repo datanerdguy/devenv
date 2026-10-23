@@ -14,6 +14,7 @@ linguagens e tipos:
   python  lib api llm data ml fastapi-htmx django streamlit
   go      cli service htmx
   rust    bin lib
+  elixir  phoenix
 
 O projeto sai pronto: git com o primeiro commit, flake.lock com o mesmo nixpkgs do devenv,
 dependências travadas e hooks instalados. Depois: cd <pasta> e `just`.
@@ -24,6 +25,42 @@ USAGE
 die() {
   echo "new: $*" >&2
   exit 1
+}
+
+# Versão do gerador do Phoenix (mix phx.new). O Dependabot atualiza o Phoenix do projeto depois.
+PHX_NEW_VERSION="${DEVENV_PHX_NEW_VERSION:-1.8.16}"
+
+# Phoenix: o próprio `mix phx.new` gera o app numa pasta temporária, e ele entra no projeto sem
+# sobrescrever os nossos arquivos (AGENTS.md e .gitignore ganham o conteúdo dele no fim).
+phoenix() {
+  local app db tmp f
+  app="$(sed -n 's/^project_name: //p' .copier-answers.yml | tr - _)"
+  db=sqlite3
+  grep -q '^postgres: true' .copier-answers.yml && db=postgres
+  tmp="$(mktemp -d)"
+  # shellcheck disable=SC2016 # os $1.. são do bash -c, de propósito
+  nix develop --command bash -euo pipefail -c '
+    mix local.hex --force --if-missing
+    mix local.rebar --force --if-missing
+    mix archive.install hex phx_new "$1" --force
+    mix phx.new "$2/$3" --app "$3" --database "$4" --no-install
+  ' _ "${PHX_NEW_VERSION}" "${tmp}" "${app}" "${db}"
+  for f in AGENTS.md .gitignore; do
+    if [ -f "${tmp}/${app}/${f}" ]; then
+      printf '\n' >>"${f}"
+      cat "${tmp}/${app}/${f}" >>"${f}"
+      rm "${tmp}/${app}/${f}"
+    fi
+  done
+  cp -r --update=none "${tmp}/${app}/." .
+  rm -rf "${tmp}"
+  git add --all
+  nix develop --command bash -euo pipefail -c '
+    mix deps.get
+    mix assets.setup || echo "new: não deu para baixar o Tailwind e o esbuild agora; rode just setup depois" >&2
+    if grep -q "^docker: true" .copier-answers.yml; then mix phx.gen.release --docker; fi
+    mix format
+  '
 }
 
 case "${1:-}" in
@@ -74,6 +111,7 @@ case "${lang}" in
   python) nix develop --command uv lock --quiet ;;
   go) nix develop --command go mod tidy ;;
   rust) nix develop --command cargo generate-lockfile --quiet ;;
+  elixir) phoenix ;;
 esac
 nix develop --command lefthook install >/dev/null
 
