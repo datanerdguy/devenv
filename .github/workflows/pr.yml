@@ -1,0 +1,49 @@
+# Checagens que só existem em PR: de onde vem o PR e se os commits seguem o padrão.
+# Ficam fora do ci.yml para não aparecerem como "skipped" nos pushes para dev e main.
+name: pr
+
+on:
+  pull_request:
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # PRs para a main só podem vir da dev (fluxo feature -> dev -> main).
+  source-branch:
+    name: source-branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR para a main precisa vir da dev
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          if [ "$BASE" = main ] && [ "$HEAD" != dev ]; then
+            echo "::error::PRs para a main precisam vir da dev (este vem de '$HEAD'). Mude a base do PR para dev."
+            exit 1
+          fi
+          echo "ok: $HEAD -> $BASE"
+
+  commits:
+    name: commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Título do PR no padrão Conventional Commits
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: nix develop --command cz check --message "$PR_TITLE"
+      - name: Commits do PR no padrão Conventional Commits
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: nix develop --command cz check --rev-range "$BASE_SHA..$HEAD_SHA"

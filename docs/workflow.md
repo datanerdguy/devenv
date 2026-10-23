@@ -58,12 +58,19 @@ Escopos sugeridos: o nome do módulo (`cli`, `shell`, `git`, `terminal`, `nvim`,
 | Job | O que verifica |
 | --- | --- |
 | `lint` | `nix fmt` sem mudanças, statix (Nix), shellcheck (scripts), actionlint (workflows) |
-| `commits` | Só em PR: título do PR e cada commit no padrão Conventional Commits |
-| `source-branch` | Só em PR: um PR para a `main` precisa vir da `dev` |
 | `build` | `nix flake check` e build de todos os hosts em `homeConfigurations` |
 | `install` | Instalação do zero em containers limpos **Fedora** e **Ubuntu**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` |
 
 `tests/smoke.sh` confere que os programas existem, que fish e starship iniciam, e que as configs de git, Ghostty, starship e direnv foram geradas. Para rodar localmente: `just test-container fedora:latest`.
+
+### `pr.yml`: só em PR
+
+Num workflow próprio para não aparecerem como "skipped" nos pushes para `dev` e `main`.
+
+| Job | O que verifica |
+| --- | --- |
+| `commits` | Título do PR e cada commit no padrão Conventional Commits |
+| `source-branch` | Um PR para a `main` precisa vir da `dev` |
 
 ### `release.yml`: em todo push na `main`
 
