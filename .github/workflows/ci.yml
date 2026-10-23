@@ -188,6 +188,8 @@ jobs:
         if: needs.changes.outputs.nix == 'true'
       - name: Instala do zero num container limpo e roda os testes de fumaça
         if: needs.changes.outputs.nix == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }} # o bob usa para não estourar o limite da API do GitHub
         run: tests/container.sh "${{ matrix.image }}"
       - name: Nada a testar
         if: needs.changes.outputs.nix != 'true'

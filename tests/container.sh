@@ -6,7 +6,9 @@ set -euo pipefail
 image="${1:?informe a imagem, ex.: tests/container.sh fedora:latest}"
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-docker run --rm -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
+# GITHUB_TOKEN (no CI): o bob baixa o Neovim pela API do GitHub, que sem token aceita só 60 pedidos por hora
+# por IP; com vários jobs rodando juntos, o limite estoura.
+docker run --rm -e GITHUB_TOKEN -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
   if command -v dnf >/dev/null; then
     dnf install -y -q curl xz tar git sudo shadow-utils procps-ng
   elif command -v pacman >/dev/null; then
@@ -18,5 +20,5 @@ docker run --rm -v "${repo_dir}:/src:ro" "${image}" bash -euo pipefail -c '
   echo "dev ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dev
   cp -r /src /home/dev/devenv && chown -R dev:dev /home/dev/devenv
 
-  sudo -iu dev bash /home/dev/devenv/tests/container-user.sh
+  sudo -iu dev env GITHUB_TOKEN="${GITHUB_TOKEN:-}" bash /home/dev/devenv/tests/container-user.sh
 '
