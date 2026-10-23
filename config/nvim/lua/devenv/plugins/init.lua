@@ -1,5 +1,6 @@
 -- Lista de plugins, por área. Cada arquivo chama require("devenv.pack").add(...).
 -- O lockfile (nvim-pack-lock.json) fixa o commit de cada um e fica no git.
+require("devenv.theme") -- primeiro, para a tela já abrir com as cores do tema
 require("devenv.plugins.ui")
 require("devenv.plugins.editor")
 require("devenv.plugins.coding")

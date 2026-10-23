@@ -37,6 +37,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just desktop-check` | Valida as configs do niri, sway, i3 e kanata |
 | `just keyboard-doc` | Regenera o mapa do teclado depois de salvar no Vial |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia |
+| `theme <nome>` | Troca o tema de tudo (`Super+T` mostra a lista) |
 | `just generations` | Lista as gerações para rollback |
 
 ## Contribuindo
@@ -61,6 +62,8 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   local-models/          Ollama opcional (desligado por padrão)
   desktop/               niri, Noctalia, sway/i3 opcionais, kanata, Vial
   apps/                  Flatpaks (nix-flatpak), Flameshot, apps padrão
+  theme/                 comando `theme` (troca o tema de todos os apps)
+themes/                  as paletas e os papéis de parede de cada tema
 config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
 keyboard/                layouts do Corne (Vial) e o gerador do docs/keyboard.md
 agents/                  AGENTS.md, skills e scripts dos agentes
@@ -77,7 +80,7 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
 - [x] 3. tmux + sesh: veja [`docs/tmux.md`](docs/tmux.md)
 - [x] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) e [`docs/apps.md`](docs/apps.md)
-- [ ] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula)
+- [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)
 - [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops

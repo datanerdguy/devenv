@@ -11,6 +11,7 @@ _: {
     ./local-models
     ./desktop
     ./apps
+    ./theme
   ];
 
   # Fora do NixOS (Fedora, Ubuntu, Arch): ajusta variáveis e caminhos de sistema.

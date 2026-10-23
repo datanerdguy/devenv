@@ -1,6 +1,6 @@
 # Apps do desktop
 
-Módulo: [`modules/apps`](../modules/apps/default.nix) (`devenv.apps.enable`).
+Módulo: [`modules/apps`](../modules/apps/default.nix) (`devenv.apps.enable`). Cores: [themes.md](themes.md).
 
 Apps gráficos não vêm do Nix: fora do NixOS eles não acham a GPU sem ajuda ([ADR 0001](adr/0001-nix-home-manager-sobre-a-distro.md)).
 
@@ -46,7 +46,21 @@ Os modelos (`zettel`, `conceito` com um diagrama Mermaid, `diario`) ficam no rep
 [`config/nvim/templates/notes`](../config/nvim/templates/notes/), e o `<leader>zt` usa eles.
 O cofre não vai para este repo: são dados seus. Para sincronizar, use o Obsidian Sync ou um repositório git só para o cofre.
 
-Na primeira vez, abra o app e escolha *Abrir pasta como cofre* → `~/notes`.
+Na primeira vez, abra o app e escolha *Abrir pasta como cofre* → `~/notes`. Para as cores seguirem o tema do sistema, ligue o trecho de CSS `devenv-theme` ([themes.md](themes.md#obsidian)).
+
+## Histórico de cópias
+
+O Noctalia guarda as últimas **30 cópias**, de texto e de imagem (captura de tela, imagem copiada do navegador).
+`Super+Ctrl+V` abre a lista: digite para filtrar, `Enter` cola no app em foco. Dá para fixar um item para ele
+não sair da lista (os fixados não contam nos 30).
+
+- O que você copia no Neovim, no tmux e no terminal também entra (eles mandam para a área de transferência do sistema).
+- Cópias de apps que já fecharam continuam disponíveis.
+- A lista fica guardada criptografada em `~/.local/state/noctalia`, então sobrevive a um reinício.
+  Para apagar tudo: `noctalia msg clipboard-clear`. Senhas copiadas do Bitwarden também entram; apague depois de usar.
+- Para mudar o tamanho: `clipboard_history_max_entries` em [`config/noctalia/devenv.toml`](../config/noctalia/devenv.toml).
+
+Funciona no niri e no sway (`Super+Ctrl+v`); no i3 não, porque o Noctalia não roda em X11.
 
 ## Captura de tela
 

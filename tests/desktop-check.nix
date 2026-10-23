@@ -1,9 +1,11 @@
 # Valida as configs do desktop com os próprios programas, sem abrir sessão gráfica:
-# niri, sway (backend headless), i3, kanata e o docs/keyboard.md gerado a partir dos .vil.
+# niri, sway (backend headless), i3, kanata, o docs/keyboard.md gerado a partir dos .vil
+# e os quatro temas (Ghostty, niri, sway, i3, Noctalia, tmux e btop com os arquivos que o `theme` gera).
 {
   pkgs,
   src,
   kanataConfig,
+  theme,
 }:
 pkgs.runCommand "devenv-desktop-check"
   {
@@ -13,6 +15,9 @@ pkgs.runCommand "devenv-desktop-check"
       i3
       kanata
       python3
+      noctalia
+      ghostty
+      tmux
     ];
   }
   ''
@@ -23,10 +28,37 @@ pkgs.runCommand "devenv-desktop-check"
     touch "$HOME/.config/devenv/sway-local.conf" "$HOME/.config/devenv/i3-local.conf"
 
     echo "niri";   niri validate -c ${src}/config/niri/config.kdl
-    echo "sway";   WLR_BACKENDS=headless WLR_RENDERER=pixman sway --validate -c ${src}/config/sway/config
-    echo "i3";     i3 -C -c ${src}/config/i3/config
     echo "kanata"; kanata --check --cfg ${kanataConfig}
     echo "teclado"; python3 ${src}/keyboard/render.py --check
+
+    # Temas: gera cada um como o `theme <nome>` faria e valida o resultado.
+    export DEVENV_THEMES_DIR=${theme.themes} DEVENV_THEME_STATE="$HOME/.local/state/devenv/theme"
+    mkdir -p "$HOME/.config/noctalia"
+    cp ${src}/config/noctalia/devenv.toml "$HOME/.config/noctalia/"
+    ln -s ${theme.noctaliaPalettes} "$HOME/.config/noctalia/palettes"
+    ln -s "$DEVENV_THEME_STATE/noctalia.toml" "$HOME/.config/noctalia/theme.toml"
+    for id in $(${theme.package}/bin/theme list); do
+      echo "tema $id"
+      ${theme.package}/bin/theme "$id" >/dev/null
+      ghostty +validate-config --config-file="$DEVENV_THEME_STATE/ghostty"
+      niri validate -c ${src}/config/niri/config.kdl
+      # sway e i3 incluem as cores do tema (a barra do i3 usa as variáveis $theme_*).
+      WLR_BACKENDS=headless WLR_RENDERER=pixman sway --validate -c ${src}/config/sway/config
+      i3 -C -c ${src}/config/i3/config
+      zathura_ok="$(grep -c '^set ' "$DEVENV_THEME_STATE/current/zathurarc")"
+      test "$zathura_ok" -gt 10
+      grep -q 'theme\[main_bg\]' "$HOME/.config/btop/themes/devenv.theme"
+      grep -q 'color_theme = "devenv"' "$HOME/.config/btop/btop.conf"
+      noctalia config validate | grep -v '^WARN' || true
+      noctalia config validate >/dev/null
+      tmux -L check -f /dev/null new-session -d \; source-file "$DEVENV_THEME_STATE/current/tmux.conf" \; kill-server
+      # A paleta tem as 16 cores do terminal e o Noctalia acha ela pelo nome.
+      test "$(grep -c '^palette = ' "$DEVENV_THEME_STATE/ghostty")" = 16
+      test -f "$HOME/.config/noctalia/palettes/$(cat "$DEVENV_THEME_STATE/current/name").json"
+      test -n "$(ls "$DEVENV_THEME_STATE/current/wallpapers")"
+    done
+    ${theme.package}/bin/theme opacity 0.8 >/dev/null
+    grep -q 'transparency_mode = "glass"' "$DEVENV_THEME_STATE/noctalia.toml"
 
     touch "$out"
   ''

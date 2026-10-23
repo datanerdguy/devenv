@@ -22,6 +22,7 @@ _: {
       i3.enable = false; # o i3 Spin já tem o seu ~/.config/i3; ligar troca pela config do repo
     };
     apps.enable = true;
+    theme.enable = true; # `theme <nome>` troca o tema; veja docs/themes.md
     # localModels.enable = true; # Ollama; veja docs/agents.md
   };
 }

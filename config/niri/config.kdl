@@ -51,6 +51,8 @@ layout {
 // Variáveis para os apps abertos pelo niri.
 environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto"
+    // Apps Qt com as cores do tema (paleta gerada pelo Noctalia para o qt6ct).
+    QT_QPA_PLATFORMTHEME "qt6ct"
 }
 
 // Noctalia: barra, launcher, notificações, bloqueio, papel de parede e agente de polkit.
@@ -75,5 +77,5 @@ debug {
 // Por último, para valer por cima do que está acima:
 // Monitores e ajustes desta máquina (fora do git; exemplo em docs/desktop.md).
 include optional=true "~/.config/devenv/niri-local.kdl"
-// Cores do tema atual, geradas pelo sistema de temas (fase 5).
+// Cores do tema atual, geradas pelo comando `theme` (docs/themes.md).
 include optional=true "~/.local/state/devenv/theme/niri.kdl"

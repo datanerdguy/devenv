@@ -74,6 +74,22 @@ for bin in kanata Vial wl-copy; do
   check "binário ${bin}" command -v "${bin}"
 done
 
+# Temas: o switch aplica o padrão, e o `theme` troca e volta.
+check "comando theme" command -v theme
+check "tema atual aplicado" test -f "${HOME}/.local/state/devenv/theme/current/ghostty"
+check "ghostty lê o tema" grep -q 'devenv/theme/ghostty' "${HOME}/.config/ghostty/config"
+check "tmux lê o tema" grep -q 'devenv/theme/current/tmux.conf' "${HOME}/.config/tmux/tmux.conf"
+check "paletas no noctalia" test -f "${HOME}/.config/noctalia/palettes/Everforest.json"
+check "theme.toml do noctalia" test -f "${HOME}/.config/noctalia/theme.toml"
+check "papéis de parede do tema" test -n "$(ls "${HOME}/.local/share/devenv/themes/dracula/wallpapers")"
+# shellcheck disable=SC2329 # chamada pelo check
+theme_switch_ok() { theme dracula && [ "$(theme current)" = dracula ] && theme everforest; }
+check "theme troca e volta" theme_switch_ok
+check "btop com o tema" grep -q 'color_theme = "devenv"' "${HOME}/.config/btop/btop.conf"
+check "zathura inclui o tema" grep -q 'devenv/theme/current/zathurarc' "${HOME}/.config/zathura/zathurarc"
+check "flameshot com a cor do tema" grep -q '^uiColor=#a7c080' "${HOME}/.config/flameshot/flameshot.ini"
+check "semente do qt6ct" test -f "${HOME}/.config/qt6ct/qt6ct.conf"
+
 # Neovim: instala os plugins, carrega todos e mede a abertura.
 export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

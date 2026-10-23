@@ -27,7 +27,7 @@ fmt:
 lint:
     nix fmt -- --ci
     statix check .
-    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh .githooks/*
+    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh modules/theme/theme.sh .githooks/*
     actionlint
     stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
     python3 keyboard/render.py --check

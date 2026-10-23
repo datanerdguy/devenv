@@ -12,6 +12,8 @@ binds {
     Mod+Space hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma hotkey-overlay-title="Configurações do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+Ctrl+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "theme"; }
     Alt+Tab { spawn-sh "noctalia msg window-switcher hold"; }
     Mod+Alt+L hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
 
