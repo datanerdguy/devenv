@@ -26,7 +26,8 @@ fi
 
 # Ghostty: pacote .deb da comunidade (https://github.com/mkasberg/ghostty-ubuntu).
 if ! command -v ghostty >/dev/null; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
+  # O instalador baixa o .deb na pasta atual; roda numa pasta temporária.
+  (cd "$(mktemp -d)" && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)")
 fi
 
 # Desktop: niri + Noctalia v5. Precisa do Ubuntu 26.04+ (o Noctalia só tem pacote para ele).
