@@ -9,6 +9,7 @@ _: {
     ./tmux
     ./agents
     ./local-models
+    ./desktop
   ];
 
   # Fora do NixOS (Fedora, Ubuntu, Arch): ajusta variáveis e caminhos de sistema.
