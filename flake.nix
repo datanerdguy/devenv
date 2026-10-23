@@ -48,6 +48,7 @@
           statix
           shellcheck
           actionlint
+          stylua
           commitizen
         ];
         shellHook = ''

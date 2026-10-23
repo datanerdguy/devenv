@@ -27,6 +27,29 @@ check "git com branch padrão main" test "$(git config --global init.defaultBran
 check "git usa delta nos diffs" sh -c 'git config --global pager.diff | grep -q delta'
 check "config do ghostty" test -f "${HOME}/.config/ghostty/config"
 check "config do starship" test -f "${HOME}/.config/starship.toml"
+check "neovim instalado pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
+check "config do neovim ligada ao repo" test -f "${HOME}/.config/nvim/init.lua"
+for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; do
+  check "ferramenta ${bin}" command -v "${bin}"
+done
 check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
+
+# Neovim: instala os plugins, carrega todos e mede a abertura.
+export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+log="$(mktemp)"
+if DEVENV_NVIM_TEST=1 nvim --headless -l "${repo_dir}/tests/nvim/check.lua" >"${log}" 2>&1; then
+  echo "ok    neovim carrega todos os plugins"
+else
+  echo "FALHA neovim carrega todos os plugins"
+  fail=1
+fi
+grep -v '^vim.pack' "${log}" || true
+if "${repo_dir}/tests/nvim/startup.sh"; then
+  echo "ok    neovim abre dentro do limite"
+else
+  echo "FALHA neovim abre dentro do limite"
+  fail=1
+fi
 
 exit "${fail}"
