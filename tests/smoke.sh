@@ -66,7 +66,7 @@ for f in niri/config.kdl niri/binds.kdl noctalia/devenv.toml sway/config i3/conf
   check "config ${f}" test -f "${HOME}/.config/${f}"
 done
 check "serviço do kanata" test -f "${HOME}/.config/systemd/user/kanata.service"
-for bin in kanata vial wl-copy; do
+for bin in kanata Vial wl-copy; do
   check "binário ${bin}" command -v "${bin}"
 done
 

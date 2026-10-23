@@ -113,7 +113,7 @@ Funciona pelo libinput, sem driver extra. Por padrão a área da mesa vai para a
 O Corne v4.1 continua no **Vial**: muda ao vivo, sem gravar firmware, e o `.vil` vai para o repo.
 Avaliamos as alternativas: o QMK Configurator e o ZMK Studio exigem trocar o firmware, e nenhum faz mais que o Vial no Corne.
 
-- O app `vial` vem do Nix; a regra udev (`system/desktop-common.sh`) deixa ele abrir o teclado sem sudo.
+- O app `Vial` (o comando tem V maiúsculo) vem do Nix; a regra udev (`system/desktop-common.sh`) deixa ele abrir o teclado sem sudo.
   No navegador, [vial.rocks](https://vial.rocks) também funciona, só em navegadores baseados no Chromium.
 - O layout fica em [`keyboard/corne/corne.vil`](../keyboard/corne/corne.vil). Depois de mudar no Vial,
   salve por cima dele (*File → Save current layout*), rode `just keyboard-doc` e faça commit.

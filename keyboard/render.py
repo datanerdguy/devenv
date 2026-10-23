@@ -87,7 +87,7 @@ def main():
         "As colunas 0–5 são a metade esquerda; as teclas extras e os polegares ficam nas linhas e colunas do fim.",
         "`▽` = transparente (usa a camada de baixo), `·` = sem tecla nessa posição.",
         "",
-        "Para mudar: abra o Vial (`vial`), edite ao vivo e salve com *File → Save current layout* por cima do",
+        "Para mudar: abra o Vial (comando `Vial`), edite ao vivo e salve com *File → Save current layout* por cima do",
         "`.vil` do repo. Para testar a sugestão: *File → Load saved layout* e escolha `corne-devenv.vil`.",
         "Detalhes em [desktop.md](desktop.md#teclado).",
         "",
