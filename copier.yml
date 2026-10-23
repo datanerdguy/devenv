@@ -1,0 +1,98 @@
+# Modelos de projeto do devenv (docs/templates.md). Use pelo comando `new`:
+#   new python meu-projeto
+# Os arquivos ficam em templates/<linguagem>/; as partes comuns, em templates/common/ (por link).
+_subdirectory: "templates/{{ lang }}"
+_min_copier_version: "9.4"
+_answers_file: .copier-answers.yml
+# `new` passa os dados do git; os testes passam tudo com --defaults.
+_envops:
+  keep_trailing_newline: true
+
+lang:
+  type: str
+  help: Linguagem
+  choices:
+    Python (ML, LLM, dados, web): python
+
+python_kind:
+  type: str
+  help: Tipo de projeto Python
+  when: "{{ lang == 'python' }}"
+  default: lib
+  choices:
+    "lib: biblioteca (pacote publicável)": lib
+    "api: API com FastAPI": api
+    "llm: app de LLM com pydantic-ai (Ollama ou qualquer provedor)": llm
+    "data: dados com polars, duckdb e marimo": data
+    "ml: machine learning com PyTorch e marimo": ml
+    "fastapi-htmx: site com FastAPI, Jinja e htmx": fastapi-htmx
+    "django: site com Django e htmx": django
+    "streamlit: app de dados com Streamlit": streamlit
+
+kind:
+  type: str
+  when: false
+  default: "{{ python_kind if lang == 'python' else '' }}"
+
+project_name:
+  type: str
+  help: Nome do projeto (pasta e repositório)
+  default: "{{ _copier_conf.dst_path | basename }}"
+  validator: >-
+    {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}
+    Use letras minúsculas, números e hífen, começando com uma letra.
+    {% endif %}
+
+package:
+  type: str
+  help: Nome do pacote no código
+  when: "{{ lang == 'python' }}"
+  default: "{{ project_name | replace('-', '_') }}"
+
+description:
+  type: str
+  help: Descrição em uma linha
+  default: ""
+
+author_name:
+  type: str
+  help: Seu nome
+  default: ""
+
+author_email:
+  type: str
+  help: Seu e-mail
+  default: ""
+
+license:
+  type: str
+  help: Licença
+  default: MIT
+  choices:
+    - MIT
+    - Apache-2.0
+    - none
+
+python_version:
+  type: str
+  help: Versão do Python
+  when: "{{ lang == 'python' }}"
+  default: "3.13"
+
+gpu:
+  type: bool
+  help: Usar GPU NVIDIA (PyTorch com CUDA)?
+  when: "{{ lang == 'python' and python_kind == 'ml' }}"
+  default: false
+
+postgres:
+  type: bool
+  help: Postgres local (just db)?
+  when: "{{ lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django'] }}"
+  default: false
+
+docker:
+  type: bool
+  help: Dockerfile para o deploy?
+  when: "{{ lang == 'python' and python_kind in ['api', 'fastapi-htmx', 'django', 'streamlit'] }}"
+  default: true

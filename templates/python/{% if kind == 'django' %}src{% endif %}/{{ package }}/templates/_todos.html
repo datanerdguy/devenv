@@ -1,0 +1,7 @@
+<ul>
+  {% for todo in todos %}
+  <li>{{ todo.text }} <button hx-delete="{% url 'delete_todo' todo.pk %}" hx-target="#todos">×</button></li>
+  {% empty %}
+  <li>Nada por aqui.</li>
+  {% endfor %}
+</ul>

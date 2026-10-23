@@ -1,0 +1,6 @@
+from {{ package }}.train import train
+
+
+def test_loss_goes_down() -> None:
+    result = train(epochs=100)
+    assert result.last_loss < result.first_loss / 2

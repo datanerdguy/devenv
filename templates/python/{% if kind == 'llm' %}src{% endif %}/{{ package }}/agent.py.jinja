@@ -1,0 +1,27 @@
+"""O agente.
+
+O modelo vem de LLM_MODEL (`provedor:modelo` do pydantic-ai); o padrão é local, no Ollama.
+"""
+
+import os
+from datetime import date
+
+from pydantic_ai import Agent
+from pydantic_ai.models import Model
+
+DEFAULT_MODEL = "ollama:qwen3:8b"
+
+
+def build_agent(model: Model | str | None = None) -> Agent[None, str]:
+    os.environ.setdefault("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    agent = Agent(
+        model or os.environ.get("LLM_MODEL", DEFAULT_MODEL),
+        instructions="Responda em português, de forma curta e direta.",
+    )
+
+    @agent.tool_plain
+    def today() -> str:
+        """A data de hoje (AAAA-MM-DD)."""
+        return date.today().isoformat()
+
+    return agent

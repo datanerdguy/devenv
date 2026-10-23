@@ -1,0 +1,7 @@
+from {{ package }}.pipeline import load_sample, summary
+
+
+def test_summary() -> None:
+    out = summary(load_sample())
+    assert out["city"].to_list() == ["Curitiba", "Manaus", "Recife"]
+    assert out["avg_temp_c"].to_list() == [16.25, 32.0, 29.75]

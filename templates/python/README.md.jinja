@@ -1,0 +1,60 @@
+# {{ project_name }}
+
+{{ description or 'Projeto criado com o devenv.' }}
+
+## Começar
+
+Com o [devenv](https://github.com/datanerdguy/devenv) (Nix e direnv), basta entrar na pasta: o direnv carrega as
+ferramentas do `flake.nix` e o uv instala o Python {{ python_version }} e as dependências em `.venv`.
+
+Sem o direnv:
+
+```sh
+nix develop   # ou instale o uv e o just à mão
+just sync
+```
+
+## Comandos
+
+| Comando | O que faz |
+| --- | --- |
+{%- if kind in ['api', 'fastapi-htmx', 'django'] %}
+| `just dev` | sobe o servidor em http://localhost:8000, com recarga automática |
+{%- elif kind == 'streamlit' %}
+| `just dev` | abre o app em http://localhost:8501 |
+{%- elif kind in ['data', 'ml'] %}
+| `just dev` | abre os notebooks do marimo (`notebooks/`) |
+{%- elif kind == 'llm' %}
+| `just dev "pergunta"` | pergunta ao agente |
+{%- endif %}
+| `just test` | testes (pytest) |
+| `just fmt` | formata e corrige (ruff) |
+| `just ci` | tudo que o CI roda: formatação, lint, tipos (basedpyright) e testes |
+{%- if postgres %}
+| `just db` | Postgres local (dados em `.devenv/pg`) |
+{%- endif %}
+{%- if docker %}
+| `just docker` | gera a imagem Docker |
+{%- endif %}
+
+Dependências: `uv add pacote` (ou `uv add --dev pacote`). O `uv.lock` vai para o git.
+{%- if kind == 'llm' %}
+
+## Modelo
+
+O agente usa o modelo da variável `LLM_MODEL`, no formato do pydantic-ai (`provedor:modelo`). O padrão é um
+modelo local do Ollama (`ollama:qwen3:8b`, com `ollama pull qwen3:8b`). Para outro provedor, ponha a chave no
+`.envrc.local` (fora do git), ex.: `export OPENAI_API_KEY="$(rbw get openai)"` e `export LLM_MODEL=openai:gpt-5-mini`.
+{%- endif %}
+{%- if kind == 'ml' %}
+
+## GPU
+
+O PyTorch vem do índice {% if gpu %}com CUDA 12.8{% else %}só CPU{% endif %} (veja `[[tool.uv.index]]` no
+`pyproject.toml`). Para trocar, mude a url e rode `just sync`.
+{%- endif %}
+
+## Commits
+
+[Conventional Commits](https://www.conventionalcommits.org/pt-br/): `cz commit` guia, e o hook do git confere
+(lefthook). `cz bump` sobe a versão e atualiza o CHANGELOG.

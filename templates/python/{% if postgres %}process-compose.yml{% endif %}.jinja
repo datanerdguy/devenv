@@ -1,0 +1,21 @@
+# Postgres local para o desenvolvimento: `just db` (Ctrl+C para parar).
+# Os dados ficam em .devenv/pg (fora do git). O DATABASE_URL vem do .envrc.
+version: "0.5"
+
+processes:
+  postgres:
+    command: |
+      [ -d .devenv/pg ] || initdb --pgdata .devenv/pg --username postgres --auth trust >/dev/null
+      exec postgres -D .devenv/pg -k "$PWD/.devenv" -c listen_addresses=localhost
+    readiness_probe:
+      exec:
+        command: pg_isready --host localhost --username postgres
+      period_seconds: 1
+    shutdown:
+      signal: 2
+
+  createdb:
+    command: createdb --host localhost --username postgres {{ project_name | replace('-', '_') }} 2>/dev/null || true
+    depends_on:
+      postgres:
+        condition: process_healthy

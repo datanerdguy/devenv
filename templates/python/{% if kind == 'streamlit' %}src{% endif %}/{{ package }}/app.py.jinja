@@ -1,0 +1,17 @@
+"""App do Streamlit. Rode com `just dev` (http://localhost:8501)."""
+
+import streamlit as st
+
+from {{ package }}.data import mean, sample
+
+st.set_page_config(page_title="{{ project_name }}", layout="wide")
+st.title("{{ project_name }}")
+
+rows = st.slider("Linhas", min_value=10, max_value=1000, value=100, key="rows")
+df = sample(rows)
+
+left, right = st.columns(2)
+left.metric("Média de y", f"{mean(df, 'y'):.3f}")
+right.metric("Linhas", df.height)
+st.line_chart(df, x="x", y="y")
+st.dataframe(df)

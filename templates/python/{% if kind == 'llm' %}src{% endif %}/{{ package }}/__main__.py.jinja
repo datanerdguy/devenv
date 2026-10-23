@@ -1,0 +1,14 @@
+"""Linha de comando: `python -m {{ package }} "pergunta"` (ou `just dev "pergunta"`)."""
+
+import sys
+
+from {{ package }}.agent import build_agent
+
+
+def main() -> None:
+    prompt = " ".join(sys.argv[1:]).strip() or "Diga olá."
+    print(build_agent().run_sync(prompt).output)
+
+
+if __name__ == "__main__":
+    main()

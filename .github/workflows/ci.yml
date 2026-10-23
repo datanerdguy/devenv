@@ -61,6 +61,34 @@ jobs:
       - name: Roda o script da distro num container limpo
         run: tests/system.sh "${{ matrix.image }}"
 
+  # Modelos de projeto: gera cada um com o `new` e roda o CI do projeto gerado (tests/templates.sh).
+  templates:
+    name: template (${{ matrix.case }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - python:lib
+          - python:api
+          - python:api:postgres
+          - python:llm
+          - python:data
+          - python:ml
+          - python:fastapi-htmx
+          - python:django
+          - python:streamlit
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # o copier lê o histórico do repo dos modelos
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Gera o projeto, roda o just ci dele e gera a imagem Docker
+        run: tests/templates.sh "${{ matrix.case }}"
+        env:
+          DEVENV_TEST_DOCKER: "1"
+
   install:
     name: install (${{ matrix.image }})
     needs: build

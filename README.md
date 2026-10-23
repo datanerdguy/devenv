@@ -38,6 +38,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 | `just keyboard-doc` | Regenera o mapa do teclado depois de salvar no Vial |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia |
 | `theme <nome>` | Troca o tema de tudo (`Super+T` mostra a lista) |
+| `new python meu-projeto api` | Cria um projeto pronto a partir dos modelos ([`docs/templates.md`](docs/templates.md)) |
 | `just generations` | Lista as gerações para rollback |
 
 ## Contribuindo
@@ -63,12 +64,14 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   desktop/               niri, Noctalia, sway/i3 opcionais, kanata, Vial
   apps/                  Flatpaks (nix-flatpak), Flameshot, apps padrão
   theme/                 comando `theme` (troca o tema de todos os apps)
+  templates/             comando `new` (cria projetos a partir dos modelos)
 themes/                  as paletas e os papéis de parede de cada tema
+templates/ + copier.yml  modelos de projeto (Python; Go, Rust e Phoenix a seguir)
 config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
 keyboard/                layouts do Corne (Vial) e o gerador do docs/keyboard.md
 agents/                  AGENTS.md, skills e scripts dos agentes
 system/                  scripts de root por distro
-tests/                   testes de fumaça, do Neovim, do desktop e instalação em container
+tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e instalação em container
 .githooks/               hooks de lint e de mensagem de commit
 .github/workflows/       CI, release e atualização semanal do flake.lock
 docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
@@ -82,5 +85,5 @@ docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 - [x] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) e [`docs/apps.md`](docs/apps.md)
 - [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
-- [ ] 7. Templates de projeto (Python ML/LLM, Go, Rust, Phoenix, htmx)
+- [ ] 7. Modelos de projeto: Python pronto (lib, api, llm, data, ml, fastapi-htmx, django, streamlit); Go, Rust e Phoenix a seguir. Veja [`docs/templates.md`](docs/templates.md)
 - [ ] 8. Portabilidade: Ubuntu e Arch no CI, segredos com sops

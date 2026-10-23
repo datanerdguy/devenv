@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Ambiente local
+.direnv/
+.devenv/
+.envrc.local
+.env
+result
+{%- if kind == 'django' %}
+
+# Django
+db.sqlite3
+staticfiles/
+{%- endif %}
+{%- if kind in ['data', 'ml'] %}
+
+# Dados e modelos (versione só o que for pequeno; o resto vai para fora do git)
+data/*
+!data/.gitkeep
+models/
+__marimo__/
+{%- endif %}
+{%- if kind == 'streamlit' %}
+
+# Streamlit
+.streamlit/secrets.toml
+{%- endif %}

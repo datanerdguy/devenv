@@ -1,0 +1,18 @@
+# direnv: entra no ambiente do projeto ao abrir a pasta (ferramentas do flake.nix).
+use flake
+{%- if lang == 'python' %}
+
+# Python: o .venv do uv, sincronizado quando o uv.lock muda.
+watch_file uv.lock pyproject.toml
+uv sync --quiet || log_error "uv sync falhou; rode 'just sync'"
+export VIRTUAL_ENV="$PWD/.venv"
+PATH_add .venv/bin
+{%- endif %}
+{%- if postgres %}
+
+# Postgres local (just db).
+export DATABASE_URL="postgresql://postgres@localhost:5432/{{ project_name | replace('-', '_') }}"
+{%- endif %}
+
+# Segredos e ajustes só desta máquina (fora do git). Ex.: export OPENAI_API_KEY="$(rbw get openai)"
+source_env_if_exists .envrc.local

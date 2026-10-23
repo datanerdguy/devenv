@@ -1,0 +1,113 @@
+[project]
+name = "{{ project_name }}"
+version = "0.1.0"
+description = "{{ description }}"
+readme = "README.md"
+{%- if author_name %}
+authors = [{ name = "{{ author_name }}"{% if author_email %}, email = "{{ author_email }}"{% endif %} }]
+{%- endif %}
+{%- if license != 'none' %}
+license = "{{ license }}"
+{%- endif %}
+requires-python = ">={{ python_version }}"
+dependencies = [
+{%- if kind == 'api' %}
+    "fastapi[standard]>=0.120",
+    "pydantic-settings>=2.11",
+{%- elif kind == 'fastapi-htmx' %}
+    "fastapi[standard]>=0.120",
+    "jinja2>=3.1",
+    "pydantic-settings>=2.11",
+{%- elif kind == 'llm' %}
+    "pydantic-ai-slim[openai]>=1.0",
+    "pydantic-settings>=2.11",
+{%- elif kind == 'data' %}
+    "duckdb>=1.4",
+    "marimo>=0.17",
+    "polars>=1.34",
+    "pyarrow>=21",
+{%- elif kind == 'ml' %}
+    "marimo>=0.17",
+    "numpy>=2.3",
+    "torch>=2.9",
+{%- elif kind == 'django' %}
+    "django>=5.2",
+    "django-htmx>=1.26",
+    "dj-database-url>=3.0",
+{%- if docker %}
+    "gunicorn>=23",
+    "whitenoise>=6.11",
+{%- endif %}
+{%- elif kind == 'streamlit' %}
+    "polars>=1.34",
+    "streamlit>=1.50",
+{%- endif %}
+{%- if postgres %}
+    "psycopg[binary]>=3.2",
+{%- endif %}
+]
+{%- if kind == 'llm' %}
+
+[project.scripts]
+{{ project_name }} = "{{ package }}.__main__:main"
+{%- endif %}
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.31",
+    "pytest>=8.4",
+    "ruff>=0.14",
+{%- if kind == 'django' %}
+    "django-stubs>=5.2",
+    "pytest-django>=4.11",
+{%- endif %}
+]
+
+[build-system]
+requires = ["uv_build>=0.9,<1"]
+build-backend = "uv_build"
+{%- if kind == 'ml' %}
+
+# PyTorch do índice oficial: {% if gpu %}com CUDA 12.8 (placa NVIDIA){% else %}só CPU (bem menor){% endif %}.
+# Para trocar, mude a url do índice e rode `just sync`. Cada versão do CUDA tem o seu: download.pytorch.org/whl
+[tool.uv]
+environments = ["sys_platform == 'linux'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/{{ 'cu128' if gpu else 'cpu' }}"
+explicit = true
+{%- endif %}
+
+[tool.ruff]
+line-length = 100
+{%- if kind == 'django' %}
+extend-exclude = ["**/migrations"]
+{%- endif %}
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+{%- if kind in ['data', 'ml'] %}
+
+[tool.ruff.lint.per-file-ignores]
+# no marimo, a última expressão da célula é o que aparece na tela
+"notebooks/*" = ["B018"]
+{%- endif %}
+
+[tool.basedpyright]
+include = ["src", "tests"]
+typeCheckingMode = "standard"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+{%- if kind == 'django' %}
+DJANGO_SETTINGS_MODULE = "{{ package }}.settings"
+{%- if docker %}
+# o WhiteNoise avisa que staticfiles/ não existe (só o collectstatic do Dockerfile cria)
+filterwarnings = ["ignore:No directory at:UserWarning"]
+{%- endif %}
+{%- endif %}
