@@ -30,6 +30,21 @@ if [ "${DEVENV_I3:-0}" = 1 ]; then sudo dnf install -y i3 xorg-x11-server-Xorg; 
 
 "$(dirname "${BASH_SOURCE[0]}")/desktop-common.sh"
 
+# Apps gráficos pela distro (acham a GPU sem ajuda): captura, PDF, imagem, vídeo e o Flatpak
+# (os apps grandes vêm do Flathub, pelo home-manager). wayscriber: repositório oficial do projeto.
+if [ ! -f /etc/yum.repos.d/wayscriber.repo ]; then
+  sudo tee /etc/yum.repos.d/wayscriber.repo >/dev/null <<'REPO'
+[wayscriber]
+name=Wayscriber Repo
+baseurl=https://wayscriber.com/rpm
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://wayscriber.com/rpm/RPM-GPG-KEY-wayscriber.asc
+REPO
+fi
+sudo dnf install -y flatpak flameshot wayscriber zathura zathura-pdf-mupdf imv mpv
+
 # GPU NVIDIA: só se a placa existir.
 if lspci | grep -qi 'nvidia'; then
   echo "GPU NVIDIA detectada: instalando driver via RPM Fusion."

@@ -26,6 +26,7 @@ config/nvim/
       coding.lua           blink.cmp, tiny-inline-diagnostic, conform, nvim-lint, mason
       ai.lua               sidekick (qualquer CLI de agente), claudecode
       notebooks.lua        molten + image.nvim, marimo
+      notes.lua            obsidian.nvim (notas no cofre do Obsidian)
       debug.lua            nvim-dap, dap-view, dap-python
 ```
 
@@ -49,6 +50,7 @@ config/nvim/
 | sidekick.nvim | terminal de agentes (Claude, Codex, Gemini, opencode) | tecla |
 | claudecode.nvim | integração de IDE do Claude Code | tecla ou comando |
 | molten-nvim + image.nvim | rodar células Jupyter no buffer | tecla |
+| obsidian.nvim | notas no cofre do Obsidian (links, nota do dia, modelos) | tecla, `:Obsidian` ou nota do cofre |
 | nvim-dap + dap-view + dap-python | debug | tecla |
 
 ## Gerenciador de plugins (:Pack)
@@ -218,6 +220,24 @@ As sessões do sidekick rodam no tmux, então continuam vivas se o Neovim fechar
 | `<leader>nm` / `<leader>nM` | marimo: editar o notebook / rodar como app |
 
 O molten usa o kernel do projeto: tenha `ipykernel` nas dependências de dev (`uv add --dev ipykernel`) e registre com `uv run python -m ipykernel install --user --name <projeto>`. Imagens aparecem no Ghostty (protocolo do kitty). O marimo roda com `uvx`, sem instalar nada.
+
+### Notas (`<leader>z`)
+
+Mesmo cofre do app Obsidian (`~/notes`, ou `$DEVENV_NOTES`). Detalhes em [apps.md](apps.md#notas-obsidian--neovim).
+
+| Tecla | Ação |
+| --- | --- |
+| `<leader>zn` | Nova nota (vai para `zettel/`, com ID de data e hora) |
+| `<leader>zz` / `<leader>zs` | Abrir nota pelo nome / buscar no texto |
+| `<leader>zd` / `<leader>zy` | Nota de hoje / de ontem (`diario/`) |
+| `<leader>zt` | Nova nota a partir de um modelo (zettel, conceito, diário) |
+| `<leader>zb` / `<leader>zl` / `<leader>z#` | Quem aponta para a nota / links dela / tags |
+| `<leader>zr` | Renomear, atualizando os links |
+| `<leader>zp` | Colar imagem do clipboard (vai para `anexos/`) |
+| `<leader>ze` / `<leader>zk` | Seleção vira nota nova / vira link para nota nova |
+| `<leader>zo` | Abrir a nota no app Obsidian |
+
+Dentro de uma nota: `Enter` segue o link, marca a caixa ou abre as notas da tag; `]l` / `[l` pulam entre links; `[[` completa o nome de outra nota e `#` as tags.
 
 ### Debug (`<leader>d`)
 

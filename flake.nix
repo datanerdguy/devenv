@@ -16,6 +16,8 @@
     # Agentes de código (Claude Code, Codex, Gemini CLI, opencode...) atualizados todo dia.
     # Sem `follows`: usa o nixpkgs deles, para bater com o cache binário da numtide.
     llm-agents.url = "github:numtide/llm-agents.nix";
+    # Flatpaks declarados no home-manager (apps grandes do Flathub). Sem nixpkgs próprio.
+    nix-flatpak.url = "git+https://github.com/gmodena/nix-flatpak?ref=refs/tags/v0.8.0";
   };
 
   outputs =
@@ -24,6 +26,7 @@
       nixpkgs,
       home-manager,
       llm-agents,
+      nix-flatpak,
       ...
     }:
     let
@@ -37,6 +40,7 @@
           inherit pkgs;
           extraSpecialArgs.llmAgents = llm-agents.packages.${system};
           modules = [
+            nix-flatpak.homeManagerModules.nix-flatpak
             ./modules
             hostFile
           ];

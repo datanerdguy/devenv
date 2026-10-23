@@ -3,7 +3,7 @@
 Sessão principal: **[niri](https://github.com/niri-wm/niri)** (janelas em colunas que rolam na horizontal) com o
 **[Noctalia Shell](https://noctalia.dev)** v5 (barra, launcher, notificações, central de controle, tela de bloqueio).
 **sway** e **i3** ficam como sessões opcionais, com os mesmos atalhos básicos.
-Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
+Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
 
 ## Instalação
 
@@ -74,7 +74,11 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 | `Super+C` | centraliza a coluna |
 | `Super+V`, `Super+Shift+V` | janela flutuante, alterna foco entre flutuantes e lado a lado |
 | `Super+W` | coluna em abas |
-| `Print`, `Ctrl+Print`, `Alt+Print` | captura de área, da tela, da janela (salva em `~/Pictures/Screenshots` e copia) |
+| `Super+B` | navegador |
+| `Super+N` | nota do dia no Neovim |
+| `Super+D` | desenhar na tela (wayscriber) |
+| `Print` | captura com anotação (Flameshot) |
+| `Super+Print`, `Ctrl+Print`, `Alt+Print` | captura nativa do niri: área, tela, janela (salva em `~/Pictures/Screenshots` e copia) |
 | `Super+Alt+L` | bloqueia a tela |
 | `Super+Escape` | libera os atalhos para o app em foco (VM, jogo) |
 | `Super+Shift+E` | sai do niri |
@@ -157,7 +161,7 @@ Para mudar, edite `xkb` no `config.kdl`.
 
 Nada a configurar no caso comum. O bootstrap só instala o driver da NVIDIA se achar a placa, junto com o perfil de VRAM.
 O niri escolhe sozinho a placa que desenha a tela: com GPU híbrida, usa a integrada e a NVIDIA fica livre para
-CUDA e jogos (`prime-run <app>` ou `__NV_PRIME_RENDER_OFFLOAD=1 <app>` para mandar um app para ela).
+CUDA e jogos (`__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia <app>` manda um app para ela).
 
 Se o niri abrir com tela preta, o modeset do kernel está desligado:
 

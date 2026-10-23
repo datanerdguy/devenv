@@ -59,6 +59,18 @@ else
   echo "Ubuntu ${VERSION_ID}: sem pacotes do niri/Noctalia (precisa do 26.04). Pulando o desktop."
 fi
 
+# Apps gráficos pela distro (acham a GPU sem ajuda): captura, PDF, imagem, vídeo e o Flatpak
+# (os apps grandes vêm do Flathub, pelo home-manager). wayscriber: repositório oficial do projeto.
+if [ ! -f /etc/apt/sources.list.d/wayscriber.list ]; then
+  sudo apt-get install -y gpg
+  sudo install -d -m 0755 /usr/share/keyrings
+  curl -fsSL https://wayscriber.com/apt/WAYSCRIBER-GPG-KEY.asc | gpg --dearmor | sudo tee /usr/share/keyrings/wayscriber.gpg >/dev/null
+  echo "deb [signed-by=/usr/share/keyrings/wayscriber.gpg] https://wayscriber.com/apt stable main" |
+    sudo tee /etc/apt/sources.list.d/wayscriber.list >/dev/null
+  sudo apt-get update
+fi
+sudo apt-get install -y flatpak flameshot wayscriber zathura imv mpv
+
 # GPU NVIDIA: só se a placa existir.
 if lspci | grep -qi 'nvidia'; then
   echo "GPU NVIDIA detectada: instalando o driver recomendado."
