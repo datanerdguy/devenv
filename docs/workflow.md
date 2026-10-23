@@ -59,6 +59,7 @@ Escopos sugeridos: o nome do módulo (`cli`, `shell`, `git`, `terminal`, `nvim`,
 | --- | --- |
 | `lint` | `nix fmt` sem mudanças, statix (Nix), shellcheck (scripts), actionlint (workflows) |
 | `commits` | Só em PR: título do PR e cada commit no padrão Conventional Commits |
+| `source-branch` | Só em PR: um PR para a `main` precisa vir da `dev` |
 | `build` | `nix flake check` e build de todos os hosts em `homeConfigurations` |
 | `install` | Instalação do zero em containers limpos **Fedora** e **Ubuntu**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` |
 
@@ -81,7 +82,7 @@ Atualiza as versões das GitHub Actions toda semana, com PRs para a `dev`.
 Em **Settings → Branches** (ou **Rules → Rulesets**), para `main` e `dev`:
 
 - Exigir PR antes do merge.
-- Exigir os checks `lint`, `build`, `install (fedora:latest)` e `install (ubuntu:24.04)`; na `dev`, também `commits`.
+- Exigir os checks `lint`, `build`, `install (fedora:latest)` e `install (ubuntu:24.04)`; na `main`, também `source-branch`; na `dev`, também `commits`.
 - Bloquear force push e exclusão.
 - Na `dev`: permitir só squash merge. Na `main`: permitir merge commit.
 
