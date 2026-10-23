@@ -1,6 +1,6 @@
 # devenv
 
-Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu e outras distros.
+Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu, Arch e derivadas.
 
 Foco: ML/IA/LLM, dados, fluxo guiado pelo teclado (terminal, Neovim, niri), code agents. O plano completo está no documento de proposta; as decisões ficam em [`docs/adr/`](docs/adr/).
 
@@ -43,7 +43,7 @@ Antes de rodar, ajuste usuário, nome e e-mail em [`hosts/fedora-laptop.nix`](ho
 
 ## Contribuindo
 
-Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora e Ubuntu. Detalhes em [`docs/workflow.md`](docs/workflow.md).
+Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora, Ubuntu e Arch. Detalhes em [`docs/workflow.md`](docs/workflow.md).
 
 Para trabalhar no repo: `nix develop` (ou `direnv allow`), que traz as ferramentas e liga os git hooks.
 

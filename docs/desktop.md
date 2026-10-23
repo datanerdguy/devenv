@@ -14,6 +14,11 @@ O `./bootstrap.sh <host>` instala pela distro o que precisa de root:
 | Fedora 44+ | `niri`, `noctalia`, `xwayland-satellite` e os portais, todos dos repositórios oficiais |
 | Ubuntu 26.04+ | `niri` (do arquivo ou do PPA `avengemedia/danklinux`), `noctalia` do [repositório APT do projeto](https://docs.noctalia.dev) |
 | Ubuntu 24.04 | sem desktop (não há pacote do Noctalia); o resto do devenv funciona |
+| Arch (e derivadas) | tudo dos repositórios oficiais (`extra`) |
+
+Derivadas caem no script da distro-mãe pelo `ID_LIKE` do `/etc/os-release`: EndeavourOS, CachyOS e Manjaro usam o
+`system/arch.sh`; Nobara usa o `fedora.sh`; Pop!_OS e Mint, o `ubuntu.sh`. Na CachyOS, se o `noctalia-shell` dela já
+estiver instalado, o pacman pede para trocar pelo `noctalia` do Arch: aceite, ou remova o antigo antes.
 
 Também em todas: regra udev do uinput e grupo `input` (para o kanata) e a regra udev do Vial.
 Com placa NVIDIA, o perfil que reduz a VRAM presa pelo compositor ([guia do niri](https://github.com/niri-wm/niri/wiki/Nvidia)).
@@ -171,6 +176,9 @@ Se o niri abrir com tela preta, o modeset do kernel está desligado:
 ```bash
 sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   # Fedora
 ```
+
+No Arch, o bootstrap instala o driver aberto (`nvidia-open-dkms`, da GTX 16xx / RTX 20xx em diante), que já liga o
+modeset. Placas mais antigas precisam do driver legado do AUR; o bootstrap avisa e não instala nada.
 
 Para forçar uma placa (ex.: o monitor externo ligado direto na NVIDIA ficar lento), veja as placas com
 `ls -l /dev/dri/by-path/` e ponha no `niri-local.kdl`:

@@ -3,6 +3,12 @@
 # Tudo o mais vem do Nix (home-manager).
 set -euo pipefail
 
+# RHEL, CentOS e Alma também se dizem "fedora" no ID_LIKE, mas não têm os mesmos repositórios.
+if ! [[ "$(rpm -E %fedora)" =~ ^[0-9]+$ ]]; then
+  echo "Esta distro não é um Fedora (nem derivada direta): pulando pacotes de sistema."
+  exit 0
+fi
+
 sudo dnf install -y dnf-plugins-core git curl gcc make
 
 # Ghostty (COPR mantido pela comunidade).

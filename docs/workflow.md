@@ -67,8 +67,8 @@ esperando. Um PR só de documentação roda só o `lint`.
 | --- | --- | --- |
 | `lint` | `nix fmt` sem mudanças, statix (Nix), shellcheck (scripts), actionlint (workflows), stylua | sempre |
 | `build` | `nix flake check` e build de todos os hosts em `homeConfigurations` | Nix, módulos, hosts, configs, temas, agentes, testes, `flake.lock` |
-| `install` | Instalação do zero em containers limpos **Fedora** e **Ubuntu**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` | os mesmos do `build` (roda junto com ele, não depois) |
-| `system` | Pacotes de sistema de cada distro (`system/<distro>.sh`) em Fedora, Ubuntu 24.04 e 26.04 | `system/`, `tests/system.sh` |
+| `install` | Instalação do zero em containers limpos **Fedora**, **Ubuntu** (24.04 e 26.04) e **Arch**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` | os mesmos do `build` (roda junto com ele, não depois) |
+| `system` | Pacotes de sistema de cada distro (`system/<distro>.sh`) em Fedora, Ubuntu 24.04 e 26.04 e Arch (com o AUR) | `system/`, `tests/system.sh` |
 | `template` | Gera cada modelo com o `new` e roda o `just ci` dele e o `docker build` (`tests/templates.sh`) | `templates/`, `copier.yml`, `modules/templates/`, `flake.lock` |
 
 Mudar o próprio `ci.yml` roda tudo. Cada job tem tempo máximo. O `build` para em 15 min: com os caches no ar
@@ -104,6 +104,8 @@ Em **Settings → Branches** (ou **Rules → Rulesets**), para `main` e `dev`:
 
 - Exigir PR antes do merge.
 - Exigir os checks `lint`, `build`, `install (fedora:latest)` e `install (ubuntu:24.04)`; na `main`, também `source-branch`; na `dev`, também `commits`.
+  `install (ubuntu:26.04)` e `install (archlinux:latest)` entraram em 2026-10 e ficam opcionais por umas duas semanas;
+  depois, se estiverem estáveis, entram na lista.
 - Bloquear force push e exclusão.
 - Na `dev`: permitir só squash merge. Na `main`: permitir merge commit.
 

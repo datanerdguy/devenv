@@ -6,6 +6,7 @@ Apps gráficos não vêm do Nix: fora do NixOS eles não acham a GPU sem ajuda (
 
 - **Flathub (Flatpak)**: os apps grandes. A lista fica no módulo e o [nix-flatpak](https://github.com/gmodena/nix-flatpak) instala no `just switch`, em segundo plano. Eles se atualizam uma vez por semana.
 - **Distro** (`system/<distro>.sh`): Flameshot, wayscriber, zathura, imv e mpv, junto com o próprio Flatpak.
+  No Arch, o wayscriber vem do AUR (`wayscriber-bin`): o bootstrap usa o paru ou o yay, ou instala o paru se não houver nenhum.
 
 | App | Para que | De onde | Atalho |
 | --- | --- | --- | --- |

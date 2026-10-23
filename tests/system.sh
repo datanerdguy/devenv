@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Roda o script de sistema da distro (system/<distro>.sh) num container limpo e confere os pacotes.
 # Pega nome de pacote errado, repositório fora do ar e mudança de versão da distro.
-# Uso: tests/system.sh fedora:latest | ubuntu:24.04 | ubuntu:26.04
+# Uso: tests/system.sh fedora:latest | ubuntu:24.04 | ubuntu:26.04 | archlinux:latest
 set -euo pipefail
 
 image="${1:?informe a imagem, ex.: tests/system.sh fedora:latest}"
@@ -13,6 +13,9 @@ docker run --rm -e DEVENV_SWAY=1 -e DEVENV_I3=1 -v "${repo_dir}:/src:ro" "${imag
     # (dependência do noctalia). Numa instalação real o systemd já está lá.
     dnf install -y -q --allowerasing sudo shadow-utils pciutils systemd
     script=fedora.sh
+  elif command -v pacman >/dev/null; then
+    pacman -Syu --noconfirm --needed sudo
+    script=arch.sh
   else
     apt-get update -qq && apt-get install -y -qq sudo curl ca-certificates
     script=ubuntu.sh
@@ -24,8 +27,8 @@ docker run --rm -e DEVENV_SWAY=1 -e DEVENV_I3=1 -v "${repo_dir}:/src:ro" "${imag
   . /etc/os-release
   bins="ghostty fish bwrap flatpak flameshot wayscriber zathura imv mpv"
   desktop=0
-  # O desktop só existe no Fedora 44+ e no Ubuntu 26.04+.
-  if { [ "${ID}" = fedora ] && [ "${VERSION_ID}" -ge 44 ]; } || { [ "${ID}" = ubuntu ] && dpkg --compare-versions "${VERSION_ID}" ge 26.04; }; then
+  # O desktop só existe no Fedora 44+, no Ubuntu 26.04+ e no Arch.
+  if [ "${ID}" = arch ] || { [ "${ID}" = fedora ] && [ "${VERSION_ID}" -ge 44 ]; } || { [ "${ID}" = ubuntu ] && dpkg --compare-versions "${VERSION_ID}" ge 26.04; }; then
     bins="${bins} niri noctalia sway i3 qt6ct"
     desktop=1
   fi
