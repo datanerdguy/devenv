@@ -4,6 +4,9 @@
 # perde as quebras de linha e o teste terminava cedo sem falhar.
 set -euo pipefail
 
+# Rodando via `sudo -iu`: sem isso o bob procura as pastas do root (SUDO_USER).
+unset SUDO_USER SUDO_UID SUDO_GID SUDO_COMMAND
+
 curl -fsSL https://nixos.org/nix/install -o /tmp/nix-install
 sh /tmp/nix-install --no-daemon
 # shellcheck disable=SC1091

@@ -89,6 +89,12 @@ in
       DEVENV_NVIM_PYTHON = "${moltenPython}/bin/python3";
     };
 
+    # O PATH já vem do home.sessionPath; sem isso o bob edita arquivos do shell sozinho.
+    xdg.configFile."bob/config.toml".text = ''
+      add_neovim_binary_to_path = false
+      enable_nightly_info = true
+    '';
+
     xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${cfg.repoPath}/config/nvim";
 
     # Instala o Neovim pelo bob enquanto nenhuma versão estiver em uso. Depois: `just nvim-update`.
