@@ -53,19 +53,33 @@ Escopos sugeridos: o nome do módulo (`cli`, `shell`, `git`, `terminal`, `nvim`,
 
 ## Pipeline
 
-### `ci.yml`: em todo PR e todo push para `dev` e `main`
+### `ci.yml`: em todo PR, toda segunda e à mão
 
-| Job | O que verifica |
-| --- | --- |
-| `lint` | `nix fmt` sem mudanças, statix (Nix), shellcheck (scripts), actionlint (workflows) |
-| `build` | `nix flake check` e build de todos os hosts em `homeConfigurations` |
-| `install` | Instalação do zero em containers limpos **Fedora** e **Ubuntu**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` |
+Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI no PR, com a mesma árvore
+(o PR `dev` → `main` testa exatamente o que vai para a `main`). Toda segunda, depois da atualização do
+`flake.lock`, roda tudo para pegar o que quebrou fora do repo (repositórios das distros, imagens, downloads).
+
+Num PR, o job `changes` vê os arquivos mudados e cada job só faz o trabalho pesado se o PR mexe no que ele
+testa. Os jobs aparecem sempre (com o passo "Nada a testar"), para as checagens obrigatórias não ficarem
+esperando. Um PR só de documentação roda só o `lint`.
+
+| Job | O que verifica | Roda quando o PR mexe em |
+| --- | --- | --- |
+| `lint` | `nix fmt` sem mudanças, statix (Nix), shellcheck (scripts), actionlint (workflows), stylua | sempre |
+| `build` | `nix flake check` e build de todos os hosts em `homeConfigurations` | Nix, módulos, hosts, configs, temas, agentes, testes, `flake.lock` |
+| `install` | Instalação do zero em containers limpos **Fedora** e **Ubuntu**: instala Nix, aplica o host `ci` e roda `tests/smoke.sh` | os mesmos do `build` (roda junto com ele, não depois) |
+| `system` | Pacotes de sistema de cada distro (`system/<distro>.sh`) em Fedora, Ubuntu 24.04 e 26.04 | `system/`, `tests/system.sh` |
+| `template` | Gera cada modelo com o `new` e roda o `just ci` dele e o `docker build` (`tests/templates.sh`) | `templates/`, `copier.yml`, `modules/templates/`, `flake.lock` |
+
+Mudar o próprio `ci.yml` roda tudo. Cada job tem tempo máximo. O `build` para em 15 min: com os caches no ar
+ele leva uns 3; passar disso quase sempre é o cache da numtide fora do ar e o Codex sendo compilado do zero
+(mais de 20 min). Nesse caso, rode o job de novo.
 
 `tests/smoke.sh` confere que os programas existem, que fish e starship iniciam, e que as configs de git, Ghostty, starship e direnv foram geradas. Para rodar localmente: `just test-container fedora:latest`.
 
 ### `pr.yml`: só em PR
 
-Num workflow próprio para não aparecerem como "skipped" nos pushes para `dev` e `main`.
+Num workflow próprio porque só fazem sentido em PR.
 
 | Job | O que verifica |
 | --- | --- |
