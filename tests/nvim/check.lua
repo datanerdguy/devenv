@@ -2,11 +2,18 @@
 --   nvim --headless -l tests/nvim/check.lua
 -- Carrega todos os plugins, abre arquivos de várias linguagens e falha se algo der erro.
 local errors = {}
-local notify = vim.notify
-vim.notify = function(msg, level, ...)
-  if level and level >= vim.log.levels.ERROR then table.insert(errors, msg) end
-  return notify(msg, level, ...)
+-- Guarda os erros de vim.notify. Roda de novo depois do init, porque o snacks troca o vim.notify.
+local wrapper
+local function capture()
+  if vim.notify == wrapper then return end
+  local notify = vim.notify
+  wrapper = function(msg, level, ...)
+    if level and level >= vim.log.levels.ERROR then table.insert(errors, msg) end
+    return notify(msg, level, ...)
+  end
+  vim.notify = wrapper
 end
+capture()
 
 vim.opt.rtp:prepend(vim.fn.stdpath("config"))
 local ok, err = pcall(dofile, vim.fn.stdpath("config") .. "/init.lua")
@@ -14,7 +21,12 @@ if not ok then table.insert(errors, "init.lua: " .. tostring(err)) end
 
 if vim.v.errmsg ~= "" then table.insert(errors, "errmsg: " .. vim.v.errmsg) end
 local pack = require("devenv.pack")
-pack.load_all()
+-- Carrega um a um, capturando de novo antes de cada plugin (um deles pode trocar o vim.notify).
+for _, name in ipairs(pack.order) do
+  capture()
+  pack.load(name)
+end
+vim.wait(200) -- deixa rodar o que os plugins agendaram (alguns só avisam erro assim)
 vim.api.nvim_exec_autocmds("VimEnter", {})
 vim.api.nvim_exec_autocmds("UIEnter", {})
 

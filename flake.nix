@@ -16,13 +16,17 @@
     # Agentes de código (Claude Code, Codex, Gemini CLI, opencode...) atualizados todo dia.
     # Sem `follows`: usa o nixpkgs deles, para bater com o cache binário da numtide.
     llm-agents.url = "github:numtide/llm-agents.nix";
+    # Flatpaks declarados no home-manager (apps grandes do Flathub). Sem nixpkgs próprio.
+    nix-flatpak.url = "git+https://github.com/gmodena/nix-flatpak?ref=refs/tags/v0.8.0";
   };
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
       llm-agents,
+      nix-flatpak,
       ...
     }:
     let
@@ -36,6 +40,7 @@
           inherit pkgs;
           extraSpecialArgs.llmAgents = llm-agents.packages.${system};
           modules = [
+            nix-flatpak.homeManagerModules.nix-flatpak
             ./modules
             hostFile
           ];
@@ -45,6 +50,13 @@
       homeConfigurations = {
         fedora-laptop = mkHome ./hosts/fedora-laptop.nix;
         ci = mkHome ./hosts/ci.nix; # usado pelos testes em container
+      };
+
+      # `nix flake check` também valida as configs do desktop e o mapa do teclado (`just desktop-check`).
+      checks.${system}.desktop = import ./tests/desktop-check.nix {
+        inherit pkgs;
+        src = ./.;
+        kanataConfig = self.homeConfigurations.ci.config.xdg.configFile."kanata/kanata.kbd".source;
       };
 
       # `nix fmt` formata os arquivos .nix do repo.
@@ -65,6 +77,7 @@
           actionlint
           stylua
           commitizen
+          python3 # keyboard/render.py
         ];
         shellHook = ''
           git config core.hooksPath .githooks

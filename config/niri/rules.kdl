@@ -1,0 +1,47 @@
+// Regras de janela e de camada (layer-shell).
+
+// Cantos arredondados em tudo.
+window-rule {
+    geometry-corner-radius 10
+    clip-to-geometry true
+}
+
+// Configurações do Noctalia flutuando.
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+// Diálogos e janelas pequenas flutuando.
+window-rule {
+    match title="^Picture-in-Picture$"
+    match app-id="^org\\.gnome\\.Calculator$"
+    match app-id="^pavucontrol$"
+    open-floating true
+}
+
+// Gerenciadores de senha fora de gravações e capturas.
+window-rule {
+    match app-id="^com\\.bitwarden\\.desktop$"
+    match app-id="^Bitwarden$"
+    block-out-from "screen-capture"
+}
+
+// Papel de parede do Noctalia atrás das áreas de trabalho (também na visão geral).
+layer-rule {
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
+}
+layer-rule {
+    match namespace="^noctalia-wallpaper"
+    place-within-backdrop true
+}
+
+// Flameshot: a tela de seleção cobre o monitor inteiro, sem virar coluna nem tela cheia.
+window-rule {
+    match app-id="flameshot"
+    open-floating true
+    open-fullscreen false
+}

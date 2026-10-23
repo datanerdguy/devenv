@@ -1,0 +1,79 @@
+// niri: config principal. Ligada em ~/.config/niri; o niri recarrega a cada gravação.
+// Atalhos em binds.kdl, regras de janela em rules.kdl. Docs: docs/desktop.md.
+// Referência completa: https://github.com/niri-wm/niri/wiki/Configuration:-Introduction
+
+include "binds.kdl"
+include "rules.kdl"
+
+input {
+    keyboard {
+        xkb {
+            // US internacional com AltGr: ç, á, ã... sem teclas mortas no ' e no ".
+            layout "us"
+            variant "altgr-intl"
+        }
+        repeat-delay 250
+        repeat-rate 40
+        numlock
+    }
+    touchpad {
+        tap
+        natural-scroll
+        dwt // ignora o touchpad enquanto digita
+    }
+    // Mesa digitalizadora: presa ao monitor principal. Troque o nome em niri-local.kdl.
+    tablet {
+        map-to-output "eDP-1"
+    }
+    focus-follows-mouse max-scroll-amount="0%"
+    warp-mouse-to-focus
+}
+
+layout {
+    gaps 12
+    center-focused-column "never"
+    // No ultrawide cabem 3 colunas de 1/3 lado a lado.
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+    focus-ring {
+        width 2
+        active-color "#a7c080"
+        inactive-color "#475258"
+    }
+    border { off; }
+    shadow { off; } // mais leve; o tema pode ligar
+}
+
+// Variáveis para os apps abertos pelo niri.
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+// Noctalia: barra, launcher, notificações, bloqueio, papel de parede e agente de polkit.
+spawn-at-startup "noctalia"
+// Desenho na tela fica pronto em segundo plano (Super+D mostra e esconde).
+spawn-at-startup "wayscriber" "--daemon"
+
+// Apps X11 rodam pelo xwayland-satellite, iniciado sozinho quando preciso (niri 25.08+).
+
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+debug {
+    // Deixa notificações e o launcher do Noctalia trazerem janelas para a frente.
+    honor-xdg-activation-with-invalid-serial
+}
+
+// Por último, para valer por cima do que está acima:
+// Monitores e ajustes desta máquina (fora do git; exemplo em docs/desktop.md).
+include optional=true "~/.config/devenv/niri-local.kdl"
+// Cores do tema atual, geradas pelo sistema de temas (fase 5).
+include optional=true "~/.local/state/devenv/theme/niri.kdl"

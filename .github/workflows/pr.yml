@@ -4,6 +4,8 @@ name: pr
 
 on:
   pull_request:
+    # `edited`: confere de novo quando o título ou a base do PR mudam.
+    types: [opened, synchronize, reopened, edited]
 
 concurrency:
   group: pr-${{ github.ref }}

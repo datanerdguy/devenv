@@ -30,6 +30,7 @@ lint:
     shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh .githooks/*
     actionlint
     stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
+    python3 keyboard/render.py --check
 
 # Valida o flake inteiro
 check:
@@ -56,6 +57,18 @@ nvim-test:
 # Atualiza só os agentes (Claude Code, Codex, Gemini CLI, opencode, workmux...)
 agents-update:
     nix flake update llm-agents
+
+# Valida as configs do niri, sway, i3 e kanata e o mapa do teclado (o mesmo do CI)
+desktop-check:
+    nix build .#checks.x86_64-linux.desktop --no-link --print-build-logs
+
+# Regenera docs/keyboard.md depois de salvar o .vil no Vial
+keyboard-doc:
+    python3 keyboard/render.py
+
+# Mostra o que você mudou pela tela de ajustes do Noctalia (para trazer ao repo)
+noctalia-diff:
+    @cat ~/.local/state/noctalia/settings.toml 2>/dev/null || echo "Nenhum ajuste feito pela tela do Noctalia."
 
 # Lista as gerações (para rollback)
 generations:
