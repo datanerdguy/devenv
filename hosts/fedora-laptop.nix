@@ -12,7 +12,10 @@ _: {
       name = "Lucas";
       email = "you@example.com"; # vale até existir secrets/fedora-laptop.yaml (docs/secrets.md)
     };
-    terminal.enable = true;
+    terminal = {
+      enable = true;
+      # fontSize = 14; # padrão 12; no kitty você usava 17 (o tamanho real depende da escala da tela)
+    };
     nvim.enable = true;
     tmux.enable = true;
     agents.enable = true;

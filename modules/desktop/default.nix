@@ -123,11 +123,30 @@ in
       })
       (lib.mkIf cfg.i3.enable {
         xdg.configFile."i3".source = link "config/i3";
+        # picom, nm-applet e feh vêm da distro (system/<distro>.sh), porque usam a GPU e o GTK de lá.
+        xdg.configFile."picom/picom.conf".source = link "config/picom/picom.conf";
+        # Histórico de cópias: texto e imagens, 30 itens; senhas do Bitwarden ficam de fora.
+        xdg.configFile."greenclip.toml".text = ''
+          [greenclip]
+            history_file = "${config.xdg.cacheHome}/greenclip.history"
+            max_history_length = 30
+            max_selection_size_bytes = 0
+            trim_space_from_selection = true
+            use_primary_selection_as_input = false
+            blacklisted_applications = ["Bitwarden", "KeePassXC"]
+            enable_image_support = true
+            image_cache_directory = "${config.xdg.cacheHome}/greenclip"
+            static_history = []
+        '';
         home.packages = with pkgs; [
           i3status-rust
           rofi
           i3lock
           flameshot
+          dex # autostart do XDG
+          xss-lock # bloqueia a tela ao suspender
+          xclip # clipboard do Neovim no X11
+          haskellPackages.greenclip
         ];
         home.activation.devenvI3Local = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
           run touch ${config.xdg.configHome}/devenv/i3-local.conf

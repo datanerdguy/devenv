@@ -17,6 +17,7 @@ config/nvim/
   lua/devenv/
     options.lua            opções do editor
     keymaps.lua            atalhos gerais
+    data.lua               dados: harlequin, tabiew e SQL no DuckDB (sem plugin)
     autocmds.lua           automações (destaque ao copiar, voltar à última posição...)
     pack.lua               carga sob demanda + gerenciador :Pack
     lsp.lua                servidores LSP e diagnósticos
@@ -40,6 +41,8 @@ config/nvim/
 | snacks.nvim | picker, explorer, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
 | which-key.nvim | mostra as teclas depois do `<leader>` | depois da interface abrir |
 | nvim-treesitter | realce, indentação e dobras | primeiro arquivo |
+| nvim-treesitter-context | fixa no topo a função ou classe atual | primeiro arquivo |
+| nvim-ts-autotag | fecha e renomeia a tag par (HTML, HEEx, templates) | arquivo HTML ou template |
 | gitsigns.nvim | marcas e ações de git por trecho | primeiro arquivo |
 | smart-splits.nvim | navegar entre janelas do Neovim e painéis do tmux | tecla |
 | nvim-lspconfig | configurações prontas dos servidores (só dados) | abertura |
@@ -126,6 +129,7 @@ O `<leader>` é **Espaço**. Aperte Espaço e espere para o which-key mostrar as
 | --- | --- |
 | `<leader>w` / `<leader>q` / `<leader>Q` | Salvar / fechar janela / sair |
 | `<leader>R` | Reiniciar o Neovim mantendo a sessão |
+| `jk` | Sair do modo de inserção |
 | `Esc` | Limpar destaque da busca |
 | `Alt-j` / `Alt-k` | Mover linha ou seleção |
 | `<leader>-` / `<leader>\|` / `<leader>=` | Dividir abaixo / à direita / igualar |
@@ -137,6 +141,8 @@ O `<leader>` é **Espaço**. Aperte Espaço e espere para o which-key mostrar as
 | `Ctrl-/` | Terminal flutuante |
 | `Esc Esc` | Sair do modo terminal |
 | `<leader>.` | Rascunho |
+| `<leader>yp` / `<leader>yP` / `<leader>yn` | Copiar caminho relativo / absoluto / nome do arquivo |
+| `<leader>yl` | Copiar `caminho:linha` (na seleção, `caminho:início-fim`), para colar num agente |
 
 ### Buscar (`<leader>f`) e explorer
 
@@ -170,7 +176,7 @@ No explorer: `Enter` abre, `a` cria (termine com `/` para pasta), `d` apaga, `r`
 | `<leader>cd` | Diagnóstico da linha |
 | `]d` / `[d` | Próximo / anterior diagnóstico (nativo) |
 
-Completion: `Tab`/`Shift-Tab` navegam, `Enter` aceita, `Ctrl-Space` abre, `Ctrl-e` fecha.
+Completion: `Tab` aceita (o primeiro item já vem marcado) e pula para o próximo campo do snippet, `Ctrl-n`/`Ctrl-p` escolhem, `Ctrl-Space` abre, `Ctrl-e` fecha.
 
 ### Diagnósticos e listas (`<leader>x`)
 
@@ -252,6 +258,17 @@ Dentro de uma nota: `Enter` segue o link, marca a caixa ou abre as notas da tag;
 
 Python usa o ambiente do projeto via uv (`debugpy` nas dependências de dev).
 
+### Dados (`<leader>D`)
+
+Sem plugin de banco: o Neovim abre as ferramentas do terminal numa janela flutuante e roda SQL no DuckDB. Fluxos em [data.md](data.md).
+
+| Tecla | Ação |
+| --- | --- |
+| `<leader>Dh` | Harlequin (IDE de SQL) na raiz do projeto |
+| `<leader>Dt` | Tabiew no arquivo atual (CSV, Parquet, Excel…) ou escolher um |
+| `<leader>Dr` | Rodar o arquivo `.sql` (ou a seleção) no DuckDB; o resultado abre num split abaixo |
+| `<leader>Db` | Escolher o banco do DuckDB do buffer (vazio = em memória) |
+
 ### Alternar (`<leader>u`)
 
 | Tecla | Ação |
@@ -260,6 +277,9 @@ Python usa o ambiente do projeto via uv (`debugpy` nas dependências de dev).
 | `<leader>uh` / `<leader>ud` | Inlay hints / diagnósticos |
 | `<leader>uf` | Formatar ao salvar |
 | `<leader>uz` / `<leader>un` | Modo zen / histórico de notificações |
+| `<leader>uc` / `[C` | Contexto no topo (função atual) / ir até ele |
+
+O corretor aceita as palavras de [`config/nvim/spell/tech.utf-8.add`](../config/nvim/spell/tech.utf-8.add): `zg` acrescenta a palavra sob o cursor e o arquivo vai para o git.
 
 ## Versão do Neovim
 

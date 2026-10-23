@@ -70,4 +70,6 @@ o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 o.foldtext = ""
 
 o.spelllang = { "pt_br", "en" }
+-- Palavras aceitas pelo corretor (zg adiciona): fica no repo, versionado.
+o.spellfile = vim.fn.stdpath("config") .. "/spell/tech.utf-8.add"
 o.shortmess:append({ W = true, I = true, c = true, C = true })

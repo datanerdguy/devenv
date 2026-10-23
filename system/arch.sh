@@ -18,7 +18,7 @@ pac bubblewrap socat
 pac niri noctalia xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk adw-gtk-theme qt6ct
 # Sessões alternativas, se pedidas: DEVENV_SWAY=1 / DEVENV_I3=1 ./bootstrap.sh <host>
 if [ "${DEVENV_SWAY:-0}" = 1 ]; then pac sway; fi
-if [ "${DEVENV_I3:-0}" = 1 ]; then pac i3-wm xorg-server; fi
+if [ "${DEVENV_I3:-0}" = 1 ]; then pac i3-wm xorg-server picom network-manager-applet feh; fi
 
 "${here}/desktop-common.sh"
 

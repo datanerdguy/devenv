@@ -33,7 +33,8 @@ fi
 sudo dnf install -y "${desktop[@]}"
 # Sessões alternativas, se pedidas: DEVENV_SWAY=1 / DEVENV_I3=1 ./bootstrap.sh <host>
 if [ "${DEVENV_SWAY:-0}" = 1 ]; then sudo dnf install -y sway; fi
-if [ "${DEVENV_I3:-0}" = 1 ]; then sudo dnf install -y i3 xorg-x11-server-Xorg; fi
+# i3: compositor (picom), Wi-Fi na bandeja (nm-applet) e papel de parede (feh), que precisam da GPU ou do GTK da distro.
+if [ "${DEVENV_I3:-0}" = 1 ]; then sudo dnf install -y i3 xorg-x11-server-Xorg picom network-manager-applet feh; fi
 
 "$(dirname "${BASH_SOURCE[0]}")/desktop-common.sh"
 
