@@ -97,7 +97,8 @@ Por que essa divisão (números da Anthropic, outubro de 2026):
 - Effort pesa quase tanto quanto o modelo: o Opus em `medium` fica perto do Fable em `max` (CursorBench 52,5% contra 51,8%).
   O Haiku sobe de 53% (`medium`) para 61% (`high`) e 72% (`max`) no OSWorld, mas o `max` custa 3 a 4 vezes mais.
 - `max` nem sempre ganha: o Sonnet rende mais em `xhigh` do que em `max` no FrontierCode.
-- O padrão do Claude Code no Pro é Opus 5.5 em `medium`. Para poupar cota, troque para `/model sonnet` nas tarefas de rotina.
+- O padrão do Claude Code no Pro seria Opus 5.5. O devenv põe **Sonnet** (`devenv.agents.claudeModel`, padrão `"sonnet"`)
+  para poupar cota; `/model opus` ou `/model opusplan` quando a tabela pedir.
 
 Fontes: [configuração de modelos](https://code.claude.com/docs/en/model-config),
 [comparação dos três](https://www.developersdigest.tech/blog/claude-opus-5-5-vs-sonnet-5-5-vs-haiku-5-5),

@@ -61,6 +61,7 @@ for f in .claude/settings.json .claude.json .gemini/settings.json .config/openco
 done
 check "config do codex é TOML válido" taplo check --no-schema "${HOME}/.codex/config.toml"
 check "statusline do claude configurada" jq -e '.statusLine.command' "${HOME}/.claude/settings.json"
+check "modelo padrão do claude é sonnet" jq -e '.model == "sonnet"' "${HOME}/.claude/settings.json"
 check "MCPs context7 e docs no claude" jq -e '.mcpServers.context7 and .mcpServers.docs' "${HOME}/.claude.json"
 for f in .config/agents/AGENTS.md .codex/AGENTS.md .gemini/AGENTS.md .config/opencode/AGENTS.md .claude/CLAUDE.md; do
   check "instruções ${f}" test -s "${HOME}/${f}"

@@ -66,7 +66,8 @@ Use a tabela para decidir quem faz o quê. Pode chamar outro agente em modo não
 | Revisar diff de risco (infra, segurança, release) | Opus | high | subagente + `/second-opinion` (Codex) |
 | Docs, README, ADR | Sonnet | medium | na sessão; ADR com decisão difícil, Opus |
 
-- Sessão em Opus e tarefa de rotina pela tabela: sugira `/model sonnet` antes de começar. O contrário também.
+- A sessão abre em Sonnet. Se a tarefa pede Opus pela tabela, sugira `/model opus` (ou `opusplan`) antes de começar;
+  sessão em Opus com tarefa de rotina, sugira `/model sonnet`.
 - Na dúvida entre dois níveis, escolha o menor e suba se o resultado não servir.
 
 ### Subagentes
