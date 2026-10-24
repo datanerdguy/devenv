@@ -27,6 +27,8 @@ in
       enableFishIntegration = true;
       systemd.enable = false; # sem o binário do Nix, não há serviço para gerenciar
       settings = {
+        # O shell de login pode ser outro (zsh, bash); o Ghostty abre sempre o fish do home-manager.
+        command = lib.mkIf config.devenv.shell.enable "${config.programs.fish.package}/bin/fish";
         font-family = "JetBrainsMono Nerd Font";
         font-size = cfg.fontSize;
         window-padding-x = 8;
@@ -52,7 +54,7 @@ in
         else
           {
             theme = "Everforest Dark Hard";
-            background-opacity = 0.95;
+            background-opacity = 0.85;
           }
       );
     };
