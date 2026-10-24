@@ -1,6 +1,6 @@
 # i3 (X11): plano B para quando o Wayland não servir (alguns apps de captura,
 # drivers antigos). Sem Noctalia (ele não roda em X11): barra i3status-rust, launcher rofi.
-# Ligada em ~/.config/i3. Recarregar: Super+Shift+c.
+# Ligada em ~/.config/i3. Recarregar: Alt+Shift+c.
 include ~/.config/devenv/wm-common.conf
 # Cores do tema atual (comando `theme`); a barra usa as variáveis $theme_*.
 include ~/.local/state/devenv/theme/current/wm-colors.conf
@@ -16,10 +16,10 @@ exec --no-startup-id greenclip daemon
 # Papel de parede do tema atual (o `theme` troca junto).
 exec_always --no-startup-id theme __wallpaper-x11
 
-bindsym $mod+space exec rofi -show drun
-bindsym $mod+Alt+l exec i3lock -c 2d353b
-# Histórico de cópias (texto e imagens, 30 itens), igual ao Super+Ctrl+V do niri.
-bindsym $mod+Ctrl+v exec rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+bindsym $mod+d exec rofi -show drun
+bindsym $sup+l exec i3lock -c 2d353b
+# Histórico de cópias (texto e imagens, 30 itens), igual ao Super+V do niri.
+bindsym $sup+v exec rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
 bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle

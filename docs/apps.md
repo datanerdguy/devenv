@@ -5,6 +5,8 @@ Módulo: [`modules/apps`](../modules/apps/default.nix) (`devenv.apps.enable`). C
 Apps gráficos não vêm do Nix: fora do NixOS eles não acham a GPU sem ajuda ([ADR 0001](adr/0001-nix-home-manager-sobre-a-distro.md)).
 
 - **Flathub (Flatpak)**: os apps grandes. A lista fica no módulo e o [nix-flatpak](https://github.com/gmodena/nix-flatpak) instala no `just switch`, em segundo plano. Eles se atualizam uma vez por semana.
+  Na primeira instalação, os downloads levam alguns minutos depois do switch. Para acompanhar:
+  `journalctl --user -u flatpak-managed-install -f`.
 - **Distro** (`system/<distro>.sh`): Flameshot, wayscriber, zathura, imv e mpv, junto com o próprio Flatpak.
   No Arch, o wayscriber vem do AUR (`wayscriber-bin`): o bootstrap usa o paru ou o yay, ou instala o paru se não houver nenhum.
 
@@ -52,7 +54,7 @@ Na primeira vez, abra o app e escolha *Abrir pasta como cofre* → `~/notes`. Pa
 ## Histórico de cópias
 
 O Noctalia guarda as últimas **30 cópias**, de texto e de imagem (captura de tela, imagem copiada do navegador).
-`Super+Ctrl+V` abre a lista: digite para filtrar, `Enter` cola no app em foco. Dá para fixar um item para ele
+`Super+V` abre a lista: digite para filtrar, `Enter` cola no app em foco. Dá para fixar um item para ele
 não sair da lista (os fixados não contam nos 30).
 
 - O que você copia no Neovim, no tmux e no terminal também entra (eles mandam para a área de transferência do sistema).
@@ -61,15 +63,15 @@ não sair da lista (os fixados não contam nos 30).
   Para apagar tudo: `noctalia msg clipboard-clear`. Senhas copiadas do Bitwarden também entram; apague depois de usar.
 - Para mudar o tamanho: `clipboard_history_max_entries` em [`config/noctalia/devenv.toml`](../config/noctalia/devenv.toml).
 
-Funciona no niri e no sway (`Super+Ctrl+v`). No i3 (X11), onde o Noctalia não roda, quem faz o papel é o
-[greenclip](https://github.com/erebe/greenclip), pelo rofi, com o mesmo `Super+Ctrl+v`: 30 itens, texto e imagens.
+Funciona no niri e no sway (`Super+v`). No i3 (X11), onde o Noctalia não roda, quem faz o papel é o
+[greenclip](https://github.com/erebe/greenclip), pelo rofi, com o mesmo `Super+v`: 30 itens, texto e imagens.
 Senhas copiadas do app do Bitwarden ficam de fora. A lista fica em `~/.cache/greenclip.history`; para apagar,
 `greenclip clear`.
 
 ## Captura de tela
 
 - `Print`: Flameshot. Selecione a área e anote. `Ctrl+C` copia, `Ctrl+S` salva em `~/Pictures/Screenshots`, `Enter` copia e fecha.
-- `Super+Print`, `Ctrl+Print`, `Alt+Print`: a captura do próprio niri (área, tela, janela), sem anotação. Ela salva e copia na hora.
+- `Super+Print`, `Ctrl+Print`, `Super+Shift+Print`: a captura do próprio niri (área, tela, janela), sem anotação. Ela salva e copia na hora.
 
 O Flameshot usa o `grim` por baixo no niri (`useGrimAdapter`). A config inicial é criada em
 `~/.config/flameshot/flameshot.ini` só na primeira vez; depois, o que você muda na tela de ajustes dele fica valendo.

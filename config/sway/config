@@ -1,5 +1,5 @@
 # sway: sessão alternativa ao niri, com o mesmo Noctalia e os mesmos atalhos.
-# Ligada em ~/.config/sway. Recarregar: Super+Shift+c.
+# Ligada em ~/.config/sway. Recarregar: Alt+Shift+c.
 include ~/.config/devenv/wm-common.conf
 # Cores do tema atual (comando `theme`).
 include ~/.local/state/devenv/theme/current/wm-colors.conf
@@ -18,11 +18,11 @@ input type:touchpad {
 
 # Noctalia (barra, launcher, notificações, bloqueio)
 exec noctalia
-bindsym $mod+space exec noctalia msg panel-toggle launcher
-bindsym $mod+s exec noctalia msg panel-toggle control-center
-bindsym $mod+comma exec noctalia msg settings-toggle
-bindsym $mod+Ctrl+v exec noctalia msg panel-toggle clipboard
-bindsym $mod+Alt+l exec noctalia msg session lock
+bindsym $mod+d exec noctalia msg panel-toggle launcher
+bindsym $sup+s exec noctalia msg panel-toggle control-center
+bindsym $sup+comma exec noctalia msg settings-toggle
+bindsym $sup+v exec noctalia msg panel-toggle clipboard
+bindsym $sup+l exec noctalia msg session lock
 bindsym XF86AudioRaiseVolume exec noctalia msg volume-up
 bindsym XF86AudioLowerVolume exec noctalia msg volume-down
 bindsym XF86AudioMute exec noctalia msg volume-mute

@@ -16,7 +16,8 @@ O bootstrap faz três coisas:
 
 1. Instala pela distro o que precisa de root (`system/<distro>.sh`): Ghostty, fish, bubblewrap (sandbox dos agentes), o desktop (niri + Noctalia), regras udev dos teclados e o driver NVIDIA se houver placa.
 2. Instala o Nix, se faltar.
-3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`.
+3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`. O que estiver no caminho
+   (`.bashrc`, `~/.config/nvim`...) fica como `<nome>.backup`, inclusive links de dotfiles antigas (stow).
 
 Antes de rodar, ajuste o usuário em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix). Nome, e-mail e tokens ficam cifrados em `secrets/` ([`docs/secrets.md`](docs/secrets.md)).
 

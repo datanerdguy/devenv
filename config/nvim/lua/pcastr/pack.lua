@@ -263,7 +263,7 @@ function M.ui(online)
         keys = {
           ["<a-u>"] = { "pack_update", mode = { "n", "i" }, desc = "atualizar selecionados" },
           ["<a-U>"] = { "pack_update_all", mode = { "n", "i" }, desc = "atualizar todos" },
-          ["<a-d>"] = { "pack_delete", mode = { "n", "i" }, desc = "remover" },
+          ["<a-x>"] = { "pack_delete", mode = { "n", "i" }, desc = "remover" },
           ["<a-c>"] = { "pack_check", mode = { "n", "i" }, desc = "verificar atualizações" },
         },
       },

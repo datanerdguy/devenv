@@ -84,6 +84,10 @@ in
         onCalendar = "weekly";
       };
     };
+    # O nix-flatpak usa um serviço oneshot: o switch espera todos os downloads e, na primeira instalação,
+    # desiste depois de 2 minutos (o sd-switch dá "timed out waiting on channel") e para antes de pôr os
+    # programas no PATH. Com exec, o serviço só começa a instalar e o switch segue.
+    systemd.user.services.flatpak-managed-install.Service.Type = lib.mkForce "exec";
 
     home.activation.devenvFlameshot = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if [ ! -e ${config.xdg.configHome}/flameshot/flameshot.ini ]; then
