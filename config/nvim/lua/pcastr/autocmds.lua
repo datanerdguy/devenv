@@ -1,5 +1,5 @@
 local au = vim.api.nvim_create_autocmd
-local group = vim.api.nvim_create_augroup("devenv", { clear = true })
+local group = vim.api.nvim_create_augroup("pcastr", { clear = true })
 
 -- Destaca o texto copiado
 au("TextYankPost", {

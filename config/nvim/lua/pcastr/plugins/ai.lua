@@ -2,7 +2,7 @@
 --   sidekick.nvim: terminal com qualquer CLI de agente (Claude, Codex, Gemini, opencode...),
 --                  mandando arquivo, seleção e diagnósticos. Sessões ficam no tmux.
 --   claudecode.nvim: integração de IDE do Claude Code (diffs revisados aqui no Neovim).
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 pack.add({

@@ -1,5 +1,5 @@
 -- Teclas do editor que não dependem de plugin.
--- As de cada plugin ficam junto do plugin (lua/devenv/plugins/*.lua).
+-- As de cada plugin ficam junto do plugin (lua/pcastr/plugins/*.lua).
 -- Lista completa e organizada: docs/neovim.md, ou <leader>? dentro do Neovim.
 local map = vim.keymap.set
 

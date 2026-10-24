@@ -2,7 +2,7 @@
 --   molten-nvim: roda células Jupyter direto no buffer (saída inline, imagens no terminal).
 --   marimo: notebooks Python reativos, guardados como .py puro (bom para git).
 -- Tudo carrega só ao usar uma tecla de <leader>n.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 -- Opções do molten precisam existir antes de o plugin carregar.

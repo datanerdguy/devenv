@@ -1,6 +1,6 @@
 -- Notas (zettelkasten) no mesmo cofre do app Obsidian, com o obsidian.nvim.
 -- Cofre: $DEVENV_NOTES ou ~/notes. Tudo em <leader>z; carrega só ao usar ou ao abrir uma nota do cofre.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 local vault = vim.fs.normalize(vim.env.DEVENV_NOTES or "~/notes")

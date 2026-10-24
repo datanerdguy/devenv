@@ -1,7 +1,7 @@
 -- Tema do Neovim: segue o comando `theme` (docs/themes.md).
 -- Lê ~/.local/state/devenv/theme/current/id e a opacidade; só o colorscheme escolhido carrega.
 -- `theme <nome>` manda SIGUSR1 e todo Neovim aberto troca na hora.
-local pack = require("devenv.pack")
+local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 local M = {}
@@ -84,7 +84,7 @@ pack.add({
 M.apply()
 
 vim.api.nvim_create_autocmd("Signal", {
-  group = vim.api.nvim_create_augroup("devenv.theme", { clear = true }),
+  group = vim.api.nvim_create_augroup("pcastr.theme", { clear = true }),
   pattern = "SIGUSR1",
   callback = function() vim.schedule(M.apply) end,
 })
