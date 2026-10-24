@@ -103,6 +103,18 @@ in
           fi
         '';
 
+        # O dunst (pacote da distro, ativado por D-Bus) pega o nome org.freedesktop.Notifications antes
+        # do Noctalia e as notificações saem com o visual do i3. Sem o i3, o serviço fica mascarado.
+        home.activation.devenvMaskDunst = lib.mkIf (!cfg.i3.enable) (
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            unit=${config.xdg.configHome}/systemd/user/dunst.service
+            if [ ! -e "$unit" ] || [ "$(readlink "$unit")" = /dev/null ]; then
+              run mkdir -p "$(dirname "$unit")"
+              run ln -sfn /dev/null "$unit"
+            fi
+          ''
+        );
+
         # Pasta das capturas do niri.
         home.file."Pictures/Screenshots/.keep".text = "";
       }
