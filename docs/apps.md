@@ -5,6 +5,8 @@ Módulo: [`modules/apps`](../modules/apps/default.nix) (`devenv.apps.enable`). C
 Apps gráficos não vêm do Nix: fora do NixOS eles não acham a GPU sem ajuda ([ADR 0001](adr/0001-nix-home-manager-sobre-a-distro.md)).
 
 - **Flathub (Flatpak)**: os apps grandes. A lista fica no módulo e o [nix-flatpak](https://github.com/gmodena/nix-flatpak) instala no `just switch`, em segundo plano. Eles se atualizam uma vez por semana.
+  Na primeira instalação, os downloads levam alguns minutos depois do switch. Para acompanhar:
+  `journalctl --user -u flatpak-managed-install -f`.
 - **Distro** (`system/<distro>.sh`): Flameshot, wayscriber, zathura, imv e mpv, junto com o próprio Flatpak.
   No Arch, o wayscriber vem do AUR (`wayscriber-bin`): o bootstrap usa o paru ou o yay, ou instala o paru se não houver nenhum.
 
