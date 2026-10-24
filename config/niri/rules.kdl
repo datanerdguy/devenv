@@ -1,9 +1,11 @@
 // Regras de janela e de camada (layer-shell).
 
-// Cantos arredondados em tudo.
+// Cantos arredondados em tudo. O anel de foco só contorna a janela: por padrão o niri o desenha como um
+// retângulo sólido atrás dela, e ele apareceria por baixo dos terminais transparentes.
 window-rule {
     geometry-corner-radius 10
     clip-to-geometry true
+    draw-border-with-background false
 }
 
 // Configurações do Noctalia flutuando.
