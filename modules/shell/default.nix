@@ -117,6 +117,7 @@ in
       settings = {
         add_newline = false;
         command_timeout = 500;
+        scan_timeout = 200;
         format = "$directory$git_branch$git_status$python$nodejs$golang$rust$elixir$nix_shell$cmd_duration$line_break$character";
         directory.truncation_length = 3;
         cmd_duration.min_time = 2000;
