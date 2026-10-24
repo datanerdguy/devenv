@@ -72,6 +72,7 @@ let
         enabled = cfg.sandbox; # bubblewrap + socat (instalados pela distro)
         autoAllowBashIfSandboxed = true;
       };
+      model = cfg.claudeModel; # padrão da sessão; `/model` troca na hora
       teammateMode = "auto"; # agent teams em painéis do tmux, quando ligadas (`cteam`)
       hooks = {
         SessionStart = hook "startup|resume|clear|fork" [ register ];
@@ -212,6 +213,13 @@ in
       type = lib.types.str;
       default = "${home}/devenv";
       description = "Onde este repositório está clonado (instruções e skills são lidas de lá).";
+    };
+
+    claudeModel = lib.mkOption {
+      type = lib.types.str;
+      default = "sonnet";
+      example = "opusplan";
+      description = "Modelo padrão do Claude Code (`sonnet`, `opus`, `opusplan`, `haiku`). Sonnet poupa a cota do Pro; o roteamento por tarefa fica no AGENTS.md.";
     };
 
     sandbox = lib.mkOption {

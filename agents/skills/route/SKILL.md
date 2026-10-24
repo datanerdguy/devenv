@@ -5,7 +5,8 @@ description: Decide qual agente e modelo deve fazer uma tarefa e delega quando o
 
 # Rotear uma tarefa
 
-1. Classifique a tarefa pela tabela de roteamento do AGENTS.md global.
+1. Classifique a tarefa pelas tabelas do AGENTS.md global: agente, modelo e effort.
+   Ao delegar a um subagente do Claude, passe o modelo explícito (Haiku busca, Sonnet edita).
 2. Se for sua, faça. Se for de outro agente:
    - tarefa curta com resposta direta: rode o agente em modo não interativo e use o resultado
      (`codex exec "<pedido>"`, `gemini -p "<pedido>"`, `opencode run "<pedido>"`).
