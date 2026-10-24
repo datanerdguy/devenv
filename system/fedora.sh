@@ -53,14 +53,26 @@ REPO
 fi
 sudo dnf install -y flatpak flameshot wayscriber zathura zathura-pdf-mupdf imv mpv
 
-# GPU NVIDIA: só se a placa existir.
-if lspci | grep -qi 'nvidia'; then
-  echo "GPU NVIDIA detectada: instalando driver via RPM Fusion."
+# GPU NVIDIA: só se a placa existir. O driver depende da geração do chip (nome de código no lspci, ex.: GM108M):
+# - Turing (TU) em diante: akmod-nvidia, o driver atual.
+# - Maxwell (GM), Pascal (GP) e Volta (GV): param na série 580. No Fedora 44+ ela tem pacote próprio
+#   (akmod-nvidia-580xx), porque o akmod-nvidia já é uma série que não aceita essas placas.
+# - Kepler (GK) e Fermi (GF): os drivers antigos não acompanham o kernel atual. Fica o nouveau.
+nvidia="$(lspci | grep -i 'nvidia' || true)"
+if [ -z "${nvidia}" ]; then
+  echo "Sem GPU NVIDIA: pulando driver."
+elif grep -Eq '\bG[FK][0-9]{3}' <<<"${nvidia}"; then
+  echo "GPU NVIDIA Kepler ou Fermi: sem driver suportado no Fedora atual. Pulando (fica o nouveau)."
+else
   sudo dnf install -y \
     "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
     "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-  sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia-cuda
+  driver=(akmod-nvidia xorg-x11-drv-nvidia-cuda)
+  if grep -Eq '\bG[MPV][0-9]{3}' <<<"${nvidia}" && [ -n "$(dnf -q repoquery akmod-nvidia-580xx 2>/dev/null)" ]; then
+    driver=(akmod-nvidia-580xx xorg-x11-drv-nvidia-580xx-cuda)
+  fi
+  echo "GPU NVIDIA detectada: instalando ${driver[0]} via RPM Fusion."
+  # --allowerasing troca o akmod-nvidia pelo 580xx se o errado já estiver instalado.
+  sudo dnf install -y --allowerasing "${driver[@]}"
   "$(dirname "${BASH_SOURCE[0]}")/nvidia-wayland.sh"
-else
-  echo "Sem GPU NVIDIA: pulando driver."
 fi
