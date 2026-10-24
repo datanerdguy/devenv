@@ -169,6 +169,12 @@ Se o niri abrir com tela preta, o modeset do kernel está desligado:
 sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   # Fedora
 ```
 
+No Fedora, o bootstrap escolhe o driver pela geração da placa. Da GTX 16xx / RTX 20xx em diante, instala o
+`akmod-nvidia`. Maxwell, Pascal e Volta (GTX 9xx, GTX 10xx, MX1xx/MX2xx/MX3xx) param na série 580: no Fedora 44+,
+o bootstrap instala o `akmod-nvidia-580xx`. Placas mais antigas ficam com o nouveau.
+Ao atualizar o Fedora com uma dessas placas, troque o driver depois do upgrade:
+`sudo dnf swap akmod-nvidia akmod-nvidia-580xx --allowerasing`.
+
 No Arch, o bootstrap instala o driver aberto (`nvidia-open-dkms`, da GTX 16xx / RTX 20xx em diante), que já liga o
 modeset. Placas mais antigas precisam do driver legado do AUR; o bootstrap avisa e não instala nada.
 
