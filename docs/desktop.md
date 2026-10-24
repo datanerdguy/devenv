@@ -178,8 +178,14 @@ ou troque à mão em duas etapas (o `dnf swap` falha: as libs antigas têm os me
 ```bash
 sudo dnf remove --noautoremove akmod-nvidia 'xorg-x11-drv-nvidia*' nvidia-settings 'kmod-nvidia-*'
 sudo dnf install akmod-nvidia-580xx xorg-x11-drv-nvidia-580xx-cuda
-sudo akmods --force
+sudo akmods --rebuild
 ```
+
+Essas placas precisam do módulo fechado. Por padrão, o 580xx procura a placa no `lspci` ao compilar e, se não
+achar, compila o módulo open. Isso acontece com o envycontrol no modo `integrated`, que esconde a placa.
+O bootstrap cria o `/etc/rpm/macros.nvidia-kmod-fechado`, que fixa o módulo fechado. Para conferir, rode
+`modinfo -F license nvidia`: deve sair `NVIDIA`. Se sair `Dual MIT/GPL`, rode `sudo akmods --rebuild` e reinicie.
+(O `--force` não serve: ele não recompila um módulo que já existe.)
 
 No Arch, o bootstrap instala o driver aberto (`nvidia-open-dkms`, da GTX 16xx / RTX 20xx em diante), que já liga o
 modeset. Placas mais antigas precisam do driver legado do AUR; o bootstrap avisa e não instala nada.

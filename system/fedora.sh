@@ -80,6 +80,12 @@ else
     echo "Removendo o driver que não aceita esta placa: ${antigos[*]}"
     sudo dnf remove -y --noautoremove "${antigos[@]}"
   fi
+  # O 580xx escolhe entre o módulo open e o fechado procurando a placa no lspci na hora de compilar.
+  # Com a GPU escondida (envycontrol no modo integrated), ele compila o open, que não aceita essas placas.
+  # Este macro desliga a detecção e fixa o módulo fechado.
+  if [ "${driver[0]}" = akmod-nvidia-580xx ]; then
+    echo '%_without_kmod_nvidia_detect 1' | sudo tee /etc/rpm/macros.nvidia-kmod-fechado >/dev/null
+  fi
   echo "GPU NVIDIA detectada: instalando ${driver[0]} via RPM Fusion."
   sudo dnf install -y "${driver[@]}"
   "$(dirname "${BASH_SOURCE[0]}")/nvidia-wayland.sh"
