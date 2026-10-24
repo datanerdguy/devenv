@@ -8,10 +8,10 @@
 [shell]
 # Pedidos de senha do polkit (Wi-Fi, montar disco) pelo próprio Noctalia.
 polkit_agent = true
-# Na visão geral do niri (Super+O), começar a digitar abre o launcher.
+# Na visão geral do niri (Alt+O), começar a digitar abre o launcher.
 niri_overview_type_to_launch_enabled = true
 niri_overview_close_on_launch_enabled = true
-# Histórico de cópias (Super+Ctrl+V): texto e imagens, os 30 últimos (itens fixados não contam).
+# Histórico de cópias (Super+V): texto e imagens, os 30 últimos (itens fixados não contam).
 # Fica criptografado em ~/.local/state/noctalia; para apagar tudo: `noctalia msg clipboard-clear`.
 clipboard_history_max_entries = 30
 

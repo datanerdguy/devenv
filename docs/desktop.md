@@ -3,7 +3,7 @@
 Sessão principal: **[niri](https://github.com/niri-wm/niri)** (janelas em colunas que rolam na horizontal) com o
 **[Noctalia Shell](https://noctalia.dev)** v5 (barra, launcher, notificações, central de controle, tela de bloqueio).
 **sway** e **i3** ficam como sessões opcionais, com os mesmos atalhos básicos.
-Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Temas: [themes.md](themes.md). Decisão: [ADR 0004](adr/0004-desktop-niri-noctalia.md).
+Módulo: [`modules/desktop`](../modules/desktop/default.nix) (`devenv.desktop.enable`). Apps: [apps.md](apps.md). Temas: [themes.md](themes.md). Decisões: [ADR 0004](adr/0004-desktop-niri-noctalia.md), atalhos no [ADR 0008](adr/0008-atalhos-alt-como-no-i3.md).
 
 ## Instalação
 
@@ -41,7 +41,7 @@ repo (o home-manager guarda o antigo como `config.backup`), por isso fica deslig
 | sway / i3 | `config/sway/`, `config/i3/`, `config/wm/common.conf` | `~/.config/sway`, `~/.config/i3`, `~/.config/devenv/wm-common.conf` |
 | kanata | gerado pelo módulo | `~/.config/kanata/kanata.kbd` + serviço `kanata` do systemd do usuário |
 
-As configs são links para o repo: editar e salvar já vale (o niri recarrega sozinho, o sway e o i3 com `Super+Shift+C`).
+As configs são links para o repo: editar e salvar já vale (o niri recarrega sozinho, o sway e o i3 com `Alt+Shift+c`).
 Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa do teclado, igual ao CI.
 
 ### Ajustes só desta máquina
@@ -53,54 +53,64 @@ Para conferir antes: `just desktop-check` valida niri, sway, i3, kanata e o mapa
 
 ## Atalhos (niri)
 
-`Super+Shift+/` mostra todos na tela. O padrão segue o Neovim e o tmux: `h/j/k/l` andam, `Ctrl` move, `Shift` muda de monitor.
+`Alt+Shift+/` mostra todos na tela. Os atalhos seguem o i3 padrão:
+
+- **Alt** cuida das janelas: `j/k/l/;` andam (esquerda, abaixo, acima, direita), com `Shift` movem, com `Ctrl` mudam de monitor.
+- **Super** abre apps e o sistema: navegador, notas, tema, bloqueio, capturas.
+
+Por isso o tmux, o Neovim e o Ghostty não usam Alt ([tmux.md](tmux.md), [neovim.md](neovim.md)).
+O Alt dos apps que o niri não usa continua valendo (no fish, `Alt+b`/`Alt+f` pulam palavras e o `Alt+c` do fzf entra numa pasta).
 
 | Tecla | O que faz |
 | --- | --- |
-| `Super+Enter` | terminal (Ghostty) |
-| `Super+Space` | launcher do Noctalia |
-| `Super+E` | arquivos (yazi) |
-| `Super+S` | central de controle (Wi-Fi, som, energia) |
-| `Super+,` | ajustes do Noctalia |
-| `Super+T` | trocar o tema ([themes.md](themes.md)) |
-| `Super+Ctrl+V` | histórico de cópias ([apps.md](apps.md#histórico-de-cópias)) |
+| `Alt+Enter` | terminal (Ghostty) |
+| `Alt+d` | launcher do Noctalia |
+| `Alt+Shift+q` | fecha a janela |
 | `Alt+Tab` | troca de janela |
-| `Super+Q` | fecha a janela |
-| `Super+O` | visão geral (digite para buscar um app) |
-| `Super+h/j/k/l` | foco: coluna à esquerda, janela abaixo, acima, coluna à direita |
-| `Super+Ctrl+h/j/k/l` | move a coluna ou a janela |
-| `Super+Shift+h/j/k/l` | foco no monitor vizinho |
-| `Super+Shift+Ctrl+h/j/k/l` | leva a coluna para o monitor vizinho |
-| `Super+u` / `Super+i` | área de trabalho abaixo / acima |
-| `Super+Ctrl+u/i`, `Super+Ctrl+1..9` | leva a coluna para outra área |
-| `Super+1..9`, `Super+Tab` | vai para a área N, volta para a anterior |
-| `Super+[` / `Super+]` | junta a janela na coluna vizinha / separa |
-| `Super+R` | alterna a largura da coluna (1/3, 1/2, 2/3) |
-| `Super+-` / `Super+=` | largura −10 % / +10 % (com `Shift`, altura) |
-| `Super+F`, `Super+Shift+F` | maximiza a coluna, tela cheia |
-| `Super+C` | centraliza a coluna |
-| `Super+V`, `Super+Shift+V` | janela flutuante, alterna foco entre flutuantes e lado a lado |
-| `Super+W` | coluna em abas |
-| `Super+B` | navegador |
-| `Super+N` | nota do dia no Neovim |
-| `Super+D` | desenhar na tela (wayscriber) |
+| `Alt+o` | visão geral (digite para buscar um app) |
+| `Alt+j/k/l/;` (ou setas) | foco: coluna à esquerda, janela abaixo, acima, coluna à direita |
+| `Alt+Shift+j/k/l/;` | move a coluna ou a janela |
+| `Alt+Ctrl+j/k/l/;` | foco no monitor vizinho |
+| `Alt+Ctrl+Shift+j/k/l/;` | leva a coluna para o monitor vizinho |
+| `Alt+1..0` | vai para a área N |
+| `Alt+Shift+1..0` | leva a coluna para a área N |
+| `Alt+PageDown` / `Alt+PageUp` | área abaixo / acima (com `Shift`, leva a coluna) |
+| `` Alt+` `` | volta para a área anterior |
+| `Alt+[` / `Alt+]` | junta a janela na coluna vizinha / separa |
+| `Alt+r` | alterna a largura da coluna (1/3, 1/2, 2/3) |
+| `Alt+-` / `Alt+=` | largura −10 % / +10 % (com `Shift`, altura) |
+| `Alt+f`, `Alt+Shift+f` | tela cheia, maximiza a coluna |
+| `Alt+Shift+c` | centraliza a coluna |
+| `Alt+Shift+Space`, `Alt+Space` | janela flutuante, alterna foco entre flutuantes e lado a lado |
+| `Alt+w` | coluna em abas |
+| `Alt+Shift+e` | sai do niri |
+| `Super+b` | navegador |
+| `Super+e` | arquivos (yazi) |
+| `Super+n` | nota do dia no Neovim |
+| `Super+d` | desenhar na tela (wayscriber) |
+| `Super+s` | central de controle (Wi-Fi, som, energia) |
+| `Super+,` | ajustes do Noctalia |
+| `Super+t` | trocar o tema ([themes.md](themes.md)) |
+| `Super+v` | histórico de cópias ([apps.md](apps.md#histórico-de-cópias)) |
+| `Super+l` | bloqueia a tela |
 | `Print` | captura com anotação (Flameshot) |
-| `Super+Print`, `Ctrl+Print`, `Alt+Print` | captura nativa do niri: área, tela, janela (salva em `~/Pictures/Screenshots` e copia) |
-| `Super+Alt+L` | bloqueia a tela |
+| `Super+Print`, `Ctrl+Print`, `Super+Shift+Print` | captura nativa do niri: área, tela, janela (salva em `~/Pictures/Screenshots` e copia) |
 | `Super+Escape` | libera os atalhos para o app em foco (VM, jogo) |
-| `Super+Shift+E` | sai do niri |
-| `Super+Shift+P` | desliga os monitores |
+| `Super+Shift+p` | desliga os monitores |
 
 Volume, brilho e mídia funcionam pelas teclas do notebook, inclusive com a tela bloqueada.
 
-No sway e no i3 os atalhos básicos são os mesmos (`Super+Enter`, `Super+Q`, `h/j/k/l`, `Ctrl` move, `Super+1..9`);
-o resto segue o padrão deles (`Super+r` redimensiona, `Super+w` abas, `Super+Shift+t` alterna a divisão;
-`Super+t` troca o tema, como no niri). `Super+Ctrl+v` abre o histórico de cópias nos dois. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
+O niri não tem divisões nem modos como o i3. Uma coluna já empilha janelas: `Alt+[` e `Alt+]` fazem o papel do
+`split`, e `Alt+r` troca a largura em vez de abrir o modo de redimensionar.
+
+No sway e no i3 os atalhos são os do i3 padrão, com as mesmas teclas: `Alt+Enter`, `Alt+d`, `Alt+Shift+q`,
+`j/k/l/;`, `Shift` move, `Alt+1..0`, `Alt+r` redimensiona, `Alt+h`/`Alt+v` dividem, `Alt+s`/`Alt+w`/`Alt+e` mudam o layout.
+`Super+t`, `Super+v` e `Super+l` fazem o mesmo que no niri. A lista está em [`config/wm/common.conf`](../config/wm/common.conf).
 
 No i3, ao entrar na sessão sobem: o `dex` (apps de autostart do XDG, inclusive o `nm-applet` do Wi-Fi), o
 `picom` (compositor: sem tearing e com a transparência do tema; config em [`config/picom/picom.conf`](../config/picom/picom.conf)),
 o `xss-lock` (bloqueia a tela ao suspender), o `greenclip` (histórico de cópias) e o papel de parede do tema, pelo `feh`.
-`Super+Shift+e` pergunta antes de sair. picom, nm-applet e feh vêm da distro com `DEVENV_I3=1 ./bootstrap.sh <host>`.
+`Alt+Shift+e` pergunta antes de sair. picom, nm-applet e feh vêm da distro com `DEVENV_I3=1 ./bootstrap.sh <host>`.
 
 ## Monitores
 

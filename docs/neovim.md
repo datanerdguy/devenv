@@ -70,11 +70,15 @@ O `vim.pack` instala e atualiza, mas não mostra o estado. O [`pack.lua`](../con
 | `:PackClean` | Remove plugins instalados que saíram da config |
 | `:PackStatus` (`<leader>ps`) | Resumo: quantos plugins, quantos carregados e o tempo total |
 
-Dentro do `:Pack`: `Alt-u` atualiza os selecionados, `Alt-U` atualiza todos, `Alt-d` remove, `Alt-c` busca atualizações.
+Dentro do `:Pack`: `Alt-u` atualiza os selecionados, `Alt-U` atualiza todos, `Alt-x` remove, `Alt-c` busca atualizações.
 
 Estados: `●` carregado, `○` sob demanda (ainda não usado), `✗` instalado mas fora da config.
 
 Depois de atualizar, faça commit do `nvim-pack-lock.json`. Para voltar uma versão: `git checkout -- config/nvim/nvim-pack-lock.json` e `:PackRestore`.
+
+Vindo de outra config que também usava o `vim.pack`, os plugins dela ficam em `~/.local/share/nvim/site/pack/core`,
+e o devenv usa o que achar ali, mesmo de outra versão (ex.: `blink.cmp v2 requires "saghen/blink.lib"`). Mova a
+pasta para **fora** de `site/pack` (o Neovim lê todas as pastas ali dentro) e abra o Neovim: ele instala tudo pelo lockfile.
 
 ### Acrescentar um plugin
 
@@ -131,10 +135,10 @@ O `<leader>` é **Espaço**. Aperte Espaço e espere para o which-key mostrar as
 | `<leader>R` | Reiniciar o Neovim mantendo a sessão |
 | `jk` | Sair do modo de inserção |
 | `Esc` | Limpar destaque da busca |
-| `Alt-j` / `Alt-k` | Mover linha ou seleção |
+| `J` / `K` (no modo visual) | Mover a seleção |
 | `<leader>-` / `<leader>\|` / `<leader>=` | Dividir abaixo / à direita / igualar |
 | `Ctrl-h/j/k/l` | Ir para a janela (ou painel do tmux) ao lado |
-| `Alt-h` / `Alt-l` / `Ctrl-Alt-j` / `Ctrl-Alt-k` | Redimensionar janela |
+| `Ctrl-setas` | Redimensionar janela |
 | `Shift-h` / `Shift-l` / `<leader>bb` | Buffer anterior / próximo / último |
 | `<leader>bd` / `<leader>bo` | Fechar buffer / fechar os outros |
 | `]q` / `[q` | Próximo / anterior no quickfix |
