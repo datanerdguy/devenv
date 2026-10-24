@@ -190,7 +190,7 @@ EOF
 
   # Avisa os apps abertos. Nenhum desses passos falha o comando.
   pkill -USR2 -x ghostty 2>/dev/null || true # Ghostty recarrega a config
-  pkill -USR1 -x nvim 2>/dev/null || true    # Neovim troca o colorscheme (lua/devenv/theme.lua)
+  pkill -USR1 -x nvim 2>/dev/null || true    # Neovim troca o colorscheme (lua/pcastr/theme.lua)
   pkill -USR2 -x btop 2>/dev/null || true     # btop relê o tema
   if command -v swaymsg >/dev/null 2>&1 && swaymsg -t get_version >/dev/null 2>&1; then
     swaymsg reload >/dev/null 2>&1 || true

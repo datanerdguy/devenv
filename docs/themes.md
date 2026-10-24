@@ -105,5 +105,5 @@ O `just switch` roda `theme apply`, que regera os arquivos do tema salvo.
    [repositório de paletas do Noctalia](https://github.com/noctalia-dev/noctalia-colorschemes).
 2. Em [`themes/default.nix`](../themes/default.nix), dê o nome e os papéis de parede (`url` e `hash`; o hash
    sai de `nix store prefetch-file <url>`).
-3. Em [`config/nvim/lua/devenv/theme.lua`](../config/nvim/lua/devenv/theme.lua), diga qual colorscheme o Neovim usa.
+3. Em [`config/nvim/lua/pcastr/theme.lua`](../config/nvim/lua/pcastr/theme.lua), diga qual colorscheme o Neovim usa.
 4. `just desktop-check` valida as configs com o tema novo, igual ao CI.

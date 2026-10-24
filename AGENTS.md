@@ -47,8 +47,8 @@ Teste do Neovim: `DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua` (c
 | Módulos do home-manager | `modules/<área>/default.nix` (opções em `devenv.<área>`) | README |
 | Máquinas | `hosts/<host>.nix` | README |
 | Root por distro | `bootstrap.sh`, `system/<distro>.sh` | [docs/desktop.md](docs/desktop.md) |
-| Neovim | `config/nvim/` (vim.pack, `lua/devenv/plugins/*.lua`) | [docs/neovim.md](docs/neovim.md) |
-| Dados (SQL, CSV) | `modules/cli`, `config/nvim/lua/devenv/data.lua` | [docs/data.md](docs/data.md) |
+| Neovim | `config/nvim/` (vim.pack, `lua/pcastr/plugins/*.lua`) | [docs/neovim.md](docs/neovim.md) |
+| Dados (SQL, CSV) | `modules/cli`, `config/nvim/lua/pcastr/data.lua` | [docs/data.md](docs/data.md) |
 | tmux | `modules/tmux/tmux.conf` | [docs/tmux.md](docs/tmux.md) |
 | Desktop | `config/niri`, `config/noctalia`, `config/sway`, `config/i3`, `config/wm` | [docs/desktop.md](docs/desktop.md), [docs/apps.md](docs/apps.md) |
 | Temas | `themes/<id>/palette.json`, `modules/theme` (comando `theme`) | [docs/themes.md](docs/themes.md) |

@@ -14,7 +14,7 @@ Princípios:
 config/nvim/
   init.lua                 ordem de carga
   nvim-pack-lock.json      versões travadas dos plugins (gerado pelo vim.pack)
-  lua/devenv/
+  lua/pcastr/
     options.lua            opções do editor
     keymaps.lua            atalhos gerais
     data.lua               dados: harlequin, tabiew e SQL no DuckDB (sem plugin)
@@ -59,7 +59,7 @@ config/nvim/
 
 ## Gerenciador de plugins (:Pack)
 
-O `vim.pack` instala e atualiza, mas não mostra o estado. O [`pack.lua`](../config/nvim/lua/devenv/pack.lua) acrescenta isso:
+O `vim.pack` instala e atualiza, mas não mostra o estado. O [`pack.lua`](../config/nvim/lua/pcastr/pack.lua) acrescenta isso:
 
 | Comando | O que faz |
 | --- | --- |
@@ -100,7 +100,7 @@ Sem `event`, `ft`, `cmd` ou `keys` o plugin carrega na abertura; prefira sempre 
 
 ## LSP
 
-Os servidores estão em [`lsp.lua`](../config/nvim/lua/devenv/lsp.lua) e ligam sozinhos quando o executável existe. Três jeitos de instalar um servidor, do mais rápido ao mais reproduzível:
+Os servidores estão em [`lsp.lua`](../config/nvim/lua/pcastr/lsp.lua) e ligam sozinhos quando o executável existe. Três jeitos de instalar um servidor, do mais rápido ao mais reproduzível:
 
 1. `:Mason` e instale (fica em `~/.local/share/nvim/mason`). Bom para experimentar.
 2. No `flake.nix` do projeto, ativado pelo direnv. Bom para o que é do projeto (ex.: versão do Go).
