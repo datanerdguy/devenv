@@ -17,6 +17,12 @@ in
       interactiveShellInit = ''
         set -g fish_greeting
         fish_vi_key_bindings
+        # Cursor em bloco em todos os modos do vi (o padrão do fish é uma barra "|" na inserção).
+        set -g fish_cursor_default block
+        set -g fish_cursor_insert block
+        set -g fish_cursor_replace_one block
+        set -g fish_cursor_replace block
+        set -g fish_cursor_visual block
         # Ctrl-F aceita a sugestão também no modo de inserção do vi.
         bind -M insert \cf accept-autosuggestion
         # Ctrl-K abre um arquivo da pasta no nvim; Ctrl-G entra numa subpasta (veja as funções abaixo).
