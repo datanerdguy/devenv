@@ -57,16 +57,52 @@ A atualização semanal do `flake.lock` (PR automático) também os atualiza.
 
 ## Roteamento: quem faz o quê
 
-A tabela fica no [`AGENTS.md`](../agents/AGENTS.md), então todo agente a conhece. Resumo:
+As regras ficam no [`AGENTS.md`](../agents/AGENTS.md), então todo agente as conhece. Resumo:
 
 | Tarefa | Agente |
 | --- | --- |
-| Planejar, refatoração grande | Claude Code com Opus (plan mode) |
-| Implementar e testar | Claude Code com Sonnet |
-| Buscar no código, ler logs | subagente Explore do Claude (Haiku) |
+| Código no dia a dia | Claude Code (modelo e effort por tipo de tarefa, abaixo) |
 | Revisão independente de um diff | Codex (`codex exec`) |
 | Muito contexto | Gemini CLI (`gemini -p`) |
 | Modelos abertos ou locais | opencode |
+
+### Modelos e effort do Claude
+
+No Pro entram Haiku 5.5, Sonnet 5.5 e Opus 5.5. O Fable 5.1 fica de fora: no Pro ele é cobrado em créditos
+à parte ([suporte](https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan)), então o AGENTS.md proíbe usar sem pedido.
+
+| Uso | Modelo | Effort |
+| --- | --- | --- |
+| Busca, leitura de logs, resumo, commit, boilerplate, classificação | Haiku (em subagente) | low a medium |
+| Código do dia a dia: bug localizado, feature, testes, CI, SQL e análise | Sonnet | medium a high |
+| Bug difícil | Sonnet `xhigh`, depois Opus | xhigh / high |
+| Plano, arquitetura, refatoração grande, desenho de ML, segurança | Opus (plan mode ou `opusplan`) | high a xhigh |
+| Revisão de diff | Sonnet (rotina) ou Opus (risco) + Codex | medium / high |
+
+A tabela completa (16 tipos de tarefa) e as regras de subagente estão no AGENTS.md. Em resumo, subagente
+serve para busca ampla, partes independentes em paralelo (até 3) e revisão com contexto limpo, sempre com o
+modelo explícito, porque sem isso ele herda o da sessão.
+
+Por que essa divisão (números da Anthropic, outubro de 2026):
+
+| Benchmark | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+| --- | --- | --- | --- |
+| SWE-bench Pro | 89,9% | 81,3% | 64,8% |
+| Terminal-Bench 4.0 | 66,4% (xhigh) | 70,6% | 39,2% (max) |
+| FrontierCode 1.1 | 54,4% (max) | 52,1% (xhigh), 46,2% (max) | 46,4% (max) |
+| Preço da API por milhão de tokens (entrada/saída), para comparar o gasto de cota | $4 / $20 | $2 / $10 | $0,10 / $0,50 |
+
+- O Sonnet empata ou passa o Opus em tarefas de terminal e bem definidas, pela metade do custo. O Opus ganha em
+  código grande e aberto (SWE-bench Pro) e em trabalho longo que pede julgamento.
+- Effort pesa quase tanto quanto o modelo: o Opus em `medium` fica perto do Fable em `max` (CursorBench 52,5% contra 51,8%).
+  O Haiku sobe de 53% (`medium`) para 61% (`high`) e 72% (`max`) no OSWorld, mas o `max` custa 3 a 4 vezes mais.
+- `max` nem sempre ganha: o Sonnet rende mais em `xhigh` do que em `max` no FrontierCode.
+- O padrão do Claude Code no Pro é Opus 5.5 em `medium`. Para poupar cota, troque para `/model sonnet` nas tarefas de rotina.
+
+Fontes: [configuração de modelos](https://code.claude.com/docs/en/model-config),
+[comparação dos três](https://www.developersdigest.tech/blog/claude-opus-5-5-vs-sonnet-5-5-vs-haiku-5-5),
+[SWE-bench Pro](https://codingfleet.com/blog/swe-bench-pro-leaderboard-2026/),
+[Haiku 5.5](https://apidog.com/blog/claude-haiku-5-5-benchmarks/), [Opus 5.5 e Fable 5.1](https://www.morphllm.com/claude-code-models).
 
 Skills que usam a tabela:
 
