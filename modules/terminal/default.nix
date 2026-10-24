@@ -37,11 +37,12 @@ in
         copy-on-select = "clipboard";
         confirm-close-surface = false;
         # Rolar fora do tmux e trocar de aba do Ghostty (dentro do tmux, quem cuida é ele).
+        # Com Ctrl+Shift: o Alt é do niri.
         keybind = [
-          "alt+shift+k=scroll_page_up"
-          "alt+shift+j=scroll_page_down"
-          "alt+ctrl+h=previous_tab"
-          "alt+ctrl+l=next_tab"
+          "ctrl+shift+k=scroll_page_up"
+          "ctrl+shift+j=scroll_page_down"
+          "ctrl+shift+h=previous_tab"
+          "ctrl+shift+l=next_tab"
         ];
       }
       # Cores e opacidade vêm do tema atual (comando `theme`); sem o módulo de temas, um tema fixo.

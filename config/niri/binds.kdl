@@ -1,21 +1,22 @@
-// Atalhos. Mod = Super. Estilo vim: h/j/k/l como no Neovim e no tmux.
-// Super+Shift+/ mostra todos os atalhos na tela.
+// Atalhos. Mod = Alt (config.kdl), com as teclas do i3: j/k/l/; andam, Shift move.
+// Alt fica para as janelas; Super abre apps e o sistema (navegador, notas, tema, bloqueio, capturas).
+// Alt+Shift+/ mostra todos os atalhos na tela.
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // --- Apps e Noctalia --------------------------------------------------
     Mod+Return hotkey-overlay-title="Terminal (Ghostty)" { spawn "ghostty"; }
-    Mod+E hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
-    Mod+B hotkey-overlay-title="Navegador" { spawn "devenv-browser"; }
-    Mod+N hotkey-overlay-title="Nota do dia (Neovim)" { spawn "ghostty" "-e" "nvim" "+Obsidian today"; }
-    Mod+D hotkey-overlay-title="Desenhar na tela (wayscriber)" { spawn "wayscriber" "--daemon-toggle"; }
-    Mod+Space hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
-    Mod+Comma hotkey-overlay-title="Configurações do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
-    Mod+Ctrl+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Mod+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "theme"; }
-    Alt+Tab { spawn-sh "noctalia msg window-switcher hold"; }
-    Mod+Alt+L hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
+    Mod+D hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Super+E hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
+    Super+B hotkey-overlay-title="Navegador" { spawn "devenv-browser"; }
+    Super+N hotkey-overlay-title="Nota do dia (Neovim)" { spawn "ghostty" "-e" "nvim" "+Obsidian today"; }
+    Super+D hotkey-overlay-title="Desenhar na tela (wayscriber)" { spawn "wayscriber" "--daemon-toggle"; }
+    Super+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Super+Comma hotkey-overlay-title="Configurações do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
+    Super+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Super+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "theme"; }
+    Super+L hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
+    Mod+Tab { spawn-sh "noctalia msg window-switcher hold"; }
 
     // --- Mídia, volume e brilho (funcionam com a tela bloqueada) ----------
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
@@ -25,47 +26,52 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
 
     // --- Janelas ----------------------------------------------------------
-    Mod+Q repeat=false { close-window; }
+    Mod+Shift+Q repeat=false { close-window; }
     Mod+O repeat=false { toggle-overview; }
 
-    // Foco: Super+h/j/k/l (ou setas)
-    Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
-    Mod+L     { focus-column-right; }
-    Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
-    Mod+Right { focus-column-right; }
+    // Foco: Alt+j/k/l/; (esquerda, abaixo, acima, direita), como no i3, ou setas
+    Mod+J         { focus-column-left; }
+    Mod+K         { focus-window-down; }
+    Mod+L         { focus-window-up; }
+    Mod+Semicolon { focus-column-right; }
+    Mod+Left      { focus-column-left; }
+    Mod+Down      { focus-window-down; }
+    Mod+Up        { focus-window-up; }
+    Mod+Right     { focus-column-right; }
 
-    // Mover: Super+Ctrl+h/j/k/l
-    Mod+Ctrl+H { move-column-left; }
-    Mod+Ctrl+J { move-window-down; }
-    Mod+Ctrl+K { move-window-up; }
-    Mod+Ctrl+L { move-column-right; }
+    // Mover: Alt+Shift+j/k/l/;
+    Mod+Shift+J         { move-column-left; }
+    Mod+Shift+K         { move-window-down; }
+    Mod+Shift+L         { move-window-up; }
+    Mod+Shift+Semicolon { move-column-right; }
+    Mod+Shift+Left      { move-column-left; }
+    Mod+Shift+Down      { move-window-down; }
+    Mod+Shift+Up        { move-window-up; }
+    Mod+Shift+Right     { move-column-right; }
 
-    Mod+Home      { focus-column-first; }
-    Mod+End       { focus-column-last; }
-    Mod+Ctrl+Home { move-column-to-first; }
-    Mod+Ctrl+End  { move-column-to-last; }
+    Mod+Home       { focus-column-first; }
+    Mod+End        { focus-column-last; }
+    Mod+Shift+Home { move-column-to-first; }
+    Mod+Shift+End  { move-column-to-last; }
 
-    // Monitores: Super+Shift+h/l foca, Super+Shift+Ctrl+h/l leva a coluna
-    Mod+Shift+H      { focus-monitor-left; }
-    Mod+Shift+J      { focus-monitor-down; }
-    Mod+Shift+K      { focus-monitor-up; }
-    Mod+Shift+L      { focus-monitor-right; }
-    Mod+Shift+Ctrl+H { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+J { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+K { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+L { move-column-to-monitor-right; }
+    // Monitores: Alt+Ctrl+j/k/l/; foca, Alt+Ctrl+Shift+j/k/l/; leva a coluna
+    Mod+Ctrl+J               { focus-monitor-left; }
+    Mod+Ctrl+K               { focus-monitor-down; }
+    Mod+Ctrl+L               { focus-monitor-up; }
+    Mod+Ctrl+Semicolon       { focus-monitor-right; }
+    Mod+Ctrl+Shift+J         { move-column-to-monitor-left; }
+    Mod+Ctrl+Shift+K         { move-column-to-monitor-down; }
+    Mod+Ctrl+Shift+L         { move-column-to-monitor-up; }
+    Mod+Ctrl+Shift+Semicolon { move-column-to-monitor-right; }
 
-    // Áreas de trabalho: Super+u/i (abaixo/acima), Super+1..9
-    Mod+U       { focus-workspace-down; }
-    Mod+I       { focus-workspace-up; }
-    Mod+Ctrl+U  { move-column-to-workspace-down; }
-    Mod+Ctrl+I  { move-column-to-workspace-up; }
-    Mod+Shift+U { move-workspace-down; }
-    Mod+Shift+I { move-workspace-up; }
+    // Áreas de trabalho: Alt+1..0 vai, Alt+Shift+1..0 leva a coluna (como no i3).
+    // Alt+PageDown/PageUp: a de baixo / a de cima. Alt+` volta para a anterior.
+    Mod+Page_Down       { focus-workspace-down; }
+    Mod+Page_Up         { focus-workspace-up; }
+    Mod+Shift+Page_Down { move-column-to-workspace-down; }
+    Mod+Shift+Page_Up   { move-column-to-workspace-up; }
+    Mod+Ctrl+Page_Down  { move-workspace-down; }
+    Mod+Ctrl+Page_Up    { move-workspace-up; }
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -75,16 +81,18 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
-    Mod+Tab { focus-workspace-previous; }
+    Mod+0 { focus-workspace 10; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Shift+0 { move-column-to-workspace 10; }
+    Mod+Grave { focus-workspace-previous; }
 
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
@@ -97,28 +105,28 @@ binds {
     Mod+R       { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R  { reset-window-height; }
-    Mod+F       { maximize-column; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+F       { fullscreen-window; }
+    Mod+Shift+F { maximize-column; }
     Mod+Ctrl+F  { expand-column-to-available-width; }
-    Mod+C       { center-column; }
+    Mod+Shift+C { center-column; }
     Mod+Minus       { set-column-width "-10%"; }
     Mod+Equal       { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
-    Mod+W       { toggle-column-tabbed-display; }
+    Mod+Shift+Space { toggle-window-floating; }
+    Mod+Space       { switch-focus-between-floating-and-tiling; }
+    Mod+W           { toggle-column-tabbed-display; }
 
     // --- Captura de tela ---------------------------------------------------
     // Print: Flameshot (seleciona, anota, copia ou salva). Super+Print: captura nativa do niri.
     Print hotkey-overlay-title="Captura com anotação (Flameshot)" { spawn "flameshot" "gui"; }
-    Mod+Print  { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print  { screenshot-window; }
+    Super+Print       { screenshot; }
+    Ctrl+Print        { screenshot-screen; }
+    Super+Shift+Print { screenshot-window; }
 
     // --- Sessão -----------------------------------------------------------
     // Libera os atalhos do niri para apps que capturam o teclado (VMs, jogos).
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Super+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+E { quit; }
-    Mod+Shift+P { power-off-monitors; }
+    Super+Shift+P { power-off-monitors; }
 }

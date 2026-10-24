@@ -27,6 +27,9 @@ input {
     }
     focus-follows-mouse max-scroll-amount="0%"
     warp-mouse-to-focus
+    // Mod dos atalhos (binds.kdl): Alt, como no i3. Num niri aninhado (janela dentro do niri), Super.
+    mod-key "Alt"
+    mod-key-nested "Super"
 }
 
 layout {

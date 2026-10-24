@@ -19,11 +19,9 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Meia página para cima" })
 map("n", "n", "nzzzv", { desc = "Próximo resultado" })
 map("n", "N", "Nzzzv", { desc = "Resultado anterior" })
 
--- Mover linhas (Alt+j/k) e manter seleção ao indentar
-map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Mover linha para baixo" })
-map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Mover linha para cima" })
-map("x", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Mover seleção para baixo", silent = true })
-map("x", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Mover seleção para cima", silent = true })
+-- Mover a seleção (J/K no modo visual) e manter a seleção ao indentar. Sem Alt: o Alt é do niri.
+map("x", "J", ":m '>+1<cr>gv=gv", { desc = "Mover seleção para baixo", silent = true })
+map("x", "K", ":m '<-2<cr>gv=gv", { desc = "Mover seleção para cima", silent = true })
 map("x", "<", "<gv")
 map("x", ">", ">gv")
 

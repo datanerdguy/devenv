@@ -132,7 +132,7 @@ pack.add({
     end,
   },
 
-  -- C-h/j/k/l anda entre janelas do Neovim e painéis do tmux sem diferença.
+  -- C-h/j/k/l anda entre janelas do Neovim e painéis do tmux sem diferença. Ctrl+setas redimensiona.
   {
     src = gh("mrjones2014/smart-splits.nvim"),
     keys = {
@@ -140,10 +140,10 @@ pack.add({
       { "<C-j>", function() require("smart-splits").move_cursor_down() end, desc = "Janela abaixo" },
       { "<C-k>", function() require("smart-splits").move_cursor_up() end, desc = "Janela acima" },
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Janela à direita" },
-      { "<A-h>", function() require("smart-splits").resize_left() end, desc = "Redimensionar ←" },
-      { "<A-l>", function() require("smart-splits").resize_right() end, desc = "Redimensionar →" },
-      { "<C-A-j>", function() require("smart-splits").resize_down() end, desc = "Redimensionar ↓" },
-      { "<C-A-k>", function() require("smart-splits").resize_up() end, desc = "Redimensionar ↑" },
+      { "<C-Left>", function() require("smart-splits").resize_left() end, desc = "Redimensionar ←" },
+      { "<C-Right>", function() require("smart-splits").resize_right() end, desc = "Redimensionar →" },
+      { "<C-Down>", function() require("smart-splits").resize_down() end, desc = "Redimensionar ↓" },
+      { "<C-Up>", function() require("smart-splits").resize_up() end, desc = "Redimensionar ↑" },
     },
     config = function() require("smart-splits").setup({ at_edge = "stop" }) end,
   },

@@ -10,10 +10,11 @@ Prefixo: **`Ctrl-Space`**. Na tabela, `P` = prefixo.
 | Tecla | O que faz |
 | --- | --- |
 | `Ctrl-h/j/k/l` | anda entre painéis do tmux **e** janelas do Neovim (sem prefixo) |
-| `Alt-h/l`, `Ctrl-Alt-j/k` | redimensiona (também compartilhado com o Neovim) |
+| `P h/j/k/l` | anda entre painéis (o mesmo, com prefixo) |
+| `P H/J/K/L` | redimensiona (repete sem o prefixo; no Neovim, `Ctrl-setas`) |
 | `P \|` / `P -` | divide na vertical / horizontal, na pasta atual |
 | `P c` | nova janela na pasta atual |
-| `P H` / `P L` | janela anterior / próxima (repete sem o prefixo) |
+| `P p` / `P n` | janela anterior / próxima |
 | `P Tab` | última janela |
 | `P z` | zoom no painel |
 | `P x` | fecha o painel |
@@ -28,6 +29,8 @@ Prefixo: **`Ctrl-Space`**. Na tabela, `P` = prefixo.
 | `P r` | recarrega a config |
 
 O mouse funciona (selecionar painel, rolar, redimensionar).
+
+Nenhum atalho usa Alt: ele é do niri ([desktop.md](desktop.md#atalhos-niri)).
 
 ## Sessões com sesh
 
