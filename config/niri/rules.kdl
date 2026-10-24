@@ -39,13 +39,11 @@ window-rule {
     block-out-from "screen-capture"
 }
 
-// Papel de parede do Noctalia atrás das áreas de trabalho (também na visão geral).
+// Papel de parede do Noctalia: o "noctalia-wallpaper" fica no fundo normal, visível atrás das janelas;
+// só o "noctalia-backdrop" vai para o fundo da visão geral. Com o wallpaper também no backdrop,
+// ele some das áreas de trabalho.
 layer-rule {
     match namespace="^noctalia-backdrop"
-    place-within-backdrop true
-}
-layer-rule {
-    match namespace="^noctalia-wallpaper"
     place-within-backdrop true
 }
 
