@@ -71,8 +71,16 @@ else
   if grep -Eq '\bG[MPV][0-9]{3}' <<<"${nvidia}" && [ -n "$(dnf -q repoquery akmod-nvidia-580xx 2>/dev/null)" ]; then
     driver=(akmod-nvidia-580xx xorg-x11-drv-nvidia-580xx-cuda)
   fi
+  # Se o akmod-nvidia errado já estiver instalado (ex.: depois do upgrade do Fedora), remova antes.
+  # O --allowerasing não basta: as libs da série nova ficam e têm os mesmos arquivos do 580xx.
+  # O --noautoremove guarda o akmods, o kernel-devel e o envycontrol.
+  if [ "${driver[0]}" = akmod-nvidia-580xx ] && rpm -q akmod-nvidia >/dev/null 2>&1; then
+    mapfile -t antigos < <(rpm -qa --qf '%{NAME}\n' akmod-nvidia 'kmod-nvidia*' 'xorg-x11-drv-nvidia*' nvidia-settings |
+      grep -v 580xx)
+    echo "Removendo o driver que não aceita esta placa: ${antigos[*]}"
+    sudo dnf remove -y --noautoremove "${antigos[@]}"
+  fi
   echo "GPU NVIDIA detectada: instalando ${driver[0]} via RPM Fusion."
-  # --allowerasing troca o akmod-nvidia pelo 580xx se o errado já estiver instalado.
-  sudo dnf install -y --allowerasing "${driver[@]}"
+  sudo dnf install -y "${driver[@]}"
   "$(dirname "${BASH_SOURCE[0]}")/nvidia-wayland.sh"
 fi

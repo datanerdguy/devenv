@@ -172,8 +172,14 @@ sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'   # Fedora
 No Fedora, o bootstrap escolhe o driver pela geração da placa. Da GTX 16xx / RTX 20xx em diante, instala o
 `akmod-nvidia`. Maxwell, Pascal e Volta (GTX 9xx, GTX 10xx, MX1xx/MX2xx/MX3xx) param na série 580: no Fedora 44+,
 o bootstrap instala o `akmod-nvidia-580xx`. Placas mais antigas ficam com o nouveau.
-Ao atualizar o Fedora com uma dessas placas, troque o driver depois do upgrade:
-`sudo dnf swap akmod-nvidia akmod-nvidia-580xx --allowerasing`.
+Ao atualizar o Fedora com uma dessas placas, o upgrade traz o `akmod-nvidia` de volta. Rode o bootstrap de novo,
+ou troque à mão em duas etapas (o `dnf swap` falha: as libs antigas têm os mesmos arquivos do 580xx):
+
+```bash
+sudo dnf remove --noautoremove akmod-nvidia 'xorg-x11-drv-nvidia*' nvidia-settings 'kmod-nvidia-*'
+sudo dnf install akmod-nvidia-580xx xorg-x11-drv-nvidia-580xx-cuda
+sudo akmods --force
+```
 
 No Arch, o bootstrap instala o driver aberto (`nvidia-open-dkms`, da GTX 16xx / RTX 20xx em diante), que já liga o
 modeset. Placas mais antigas precisam do driver legado do AUR; o bootstrap avisa e não instala nada.
