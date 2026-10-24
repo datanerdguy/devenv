@@ -18,6 +18,8 @@ in
       mouse = true;
       focusEvents = true; # o Neovim recarrega arquivos ao voltar o foco
       terminal = "tmux-256color";
+      # Painéis novos abrem o fish do home-manager, mesmo com login em zsh ou bash.
+      shell = lib.mkIf config.devenv.shell.enable "${config.programs.fish.package}/bin/fish";
       sensibleOnTop = false;
       extraConfig = builtins.readFile ./tmux.conf;
     };

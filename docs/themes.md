@@ -26,7 +26,7 @@ A escolha fica salva e vale no próximo login. O tema de cada máquina, até voc
 devenv.theme = {
   enable = true;
   default = "everforest";
-  opacity = 0.95; # 1 = sólido
+  opacity = 0.85; # 1 = sólido
 };
 ```
 

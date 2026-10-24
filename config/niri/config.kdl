@@ -8,9 +8,9 @@ include "rules.kdl"
 input {
     keyboard {
         xkb {
-            // US internacional com AltGr: ç, á, ã... sem teclas mortas no ' e no ".
+            // US internacional com teclas mortas: ' + a = á, ~ + a = ã, ' + c = ç.
             layout "us"
-            variant "altgr-intl"
+            variant "intl"
         }
         repeat-delay 250
         repeat-rate 40

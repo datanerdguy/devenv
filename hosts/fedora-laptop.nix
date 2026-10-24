@@ -14,7 +14,7 @@ _: {
     };
     terminal = {
       enable = true;
-      # fontSize = 14; # padrão 12; no kitty você usava 17 (o tamanho real depende da escala da tela)
+      fontSize = 16; # padrão 12; no kitty você usava 17 (o tamanho real depende da escala da tela)
     };
     nvim.enable = true;
     tmux.enable = true;
