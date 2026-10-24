@@ -115,6 +115,21 @@ in
           ''
         );
 
+        # picom e nvidia-settings (pacotes da distro) sobem pelo autostart do XDG e falham no niri, que não
+        # tem X: a sessão do usuário fica "degraded". Uma cópia local com Hidden=true desliga cada um.
+        home.activation.devenvHideX11Autostart = lib.mkIf (!cfg.i3.enable) (
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            for src in /etc/xdg/autostart/picom.desktop /etc/xdg/autostart/nvidia-settings*.desktop; do
+              [ -e "$src" ] || continue
+              dst=${config.xdg.configHome}/autostart/$(basename "$src")
+              if [ ! -e "$dst" ]; then
+                run mkdir -p "$(dirname "$dst")"
+                run sh -c 'printf "[Desktop Entry]\nType=Application\nHidden=true\n" > "$1"' _ "$dst"
+              fi
+            done
+          ''
+        );
+
         # Pasta das capturas do niri.
         home.file."Pictures/Screenshots/.keep".text = "";
       }
