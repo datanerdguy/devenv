@@ -37,6 +37,9 @@ in
         cursor-style = "block";
         shell-integration-features = "no-cursor,sudo,title";
         copy-on-select = "clipboard";
+        # Janelas e abas novas começam em ~, não na pasta do terminal em foco.
+        window-inherit-working-directory = false;
+        tab-inherit-working-directory = false;
         confirm-close-surface = false;
         # Rolar fora do tmux e trocar de aba do Ghostty (dentro do tmux, quem cuida é ele).
         # Com Ctrl+Shift: o Alt é do niri.
