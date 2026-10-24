@@ -1,8 +1,8 @@
 # Notebook principal (Fedora i3 Spin + monitor ultrawide).
 # Cada host diz quem é o usuário e quais módulos liga.
 _: {
-  home.username = "lucas"; # ajuste para o seu usuário (`whoami`)
-  home.homeDirectory = "/home/lucas";
+  home.username = "pcastr"; # ajuste para o seu usuário (`whoami`)
+  home.homeDirectory = "/home/pcastr";
 
   devenv = {
     cli.enable = true;
