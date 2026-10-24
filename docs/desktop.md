@@ -112,6 +112,20 @@ No i3, ao entrar na sessão sobem: o `dex` (apps de autostart do XDG, inclusive 
 o `xss-lock` (bloqueia a tela ao suspender), o `greenclip` (histórico de cópias) e o papel de parede do tema, pelo `feh`.
 `Alt+Shift+e` pergunta antes de sair. picom, nm-applet e feh vêm da distro com `DEVENV_I3=1 ./bootstrap.sh <host>`.
 
+## Notificações
+
+O Noctalia é o daemon de notificações. O `dunst` (que vem com a distro e sobe por D-Bus) pega o lugar dele e as
+notificações ficam com o visual do i3. Por isso o `just switch` mascara o `dunst.service` do usuário, a não ser que
+`devenv.desktop.i3.enable` esteja ligado. Para desfazer: `systemctl --user unmask dunst.service`.
+Para conferir quem responde: `busctl --user status $(busctl --user call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus GetNameOwner s org.freedesktop.Notifications | cut -d'"' -f2)`.
+
+## Autostart que só serve para X11
+
+O `picom` e o `nvidia-settings` da distro sobem pelo autostart do XDG (`/etc/xdg/autostart`) e falham no niri,
+que não usa X. A sessão do usuário aparece como "degraded" (`systemctl --user --failed`). Por isso o `just switch`
+cria em `~/.config/autostart/` uma cópia de cada um com `Hidden=true`, a não ser que `devenv.desktop.i3.enable`
+esteja ligado. Para desfazer, apague o arquivo em `~/.config/autostart/`.
+
 ## Monitores
 
 Não precisa configurar nada: a cada monitor conectado o niri lê a resolução, a taxa e a escala que ele anuncia e

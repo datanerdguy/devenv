@@ -103,6 +103,33 @@ in
           fi
         '';
 
+        # O dunst (pacote da distro, ativado por D-Bus) pega o nome org.freedesktop.Notifications antes
+        # do Noctalia e as notificações saem com o visual do i3. Sem o i3, o serviço fica mascarado.
+        home.activation.devenvMaskDunst = lib.mkIf (!cfg.i3.enable) (
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            unit=${config.xdg.configHome}/systemd/user/dunst.service
+            if [ ! -e "$unit" ] || [ "$(readlink "$unit")" = /dev/null ]; then
+              run mkdir -p "$(dirname "$unit")"
+              run ln -sfn /dev/null "$unit"
+            fi
+          ''
+        );
+
+        # picom e nvidia-settings (pacotes da distro) sobem pelo autostart do XDG e falham no niri, que não
+        # tem X: a sessão do usuário fica "degraded". Uma cópia local com Hidden=true desliga cada um.
+        home.activation.devenvHideX11Autostart = lib.mkIf (!cfg.i3.enable) (
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            for src in /etc/xdg/autostart/picom.desktop /etc/xdg/autostart/nvidia-settings*.desktop; do
+              [ -e "$src" ] || continue
+              dst=${config.xdg.configHome}/autostart/$(basename "$src")
+              if [ ! -e "$dst" ]; then
+                run mkdir -p "$(dirname "$dst")"
+                run sh -c 'printf "[Desktop Entry]\nType=Application\nHidden=true\n" > "$1"' _ "$dst"
+              fi
+            done
+          ''
+        );
+
         # Pasta das capturas do niri.
         home.file."Pictures/Screenshots/.keep".text = "";
       }
