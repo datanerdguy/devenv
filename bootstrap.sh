@@ -46,6 +46,19 @@ if ! grep -qs cache.numtide.com "${nix_conf}"; then
 fi
 
 # 3. Aplica a configuração do host.
+# O -b backup do home-manager guarda arquivos e pastas, mas para num link que não é dele (de um stow ou de
+# dotfiles antigas, ex.: ~/.config/nvim -> ~/dotfiles/nvim). Esses links viram <nome>.backup antes do switch.
+gen="$(nix build --no-link --print-out-paths "${repo_dir}#homeConfigurations.${host}.activationPackage")"
+while IFS= read -r -d '' file; do
+  target="${HOME}/${file}"
+  [ -L "${target}" ] || continue
+  case "$(readlink "${target}")" in /nix/store/*-home-manager-files/*) continue ;; esac
+  backup="${target}.backup"
+  if [ -e "${backup}" ] || [ -L "${backup}" ]; then backup="${target}.backup-$(date +%s)"; fi
+  echo "Link antigo em ${target} (-> $(readlink "${target}")): movido para ${backup}."
+  mv "${target}" "${backup}"
+done < <(cd "${gen}/home-files" && find . \( -type l -o -type f \) -printf '%P\0')
+
 nix run "${repo_dir}#home-manager" -- switch --flake "${repo_dir}#${host}" -b backup
 
 echo "Pronto. Abra um novo terminal (Ghostty) para entrar no fish."
