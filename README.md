@@ -89,4 +89,5 @@ AGENTS.md, CLAUDE.md     instruções para agentes de código que abrem este rep
 - [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
 - [x] 7. Modelos de projeto (`new`): Python (lib, api, llm, data, ml, fastapi-htmx, django, streamlit), Go (cli, service, htmx), Rust (bin, lib) e Phoenix. Veja [`docs/templates.md`](docs/templates.md)
 - [x] 8. Portabilidade: Arch e derivadas, Ubuntu 26.04 no CI, segredos com sops-nix: veja [`docs/secrets.md`](docs/secrets.md)
+- [x] Shell e terminal: Ghostty abre o fish, atalhos fzf e abreviações: veja [`docs/shell.md`](docs/shell.md)
 - [x] Dados no terminal: harlequin, tabiew e DuckDB (também pelo Neovim): veja [`docs/data.md`](docs/data.md)

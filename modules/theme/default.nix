@@ -68,7 +68,7 @@ in
 
     opacity = lib.mkOption {
       type = lib.types.numbers.between 0 1;
-      default = 0.95;
+      default = 0.85;
       example = 1.0;
       description = ''
         Opacidade do fundo do terminal (1 = sólido). Também decide o painel do Noctalia:

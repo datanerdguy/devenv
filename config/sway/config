@@ -6,7 +6,7 @@ include ~/.local/state/devenv/theme/current/wm-colors.conf
 
 input type:keyboard {
     xkb_layout us
-    xkb_variant altgr-intl
+    xkb_variant intl
     repeat_delay 250
     repeat_rate 40
 }
