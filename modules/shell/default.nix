@@ -32,6 +32,8 @@ in
         bind \cg fzf-cd
         # Go instalado pela distro em /usr/local/go; só entra no PATH se existir.
         test -d /usr/local/go/bin; and fish_add_path -g -a /usr/local/go/bin
+        # cargo e rustup (~/.cargo/bin) vêm depois do Nix no PATH, então não escondem as ferramentas dele.
+        test -d ~/.cargo/bin; and fish_add_path -g -a ~/.cargo/bin
       '';
       functions = {
         fzf-nvim = {
