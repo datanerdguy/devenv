@@ -127,6 +127,8 @@ Diagnósticos: o `virtual_text` nativo fica desligado e quem mostra inline é o 
 
 O `<leader>` é **Espaço**. Aperte Espaço e espere para o which-key mostrar as opções; `<leader>?` mostra os atalhos do buffer atual.
 
+Toda `desc` de atalho segue `[Categoria] Ação`, ou `[Categoria/Sub] Ação` quando há subgrupo (ex.: `[LSP] Renomear símbolo`, `[Git/Hunk] Stage`, `[Agente/Claude Code] Abrir/fechar`). Atalho novo sempre leva `desc`, assim o which-key e o `<leader>fk` ficam agrupados por categoria.
+
 ### Geral
 
 | Tecla | Ação |
@@ -155,7 +157,8 @@ Todas as buscas mostram arquivos ocultos. No picker, `Alt-h` alterna ocultos e `
 | Tecla | Ação |
 | --- | --- |
 | `<leader><space>` | Busca inteligente de arquivos |
-| `<leader>/` ou `<leader>fg` | Texto no projeto |
+| `<leader>/` | Texto no arquivo atual (linhas) |
+| `<leader>fg` | Texto no projeto |
 | `<leader>ff` | Arquivos |
 | `<leader>fw` | Palavra sob o cursor (ou seleção) |
 | `<leader>fb` / `<leader>fr` | Buffers / recentes |
@@ -163,7 +166,7 @@ Todas as buscas mostram arquivos ocultos. No picker, `Alt-h` alterna ocultos e `
 | `<leader>fc` / `<leader>fp` | Arquivos da config / projetos |
 | `<leader>fs` / `<leader>fS` | Símbolos do arquivo / do projeto |
 | `<leader>f.` | Reabrir a última busca |
-| `<leader>e` / `<leader>E` | Explorer (alterna) / explorer no arquivo atual |
+| `<leader>e` / `<leader>E` | Explorer na raiz do projeto (alterna) / explorer no arquivo atual |
 
 No explorer: `Enter` abre, `a` cria (termine com `/` para pasta), `d` apaga, `r` renomeia, `c` copia, `m` move, `H` alterna ocultos, `?` mostra todas as teclas.
 
@@ -278,7 +281,7 @@ Sem plugin de banco: o Neovim abre as ferramentas do terminal numa janela flutua
 | Tecla | Ação |
 | --- | --- |
 | `<leader>uw` / `<leader>us` / `<leader>ur` | Quebra de linha / corretor / número relativo |
-| `<leader>uh` / `<leader>ud` | Inlay hints / diagnósticos |
+| `<leader>uh` / `<leader>ud` | Inlay hints (começam desligados) / diagnósticos |
 | `<leader>uf` | Formatar ao salvar |
 | `<leader>uz` / `<leader>un` | Modo zen / histórico de notificações |
 | `<leader>uc` / `[C` | Contexto no topo (função atual) / ir até ele |

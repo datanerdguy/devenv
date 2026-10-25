@@ -12,38 +12,38 @@ pack.add({
       {
         "<leader>aa",
         function() require("sidekick.cli").toggle() end,
-        desc = "Agente: abrir/fechar",
+        desc = "[Agente/Sidekick] Abrir/fechar",
         mode = { "n", "x" },
       },
-      { "<leader>as", function() require("sidekick.cli").select() end, desc = "Agente: escolher CLI" },
+      { "<leader>as", function() require("sidekick.cli").select() end, desc = "[Agente/Sidekick] Escolher CLI" },
       {
         "<leader>at",
         function() require("sidekick.cli").send({ msg = "{this}" }) end,
-        desc = "Agente: mandar isto",
+        desc = "[Agente/Sidekick] Enviar contexto ({this})",
         mode = { "n", "x" },
       },
       {
         "<leader>af",
         function() require("sidekick.cli").send({ msg = "{file}" }) end,
-        desc = "Agente: mandar arquivo",
+        desc = "[Agente/Sidekick] Enviar arquivo",
       },
       {
         "<leader>av",
         function() require("sidekick.cli").send({ msg = "{selection}" }) end,
-        desc = "Agente: mandar seleção",
+        desc = "[Agente/Sidekick] Enviar seleção",
         mode = "x",
       },
       {
         "<leader>ap",
         function() require("sidekick.cli").prompt() end,
-        desc = "Agente: prompts prontos",
+        desc = "[Agente/Sidekick] Prompts prontos",
         mode = { "n", "x" },
       },
-      { "<leader>ad", function() require("sidekick.cli").close() end, desc = "Agente: encerrar sessão" },
+      { "<leader>ad", function() require("sidekick.cli").close() end, desc = "[Agente/Sidekick] Encerrar sessão" },
       {
         "<C-.>",
         function() require("sidekick.cli").focus() end,
-        desc = "Agente: focar",
+        desc = "[Agente/Sidekick] Focar no terminal",
         mode = { "n", "t", "i", "x" },
       },
     },
@@ -69,11 +69,11 @@ pack.add({
       "ClaudeCodeDiffDeny",
     },
     keys = {
-      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Claude Code: abrir/fechar" },
-      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Claude Code: adicionar arquivo" },
-      { "<leader>ay", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Claude Code: aceitar diff" },
-      { "<leader>an", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Claude Code: recusar diff" },
-      { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Claude Code: escolher modelo" },
+      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "[Agente/Claude Code] Abrir/fechar" },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "[Agente/Claude Code] Adicionar arquivo ao contexto" },
+      { "<leader>ay", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "[Agente/Claude Code] Aceitar diff" },
+      { "<leader>an", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "[Agente/Claude Code] Recusar diff" },
+      { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "[Agente/Claude Code] Escolher modelo" },
     },
     config = function()
       require("claudecode").setup({
@@ -85,4 +85,4 @@ pack.add({
 })
 
 -- Mandar a seleção visual para o Claude Code
-vim.keymap.set("x", "<leader>ae", "<cmd>ClaudeCodeSend<cr>", { desc = "Claude Code: mandar seleção" })
+vim.keymap.set("x", "<leader>ae", "<cmd>ClaudeCodeSend<cr>", { desc = "[Agente/Claude Code] Enviar seleção" })
