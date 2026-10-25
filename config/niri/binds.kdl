@@ -13,7 +13,7 @@ binds {
     Super+D hotkey-overlay-title="Desenhar na tela (wayscriber)" { spawn "wayscriber" "--daemon-toggle"; }
     Super+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Super+Comma hotkey-overlay-title="Configurações do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
-    Super+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
     Super+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "theme"; }
     Super+L hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
     Mod+Tab { spawn-sh "noctalia msg window-switcher hold"; }
@@ -118,11 +118,8 @@ binds {
     Mod+W           { toggle-column-tabbed-display; }
 
     // --- Captura de tela ---------------------------------------------------
-    // Print: Flameshot (seleciona, anota, copia ou salva). Super+Print: captura nativa do niri.
+    // Print: Flameshot (seleciona, anota, copia ou salva).
     Print hotkey-overlay-title="Captura com anotação (Flameshot)" { spawn "flameshot" "gui"; }
-    Super+Print       { screenshot; }
-    Ctrl+Print        { screenshot-screen; }
-    Super+Shift+Print { screenshot-window; }
 
     // --- Sessão -----------------------------------------------------------
     // Libera os atalhos do niri para apps que capturam o teclado (VMs, jogos).

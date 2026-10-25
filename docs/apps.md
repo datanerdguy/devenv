@@ -71,10 +71,12 @@ Senhas copiadas do app do Bitwarden ficam de fora. A lista fica em `~/.cache/gre
 ## Captura de tela
 
 - `Print`: Flameshot. Selecione a área e anote. `Ctrl+C` copia, `Ctrl+S` salva em `~/Pictures/Screenshots`, `Enter` copia e fecha.
-- `Super+Print`, `Ctrl+Print`, `Super+Shift+Print`: a captura do próprio niri (área, tela, janela), sem anotação. Ela salva e copia na hora.
 
-O Flameshot usa o `grim` por baixo no niri (`useGrimAdapter`). A config inicial é criada em
-`~/.config/flameshot/flameshot.ini` só na primeira vez; depois, o que você muda na tela de ajustes dele fica valendo.
+Na primeira captura, o portal do desktop pede permissão. Clique em **Permitir**; se negar sem querer,
+o `Print` falha com "Unable to capture screen". Para perguntar de novo:
+`gdbus call --session --dest org.freedesktop.impl.portal.PermissionStore --object-path /org/freedesktop/impl/portal/PermissionStore --method org.freedesktop.impl.portal.PermissionStore.DeletePermission screenshot screenshot ''`.
+
+A config inicial do Flameshot é criada em `~/.config/flameshot/flameshot.ini` só na primeira vez; depois, o que você muda na tela de ajustes dele fica valendo.
 
 ## Desenhos e diagramas
 

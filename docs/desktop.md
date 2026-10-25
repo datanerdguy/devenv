@@ -94,7 +94,6 @@ O Alt dos apps que o niri não usa continua valendo (no fish, `Alt+b`/`Alt+f` pu
 | `Super+v` | histórico de cópias ([apps.md](apps.md#histórico-de-cópias)) |
 | `Super+l` | bloqueia a tela |
 | `Print` | captura com anotação (Flameshot) |
-| `Super+Print`, `Ctrl+Print`, `Super+Shift+Print` | captura nativa do niri: área, tela, janela (salva em `~/Pictures/Screenshots` e copia) |
 | `Super+Escape` | libera os atalhos para o app em foco (VM, jogo) |
 | `Super+Shift+p` | desliga os monitores |
 
