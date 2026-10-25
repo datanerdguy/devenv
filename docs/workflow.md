@@ -97,6 +97,8 @@ Abre um PR `chore(deps): atualiza flake.lock` contra a `dev`. O CI do PR constr�
 ### Dependabot
 
 Atualiza as versões das GitHub Actions toda semana, com PRs para a `dev`.
+Todas as Actions ficam presas a um commit (SHA), com a versão no comentário (`# v4`): uma tag ou a `main`
+de terceiros pode mudar sem aviso. O Dependabot atualiza o SHA e o comentário juntos.
 
 ## Proteção das branches (configurar no GitHub)
 

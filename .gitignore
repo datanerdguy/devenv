@@ -4,3 +4,12 @@ result-*
 
 # Dicionário compilado pelo Neovim (o .add é a fonte)
 config/nvim/spell/*.spl
+
+# Segredos: nunca no repo (os cifrados ficam em secrets/*.yaml; docs/secrets.md)
+.env
+.env.*
+!.env.example
+keys.txt
+*.pem
+*.key
+.mcp.json

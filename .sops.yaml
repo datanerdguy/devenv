@@ -1,0 +1,5 @@
+# Quem pode abrir os segredos (secrets/*.yaml). Uma chave age pública por linha; docs/secrets.md.
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    age: >-
+      age1nrxhffyq6h5lxv7fjdju6l3acv7fuzlg93jf676k2d7tyxhz24fqw2kjk8
