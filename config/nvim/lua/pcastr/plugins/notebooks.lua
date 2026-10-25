@@ -46,18 +46,18 @@ pack.add({
     -- Plugin remoto em Python: registra os comandos depois de instalar ou atualizar.
     build = function() vim.cmd("UpdateRemotePlugins") end,
     keys = {
-      { "<leader>ni", molten("MoltenInit"), desc = "Iniciar kernel" },
-      { "<leader>ne", molten("MoltenEvaluateOperator"), desc = "Rodar (operador)" },
-      { "<leader>nl", molten("MoltenEvaluateLine"), desc = "Rodar linha" },
-      { "<leader>nv", ":<C-u>MoltenEvaluateVisual<cr>gv", desc = "Rodar seleção", mode = "x" },
-      { "<leader>nr", molten("MoltenReevaluateCell"), desc = "Rodar célula de novo" },
-      { "<leader>no", molten("noautocmd MoltenEnterOutput"), desc = "Abrir saída" },
-      { "<leader>nh", molten("MoltenHideOutput"), desc = "Esconder saída" },
-      { "<leader>nd", molten("MoltenDelete"), desc = "Apagar célula" },
-      { "<leader>nI", molten("MoltenInterrupt"), desc = "Interromper kernel" },
+      { "<leader>ni", molten("MoltenInit"), desc = "[Notebook/Molten] Iniciar kernel" },
+      { "<leader>ne", molten("MoltenEvaluateOperator"), desc = "[Notebook/Molten] Rodar com operador" },
+      { "<leader>nl", molten("MoltenEvaluateLine"), desc = "[Notebook/Molten] Rodar linha" },
+      { "<leader>nv", ":<C-u>MoltenEvaluateVisual<cr>gv", desc = "[Notebook/Molten] Rodar seleção", mode = "x" },
+      { "<leader>nr", molten("MoltenReevaluateCell"), desc = "[Notebook/Molten] Rodar célula de novo" },
+      { "<leader>no", molten("noautocmd MoltenEnterOutput"), desc = "[Notebook/Molten] Abrir saída" },
+      { "<leader>nh", molten("MoltenHideOutput"), desc = "[Notebook/Molten] Esconder saída" },
+      { "<leader>nd", molten("MoltenDelete"), desc = "[Notebook/Molten] Apagar célula" },
+      { "<leader>nI", molten("MoltenInterrupt"), desc = "[Notebook/Molten] Interromper kernel" },
     },
   },
 })
 
-vim.keymap.set("n", "<leader>nm", marimo("edit"), { desc = "marimo: editar notebook" })
-vim.keymap.set("n", "<leader>nM", marimo("run"), { desc = "marimo: rodar como app" })
+vim.keymap.set("n", "<leader>nm", marimo("edit"), { desc = "[Notebook/marimo] Editar notebook" })
+vim.keymap.set("n", "<leader>nM", marimo("run"), { desc = "[Notebook/marimo] Rodar como app" })

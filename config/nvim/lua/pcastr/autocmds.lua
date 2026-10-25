@@ -4,7 +4,7 @@ local group = vim.api.nvim_create_augroup("pcastr", { clear = true })
 -- Destaca o texto copiado
 au("TextYankPost", {
   group = group,
-  callback = function() vim.hl.on_yank({ timeout = 150 }) end,
+  callback = function() vim.hl.hl_op({ timeout = 150 }) end,
 })
 
 -- Volta para a última posição ao reabrir um arquivo
@@ -46,7 +46,12 @@ au("FileType", {
   pattern = { "help", "qf", "checkhealth", "man", "nvim-pack" },
   callback = function(ev)
     vim.bo[ev.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = ev.buf, silent = true })
+    vim.keymap.set(
+      "n",
+      "q",
+      "<cmd>close<cr>",
+      { buffer = ev.buf, silent = true, desc = "[Janela] Fechar janela auxiliar" }
+    )
   end,
 })
 
