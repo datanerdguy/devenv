@@ -99,3 +99,8 @@ para mudar, veja [desktop.md](desktop.md#mesa-digitalizadora).
 - **OBS Studio** para vídeos com cenas, webcam por cima, várias fontes ou transmissão ao vivo.
 
 Os dois pedem a tela pelo portal do Wayland (uma janela para escolher o monitor ou a janela).
+
+## Upload e download nos apps do Flatpak
+
+Escolher arquivo (anexar, salvar como) passa pelo portal. No niri o seletor é o do GTK (`config/xdg-desktop-portal/niri-portals.conf`),
+porque o do GNOME chama o Nautilus, que não está instalado. Se o seletor não abrir, rode `just switch` e saia e entre na sessão.
