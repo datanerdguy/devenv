@@ -12,7 +12,7 @@
 local M = {}
 
 ---@class pcastr.Plugin
----@field name string
+---@field name? string
 ---@field src string
 ---@field version? string|vim.VersionRange
 ---@field event? string|string[]
@@ -25,6 +25,7 @@ local M = {}
 ---@field lazy? boolean só carrega quando alguém chamar pack.load (ex.: o tema escolhido)
 ---@field loaded? boolean
 ---@field load_ms? number
+---@field error? string
 
 ---@type table<string, pcastr.Plugin>
 M.plugins = {}

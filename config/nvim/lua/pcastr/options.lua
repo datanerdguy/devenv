@@ -1,5 +1,5 @@
 -- Opções do editor. `:help '<opção>'` explica cada uma.
-local o, g = vim.opt, vim.g
+local o, g = vim.o, vim.g
 
 g.mapleader = " "
 g.maplocalleader = "\\"
@@ -29,8 +29,8 @@ o.sidescrolloff = 8
 o.wrap = false
 o.linebreak = true
 o.list = true
-o.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-o.fillchars = { eob = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
+o.listchars = "tab:» ,trail:·,nbsp:␣"
+o.fillchars = "eob: ,fold: ,foldopen:▾,foldclose:▸,foldsep: "
 o.winborder = "rounded" -- borda em todas as janelas flutuantes (0.11+)
 o.splitright = true
 o.splitbelow = true
@@ -62,14 +62,14 @@ o.grepprg = "rg --vimgrep --hidden --glob '!.git'"
 o.grepformat = "%f:%l:%c:%m"
 
 -- Completion e folds
-o.completeopt = { "menu", "menuone", "noselect", "popup" }
+o.completeopt = "menu,menuone,noselect,popup"
 o.foldlevel = 99
 o.foldlevelstart = 99
 o.foldmethod = "expr"
 o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 o.foldtext = ""
 
-o.spelllang = { "pt_br", "en" }
+o.spelllang = "pt_br,en"
 -- Palavras aceitas pelo corretor (zg adiciona): fica no repo, versionado.
 o.spellfile = vim.fn.stdpath("config") .. "/spell/tech.utf-8.add"
-o.shortmess:append({ W = true, I = true, c = true, C = true })
+vim.opt.shortmess:append("WIcC")
