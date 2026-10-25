@@ -17,8 +17,6 @@ let
     [General]
     savePath=${shots}
     savePathFixed=true
-    useGrimAdapter=true
-    disabledGrimWarning=true
     showStartupLaunchMessage=false
     showDesktopNotification=true
     copyPathAfterSave=false

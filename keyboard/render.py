@@ -22,25 +22,21 @@ STYLE = ROOT / "keymap-drawer.yaml"
 README = ROOT / "README.md"
 IMG = ROOT / "img"
 
-# O Vial salva cada camada como 4 linhas × 12 colunas (a matriz do firmware), que não é a ordem física.
+# O Vial salva cada camada como 8 linhas × 7 colunas (a matriz do firmware), que não é a ordem física.
 # Posição no .vil (linha, coluna) → índice da tecla no LAYOUT_split_3x6_3_ex2 (layout.json):
-#   linhas 0–2, colunas 0–5: as 3 linhas da metade esquerda, de fora para dentro
-#   linhas 0–2, colunas 7–11: as 5 colunas de dentro da metade direita; a coluna de fora fica na linha 3 (9–11)
-#   coluna 6 (linhas 0–1): as 2 teclas extras do meio, à direita; linha 3 (0–1): as 2 extras à esquerda
-#   linha 3, colunas 3–5 e 6–8: polegares esquerdos (de fora para dentro) e direitos (de dentro para fora)
+#   linhas 0–3: a metade esquerda; linhas 4–7: a direita (espelhada: a coluna 0 é a de fora)
+#   linhas 0–2, colunas 0–5: as 3 fileiras de 6 teclas; coluna 6 (linhas 0–1): as 2 extras do meio
+#   linha 3, colunas 3–5: os polegares, de fora para dentro
 POSITION = {}
-for r, base in enumerate((0, 14, 28)):
+for r, (left, right) in enumerate(((0, 8), (14, 22), (28, 34))):
     for c in range(6):
-        POSITION[(r, c)] = base + c
-for r, base in enumerate((8, 22, 34)):
-    for c in range(5):
-        POSITION[(r, 7 + c)] = base + c
+        POSITION[(r, c)] = left + c
+        POSITION[(r + 4, c)] = right + 5 - c
 POSITION.update({
-    (3, 9): 13, (3, 10): 27, (3, 11): 39,  # coluna de fora, à direita
-    (0, 6): 7, (1, 6): 21,  # extras do meio, à direita
-    (3, 0): 6, (3, 1): 20,  # extras do meio, à esquerda
+    (0, 6): 6, (1, 6): 20,  # extras do meio, à esquerda
+    (4, 6): 7, (5, 6): 21,  # extras do meio, à direita
     (3, 3): 40, (3, 4): 41, (3, 5): 42,  # polegares esquerdos
-    (3, 6): 43, (3, 7): 44, (3, 8): 45,  # polegares direitos
+    (7, 5): 43, (7, 4): 44, (7, 3): 45,  # polegares direitos (de dentro para fora)
 })
 KEYS = 46
 
