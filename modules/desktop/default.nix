@@ -90,6 +90,8 @@ in
 
         xdg.configFile = {
           "niri".source = link "config/niri";
+          # Seletor de arquivos pelo portal do GTK: o do GNOME exige o Nautilus (upload/download no Zen).
+          "xdg-desktop-portal/niri-portals.conf".source = link "config/xdg-desktop-portal/niri-portals.conf";
           # Arquivo a arquivo: o tema (modules/theme) põe a paleta e o theme.toml na mesma pasta.
           "noctalia/devenv.toml".source = link "config/noctalia/devenv.toml";
         };
