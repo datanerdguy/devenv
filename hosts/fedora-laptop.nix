@@ -10,7 +10,7 @@ _: {
     git = {
       enable = true;
       name = "datanerdguy";
-      email = "dev.pcastrovian@gmail.com"; # vale até existir secrets/fedora-laptop.yaml (docs/secrets.md)
+      email = "voce@example.com"; # valor de enchimento: o real vem de git/email em secrets/fedora-laptop.yaml (docs/secrets.md)
     };
     terminal = {
       enable = true;
