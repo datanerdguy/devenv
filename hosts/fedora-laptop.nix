@@ -9,8 +9,8 @@ _: {
     shell.enable = true;
     git = {
       enable = true;
-      name = "Lucas";
-      email = "you@example.com"; # vale até existir secrets/fedora-laptop.yaml (docs/secrets.md)
+      name = "datanerdguy";
+      email = "dev.pcastrovian@gmail.com"; # vale até existir secrets/fedora-laptop.yaml (docs/secrets.md)
     };
     terminal = {
       enable = true;
