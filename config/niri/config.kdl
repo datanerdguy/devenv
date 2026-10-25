@@ -56,6 +56,8 @@ environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     // Apps Qt com as cores do tema (paleta gerada pelo Noctalia para o qt6ct).
     QT_QPA_PLATFORMTHEME "qt6ct"
+    // Teclas mortas do layout intl (' + a = á) no Ghostty; sem isso o GTK não junta as teclas.
+    GTK_IM_MODULE "simple"
 }
 
 // Noctalia: barra, launcher, notificações, bloqueio, papel de parede e agente de polkit.

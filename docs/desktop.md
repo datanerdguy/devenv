@@ -181,6 +181,7 @@ Caps Lock vira Esc no toque e Ctrl segurando. O Corne não é afetado (ele já f
 O layout do sistema é `us` com a variante `intl` (US internacional com teclas mortas: `'` + `a` = á, `~` + `a` = ã, `'` + `c` = ç).
 Para digitar `'` ou `"` sozinhos, aperte a tecla e depois a barra de espaço. Quem prefere acentos com AltGr e sem teclas mortas
 (melhor para código) troca para `altgr-intl`: edite `xkb` no `config.kdl` (niri), `config/sway/config` ou `config/i3/config`.
+No niri, o `config.kdl` define `GTK_IM_MODULE "simple"`: sem isso o Ghostty (GTK) não junta as teclas mortas. Vale na próxima sessão.
 
 ## GPU (NVIDIA, híbrida ou integrada)
 
