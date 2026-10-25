@@ -30,11 +30,3 @@ camada de baixo). Na camada ativa, a tecla que você está segurando aparece des
 ## Camada 3
 
 ![Camada 3](img/camada-3.svg)
-
-## Combos
-
-Teclas apertadas juntas.
-
-| Teclas | Resultado | Camada |
-| --- | --- | --- |
-| Alt + 1 | F1 | Camada 1 |
