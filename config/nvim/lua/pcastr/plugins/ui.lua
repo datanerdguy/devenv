@@ -74,7 +74,7 @@ pack.add({
       local S = Snacks
       -- Busca (f)
       map("n", "<leader><space>", function() S.picker.smart() end, { desc = "[Busca] Arquivos (inteligente)" })
-      map("n", "<leader>/", function() S.picker.grep() end, { desc = "[Busca] Texto no projeto (grep)" })
+      map("n", "<leader>/", function() S.picker.lines() end, { desc = "[Busca] Texto no arquivo (grep)" })
       map("n", "<leader>ff", function() S.picker.files() end, { desc = "[Busca] Arquivos (inclui ocultos)" })
       map("n", "<leader>fg", function() S.picker.grep() end, { desc = "[Busca] Texto no projeto (grep)" })
       map({ "n", "x" }, "<leader>fw", function() S.picker.grep_word() end, { desc = "[Busca] Palavra sob o cursor" })
@@ -108,7 +108,11 @@ pack.add({
       )
 
       -- Explorer (e)
-      map("n", "<leader>e", function() S.explorer() end, { desc = "[Explorer] Abrir/fechar" })
+      map("n", "<leader>e", function()
+        local root = vim.fs.root(0, { ".git", "package.json", "Cargo.toml", "pyproject.toml" })
+        Snacks.explorer({ cwd = root or vim.fn.getcwd() })
+      end, { desc = "[explorer] abrir/fechar (root projeto)" })
+
       map("n", "<leader>E", function() S.explorer.reveal() end, { desc = "[Explorer] Revelar arquivo atual" })
 
       -- Git (g)
