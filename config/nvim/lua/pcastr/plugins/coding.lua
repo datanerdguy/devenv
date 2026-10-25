@@ -63,7 +63,7 @@ pack.add({
         "<leader>cf",
         function() require("conform").format({ async = true }) end,
         mode = { "n", "x" },
-        desc = "Formatar",
+        desc = "[Formatação] Formatar arquivo/seleção",
       },
     },
     config = function()
@@ -89,7 +89,7 @@ pack.add({
       vim.keymap.set("n", "<leader>uf", function()
         vim.g.disable_autoformat = not vim.g.disable_autoformat
         vim.notify("Formatar ao salvar: " .. (vim.g.disable_autoformat and "desligado" or "ligado"))
-      end, { desc = "Alternar formatar ao salvar" })
+      end, { desc = "[Formatação] Alternar formatar ao salvar" })
     end,
   },
 

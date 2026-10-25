@@ -16,7 +16,7 @@ end
 local tabular =
   { csv = true, tsv = true, parquet = true, json = true, jsonl = true, xlsx = true, xls = true, arrow = true }
 
-map("n", "<leader>Dh", function() float({ "harlequin" }) end, { desc = "Harlequin (IDE de SQL)" })
+map("n", "<leader>Dh", function() float({ "harlequin" }) end, { desc = "[Dados/SQL] Harlequin (IDE de SQL)" })
 map("n", "<leader>Dt", function()
   local file = vim.api.nvim_buf_get_name(0)
   if file == "" or not tabular[vim.fn.fnamemodify(file, ":e"):lower()] then
@@ -31,7 +31,7 @@ map("n", "<leader>Dt", function()
     })
   end
   float({ "tw", file })
-end, { desc = "Tabiew (ver tabela)" })
+end, { desc = "[Dados/Tabela] Tabiew (ver CSV/Parquet)" })
 
 -- Roda SQL no DuckDB e mostra o resultado num split abaixo.
 -- Banco: vim.b.duckdb, senão vim.g.duckdb, senão em memória (lê CSV/Parquet direto: from 'dados.csv').
@@ -41,7 +41,12 @@ local function show(lines)
     result_buf = vim.api.nvim_create_buf(false, true)
     vim.bo[result_buf].bufhidden = "hide"
     vim.api.nvim_buf_set_name(result_buf, "duckdb://resultado")
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = result_buf, silent = true })
+    vim.keymap.set(
+      "n",
+      "q",
+      "<cmd>close<cr>",
+      { buffer = result_buf, silent = true, desc = "[Dados/DuckDB] Fechar resultado" }
+    )
   end
   vim.api.nvim_buf_set_lines(result_buf, 0, -1, false, lines)
   local win = vim.fn.bufwinid(result_buf)
@@ -84,13 +89,13 @@ map(
   "n",
   "<leader>Dr",
   function() run_sql(table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")) end,
-  { desc = "Rodar o arquivo no DuckDB" }
+  { desc = "[Dados/DuckDB] Rodar o arquivo" }
 )
 map("x", "<leader>Dr", function()
   local lines = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = vim.fn.mode() })
   vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "n", false)
   run_sql(table.concat(lines, "\n"))
-end, { desc = "Rodar a seleção no DuckDB" })
+end, { desc = "[Dados/DuckDB] Rodar a seleção" })
 map("n", "<leader>Db", function()
   vim.ui.input(
     { prompt = "Banco do DuckDB (vazio = em memória): ", default = vim.b.duckdb or "", completion = "file" },
@@ -100,4 +105,4 @@ map("n", "<leader>Db", function()
       vim.notify("DuckDB: " .. (vim.b.duckdb or "em memória"))
     end
   )
-end, { desc = "Escolher o banco do DuckDB" })
+end, { desc = "[Dados/DuckDB] Escolher o banco" })

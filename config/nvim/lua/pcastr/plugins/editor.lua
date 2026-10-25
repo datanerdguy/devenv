@@ -39,7 +39,7 @@ pack.add({
     src = gh("nvim-treesitter/nvim-treesitter"),
     version = "main",
     ft = "*",
-    build = function() pcall(vim.cmd, "TSUpdate") end,
+    build = function() pcall(vim.cmd.TSUpdate) end,
     config = function()
       local ts = require("nvim-treesitter")
       local available = {}
@@ -86,8 +86,13 @@ pack.add({
     config = function()
       local ctx = require("treesitter-context")
       ctx.setup({ max_lines = 3, multiline_threshold = 1, trim_scope = "inner" })
-      vim.keymap.set("n", "<leader>uc", ctx.toggle, { desc = "Alternar contexto no topo" })
-      vim.keymap.set("n", "[C", function() ctx.go_to_context(vim.v.count1) end, { desc = "Ir ao contexto" })
+      vim.keymap.set("n", "<leader>uc", ctx.toggle, { desc = "[UI] Alternar contexto da função no topo" })
+      vim.keymap.set(
+        "n",
+        "[C",
+        function() ctx.go_to_context(vim.v.count1) end,
+        { desc = "[Navegação] Ir ao contexto (função/classe)" }
+      )
     end,
   },
 
@@ -118,15 +123,15 @@ pack.add({
         on_attach = function(buf)
           local gs = require("gitsigns")
           local function map(mode, l, r, desc) vim.keymap.set(mode, l, r, { buffer = buf, desc = desc }) end
-          map("n", "]h", function() gs.nav_hunk("next") end, "Próximo hunk")
-          map("n", "[h", function() gs.nav_hunk("prev") end, "Hunk anterior")
-          map({ "n", "x" }, "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", "Stage do hunk")
-          map({ "n", "x" }, "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", "Desfazer hunk")
-          map("n", "<leader>hS", gs.stage_buffer, "Stage do arquivo")
-          map("n", "<leader>hp", gs.preview_hunk_inline, "Ver hunk")
-          map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, "Blame da linha")
-          map("n", "<leader>hd", gs.diffthis, "Diff do arquivo")
-          map({ "o", "x" }, "ih", "<cmd>Gitsigns select_hunk<cr>", "Hunk (textobject)")
+          map("n", "]h", function() gs.nav_hunk("next") end, "[Git/Hunk] Próximo")
+          map("n", "[h", function() gs.nav_hunk("prev") end, "[Git/Hunk] Anterior")
+          map({ "n", "x" }, "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", "[Git/Hunk] Stage")
+          map({ "n", "x" }, "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", "[Git/Hunk] Desfazer (reset)")
+          map("n", "<leader>hS", gs.stage_buffer, "[Git/Hunk] Stage do arquivo inteiro")
+          map("n", "<leader>hp", gs.preview_hunk_inline, "[Git/Hunk] Pré-visualizar")
+          map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, "[Git/Hunk] Blame da linha")
+          map("n", "<leader>hd", gs.diffthis, "[Git/Hunk] Diff do arquivo")
+          map({ "o", "x" }, "ih", "<cmd>Gitsigns select_hunk<cr>", "[Git/Hunk] Textobject (ih)")
         end,
       })
     end,
@@ -136,14 +141,38 @@ pack.add({
   {
     src = gh("mrjones2014/smart-splits.nvim"),
     keys = {
-      { "<C-h>", function() require("smart-splits").move_cursor_left() end, desc = "Janela à esquerda" },
-      { "<C-j>", function() require("smart-splits").move_cursor_down() end, desc = "Janela abaixo" },
-      { "<C-k>", function() require("smart-splits").move_cursor_up() end, desc = "Janela acima" },
-      { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Janela à direita" },
-      { "<C-Left>", function() require("smart-splits").resize_left() end, desc = "Redimensionar ←" },
-      { "<C-Right>", function() require("smart-splits").resize_right() end, desc = "Redimensionar →" },
-      { "<C-Down>", function() require("smart-splits").resize_down() end, desc = "Redimensionar ↓" },
-      { "<C-Up>", function() require("smart-splits").resize_up() end, desc = "Redimensionar ↑" },
+      {
+        "<C-h>",
+        function() require("smart-splits").move_cursor_left() end,
+        desc = "[Janela] Ir para a esquerda (tmux também)",
+      },
+      {
+        "<C-j>",
+        function() require("smart-splits").move_cursor_down() end,
+        desc = "[Janela] Ir para baixo (tmux também)",
+      },
+      {
+        "<C-k>",
+        function() require("smart-splits").move_cursor_up() end,
+        desc = "[Janela] Ir para cima (tmux também)",
+      },
+      {
+        "<C-l>",
+        function() require("smart-splits").move_cursor_right() end,
+        desc = "[Janela] Ir para a direita (tmux também)",
+      },
+      {
+        "<C-Left>",
+        function() require("smart-splits").resize_left() end,
+        desc = "[Janela] Redimensionar para a esquerda",
+      },
+      {
+        "<C-Right>",
+        function() require("smart-splits").resize_right() end,
+        desc = "[Janela] Redimensionar para a direita",
+      },
+      { "<C-Down>", function() require("smart-splits").resize_down() end, desc = "[Janela] Redimensionar para baixo" },
+      { "<C-Up>", function() require("smart-splits").resize_up() end, desc = "[Janela] Redimensionar para cima" },
     },
     config = function() require("smart-splits").setup({ at_edge = "stop" }) end,
   },

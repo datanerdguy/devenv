@@ -73,61 +73,70 @@ pack.add({
       local map = vim.keymap.set
       local S = Snacks
       -- Busca (f)
-      map("n", "<leader><space>", function() S.picker.smart() end, { desc = "Busca inteligente (arquivos)" })
-      map("n", "<leader>/", function() S.picker.grep() end, { desc = "Buscar texto no projeto" })
-      map("n", "<leader>ff", function() S.picker.files() end, { desc = "Arquivos (inclui ocultos)" })
-      map("n", "<leader>fg", function() S.picker.grep() end, { desc = "Texto no projeto" })
-      map({ "n", "x" }, "<leader>fw", function() S.picker.grep_word() end, { desc = "Palavra sob o cursor" })
-      map("n", "<leader>fb", function() S.picker.buffers() end, { desc = "Buffers abertos" })
-      map("n", "<leader>fr", function() S.picker.recent() end, { desc = "Arquivos recentes" })
-      map("n", "<leader>fh", function() S.picker.help() end, { desc = "Ajuda" })
-      map("n", "<leader>fk", function() S.picker.keymaps() end, { desc = "Atalhos" })
+      map("n", "<leader><space>", function() S.picker.smart() end, { desc = "[Busca] Arquivos (inteligente)" })
+      map("n", "<leader>/", function() S.picker.lines() end, { desc = "[Busca] Texto no arquivo (grep)" })
+      map("n", "<leader>ff", function() S.picker.files() end, { desc = "[Busca] Arquivos (inclui ocultos)" })
+      map("n", "<leader>fg", function() S.picker.grep() end, { desc = "[Busca] Texto no projeto (grep)" })
+      map({ "n", "x" }, "<leader>fw", function() S.picker.grep_word() end, { desc = "[Busca] Palavra sob o cursor" })
+      map("n", "<leader>fb", function() S.picker.buffers() end, { desc = "[Busca] Buffers abertos" })
+      map("n", "<leader>fr", function() S.picker.recent() end, { desc = "[Busca] Arquivos recentes" })
+      map("n", "<leader>fh", function() S.picker.help() end, { desc = "[Busca] Ajuda do Neovim" })
+      map("n", "<leader>fk", function() S.picker.keymaps() end, { desc = "[Busca] Atalhos (keymaps)" })
       map(
         "n",
         "<leader>fc",
         function() S.picker.files({ cwd = vim.fn.stdpath("config") }) end,
-        { desc = "Arquivos da config" }
+        { desc = "[Busca] Arquivos da config do Neovim" }
       )
-      map("n", "<leader>fp", function() S.picker.projects() end, { desc = "Projetos" })
-      map("n", "<leader>fs", function() S.picker.lsp_symbols() end, { desc = "Símbolos do arquivo" })
-      map("n", "<leader>fS", function() S.picker.lsp_workspace_symbols() end, { desc = "Símbolos do projeto" })
-      map("n", "<leader>f.", function() S.picker.resume() end, { desc = "Reabrir última busca" })
-      map("n", "<leader>xx", function() S.picker.diagnostics() end, { desc = "Diagnósticos do projeto" })
-      map("n", "<leader>xb", function() S.picker.diagnostics_buffer() end, { desc = "Diagnósticos do arquivo" })
-      map("n", "<leader>xq", function() S.picker.qflist() end, { desc = "Quickfix" })
+      map("n", "<leader>fp", function() S.picker.projects() end, { desc = "[Busca] Projetos" })
+      map("n", "<leader>fs", function() S.picker.lsp_symbols() end, { desc = "[Busca/LSP] Símbolos do arquivo" })
+      map(
+        "n",
+        "<leader>fS",
+        function() S.picker.lsp_workspace_symbols() end,
+        { desc = "[Busca/LSP] Símbolos do projeto" }
+      )
+      map("n", "<leader>f.", function() S.picker.resume() end, { desc = "[Busca] Reabrir última busca" })
+      map("n", "<leader>xx", function() S.picker.diagnostics() end, { desc = "[Diagnóstico] Lista do projeto" })
+      map("n", "<leader>xb", function() S.picker.diagnostics_buffer() end, { desc = "[Diagnóstico] Lista do arquivo" })
+      map("n", "<leader>xq", function() S.picker.qflist() end, { desc = "[Quickfix] Abrir lista" })
       map(
         "n",
         "<leader>xt",
         function() S.picker.grep({ search = [[\b(TODO|FIXME|HACK|NOTE)\b]], regex = true }) end,
-        { desc = "TODOs" }
+        { desc = "[Busca] TODOs do projeto" }
       )
 
       -- Explorer (e)
-      map("n", "<leader>e", function() S.explorer() end, { desc = "Explorer (alterna)" })
-      map("n", "<leader>E", function() S.explorer.reveal() end, { desc = "Explorer no arquivo atual" })
+      map("n", "<leader>e", function()
+        local root = vim.fs.root(0, { ".git", "package.json", "Cargo.toml", "pyproject.toml" })
+        Snacks.explorer({ cwd = root or vim.fn.getcwd() })
+      end, { desc = "[explorer] abrir/fechar (root projeto)" })
+
+      map("n", "<leader>E", function() S.explorer.reveal() end, { desc = "[Explorer] Revelar arquivo atual" })
 
       -- Git (g)
-      map("n", "<leader>gg", function() S.lazygit() end, { desc = "Lazygit" })
-      map("n", "<leader>gs", function() S.picker.git_status() end, { desc = "Arquivos alterados" })
-      map("n", "<leader>gl", function() S.picker.git_log() end, { desc = "Log do projeto" })
-      map("n", "<leader>gf", function() S.picker.git_log_file() end, { desc = "Log do arquivo" })
-      map("n", "<leader>gB", function() S.gitbrowse() end, { desc = "Abrir no GitHub" })
+      map("n", "<leader>gg", function() S.lazygit() end, { desc = "[Git] Lazygit" })
+      map("n", "<leader>gs", function() S.picker.git_status() end, { desc = "[Git] Arquivos alterados" })
+      map("n", "<leader>gl", function() S.picker.git_log() end, { desc = "[Git] Log do projeto" })
+      map("n", "<leader>gf", function() S.picker.git_log_file() end, { desc = "[Git] Log do arquivo" })
+      map("n", "<leader>gB", function() S.gitbrowse() end, { desc = "[Git] Abrir no GitHub" })
 
       -- LSP com picker (o padrão do 0.11+ já tem grn, gra, grr, gri, gO, K)
-      map("n", "gd", function() S.picker.lsp_definitions() end, { desc = "Ir para definição" })
-      map("n", "gD", function() S.picker.lsp_declarations() end, { desc = "Ir para declaração" })
-      map("n", "gy", function() S.picker.lsp_type_definitions() end, { desc = "Ir para tipo" })
-      map("n", "gr", function() S.picker.lsp_references() end, { desc = "Referências", nowait = true })
-      map("n", "]]", function() S.words.jump(1, true) end, { desc = "Próxima ocorrência" })
-      map("n", "[[", function() S.words.jump(-1, true) end, { desc = "Ocorrência anterior" })
+      map("n", "gd", function() S.picker.lsp_definitions() end, { desc = "[LSP] Ir para definição" })
+      map("n", "gD", function() S.picker.lsp_declarations() end, { desc = "[LSP] Ir para declaração" })
+      map("n", "gy", function() S.picker.lsp_type_definitions() end, { desc = "[LSP] Ir para definição do tipo" })
+      map("n", "gr", function() S.picker.lsp_references() end, { desc = "[LSP] Referências", nowait = true })
+      map("n", "]]", function() S.words.jump(1, true) end, { desc = "[Navegação] Próxima ocorrência da palavra" })
+      map("n", "[[", function() S.words.jump(-1, true) end, { desc = "[Navegação] Ocorrência anterior da palavra" })
 
       -- Terminal, buffers, extras
-      map({ "n", "t" }, "<C-/>", function() S.terminal() end, { desc = "Terminal flutuante" })
-      map("n", "<leader>bd", function() S.bufdelete() end, { desc = "Fechar buffer" })
-      map("n", "<leader>bo", function() S.bufdelete.other() end, { desc = "Fechar outros buffers" })
-      map("n", "<leader>.", function() S.scratch() end, { desc = "Rascunho" })
-      map("n", "<leader>uz", function() S.zen() end, { desc = "Modo zen" })
-      map("n", "<leader>un", function() S.notifier.show_history() end, { desc = "Histórico de notificações" })
+      map({ "n", "t" }, "<C-/>", function() S.terminal() end, { desc = "[Terminal] Abrir/fechar flutuante" })
+      map("n", "<leader>bd", function() S.bufdelete() end, { desc = "[Buffer] Fechar" })
+      map("n", "<leader>bo", function() S.bufdelete.other() end, { desc = "[Buffer] Fechar os outros" })
+      map("n", "<leader>.", function() S.scratch() end, { desc = "[Arquivo] Rascunho (scratch)" })
+      map("n", "<leader>uz", function() S.zen() end, { desc = "[UI] Alternar modo zen" })
+      map("n", "<leader>un", function() S.notifier.show_history() end, { desc = "[UI] Histórico de notificações" })
     end,
   },
 
@@ -153,14 +162,14 @@ pack.add({
         { "<leader>x", group = "diagnósticos e listas" },
         { "<leader>y", group = "copiar caminho" },
         { "<leader>z", group = "notas (Obsidian)" },
-        { "<leader>?", function() wk.show({ global = false }) end, desc = "Atalhos deste buffer" },
+        { "<leader>?", function() wk.show({ global = false }) end, desc = "[Geral] Atalhos deste buffer" },
       })
     end,
   },
 })
 
 -- Gerenciador de plugins (p)
-vim.keymap.set("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "Gerenciador de plugins" })
-vim.keymap.set("n", "<leader>pc", "<cmd>Pack!<cr>", { desc = "Verificar atualizações" })
-vim.keymap.set("n", "<leader>pu", "<cmd>PackUpdate<cr>", { desc = "Atualizar todos" })
-vim.keymap.set("n", "<leader>ps", "<cmd>PackStatus<cr>", { desc = "Resumo e tempo de carga" })
+vim.keymap.set("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "[Plugins] Gerenciador" })
+vim.keymap.set("n", "<leader>pc", "<cmd>Pack!<cr>", { desc = "[Plugins] Verificar atualizações" })
+vim.keymap.set("n", "<leader>pu", "<cmd>PackUpdate<cr>", { desc = "[Plugins] Atualizar todos" })
+vim.keymap.set("n", "<leader>ps", "<cmd>PackStatus<cr>", { desc = "[Plugins] Resumo e tempo de carga" })
