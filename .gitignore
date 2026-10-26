@@ -13,3 +13,8 @@ keys.txt
 *.pem
 *.key
 .mcp.json
+nvim.log
+
+# Gerado pelo tema everforest (better_performance)
+config/nvim/after/
+config/nvim/before/

@@ -137,30 +137,12 @@ pack.add({
     end,
   },
 
-  -- C-h/j/k/l anda entre janelas do Neovim e painéis do tmux sem diferença. Ctrl+setas redimensiona.
+  -- C-h/j/k/l anda entre janelas do Neovim e painéis do tmux (plugin VimScript, sem setup em Lua).
+  -- O lado do tmux está em modules/tmux/tmux.conf. Ctrl+setas redimensiona (smart-splits).
+  { src = gh("christoomey/vim-tmux-navigator") },
   {
     src = gh("mrjones2014/smart-splits.nvim"),
     keys = {
-      {
-        "<C-h>",
-        function() require("smart-splits").move_cursor_left() end,
-        desc = "[Janela] Ir para a esquerda (tmux também)",
-      },
-      {
-        "<C-j>",
-        function() require("smart-splits").move_cursor_down() end,
-        desc = "[Janela] Ir para baixo (tmux também)",
-      },
-      {
-        "<C-k>",
-        function() require("smart-splits").move_cursor_up() end,
-        desc = "[Janela] Ir para cima (tmux também)",
-      },
-      {
-        "<C-l>",
-        function() require("smart-splits").move_cursor_right() end,
-        desc = "[Janela] Ir para a direita (tmux também)",
-      },
       {
         "<C-Left>",
         function() require("smart-splits").resize_left() end,
