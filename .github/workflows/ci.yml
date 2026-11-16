@@ -8,7 +8,7 @@ name: ci
 on:
   pull_request:
   workflow_dispatch:
-  # Toda segunda, depois da atualização do flake.lock: pega o que quebrou fora do repo
+  # Toda segunda: pega o que quebrou fora do repo
   # (repositórios das distros, imagens, sites de download).
   schedule:
     - cron: "0 10 * * 1"
