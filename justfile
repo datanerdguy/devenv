@@ -58,7 +58,7 @@ nvim-test:
 metrics:
     tests/metrics.sh | column -t
 
-# Atualiza só os agentes (Claude Code, Codex, Gemini CLI, opencode, workmux...)
+# Atualiza só os agentes (Claude Code, workmux, tokscale)
 agents-update:
     nix flake update llm-agents
 

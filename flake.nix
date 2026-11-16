@@ -1,7 +1,7 @@
 {
   description = "devenv: ambiente de desenvolvimento reproduzível (Nix + home-manager)";
 
-  # Binários prontos dos agentes (llm-agents.nix). Sem isso, Codex e outros compilam do zero.
+  # Binários prontos dos agentes (llm-agents.nix), para não compilar nada do zero.
   nixConfig = {
     extra-substituters = [ "https://cache.numtide.com" ];
     extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
@@ -13,7 +13,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Agentes de código (Claude Code, Codex, Gemini CLI, opencode...) atualizados todo dia.
+    # Claude Code, workmux e tokscale, atualizados todo dia.
     # Sem `follows`: usa o nixpkgs deles, para bater com o cache binário da numtide.
     llm-agents.url = "github:numtide/llm-agents.nix";
     # Flatpaks declarados no home-manager (apps grandes do Flathub). Sem nixpkgs próprio.

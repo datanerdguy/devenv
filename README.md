@@ -61,7 +61,7 @@ modules/                 módulos liga/desliga (devenv.<nome>.enable)
   terminal/              configuração do Ghostty
   nvim/                  Neovim pelo bob, LSPs e ferramentas, link da config
   tmux/                  tmux sem plugins + sesh
-  agents/                Claude Code, Codex, Gemini CLI, opencode, workmux, tokscale
+  agents/                Claude Code, workmux, tokscale
   local-models/          Ollama opcional (desligado por padrão)
   desktop/               niri, Noctalia, sway/i3 opcionais, kanata, Vial
   apps/                  Flatpaks (nix-flatpak), Flameshot, apps padrão

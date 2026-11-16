@@ -33,7 +33,7 @@ if ! command -v nix >/dev/null; then
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
-# Cache binário dos agentes (llm-agents.nix): sem ele, Codex e outros compilam do zero.
+# Cache binário dos agentes (llm-agents.nix), para o switch não compilar nada do zero.
 # O instalador da Determinate lê ajustes locais de nix.custom.conf.
 nix_conf=/etc/nix/nix.custom.conf
 [ -f "${nix_conf}" ] || nix_conf=/etc/nix/nix.conf

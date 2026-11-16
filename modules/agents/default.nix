@@ -1,8 +1,8 @@
-# Agentes de código: Claude Code, Codex, Gemini CLI e opencode, com config gerada a partir de agents/.
+# Agente de código: Claude Code, com config gerada a partir de agents/ (ADR 0003).
 #
-# - Instruções: agents/AGENTS.md é a fonte única, ligada nos quatro agentes.
-# - Skills: agents/skills (nossas) + as do workmux, em ~/.agents/skills e ~/.claude/skills.
-# - Configs: o agente também edita os próprios arquivos (login, confiança em pastas...), então
+# - Instruções: agents/AGENTS.md, importado pelo ~/.claude/CLAUDE.md.
+# - Skills: agents/skills (nossas) + as do workmux, em ~/.claude/skills.
+# - Configs: o Claude também edita os próprios arquivos (login, confiança em pastas...), então
 #   o devenv não os substitui: só mescla as chaves que gerencia, a cada switch (merge-config.py).
 # - Sessões paralelas: workmux (worktree + janela do tmux por tarefa).
 # - Uso e custo: statusline do Claude, cota na barra do tmux, tokscale para o histórico.
@@ -27,7 +27,6 @@ let
   '';
 
   mergeConfig = pkgs.writers.writePython3 "devenv-merge-config" {
-    libraries = [ pkgs.python3Packages.tomlkit ];
     flakeIgnore = [ "E501" ];
   } (builtins.readFile ../../agents/merge-config.py);
 
@@ -56,7 +55,7 @@ let
 
   context7Url = "https://mcp.context7.com/mcp";
 
-  # Chaves gerenciadas de cada agente. Viram JSON/TOML e são mescladas no arquivo do agente.
+  # Chaves gerenciadas. Viram JSON e são mescladas no arquivo do Claude.
   managed = {
     "${home}/.claude/settings.json" = {
       "$schema" = "https://json.schemastore.org/claude-code-settings.json";
@@ -99,84 +98,6 @@ let
         ];
       };
     };
-
-    "${home}/.codex/config.toml" = {
-      sandbox_mode = "workspace-write";
-      approval_policy = "on-request";
-      check_for_update_on_startup = false;
-      analytics.enabled = false;
-      features.hooks = true; # hooks.json do workmux
-      mcp_servers = {
-        context7.url = context7Url;
-        docs = {
-          command = lib.getExe docsMcp;
-          args = [
-            "mcp"
-            "--protocol"
-            "stdio"
-          ];
-        };
-      };
-    };
-
-    "${home}/.gemini/settings.json" = {
-      context.fileName = [
-        "AGENTS.md"
-        "GEMINI.md"
-      ];
-      general.enableAutoUpdate = false;
-      privacy.usageStatisticsEnabled = false;
-      skills.enabled = true;
-      mcpServers = {
-        context7.httpUrl = context7Url;
-        docs = {
-          command = lib.getExe docsMcp;
-          args = [
-            "mcp"
-            "--protocol"
-            "stdio"
-          ];
-        };
-      };
-      hooks = {
-        SessionStart = hook null [ register ];
-        BeforeAgent = hook null [ (wm "working") ];
-        Notification = hook "ToolPermission" [ (wm "waiting") ];
-        AfterTool = hook null [ (wm "working") ];
-        AfterAgent = hook null [ (wm "done") ];
-        SessionEnd = hook null [ (wm "done") ];
-      };
-    };
-
-    "${config.xdg.configHome}/opencode/opencode.json" = {
-      "$schema" = "https://opencode.ai/config.json";
-      autoupdate = false;
-      mcp = {
-        context7 = {
-          type = "remote";
-          url = context7Url;
-        };
-        docs = {
-          type = "local";
-          command = [
-            (lib.getExe docsMcp)
-            "mcp"
-            "--protocol"
-            "stdio"
-          ];
-        };
-      };
-    }
-    // lib.optionalAttrs config.devenv.localModels.enable {
-      provider.ollama = {
-        npm = "@ai-sdk/openai-compatible";
-        name = "Ollama (local)";
-        options.baseURL = "http://127.0.0.1:11434/v1";
-        models = lib.genAttrs config.devenv.localModels.models (m: {
-          name = m;
-        });
-      };
-    };
   };
 
   fragments = lib.mapAttrs (
@@ -196,18 +117,16 @@ let
     "rebase"
     "open-pr"
   ];
-  skillFiles =
-    dir:
-    lib.listToAttrs (
-      map (s: lib.nameValuePair "${dir}/${s}" { source = link "${repo}/skills/${s}"; }) ourSkills
-      ++ map (
-        s: lib.nameValuePair "${dir}/${s}" { source = "${llmAgents.workmux.src}/skills/${s}"; }
-      ) workmuxSkills
-    );
+  skillFiles = lib.listToAttrs (
+    map (s: lib.nameValuePair ".claude/skills/${s}" { source = link "${repo}/skills/${s}"; }) ourSkills
+    ++ map (
+      s: lib.nameValuePair ".claude/skills/${s}" { source = "${llmAgents.workmux.src}/skills/${s}"; }
+    ) workmuxSkills
+  );
 in
 {
   options.devenv.agents = {
-    enable = lib.mkEnableOption "agentes de código (Claude Code, Codex, Gemini CLI, opencode)";
+    enable = lib.mkEnableOption "Claude Code, workmux e os MCPs de documentação";
 
     repoPath = lib.mkOption {
       type = lib.types.str;
@@ -238,30 +157,16 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       llmAgents.claude-code
-      llmAgents.codex
-      llmAgents.gemini-cli
-      llmAgents.opencode
       llmAgents.workmux
       llmAgents.tokscale
       docsMcp
     ];
 
-    # Instruções: um arquivo, quatro agentes. O Claude lê CLAUDE.md, que importa o AGENTS.md.
     home.file = {
       ".config/agents/AGENTS.md".source = link "${repo}/AGENTS.md";
       ".claude/CLAUDE.md".text = "@~/.config/agents/AGENTS.md\n";
-      ".codex/AGENTS.md".source = link "${repo}/AGENTS.md";
-      ".gemini/AGENTS.md".source = link "${repo}/AGENTS.md";
-      ".config/opencode/AGENTS.md".source = link "${repo}/AGENTS.md";
-
-      # Status do workmux no Codex e no opencode (no Claude e no Gemini vai nos hooks acima).
-      ".codex/hooks.json".source = "${llmAgents.workmux.src}/resources/codex/hooks/workmux-status.json";
-      ".config/opencode/plugins/workmux-status.ts".source =
-        "${llmAgents.workmux.src}/resources/opencode/plugins/workmux-status.ts"; # opencode 1.x
     }
-    # ~/.agents/skills: padrão lido por Codex, Gemini CLI e opencode. O Claude lê ~/.claude/skills.
-    // skillFiles ".agents/skills"
-    // skillFiles ".claude/skills";
+    // skillFiles;
 
     home.activation.devenvAgentConfigs = lib.hm.dag.entryAfter [ "writeBoundary" ] (
       lib.concatStringsSep "\n" (

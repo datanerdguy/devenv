@@ -79,8 +79,8 @@ jobs:
     name: build
     needs: changes
     runs-on: ubuntu-latest
-    # Com os caches no ar, leva uns 3 min. Passar disso quase sempre é o Codex sendo compilado porque o
-    # cache da numtide não respondeu: melhor falhar e rodar de novo do que esperar meia hora.
+    # Com os caches no ar, leva uns 3 min. Passar disso quase sempre é um pacote do llm-agents sendo compilado
+    # porque o cache da numtide não respondeu: melhor falhar e rodar de novo do que esperar meia hora.
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

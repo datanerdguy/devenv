@@ -6,13 +6,6 @@ base_branch: auto # novas tarefas saem da main/dev, não do branch atual
 merge_strategy: rebase
 window_placement: after_current
 
-# Atalhos para `workmux add -a <nome>`.
-agents:
-  claude: "claude"
-  codex: "codex"
-  gemini: "gemini"
-  opencode: "opencode"
-
 # Agente à esquerda, shell embaixo para rodar testes.
 panes:
   - command: <agent>

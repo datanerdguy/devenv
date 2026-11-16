@@ -1,6 +1,6 @@
 # Instruções globais para agentes de código
 
-Valem para Claude Code, Codex, Gemini CLI e opencode. Fonte única no repo devenv (`agents/AGENTS.md`).
+Valem para o Claude Code. Fonte única no repo devenv (`agents/AGENTS.md`).
 O `AGENTS.md` de cada projeto completa estas regras.
 
 ## Quem sou eu
