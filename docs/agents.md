@@ -53,7 +53,7 @@ just agents-update   # só o llm-agents no flake.lock
 just switch
 ```
 
-A atualização semanal do `flake.lock` (PR automático) também os atualiza.
+O `just update` (o `flake.lock` inteiro) também os atualiza.
 
 ## Roteamento: quem faz o quê
 

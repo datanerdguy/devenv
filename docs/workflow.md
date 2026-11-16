@@ -56,8 +56,8 @@ Escopos sugeridos: o nome do módulo (`cli`, `shell`, `git`, `terminal`, `nvim`,
 ### `ci.yml`: em todo PR, toda segunda e à mão
 
 Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI no PR, com a mesma árvore
-(o PR `dev` → `main` testa exatamente o que vai para a `main`). Toda segunda, depois da atualização do
-`flake.lock`, roda tudo para pegar o que quebrou fora do repo (repositórios das distros, imagens, downloads).
+(o PR `dev` → `main` testa exatamente o que vai para a `main`). Toda segunda, roda tudo
+para pegar o que quebrou fora do repo (repositórios das distros, imagens, downloads).
 
 Num PR, o job `changes` vê os arquivos mudados e cada job só faz o trabalho pesado se o PR mexe no que ele
 testa. Os jobs aparecem sempre (com o passo "Nada a testar"), para as checagens obrigatórias não ficarem
@@ -92,9 +92,13 @@ Num workflow próprio porque só fazem sentido em PR.
 
 O commitizen calcula a próxima versão pelos commits desde a última tag. Se houver `feat` ou `fix`, cria a tag `vX.Y.Z` e uma GitHub Release com as notas agrupadas por tipo. Só `docs`/`chore` não geram release. O changelog vive nas Releases do GitHub; não há commit de volta na `main`.
 
-### `update-flake-lock.yml`: toda segunda-feira, 09:00 UTC
+### Atualizar o `flake.lock`
 
-Abre um PR `chore(deps): atualiza flake.lock` contra a `dev`. O CI do PR constrói e testa tudo com as versões novas. Use `just diff` localmente para ver pacote a pacote o que mudou.
+À mão, quando quiser versões novas: numa branch saindo da `dev`, `just update`, `just diff` para ver pacote a
+pacote o que mudou, e um PR `chore(deps): atualiza flake.lock`. O CI do PR constrói e testa tudo.
+
+Não há atualização automática. O workflow semanal que existia não conseguia abrir o PR (o GitHub Actions não
+tem permissão para isso no repo) e, mesmo com a permissão, um PR aberto pelo `GITHUB_TOKEN` não dispara o CI.
 
 ### Dependabot
 

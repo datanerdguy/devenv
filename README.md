@@ -75,7 +75,7 @@ agents/                  AGENTS.md, skills e scripts dos agentes
 system/                  scripts de root por distro
 tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e instalação em container
 .githooks/               hooks de lint e de mensagem de commit
-.github/workflows/       CI, release e atualização semanal do flake.lock
+.github/workflows/       CI, checagens de PR e release
 docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
 AGENTS.md, CLAUDE.md     instruções para agentes de código que abrem este repo
 ```

@@ -25,3 +25,9 @@ Uma mudança nos dotfiles pode quebrar o ambiente de trabalho inteiro. É precis
 - Mensagens fora do padrão são barradas no commit e no PR.
 - Merge para a `dev` é por squash (o título do PR vira o commit); da `dev` para a `main` é merge commit, para preservar o histórico usado nas notas.
 - As regras de proteção das branches precisam ser ligadas uma vez no GitHub (ver `docs/workflow.md`).
+
+## Atualização (2026-11-16)
+
+O PR automático e semanal do `flake.lock` saiu. Ele falhava porque o GitHub Actions não pode abrir PR neste
+repo, e um PR aberto pelo `GITHUB_TOKEN` não dispararia o CI. O `flake.lock` passa a ser atualizado à mão com
+`just update`, num PR comum (`docs/workflow.md`).
