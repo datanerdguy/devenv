@@ -28,17 +28,8 @@ Comece pelo [README](README.md); as decisões e o porquê ficam em [`docs/adr/`]
 
 ## Comandos
 
-| Comando | Para quê |
-| --- | --- |
-| `nix develop` | shell com todas as ferramentas do repo |
-| `just lint` | nixfmt, statix, shellcheck, actionlint, stylua e o gerador do teclado (igual ao CI) |
-| `just check` | `nix flake check` |
-| `just desktop-check` | valida as configs do niri, sway, i3 e kanata |
-| `just switch [host]` | aplica a configuração nesta máquina |
-| `just test-container <imagem>` | instalação do zero num container (ex.: `ubuntu:26.04`) |
-| `just keyboard` | refaz as imagens das camadas do Corne depois de mudar o `.vil` |
-
-Teste do Neovim: `DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua` (carrega todos os plugins).
+`just --list` mostra todos (a tabela fica no [README](README.md)). Antes de dizer que terminou, rode `just lint`;
+mexeu no Neovim, `just nvim-test`; mexeu no desktop, `just desktop-check`.
 
 ## Onde fica cada coisa
 

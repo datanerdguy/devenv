@@ -9,7 +9,7 @@ Peça a outro agente, em modo não interativo, que revise algo e devolva só as 
 
 1. Monte um pedido curto e autocontido: o objetivo, o que revisar e o formato da resposta
    (lista de problemas com severidade, ou "sem problemas").
-2. Escolha o revisor pela tabela de roteamento do AGENTS.md:
+2. Escolha o revisor:
    - diff ou código: Codex, que lê o diff sozinho no sandbox só de leitura
      `codex exec --sandbox read-only "Rode git diff <base>... e revise: <pedido>"`
    - muito contexto (repo inteiro, documentos longos): Gemini, em modo de plano (não edita nada)
