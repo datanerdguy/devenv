@@ -1,7 +1,7 @@
 {
   description = "devenv: ambiente de desenvolvimento reproduzível (Nix + home-manager)";
 
-  # Binários prontos dos agentes (llm-agents.nix). Sem isso, alguns compilam do zero.
+  # Binários prontos dos agentes (llm-agents.nix), para não compilar nada do zero.
   nixConfig = {
     extra-substituters = [ "https://cache.numtide.com" ];
     extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];

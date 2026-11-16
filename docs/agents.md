@@ -159,12 +159,11 @@ Desligado por padrão. Para ligar, no host:
 devenv.localModels = {
   enable = true;
   acceleration = "cuda";             # NVIDIA; "rocm" para AMD, null para só CPU
-  models = [ "qwen3-coder:30b" ];    # baixados no primeiro start
 };
 ```
 
 O serviço **não** sobe no login (não gasta memória à toa): `ollama-on` e `ollama-off` ligam e desligam.
-`autoStart = true` muda isso. Nenhum agente usa os modelos locais: o Ollama fica para uso direto (`ollama run`) e experimentos.
+`autoStart = true` muda isso. Nenhum agente usa os modelos locais: baixe com `ollama pull <modelo>` e use direto (`ollama run`).
 
 ## Arquivos
 

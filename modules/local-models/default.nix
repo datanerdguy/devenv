@@ -29,12 +29,6 @@ in
         `sudo non-nixos-gpu-setup` que o home-manager indica no switch.
       '';
     };
-
-    models = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ "qwen3-coder:30b" ];
-      description = "Modelos a baixar com `ollama pull <modelo>` (só informativo; nenhum agente os usa).";
-    };
   };
 
   config = lib.mkIf cfg.enable {
