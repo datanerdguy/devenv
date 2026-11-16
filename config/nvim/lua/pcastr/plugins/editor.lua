@@ -122,7 +122,7 @@ pack.add({
       require("gitsigns").setup({
         on_attach = function(buf)
           local gs = require("gitsigns")
-          local function map(mode, l, r, desc) vim.keymap.set(mode, l, r, { buffer = buf, desc = desc }) end
+          local function map(mode, l, r, desc) vim.keymap.set(mode, l, r, { buf = buf, desc = desc }) end
           map("n", "]h", function() gs.nav_hunk("next") end, "[Git/Hunk] Próximo")
           map("n", "[h", function() gs.nav_hunk("prev") end, "[Git/Hunk] Anterior")
           map({ "n", "x" }, "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", "[Git/Hunk] Stage")

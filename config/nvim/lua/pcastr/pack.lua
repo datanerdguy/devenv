@@ -81,7 +81,7 @@ local function setup_triggers(p)
       callback = function(ev)
         once()
         -- reaplica o FileType para o plugin recém-carregado enxergar o buffer
-        vim.api.nvim_exec_autocmds("FileType", { buffer = ev.buf, modeline = false })
+        vim.api.nvim_exec_autocmds("FileType", { buf = ev.buf, modeline = false })
       end,
     })
   end

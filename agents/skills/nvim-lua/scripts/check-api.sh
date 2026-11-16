@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Procura APIs do Neovim removidas ou deprecadas (0.12/0.13-dev) no código Lua.
 #   check-api.sh [pasta]   (padrão: config/nvim e tests/nvim)
-# Sai com 1 se achar algo. Fonte das regras: REFERENCIA.md, ao lado (deprecated.txt e news do Neovim).
+# Sai com 1 se achar algo. Fonte das regras: ../references/boas-praticas.md (deprecated.txt e news do Neovim).
 set -euo pipefail
 
 paths=("$@")
@@ -30,7 +30,7 @@ rules=(
   'deprecada@nvim_(buf|win)_[gs]et_option\b@vim.bo[buf] / vim.wo[win] / nvim_get_option_value'
   'deprecada@\btermopen\(@vim.fn.jobstart(cmd, { term = true })'
   'deprecada@\bclient\.request\(@client:request(...)'
-  'deprecada@\bbuffer\s*=@buf = (keymap e autocmd, 0.13)'
+  'deprecada@(^|[{,])\s*buffer\s*=[^=]@buf = (keymap e autocmd, 0.13)'
 )
 
 found=0

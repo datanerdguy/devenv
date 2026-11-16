@@ -77,7 +77,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if not client then return end
-    local function map(lhs, rhs, desc, mode) vim.keymap.set(mode or "n", lhs, rhs, { buffer = ev.buf, desc = desc }) end
+    local function map(lhs, rhs, desc, mode) vim.keymap.set(mode or "n", lhs, rhs, { buf = ev.buf, desc = desc }) end
     map("<leader>ca", vim.lsp.buf.code_action, "[LSP] Ações de código", { "n", "x" })
     map("<leader>cr", vim.lsp.buf.rename, "[LSP] Renomear símbolo")
     map("<leader>cl", "<cmd>checkhealth vim.lsp<cr>", "[LSP] Estado (checkhealth)")
