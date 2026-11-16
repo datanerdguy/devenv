@@ -95,6 +95,7 @@ Fontes: [configuração de modelos](https://code.claude.com/docs/en/model-config
 Skills:
 
 - **`/route <tarefa>`**: escolhe modelo, effort e se roda na sessão, num subagente ou num worktree do workmux.
+- **`/nvim-lua`**: regras para escrever e revisar o Lua do Neovim, com o `check-api.sh` (APIs removidas ou deprecadas), o teste de carga e a medida da abertura como portões.
 - **`/second-opinion`**: revisão por um subagente com outro modelo do Claude (Sonnet escreveu, Opus revisa; Opus escreveu, Sonnet revisa), contexto limpo e só leitura.
 
 Por que assim: a cota do Pro é o recurso escasso, e o roteamento por instrução não precisa de proxy nem de chave de API.
@@ -170,7 +171,7 @@ O serviço **não** sobe no login (não gasta memória à toa): `ollama-on` e `o
 ```text
 agents/
   AGENTS.md            instruções globais (fonte única)
-  skills/              route, second-opinion
+  skills/              route, second-opinion, nvim-lua
   statusline.sh        statusline do Claude Code
   merge-config.py      mescla as chaves gerenciadas nas configs do Claude
 modules/agents/        módulo Nix: pacotes, configs, links, abreviações
