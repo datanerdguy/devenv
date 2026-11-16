@@ -1,19 +1,14 @@
 # Agentes de código
 
-Quatro agentes instalados pelo Nix e configurados a partir de [`agents/`](../agents/):
-**Claude Code** (principal, assinatura Pro), **Codex**, **Gemini CLI** e **opencode**.
+O agente é o **Claude Code** (assinatura Pro, sem chave de API), instalado pelo Nix e configurado a partir de
+[`agents/`](../agents/). Junto vêm o workmux (tarefas em paralelo), o tokscale (uso) e os MCPs de documentação.
 O módulo é [`modules/agents`](../modules/agents/default.nix) (`devenv.agents.enable`).
+
+Codex, Gemini CLI e opencode saíram em 2026-11 (ADR 0003, atualização): o roteamento usa só modelos do Claude Code.
 
 ## Primeiro uso
 
-Depois do `just switch`, faça login uma vez em cada agente que for usar:
-
-| Agente | Comando | Login |
-| --- | --- | --- |
-| Claude Code | `claude` (ou `cc`) | conta Claude (assinatura Pro, sem chave de API) |
-| Codex | `codex` | conta ChatGPT ou chave da OpenAI |
-| Gemini CLI | `gemini` | conta Google (cota gratuita) |
-| opencode | `opencode` | `/connect` dentro dele; com modelos locais, nenhum |
+Depois do `just switch`, rode `claude` (ou `cc`) e faça login com a conta Claude.
 
 Segredos (chaves de API, tokens) vêm do Bitwarden: `rbw config set email <seu e-mail>`,
 `rbw login` e depois `rbw get <nome>`. Os que o ambiente precisa sempre (ex.: `HF_TOKEN`) podem ficar cifrados em
@@ -23,29 +18,27 @@ Segredos (chaves de API, tokens) vêm do Bitwarden: `rbw config set email <seu e
 
 | O quê | Fonte no repo | Onde fica |
 | --- | --- | --- |
-| Instruções globais | `agents/AGENTS.md` | `~/.config/agents/AGENTS.md`, ligado em `~/.codex`, `~/.gemini`, `~/.config/opencode`; o `~/.claude/CLAUDE.md` importa |
-| Skills | `agents/skills/` + as do workmux | `~/.agents/skills` (Codex, Gemini, opencode) e `~/.claude/skills` |
-| Configs dos agentes | `modules/agents/default.nix` (`managed`) | mescladas em cada arquivo a cada switch |
+| Instruções globais | `agents/AGENTS.md` | `~/.config/agents/AGENTS.md`; o `~/.claude/CLAUDE.md` importa |
+| Skills | `agents/skills/` + as do workmux | `~/.claude/skills` |
+| Configs do Claude | `modules/agents/default.nix` (`managed`) | mescladas em cada arquivo a cada switch |
 | Statusline do Claude | `agents/statusline.sh` | `statusLine` no `~/.claude/settings.json` |
 | workmux | `modules/agents/workmux.yaml` | cópia editável em `~/.config/workmux/config.yaml` |
 
 `AGENTS.md` e as nossas skills são links para o repo: editar o arquivo muda o agente na hora, sem switch.
 
-Os agentes também escrevem nos próprios arquivos de config (login, pastas confiáveis, preferências).
+O Claude também escreve nos próprios arquivos de config (login, pastas confiáveis, preferências).
 Por isso o devenv **não** troca esses arquivos por links somente leitura: a cada switch, o
 [`merge-config.py`](../agents/merge-config.py) mescla só as chaves que o devenv gerencia e deixa o resto.
 Uma chave gerenciada que você mudar na mão volta ao valor do repo no próximo switch; para mudar de vez, mude no módulo.
 
 Chaves gerenciadas:
 
-- **Claude Code** (`~/.claude/settings.json`): sem atualização automática (quem atualiza é o Nix), statusline, sandbox, `teammateMode`, hooks do workmux. Em `~/.claude.json`: os MCPs.
-- **Codex** (`~/.codex/config.toml`): `sandbox_mode = "workspace-write"`, `approval_policy = "on-request"`, sem telemetria, hooks do workmux, MCPs.
-- **Gemini CLI** (`~/.gemini/settings.json`): lê `AGENTS.md`, sem atualização automática e sem estatísticas, skills, MCPs, hooks do workmux.
-- **opencode** (`~/.config/opencode/opencode.json`): sem atualização automática, MCPs, provedor Ollama quando os modelos locais estão ligados.
+- `~/.claude/settings.json`: sem atualização automática (quem atualiza é o Nix), statusline, sandbox, modelo padrão, `teammateMode`, hooks do workmux.
+- `~/.claude.json`: os MCPs.
 
 ## Versões e atualização
 
-Os binários vêm do [llm-agents.nix](https://github.com/numtide/llm-agents.nix) (numtide), atualizado todo dia,
+O Claude Code, o workmux e o tokscale vêm do [llm-agents.nix](https://github.com/numtide/llm-agents.nix) (numtide), atualizado todo dia,
 com cache binário em `cache.numtide.com` (já configurado no flake, no bootstrap e no CI).
 
 ```bash
@@ -57,7 +50,7 @@ A atualização semanal do `flake.lock` (PR automático) também os atualiza.
 
 ## Roteamento: quem faz o quê
 
-As regras ficam no [`AGENTS.md`](../agents/AGENTS.md), então todo agente as conhece. O roteamento usa só o que
+As regras ficam no [`AGENTS.md`](../agents/AGENTS.md). O roteamento usa só o que
 o Claude Code oferece: modelo (`haiku`, `sonnet`, `opus`, `opusplan`), effort e subagentes.
 
 ### Modelos e effort do Claude
@@ -71,7 +64,7 @@ No Pro entram Haiku 5.5, Sonnet 5.5 e Opus 5.5. O Fable 5.1 fica de fora: no Pro
 | Código do dia a dia: bug localizado, feature, testes, CI, SQL e análise | Sonnet | medium a high |
 | Bug difícil | Sonnet `xhigh`, depois Opus | xhigh / high |
 | Plano, arquitetura, refatoração grande, desenho de ML, segurança | Opus (plan mode ou `opusplan`) | high a xhigh |
-| Revisão de diff | Sonnet (rotina) ou Opus (risco) + Codex | medium / high |
+| Revisão de diff | Sonnet (rotina) ou Opus (risco), num subagente com contexto limpo | medium / high |
 
 A tabela completa (16 tipos de tarefa) fica na skill [`route`](../agents/skills/route/SKILL.md), que só carrega quando é usada; o AGENTS.md guarda as regras curtas, inclusive as de subagente. Em resumo, subagente
 serve para busca ampla, partes independentes em paralelo (até 3) e revisão com contexto limpo, sempre com o
@@ -102,7 +95,7 @@ Fontes: [configuração de modelos](https://code.claude.com/docs/en/model-config
 Skills:
 
 - **`/route <tarefa>`**: escolhe modelo, effort e se roda na sessão, num subagente ou num worktree do workmux.
-- **`/second-opinion`**: pede revisão do diff ao Codex e/ou Gemini, só leitura. Fica fora do roteamento: só roda quando você pede.
+- **`/second-opinion`**: revisão por um subagente com outro modelo do Claude (Sonnet escreveu, Opus revisa; Opus escreveu, Sonnet revisa), contexto limpo e só leitura.
 
 Por que assim: a cota do Pro é o recurso escasso, e o roteamento por instrução não precisa de proxy nem de chave de API.
 
@@ -113,12 +106,11 @@ Uma tarefa = um branch + um git worktree + uma janela do tmux com o agente e um 
 | Comando | Abreviação | O que faz |
 | --- | --- | --- |
 | `workmux add <nome> -p "<pedido>"` | `wa` | cria worktree e janela, já com o pedido |
-| `workmux add <nome> -a codex` | | o mesmo com outro agente (`claude`, `codex`, `gemini`, `opencode`) |
 | `workmux dashboard` | `wd`, prefixo + `a` | painel com todas as tarefas e o status de cada agente |
 | `workmux merge` | `wm` | junta o branch (rebase) e remove o worktree |
 
 O ícone na janela do tmux mostra o estado do agente: 🤖 trabalhando, 💬 esperando você, ✅ pronto.
-Funciona nos quatro agentes (hooks no Claude, Gemini e Codex; plugin no opencode).
+Vem dos hooks do Claude Code.
 Skills do workmux também instaladas: `/workmux`, `/worktree`, `/coordinator`, `/merge`, `/rebase`, `/open-pr`.
 
 ## Agent teams do Claude
@@ -131,13 +123,13 @@ Ficam desligadas (experimentais e gastam cota rápido). Para uma sessão: `cteam
 - **Statusline do Claude**: modelo │ contexto % │ cota de 5 h (tempo até renovar) │ cota da semana │ custo │ branch.
   Verde abaixo de 50 %, amarelo até 80 %, vermelho acima. O custo é o equivalente na API, só referência.
 - **Barra do tmux**: a cota do Claude (`5h 42% 7d 12%`), atualizada pela statusline.
-- **tokscale** (`usage` ou prefixo + `u`): histórico de tokens e custo por agente, modelo e dia, lendo os logs locais dos quatro.
+- **tokscale** (`usage` ou prefixo + `u`): histórico de tokens e custo por modelo e dia, lendo os logs locais do Claude.
 - **workmux dashboard**: o que cada agente está fazendo agora.
-- OpenTelemetry (Claude Code e Codex exportam métricas) fica para quando houver um coletor; não vem ligado.
+- OpenTelemetry (o Claude Code exporta métricas) fica para quando houver um coletor; não vem ligado.
 
 ## Documentação de bibliotecas (MCP)
 
-Os quatro agentes têm dois servidores MCP:
+O Claude tem dois servidores MCP:
 
 - **`context7`**: documentação atualizada e por versão das bibliotecas populares (remoto, gratuito).
 - **`docs`**: índice local ([docs-mcp-server](https://github.com/arabold/docs-mcp-server)) para o que o context7 não tem ou docs internas.
@@ -154,7 +146,7 @@ O índice fica em `~/.local/share/docs-mcp`. Roda por `npx` (versão fixada em `
 
 O Claude Code roda os comandos de shell no sandbox nativo (bubblewrap): escrita só na pasta do projeto,
 rede controlada. Com isso, comandos dentro do sandbox não pedem permissão (`autoAllowBashIfSandboxed`).
-O Codex usa o sandbox dele (`workspace-write`). O bootstrap instala `bubblewrap` e `socat` pela distro;
+O bootstrap instala `bubblewrap` e `socat` pela distro;
 no Ubuntu 24.04+ também cria o perfil do AppArmor que o bubblewrap precisa.
 
 Para desligar: `devenv.agents.sandbox = false;` no host.
@@ -172,7 +164,7 @@ devenv.localModels = {
 ```
 
 O serviço **não** sobe no login (não gasta memória à toa): `ollama-on` e `ollama-off` ligam e desligam.
-`autoStart = true` muda isso. Com ele ligado, o opencode ganha o provedor `Ollama (local)`.
+`autoStart = true` muda isso. Nenhum agente usa os modelos locais: o Ollama fica para uso direto (`ollama run`) e experimentos.
 
 ## Arquivos
 
@@ -181,7 +173,7 @@ agents/
   AGENTS.md            instruções globais (fonte única)
   skills/              route, second-opinion
   statusline.sh        statusline do Claude Code
-  merge-config.py      mescla as chaves gerenciadas nas configs dos agentes
+  merge-config.py      mescla as chaves gerenciadas nas configs do Claude
 modules/agents/        módulo Nix: pacotes, configs, links, abreviações
 modules/agents/workmux.yaml
 modules/local-models/  Ollama opcional

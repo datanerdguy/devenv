@@ -45,7 +45,7 @@ check "yazi abre tabelas no tabiew" grep -q 'tw %s1' "${HOME}/.config/yazi/yazi.
 check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
 
 # Agentes e tmux
-for bin in claude codex gemini opencode workmux tokscale docs-mcp tmux sesh; do
+for bin in claude workmux tokscale docs-mcp tmux sesh; do
   check "binário ${bin}" command -v "${bin}"
 done
 # O tmux sai com 0 mesmo com erro na config; o erro aparece na saída.
@@ -56,19 +56,17 @@ tmux_config_ok() {
   [ -z "${out}" ]
 }
 check "tmux carrega a config sem erro" tmux_config_ok
-for f in .claude/settings.json .claude.json .gemini/settings.json .config/opencode/opencode.json; do
+for f in .claude/settings.json .claude.json; do
   check "config ${f} é JSON válido" jq -e . "${HOME}/${f}"
 done
-check "config do codex é TOML válido" taplo check --no-schema "${HOME}/.codex/config.toml"
 check "statusline do claude configurada" jq -e '.statusLine.command' "${HOME}/.claude/settings.json"
 check "modelo padrão do claude é sonnet" jq -e '.model == "sonnet"' "${HOME}/.claude/settings.json"
 check "MCPs context7 e docs no claude" jq -e '.mcpServers.context7 and .mcpServers.docs' "${HOME}/.claude.json"
-for f in .config/agents/AGENTS.md .codex/AGENTS.md .gemini/AGENTS.md .config/opencode/AGENTS.md .claude/CLAUDE.md; do
+for f in .config/agents/AGENTS.md .claude/CLAUDE.md; do
   check "instruções ${f}" test -s "${HOME}/${f}"
 done
 for s in route second-opinion workmux merge; do
-  check "skill ${s}" test -f "${HOME}/.agents/skills/${s}/SKILL.md"
-  check "skill ${s} no claude" test -f "${HOME}/.claude/skills/${s}/SKILL.md"
+  check "skill ${s}" test -f "${HOME}/.claude/skills/${s}/SKILL.md"
 done
 check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"
 

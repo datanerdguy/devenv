@@ -37,3 +37,9 @@ versionada sem brigar com os agentes, que também escrevem nesses arquivos, e qu
 - Atualizar os agentes é `just agents-update`; a atualização semanal do `flake.lock` também atualiza.
 - Cada agente pede login na primeira vez; os segredos ficam no Bitwarden (`rbw`).
 - Ubuntu 24.04+ precisa do perfil do AppArmor para o bubblewrap (feito pelo `system/ubuntu.sh`).
+
+## Atualização (2026-11-16)
+
+Codex, Gemini CLI e opencode saíram. O Lucas usa só o Claude Code, e o roteamento escolhe entre modelos do
+Claude (`haiku`, `sonnet`, `opus`, `opusplan`). A segunda opinião passou a ser um subagente com outro modelo do
+Claude. O Ollama continua opcional, sem agente que o use. Parte da refatoração do ADR 0009.

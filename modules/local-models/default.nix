@@ -1,5 +1,4 @@
-# Modelos locais com Ollama. Desligado por padrão: ligado, instala o Ollama como serviço do
-# usuário e registra os modelos no opencode (o agente para modelos locais).
+# Modelos locais com Ollama. Desligado por padrão: ligado, instala o Ollama como serviço do usuário.
 { config, lib, ... }:
 let
   cfg = config.devenv.localModels;
@@ -34,7 +33,7 @@ in
     models = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ "qwen3-coder:30b" ];
-      description = "Modelos oferecidos no opencode (baixe com `ollama pull <modelo>`).";
+      description = "Modelos a baixar com `ollama pull <modelo>` (só informativo; nenhum agente os usa).";
     };
   };
 
