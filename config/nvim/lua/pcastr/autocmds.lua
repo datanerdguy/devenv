@@ -18,7 +18,6 @@ local function set_cursor_colors()
   end
 end
 au("ColorScheme", { group = group, callback = set_cursor_colors })
-set_cursor_colors()
 
 -- Destaca o texto copiado
 au("TextYankPost", {
