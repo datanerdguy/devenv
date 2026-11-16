@@ -57,14 +57,8 @@ A atualização semanal do `flake.lock` (PR automático) também os atualiza.
 
 ## Roteamento: quem faz o quê
 
-As regras ficam no [`AGENTS.md`](../agents/AGENTS.md), então todo agente as conhece. Resumo:
-
-| Tarefa | Agente |
-| --- | --- |
-| Código no dia a dia | Claude Code (modelo e effort por tipo de tarefa, abaixo) |
-| Revisão independente de um diff | Codex (`codex exec`) |
-| Muito contexto | Gemini CLI (`gemini -p`) |
-| Modelos abertos ou locais | opencode |
+As regras ficam no [`AGENTS.md`](../agents/AGENTS.md), então todo agente as conhece. O roteamento usa só o que
+o Claude Code oferece: modelo (`haiku`, `sonnet`, `opus`, `opusplan`), effort e subagentes.
 
 ### Modelos e effort do Claude
 
@@ -79,7 +73,7 @@ No Pro entram Haiku 5.5, Sonnet 5.5 e Opus 5.5. O Fable 5.1 fica de fora: no Pro
 | Plano, arquitetura, refatoração grande, desenho de ML, segurança | Opus (plan mode ou `opusplan`) | high a xhigh |
 | Revisão de diff | Sonnet (rotina) ou Opus (risco) + Codex | medium / high |
 
-A tabela completa (16 tipos de tarefa) e as regras de subagente estão no AGENTS.md. Em resumo, subagente
+A tabela completa (16 tipos de tarefa) fica na skill [`route`](../agents/skills/route/SKILL.md), que só carrega quando é usada; o AGENTS.md guarda as regras curtas, inclusive as de subagente. Em resumo, subagente
 serve para busca ampla, partes independentes em paralelo (até 3) e revisão com contexto limpo, sempre com o
 modelo explícito, porque sem isso ele herda o da sessão.
 
@@ -105,10 +99,10 @@ Fontes: [configuração de modelos](https://code.claude.com/docs/en/model-config
 [SWE-bench Pro](https://codingfleet.com/blog/swe-bench-pro-leaderboard-2026/),
 [Haiku 5.5](https://apidog.com/blog/claude-haiku-5-5-benchmarks/), [Opus 5.5 e Fable 5.1](https://www.morphllm.com/claude-code-models).
 
-Skills que usam a tabela:
+Skills:
 
-- **`/route <tarefa>`**: classifica e manda para o agente certo; tarefas longas viram um worktree no workmux.
-- **`/second-opinion`**: pede revisão do diff ao Codex e/ou Gemini, só leitura, e junta as respostas.
+- **`/route <tarefa>`**: escolhe modelo, effort e se roda na sessão, num subagente ou num worktree do workmux.
+- **`/second-opinion`**: pede revisão do diff ao Codex e/ou Gemini, só leitura. Fica fora do roteamento: só roda quando você pede.
 
 Por que assim: a cota do Pro é o recurso escasso, e o roteamento por instrução não precisa de proxy nem de chave de API.
 
