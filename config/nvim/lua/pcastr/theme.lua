@@ -1,7 +1,6 @@
 -- Tema do Neovim: segue o comando `theme` (docs/themes.md).
 -- Lê ~/.local/state/devenv/theme/current/id e a opacidade; só o colorscheme escolhido carrega.
 -- `theme <nome>` manda SIGUSR1 e todo Neovim aberto troca na hora.
-local pack = require("pcastr.pack")
 local gh = function(x) return "https://github.com/" .. x end
 
 local M = {}
@@ -69,17 +68,18 @@ end
 function M.apply(id)
   id = id or M.current()
   local s = M.schemes[id] or M.schemes[M.default]
-  pack.load(s.plugin)
+  vim.cmd.packadd(s.plugin)
   local ok, err = pcall(s.apply, transparent())
   if not ok then vim.notify(("[tema] erro ao aplicar %s:\n%s"):format(id, err), vim.log.levels.ERROR) end
 end
 
-pack.add({
-  { src = gh("sainnhe/everforest"), lazy = true },
-  { src = gh("rose-pine/neovim"), name = "rose-pine", lazy = true },
-  { src = gh("catppuccin/nvim"), name = "catppuccin", lazy = true },
-  { src = gh("Mofiqul/dracula.nvim"), lazy = true },
-})
+-- Instala os quatro sem carregar nenhum. O M.apply faz o packadd só do escolhido.
+vim.pack.add({
+  gh("sainnhe/everforest"),
+  { src = gh("rose-pine/neovim"), name = "rose-pine" },
+  { src = gh("catppuccin/nvim"), name = "catppuccin" },
+  gh("Mofiqul/dracula.nvim"),
+}, { confirm = false, load = function() end })
 
 M.apply()
 

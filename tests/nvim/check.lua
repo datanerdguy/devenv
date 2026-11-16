@@ -43,14 +43,17 @@ for _, f in ipairs({ "a.py", "a.go", "a.rs", "a.lua", "a.nix", "a.md", "a.sh" })
   if not okf then table.insert(errors, f .. ": " .. errf) end
 end
 
-local missing = {}
 for name, p in pairs(pack.plugins) do
   if p.error then table.insert(errors, name .. ": " .. p.error) end
-  if #vim.api.nvim_get_runtime_file("pack/*/opt/" .. name, false) == 0 then table.insert(missing, name) end
 end
-if #missing > 0 then table.insert(errors, "não instalados: " .. table.concat(missing, ", ")) end
+local plugins = vim.pack.get(nil, { info = false })
+local missing = vim.tbl_filter(function(p) return vim.fn.isdirectory(p.path) == 0 end, plugins)
+if #missing > 0 then
+  local names = vim.tbl_map(function(p) return p.spec.name end, missing)
+  table.insert(errors, "não instalados: " .. table.concat(names, ", "))
+end
 
-local n = vim.tbl_count(pack.plugins)
+local n = #plugins
 if #errors > 0 then
   io.stderr:write(("FALHOU (%d plugins):\n  %s\n"):format(n, table.concat(errors, "\n  ")))
   os.exit(1)

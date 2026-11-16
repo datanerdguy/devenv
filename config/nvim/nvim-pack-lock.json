@@ -84,6 +84,10 @@
       "src": "https://github.com/obsidian-nvim/obsidian.nvim",
       "version": "3.0.0 - 4.0.0"
     },
+    "oil.nvim": {
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
     "rose-pine": {
       "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
       "src": "https://github.com/rose-pine/neovim"

@@ -309,4 +309,9 @@ vim.api.nvim_create_user_command(
 )
 vim.api.nvim_create_user_command("PackStatus", M.status, { desc = "Resumo dos plugins" })
 
+vim.keymap.set("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "[Plugins] Gerenciador" })
+vim.keymap.set("n", "<leader>pc", "<cmd>Pack!<cr>", { desc = "[Plugins] Verificar atualizações" })
+vim.keymap.set("n", "<leader>pu", "<cmd>PackUpdate<cr>", { desc = "[Plugins] Atualizar todos" })
+vim.keymap.set("n", "<leader>ps", "<cmd>PackStatus<cr>", { desc = "[Plugins] Resumo e tempo de carga" })
+
 return M

@@ -79,10 +79,17 @@ map("x", "<leader>yl", function()
   vim.notify("Caminho com linhas: " .. text)
 end, { desc = "[Copiar] Caminho:linhas da seleção" })
 
--- Janelas (navegação C-h/j/k/l fica com o smart-splits, integrado ao tmux)
-map("n", "<leader>-", "<cmd>split<cr>", { desc = "[Janela] Dividir abaixo" })
-map("n", "<leader>|", "<cmd>vsplit<cr>", { desc = "[Janela] Dividir à direita" })
+-- Janelas e abas, como nas dotfiles do craftzdog. C-h/j/k/l também anda entre janelas e o tmux.
+map("n", "ss", "<cmd>split<cr>", { desc = "[Janela] Dividir abaixo" })
+map("n", "sv", "<cmd>vsplit<cr>", { desc = "[Janela] Dividir à direita" })
+map("n", "sh", "<C-w>h", { desc = "[Janela] Ir para a da esquerda" })
+map("n", "sj", "<C-w>j", { desc = "[Janela] Ir para a de baixo" })
+map("n", "sk", "<C-w>k", { desc = "[Janela] Ir para a de cima" })
+map("n", "sl", "<C-w>l", { desc = "[Janela] Ir para a da direita" })
 map("n", "<leader>=", "<C-w>=", { desc = "[Janela] Igualar tamanhos" })
+map("n", "te", "<cmd>tabedit<cr>", { desc = "[Aba] Nova" })
+map("n", "<Tab>", "<cmd>tabnext<cr>", { desc = "[Aba] Próxima" })
+map("n", "<S-Tab>", "<cmd>tabprevious<cr>", { desc = "[Aba] Anterior" })
 
 -- Buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "[Buffer] Anterior" })
