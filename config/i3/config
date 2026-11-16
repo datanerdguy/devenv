@@ -6,7 +6,7 @@ include ~/.config/devenv/wm-common.conf
 include ~/.local/state/devenv/theme/current/wm-colors.conf
 for_window [class="dev.devenv.theme"] floating enable, resize set 900 420
 
-font pango:JetBrainsMono Nerd Font 10
+font pango:BlexMono Nerd Font 10
 
 # Início da sessão. O dex abre os apps de autostart do XDG (inclui o nm-applet, o Wi-Fi na bandeja).
 exec --no-startup-id dex --autostart --environment i3

@@ -8,6 +8,10 @@ Princípios:
 - **Nativo primeiro.** `vim.pack` para plugins, `vim.lsp.config`/`vim.lsp.enable` para LSP, sem lazy.nvim nem mason-lspconfig.
 - **Reproduzível.** As versões dos plugins ficam em [`nvim-pack-lock.json`](../config/nvim/nvim-pack-lock.json), versionado no git.
 
+Interface: o cursor é sempre um bloco e muda de cor com o modo (normal, inserção, visual, substituição), com as
+cores do tema atual. Mensagens e a linha de comando aparecem em janelas flutuantes (ui2 do Neovim), sem a linha
+fixa no rodapé (`cmdheight=0`). A fonte do Ghostty e da barra do i3 é a BlexMono Nerd Font.
+
 ## Estrutura
 
 ```text

@@ -29,7 +29,7 @@ in
       settings = {
         # O shell de login pode ser outro (zsh, bash); o Ghostty abre sempre o fish do home-manager.
         command = lib.mkIf config.devenv.shell.enable "${config.programs.fish.package}/bin/fish";
-        font-family = "JetBrainsMono Nerd Font";
+        font-family = "BlexMono Nerd Font";
         font-size = cfg.fontSize;
         window-padding-x = 8;
         window-padding-y = 6;
@@ -63,6 +63,6 @@ in
     };
 
     fonts.fontconfig.enable = true;
-    home.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
+    home.packages = [ pkgs.nerd-fonts.blex-mono ];
   };
 }

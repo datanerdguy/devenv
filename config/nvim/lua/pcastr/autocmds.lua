@@ -1,6 +1,25 @@
 local au = vim.api.nvim_create_autocmd
 local group = vim.api.nvim_create_augroup("pcastr", { clear = true })
 
+-- Cor do cursor por modo, tirada de grupos que todo tema define; refeita a cada troca de tema.
+local cursor_colors = {
+  CursorNormal = "Cursor",
+  CursorInsert = "DiagnosticOk",
+  CursorVisual = "DiagnosticInfo",
+  CursorReplace = "DiagnosticError",
+}
+local function set_cursor_colors()
+  local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+  for group_name, from in pairs(cursor_colors) do
+    local hl = vim.api.nvim_get_hl(0, { name = from, link = false })
+    -- Cursor usa o fundo; sem ele (Dracula), a cor do texto.
+    local color = from == "Cursor" and (hl.bg or normal.fg) or hl.fg
+    if color then vim.api.nvim_set_hl(0, group_name, { bg = color, fg = normal.bg }) end
+  end
+end
+au("ColorScheme", { group = group, callback = set_cursor_colors })
+set_cursor_colors()
+
 -- Destaca o texto copiado
 au("TextYankPost", {
   group = group,

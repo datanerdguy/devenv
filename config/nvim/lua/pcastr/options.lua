@@ -22,7 +22,10 @@ o.cursorline = true
 o.termguicolors = true
 o.showmode = false -- o modo aparece na statusline
 o.laststatus = 3 -- uma statusline global
-o.cmdheight = 1
+o.cmdheight = 0 -- mensagens e linha de comando em janelas flutuantes (ui2, abaixo)
+-- Cursor sempre em bloco; a cor muda com o modo (grupos Cursor<Modo>, em autocmds.lua).
+o.guicursor = "n-c-sm:block-CursorNormal,i-ci-ve:block-CursorInsert,v:block-CursorVisual,"
+  .. "r-cr-o:block-CursorReplace,t:block-TermCursor"
 o.pumheight = 12
 o.scrolloff = 8
 o.sidescrolloff = 8
@@ -73,3 +76,5 @@ o.spelllang = "pt_br,en"
 -- Palavras aceitas pelo corretor (zg adiciona): fica no repo, versionado.
 o.spellfile = vim.fn.stdpath("config") .. "/spell/tech.utf-8.add"
 vim.opt.shortmess:append("WIcC")
+
+require("vim._core.ui2").enable({ msg = { targets = "msg" } })
