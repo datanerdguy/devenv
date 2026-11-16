@@ -108,6 +108,7 @@ let
   ourSkills = [
     "route"
     "second-opinion"
+    "nvim-lua"
   ];
   workmuxSkills = [
     "workmux"

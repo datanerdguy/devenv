@@ -65,7 +65,7 @@ check "MCPs context7 e docs no claude" jq -e '.mcpServers.context7 and .mcpServe
 for f in .config/agents/AGENTS.md .claude/CLAUDE.md; do
   check "instruções ${f}" test -s "${HOME}/${f}"
 done
-for s in route second-opinion workmux merge; do
+for s in route second-opinion nvim-lua workmux merge; do
   check "skill ${s}" test -f "${HOME}/.claude/skills/${s}/SKILL.md"
 done
 check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"

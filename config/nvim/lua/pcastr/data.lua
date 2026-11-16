@@ -45,7 +45,7 @@ local function show(lines)
       "n",
       "q",
       "<cmd>close<cr>",
-      { buffer = result_buf, silent = true, desc = "[Dados/DuckDB] Fechar resultado" }
+      { buf = result_buf, silent = true, desc = "[Dados/DuckDB] Fechar resultado" }
     )
   end
   vim.api.nvim_buf_set_lines(result_buf, 0, -1, false, lines)

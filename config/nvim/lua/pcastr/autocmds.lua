@@ -50,7 +50,7 @@ au("FileType", {
       "n",
       "q",
       "<cmd>close<cr>",
-      { buffer = ev.buf, silent = true, desc = "[Janela] Fechar janela auxiliar" }
+      { buf = ev.buf, silent = true, desc = "[Janela] Fechar janela auxiliar" }
     )
   end,
 })
