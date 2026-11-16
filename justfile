@@ -54,6 +54,10 @@ nvim-test:
     DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua
     tests/nvim/startup.sh
 
+# Linhas por área e número de plugins do Neovim, para comparar antes e depois (ADR 0009)
+metrics:
+    tests/metrics.sh | column -t
+
 # Atualiza só os agentes (Claude Code, Codex, Gemini CLI, opencode, workmux...)
 agents-update:
     nix flake update llm-agents

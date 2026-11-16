@@ -34,6 +34,7 @@ Antes de rodar, ajuste o usuário em [`hosts/fedora-laptop.nix`](hosts/fedora-la
 | `just commit` | Commit guiado no padrão Conventional Commits |
 | `just nvim-update` | Atualiza o Neovim (bob) e os plugins (com revisão) |
 | `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
+| `just metrics` | Linhas por área e plugins do Neovim, para comparar antes e depois de uma refatoração |
 | `just agents-update` | Atualiza só os agentes de código |
 | `just desktop-check` | Valida as configs do niri, sway, i3 e kanata |
 | `just keyboard` | Regenera as imagens das camadas do teclado depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
