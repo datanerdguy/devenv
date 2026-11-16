@@ -75,6 +75,8 @@ Mudar o próprio `ci.yml` roda tudo. Cada job tem tempo máximo. O `build` para 
 ele leva uns 3; passar disso quase sempre é o cache da numtide fora do ar e o Codex sendo compilado do zero
 (mais de 20 min). Nesse caso, rode o job de novo.
 
+`tests/metrics.sh` (`just metrics`) não roda no CI: imprime as linhas de cada área e o número de plugins do Neovim, em TSV, para comparar com o baseline do [ADR 0009](adr/0009-refatoracao-completa.md).
+
 `tests/smoke.sh` confere que os programas existem, que fish e starship iniciam, e que as configs de git, Ghostty, starship e direnv foram geradas. Para rodar localmente: `just test-container fedora:latest`.
 
 ### `pr.yml`: só em PR
