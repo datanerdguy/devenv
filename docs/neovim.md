@@ -27,7 +27,7 @@ config/nvim/
     lsp.lua                servidores LSP e diagnósticos
     theme.lua              colorscheme do tema atual (segue o comando `theme`)
     plugins/
-      ui.lua               mini, snacks, which-key
+      ui.lua               mini, snacks, oil, which-key
       editor.lua           treesitter, gitsigns, smart-splits
       coding.lua           blink.cmp, tiny-inline-diagnostic, conform, nvim-lint, mason
       ai.lua               sidekick (qualquer CLI de agente), claudecode
@@ -42,7 +42,8 @@ config/nvim/
 | --- | --- | --- |
 | everforest, rose-pine, catppuccin, dracula.nvim | temas; só o escolhido pelo `theme` carrega ([themes.md](themes.md)) | abertura |
 | mini.nvim | ícones, statusline, textobjects, surround, pares | abertura (ícones e statusline); o resto no primeiro arquivo |
-| snacks.nvim | picker, explorer, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
+| snacks.nvim | picker, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
+| oil.nvim | explorer: a pasta vira um buffer editável | abertura |
 | which-key.nvim | mostra as teclas depois do `<leader>` | depois da interface abrir |
 | nvim-treesitter | realce, indentação e dobras | primeiro arquivo |
 | nvim-treesitter-context | fixa no topo a função ou classe atual | primeiro arquivo |
@@ -142,7 +143,9 @@ Toda `desc` de atalho segue `[Categoria] Ação`, ou `[Categoria/Sub] Ação` qu
 | `jk` | Sair do modo de inserção |
 | `Esc` | Limpar destaque da busca |
 | `J` / `K` (no modo visual) | Mover a seleção |
-| `<leader>-` / `<leader>\|` / `<leader>=` | Dividir abaixo / à direita / igualar |
+| `ss` / `sv` / `<leader>=` | Dividir abaixo / à direita / igualar |
+| `sh` / `sj` / `sk` / `sl` | Ir para a janela ao lado |
+| `te` / `gt` / `gT` | Nova aba / próxima / anterior (o `<Tab>` fica livre para o `<C-i>` do jumplist) |
 | `Ctrl-h/j/k/l` | Ir para a janela (ou painel do tmux) ao lado |
 | `Ctrl-setas` | Redimensionar janela |
 | `Shift-h` / `Shift-l` / `<leader>bb` | Buffer anterior / próximo / último |
@@ -154,25 +157,25 @@ Toda `desc` de atalho segue `[Categoria] Ação`, ou `[Categoria/Sub] Ação` qu
 | `<leader>yp` / `<leader>yP` / `<leader>yn` | Copiar caminho relativo / absoluto / nome do arquivo |
 | `<leader>yl` | Copiar `caminho:linha` (na seleção, `caminho:início-fim`), para colar num agente |
 
-### Buscar (`<leader>f`) e explorer
+### Buscar (`;`) e explorer
 
-Todas as buscas mostram arquivos ocultos. No picker, `Alt-h` alterna ocultos e `Alt-i` alterna os ignorados pelo git.
+As teclas seguem as dotfiles do craftzdog. Todas as buscas mostram arquivos ocultos. No picker, `Alt-h` alterna ocultos e `Alt-i` alterna os ignorados pelo git.
 
 | Tecla | Ação |
 | --- | --- |
-| `<leader><space>` | Busca inteligente de arquivos |
-| `<leader>/` | Texto no arquivo atual (linhas) |
-| `<leader>fg` | Texto no projeto |
-| `<leader>ff` | Arquivos |
+| `;f` / `;r` | Arquivos / texto no projeto |
+| `;;` | Reabrir a última busca |
+| `;e` | Diagnósticos do projeto |
+| `;g` / `;h` | Lazygit / trechos alterados no git |
+| `;c` / `;n` | Quem chama a função (LSP) / histórico de notificações |
+| `\\` | Buffers abertos |
 | `<leader>fw` | Palavra sob o cursor (ou seleção) |
-| `<leader>fb` / `<leader>fr` | Buffers / recentes |
-| `<leader>fh` / `<leader>fk` | Ajuda / atalhos |
+| `<leader>fr` / `<leader>fh` / `<leader>fk` | Recentes / ajuda / atalhos |
 | `<leader>fc` / `<leader>fp` | Arquivos da config / projetos |
 | `<leader>fs` / `<leader>fS` | Símbolos do arquivo / do projeto |
-| `<leader>f.` | Reabrir a última busca |
-| `<leader>e` / `<leader>E` | Explorer na raiz do projeto (alterna) / explorer no arquivo atual |
+| `sf` | Explorer (oil) numa janela flutuante |
 
-No explorer: `Enter` abre, `a` cria (termine com `/` para pasta), `d` apaga, `r` renomeia, `c` copia, `m` move, `H` alterna ocultos, `?` mostra todas as teclas.
+No oil a pasta é um buffer. Renomeie ou apague editando o texto e salve com `:w`. `Enter` abre, `h` sobe uma pasta, `q` fecha e `g?` mostra as teclas.
 
 ### Código (`<leader>c`) e LSP
 
@@ -193,7 +196,7 @@ Completion: `Tab` aceita (o primeiro item já vem marcado) e pula para o próxim
 
 | Tecla | Ação |
 | --- | --- |
-| `<leader>xx` / `<leader>xb` | Diagnósticos do projeto / do arquivo |
+| `;e` / `<leader>xb` | Diagnósticos do projeto / do arquivo |
 | `<leader>xq` | Quickfix |
 | `<leader>xt` | TODO, FIXME, HACK, NOTE |
 
@@ -201,7 +204,7 @@ Completion: `Tab` aceita (o primeiro item já vem marcado) e pula para o próxim
 
 | Tecla | Ação |
 | --- | --- |
-| `<leader>gg` | Lazygit |
+| `;g` | Lazygit |
 | `<leader>gs` / `<leader>gl` / `<leader>gf` | Alterados / log / log do arquivo |
 | `<leader>gB` | Abrir no GitHub |
 | `]h` / `[h` | Próximo / anterior hunk |
@@ -287,7 +290,7 @@ Sem plugin de banco: o Neovim abre as ferramentas do terminal numa janela flutua
 | `<leader>uw` / `<leader>us` / `<leader>ur` | Quebra de linha / corretor / número relativo |
 | `<leader>uh` / `<leader>ud` | Inlay hints (começam desligados) / diagnósticos |
 | `<leader>uf` | Formatar ao salvar |
-| `<leader>uz` / `<leader>un` | Modo zen / histórico de notificações |
+| `<leader>uz` / `;n` | Modo zen / histórico de notificações |
 | `<leader>uc` / `[C` | Contexto no topo (função atual) / ir até ele |
 
 O corretor aceita as palavras de [`config/nvim/spell/tech.utf-8.add`](../config/nvim/spell/tech.utf-8.add): `zg` acrescenta a palavra sob o cursor e o arquivo vai para o git.
