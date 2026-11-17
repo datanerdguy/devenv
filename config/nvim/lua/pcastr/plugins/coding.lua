@@ -31,7 +31,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
     { "blink.cmp" },
     function()
       require("blink.cmp").setup({
-        keymap = { preset = "super-tab" },
+        keymap = { preset = "enter" },
         appearance = { nerd_font_variant = "mono" },
         completion = {
           documentation = { auto_show = true, auto_show_delay_ms = 200 },
