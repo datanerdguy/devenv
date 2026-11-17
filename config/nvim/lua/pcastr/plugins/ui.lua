@@ -38,7 +38,7 @@ require("snacks").setup({
         { icon = "\u{f0b0} ", key = "g", desc = "Buscar texto", action = ":lua Snacks.picker.grep()" },
         { icon = "\u{f1da} ", key = "r", desc = "Recentes", action = ":lua Snacks.picker.recent()" },
         { icon = "\u{f07b} ", key = "e", desc = "Explorer", action = ":lua require('oil').open_float()" },
-        { icon = "\u{f1e6} ", key = "p", desc = "Plugins", action = ":Pack" },
+        { icon = "\u{f1e6} ", key = "p", desc = "Atualizar plugins", action = ":packupdate" },
         {
           icon = "\u{f013} ",
           key = "c",

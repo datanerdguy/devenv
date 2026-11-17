@@ -1,6 +1,6 @@
 -- Notas (zettelkasten) no mesmo cofre do app Obsidian, com o obsidian.nvim.
 -- Cofre: $DEVENV_NOTES ou ~/notes. Tudo em <leader>z; carrega só ao usar ou ao abrir uma nota do cofre.
-local pack = require("pcastr.pack")
+local lazy = require("pcastr.lazy")
 local gh = function(x) return "https://github.com/" .. x end
 
 local vault = vim.fs.normalize(vim.env.DEVENV_NOTES or "~/notes")
@@ -15,51 +15,47 @@ end
 
 local function ob(cmd) return "<cmd>Obsidian " .. cmd .. "<cr>" end
 
-pack.add({
-  {
-    src = gh("obsidian-nvim/obsidian.nvim"),
-    version = vim.version.range("3.*"),
-    cmd = "Obsidian",
-    keys = {
-      { "<leader>zn", ob("new"), desc = "[Notas] Nova nota" },
-      { "<leader>zz", ob("quick_switch"), desc = "[Notas] Abrir nota" },
-      { "<leader>zs", ob("search"), desc = "[Notas] Buscar texto" },
-      { "<leader>zd", ob("today"), desc = "[Notas] Nota do dia" },
-      { "<leader>zy", ob("yesterday"), desc = "[Notas] Nota de ontem" },
-      { "<leader>zt", ob("new_from_template"), desc = "[Notas] Nova nota a partir de modelo" },
-      { "<leader>zb", ob("backlinks"), desc = "[Notas/Links] Backlinks desta nota" },
-      { "<leader>zl", ob("links"), desc = "[Notas/Links] Links desta nota" },
-      { "<leader>z#", ob("tags"), desc = "[Notas] Tags" },
-      { "<leader>zp", ob("paste_img"), desc = "[Notas] Colar imagem" },
-      { "<leader>zr", ob("rename"), desc = "[Notas] Renomear (atualiza os links)" },
-      { "<leader>zo", ob("open"), desc = "[Notas] Abrir no app Obsidian" },
-      { "<leader>ze", ob("extract_note"), desc = "[Notas] Extrair seleção para nota nova", mode = "x" },
-      { "<leader>zk", ob("link_new"), desc = "[Notas/Links] Seleção vira link para nota nova", mode = "x" },
-    },
-    config = function()
-      vim.fn.mkdir(vault, "p")
-      require("obsidian").setup({
-        legacy_commands = false,
-        workspaces = { { name = "notas", path = vault } },
-        notes_subdir = "zettel",
-        new_notes_location = "notes_subdir",
-        note_id_func = zettel_id,
-        picker = { name = "snacks.picker" },
-        templates = { folder = templates },
-        daily_notes = { folder = "diario", template = "diario.md", workdays_only = false },
-        attachments = { folder = "anexos" },
-        ui = { ignore_conceal_warn = true },
-      })
-    end,
-  },
+lazy.install({ { src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("3.*") } })
+
+local load = lazy.loader({ "obsidian.nvim" }, function()
+  vim.fn.mkdir(vault, "p")
+  require("obsidian").setup({
+    legacy_commands = false,
+    workspaces = { { name = "notas", path = vault } },
+    notes_subdir = "zettel",
+    new_notes_location = "notes_subdir",
+    note_id_func = zettel_id,
+    picker = { name = "snacks.picker" },
+    templates = { folder = templates },
+    daily_notes = { folder = "diario", template = "diario.md", workdays_only = false },
+    attachments = { folder = "anexos" },
+    ui = { ignore_conceal_warn = true },
+  })
+end)
+
+lazy.cmds(load, { "Obsidian" })
+lazy.keys(load, {
+  { "<leader>zn", ob("new"), desc = "[Notas] Nova nota" },
+  { "<leader>zz", ob("quick_switch"), desc = "[Notas] Abrir nota" },
+  { "<leader>zs", ob("search"), desc = "[Notas] Buscar texto" },
+  { "<leader>zd", ob("today"), desc = "[Notas] Nota do dia" },
+  { "<leader>zy", ob("yesterday"), desc = "[Notas] Nota de ontem" },
+  { "<leader>zt", ob("new_from_template"), desc = "[Notas] Nova nota a partir de modelo" },
+  { "<leader>zb", ob("backlinks"), desc = "[Notas/Links] Backlinks desta nota" },
+  { "<leader>zl", ob("links"), desc = "[Notas/Links] Links desta nota" },
+  { "<leader>z#", ob("tags"), desc = "[Notas] Tags" },
+  { "<leader>zp", ob("paste_img"), desc = "[Notas] Colar imagem" },
+  { "<leader>zr", ob("rename"), desc = "[Notas] Renomear (atualiza os links)" },
+  { "<leader>zo", ob("open"), desc = "[Notas] Abrir no app Obsidian" },
+  { "<leader>ze", ob("extract_note"), desc = "[Notas] Extrair seleção para nota nova", mode = "x" },
+  { "<leader>zk", ob("link_new"), desc = "[Notas/Links] Seleção vira link para nota nova", mode = "x" },
 })
 
 -- Abrir uma nota do cofre carrega o plugin e esconde a sintaxe dos links.
-vim.api.nvim_create_autocmd("BufReadPre", {
-  pattern = vault .. "/*.md",
-  callback = function() pack.load("obsidian.nvim") end,
-})
+local group = vim.api.nvim_create_augroup("pcastr.notes", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPre", { group = group, pattern = vault .. "/*.md", callback = load })
 vim.api.nvim_create_autocmd("BufEnter", {
+  group = group,
   pattern = vault .. "/*.md",
   callback = function() vim.opt_local.conceallevel = 2 end,
 })

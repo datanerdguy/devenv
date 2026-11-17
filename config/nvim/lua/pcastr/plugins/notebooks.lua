@@ -2,7 +2,7 @@
 --   molten-nvim: roda células Jupyter direto no buffer (saída inline, imagens no terminal).
 --   marimo: notebooks Python reativos, guardados como .py puro (bom para git).
 -- Tudo carrega só ao usar uma tecla de <leader>n.
-local pack = require("pcastr.pack")
+local lazy = require("pcastr.lazy")
 local gh = function(x) return "https://github.com/" .. x end
 
 -- Opções do molten precisam existir antes de o plugin carregar.
@@ -25,39 +25,35 @@ local function marimo(sub)
   end
 end
 
-pack.add({
+-- Plugin remoto em Python: registra os comandos depois de instalar ou atualizar.
+lazy.on_change("molten-nvim", function()
+  vim.cmd.packadd("molten-nvim")
+  vim.cmd("UpdateRemotePlugins")
+end)
+lazy.install({ gh("3rd/image.nvim"), { src = gh("benlubas/molten-nvim"), version = vim.version.range("1.*") } })
+
+lazy.keys(
+  lazy.loader({ "image.nvim", "molten-nvim" }, function()
+    require("image").setup({
+      backend = "kitty", -- protocolo de imagens do kitty, que o Ghostty também entende
+      processor = "magick_cli", -- usa o ImageMagick instalado pelo Nix, sem rock de Lua
+      integrations = { markdown = { enabled = false } },
+      max_height_window_percentage = 50,
+      tmux_show_only_in_active_window = true,
+    })
+  end),
   {
-    src = gh("3rd/image.nvim"),
-    keys = {}, -- só carrega como dependência do molten
-    config = function()
-      require("image").setup({
-        backend = "kitty", -- protocolo de imagens do kitty, que o Ghostty também entende
-        processor = "magick_cli", -- usa o ImageMagick instalado pelo Nix, sem rock de Lua
-        integrations = { markdown = { enabled = false } },
-        max_height_window_percentage = 50,
-        tmux_show_only_in_active_window = true,
-      })
-    end,
-  },
-  {
-    src = gh("benlubas/molten-nvim"),
-    version = vim.version.range("1.*"),
-    deps = { "image.nvim" },
-    -- Plugin remoto em Python: registra os comandos depois de instalar ou atualizar.
-    build = function() vim.cmd("UpdateRemotePlugins") end,
-    keys = {
-      { "<leader>ni", molten("MoltenInit"), desc = "[Notebook/Molten] Iniciar kernel" },
-      { "<leader>ne", molten("MoltenEvaluateOperator"), desc = "[Notebook/Molten] Rodar com operador" },
-      { "<leader>nl", molten("MoltenEvaluateLine"), desc = "[Notebook/Molten] Rodar linha" },
-      { "<leader>nv", ":<C-u>MoltenEvaluateVisual<cr>gv", desc = "[Notebook/Molten] Rodar seleção", mode = "x" },
-      { "<leader>nr", molten("MoltenReevaluateCell"), desc = "[Notebook/Molten] Rodar célula de novo" },
-      { "<leader>no", molten("noautocmd MoltenEnterOutput"), desc = "[Notebook/Molten] Abrir saída" },
-      { "<leader>nh", molten("MoltenHideOutput"), desc = "[Notebook/Molten] Esconder saída" },
-      { "<leader>nd", molten("MoltenDelete"), desc = "[Notebook/Molten] Apagar célula" },
-      { "<leader>nI", molten("MoltenInterrupt"), desc = "[Notebook/Molten] Interromper kernel" },
-    },
-  },
-})
+    { "<leader>ni", molten("MoltenInit"), desc = "[Notebook/Molten] Iniciar kernel" },
+    { "<leader>ne", molten("MoltenEvaluateOperator"), desc = "[Notebook/Molten] Rodar com operador" },
+    { "<leader>nl", molten("MoltenEvaluateLine"), desc = "[Notebook/Molten] Rodar linha" },
+    { "<leader>nv", ":<C-u>MoltenEvaluateVisual<cr>gv", desc = "[Notebook/Molten] Rodar seleção", mode = "x" },
+    { "<leader>nr", molten("MoltenReevaluateCell"), desc = "[Notebook/Molten] Rodar célula de novo" },
+    { "<leader>no", molten("noautocmd MoltenEnterOutput"), desc = "[Notebook/Molten] Abrir saída" },
+    { "<leader>nh", molten("MoltenHideOutput"), desc = "[Notebook/Molten] Esconder saída" },
+    { "<leader>nd", molten("MoltenDelete"), desc = "[Notebook/Molten] Apagar célula" },
+    { "<leader>nI", molten("MoltenInterrupt"), desc = "[Notebook/Molten] Interromper kernel" },
+  }
+)
 
 vim.keymap.set("n", "<leader>nm", marimo("edit"), { desc = "[Notebook/marimo] Editar notebook" })
 vim.keymap.set("n", "<leader>nM", marimo("run"), { desc = "[Notebook/marimo] Rodar como app" })

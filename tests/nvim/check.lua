@@ -20,11 +20,21 @@ local ok, err = pcall(dofile, vim.fn.stdpath("config") .. "/init.lua")
 if not ok then table.insert(errors, "init.lua: " .. tostring(err)) end
 
 if vim.v.errmsg ~= "" then table.insert(errors, "errmsg: " .. vim.v.errmsg) end
-local pack = require("pcastr.pack")
--- Carrega um a um, capturando de novo antes de cada plugin (um deles pode trocar o vim.notify).
-for _, name in ipairs(pack.order) do
+-- Teclas e comandos sob demanda existem antes de carregar (pcastr.lazy).
+local leader = vim.g.mapleader
+for _, lhs in ipairs({ "ac", "cf", "db", "ni", "zn", "pu" }) do
+  if not vim.fn.maparg(leader .. lhs, "n", false, true).desc then
+    table.insert(errors, "tecla sem desc: <leader>" .. lhs)
+  end
+end
+for _, cmd in ipairs({ "ClaudeCode", "Mason", "Obsidian", "ConformInfo" }) do
+  if vim.fn.exists(":" .. cmd) ~= 2 then table.insert(errors, "comando faltando: " .. cmd) end
+end
+-- Carrega um a um, capturando de novo antes de cada loader (um plugin pode trocar o vim.notify).
+for _, load in ipairs(require("pcastr.lazy").loaders) do
   capture()
-  pack.load(name)
+  local okl, errl = pcall(load)
+  if not okl then table.insert(errors, "loader: " .. tostring(errl)) end
 end
 -- Os quatro temas aplicam sem erro (o `theme` troca entre eles com o editor aberto).
 local theme = require("pcastr.theme")
@@ -43,9 +53,6 @@ for _, f in ipairs({ "a.py", "a.go", "a.rs", "a.lua", "a.nix", "a.md", "a.sh" })
   if not okf then table.insert(errors, f .. ": " .. errf) end
 end
 
-for name, p in pairs(pack.plugins) do
-  if p.error then table.insert(errors, name .. ": " .. p.error) end
-end
 local plugins = vim.pack.get(nil, { info = false })
 local missing = vim.tbl_filter(function(p) return vim.fn.isdirectory(p.path) == 0 end, plugins)
 if #missing > 0 then

@@ -14,7 +14,7 @@ end
 ---@return fun()
 function M.loader(names, setup)
   local done = false
-  return function()
+  local function load()
     if done then return end
     done = true
     for _, name in ipairs(names) do
@@ -22,7 +22,13 @@ function M.loader(names, setup)
     end
     if setup then setup() end
   end
+  table.insert(M.loaders, load)
+  return load
 end
+
+--- Todos os loaders criados, para o teste carregar tudo (tests/nvim/check.lua).
+---@type fun()[]
+M.loaders = {}
 
 ---@class pcastr.LazyKey
 ---@field [1] string lhs

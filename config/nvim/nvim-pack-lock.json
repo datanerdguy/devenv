@@ -21,10 +21,6 @@
       "rev": "ae752c13e95fb7c5f58da4b5123cb804ea7568ee",
       "src": "https://github.com/Mofiqul/dracula.nvim"
     },
-    "everforest": {
-      "rev": "85a86eb62409e3ec88713bff3d1b9d7374e112e4",
-      "src": "https://github.com/sainnhe/everforest"
-    },
     "gitsigns.nvim": {
       "rev": "683137003522aebd6948358334164a6ba2ca7cd5",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
@@ -91,14 +87,6 @@
     "rose-pine": {
       "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
       "src": "https://github.com/rose-pine/neovim"
-    },
-    "sidekick.nvim": {
-      "rev": "3d80a47e6375f6d647c9695d3afea6fa1b3275df",
-      "src": "https://github.com/folke/sidekick.nvim"
-    },
-    "smart-splits.nvim": {
-      "rev": "69ab668d96b54fa15907ac3245548fd8a3ce2318",
-      "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",

@@ -47,7 +47,7 @@ commit:
 # Atualiza o Neovim (bob) e os plugins (vim.pack, com revisão antes de aplicar)
 nvim-update:
     bob update --all
-    nvim +PackUpdate
+    nvim +packupdate
 
 # Testa a config do Neovim: carga de todos os plugins e tempo de abertura
 nvim-test:
