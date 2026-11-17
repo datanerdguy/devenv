@@ -26,12 +26,6 @@ local servers = {
   "dockerls",
 }
 
--- Binários instalados pelo Mason entram no PATH sem carregar o plugin.
-local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
-if not vim.env.PATH:find(mason_bin, 1, true) then
-  vim.env.PATH = vim.env.PATH .. ":" .. mason_bin -- depois do Nix/devShell: eles têm prioridade
-end
-
 -- Ajustes por servidor (o resto vem do nvim-lspconfig)
 vim.lsp.config("lua_ls", {
   settings = {
@@ -48,26 +42,24 @@ vim.lsp.config("basedpyright", {
   settings = { basedpyright = { analysis = { typeCheckingMode = "standard" } } },
 })
 
--- O que o blink.cmp muda nas capacidades nativas (get_lsp_capabilities, blink 1.x). Fica aqui porque o
--- blink só carrega no primeiro insert, depois de os servidores subirem. Confira ao atualizar o blink.
-vim.lsp.config("*", {
-  capabilities = {
-    textDocument = {
-      completion = {
-        insertTextMode = 1,
-        completionItem = {
-          commitCharactersSupport = false,
-          preselectSupport = false,
-          insertTextModeSupport = { valueSet = { 1 } },
-          resolveSupport = { properties = { "documentation", "detail", "additionalTextEdits", "command", "data" } },
-        },
+-- O que o blink.cmp muda nas capacidades nativas (get_lsp_capabilities, blink 1.x).
+-- O tests/nvim/check.lua compara com o blink de verdade.
+local blink_capabilities = {
+  textDocument = {
+    completion = {
+      insertTextMode = 1,
+      completionItem = {
+        commitCharactersSupport = false,
+        preselectSupport = false,
+        insertTextModeSupport = { valueSet = { 1 } },
+        resolveSupport = { properties = { "documentation", "detail", "additionalTextEdits", "command", "data" } },
       },
     },
   },
-})
+}
+vim.lsp.config("*", { capabilities = blink_capabilities })
 
--- O nvim-lspconfig só entra no runtimepath no primeiro arquivo (coding.lua instala sem carregar).
-local function lspconfig() vim.cmd.packadd("nvim-lspconfig") end
+local function add_lspconfig() vim.cmd.packadd("nvim-lspconfig") end
 
 local function executable(name)
   local cfg = vim.lsp.config[name]
@@ -82,13 +74,13 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   once = true,
   group = vim.api.nvim_create_augroup("pcastr.lsp.enable", { clear = true }),
   callback = function()
-    lspconfig()
+    add_lspconfig()
     vim.lsp.enable(vim.tbl_filter(executable, servers))
   end,
 })
 
 vim.api.nvim_create_user_command("LspServers", function()
-  lspconfig()
+  add_lspconfig()
   local lines = {}
   for _, s in ipairs(servers) do
     table.insert(lines, (executable(s) and "● " or "○ ") .. s)

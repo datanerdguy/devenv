@@ -2,7 +2,6 @@
 local lazy = require("pcastr.lazy")
 local gh = function(x) return "https://github.com/" .. x end
 
--- Parsers instalados junto com o nvim-treesitter (e de novo a cada atualização dele).
 local parsers = {
   "bash",
   "css",
@@ -39,8 +38,7 @@ lazy.on_change("nvim-treesitter", function()
   if vim.fn.executable("tree-sitter") == 1 then require("nvim-treesitter").install(parsers) end
 end)
 
--- O nvim-treesitter não carrega sob demanda; o plugin/ dele é leve. vim-tmux-navigator: C-h/j/k/l
--- anda entre janelas do Neovim e painéis do tmux (o lado do tmux está em modules/tmux/tmux.conf).
+-- O nvim-treesitter não aceita carga sob demanda (README dele).
 vim.pack.add({
   { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
   gh("christoomey/vim-tmux-navigator"),
@@ -51,18 +49,17 @@ local function ts_start(buf, lang)
   vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 end
 
+local function ts_start_after_redraw(buf, lang)
+  vim.schedule(function() ts_start(buf, lang) end)
+end
+
 local tried = {} ---@type table<string, true>
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("pcastr.treesitter", { clear = true }),
   callback = function(ev)
     local lang = vim.treesitter.language.get_lang(ev.match)
     if not lang then return end
-    if vim.treesitter.language.add(lang) then
-      -- Depois de a tela desenhar: compilar as queries custa ~40 ms no primeiro arquivo de cada linguagem.
-      vim.schedule(function() ts_start(ev.buf, lang) end)
-      return
-    end
-    -- Parser ainda não instalado: instala em segundo plano e liga depois.
+    if vim.treesitter.language.add(lang) then return ts_start_after_redraw(ev.buf, lang) end
     if tried[lang] or vim.env.DEVENV_NVIM_TEST or vim.fn.executable("tree-sitter") == 0 then return end
     tried[lang] = true
     local ts = require("nvim-treesitter")
@@ -71,8 +68,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Fixa no topo a função/classe em que o cursor está (até 3 linhas). <leader>uc liga e desliga; [C vai até ela.
--- gitsigns: hunks na margem. Os dois só no primeiro arquivo.
 lazy.install({ gh("nvim-treesitter/nvim-treesitter-context"), gh("lewis6991/gitsigns.nvim") })
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   group = vim.api.nvim_create_augroup("pcastr.editor", { clear = true }),
@@ -106,7 +101,6 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   end),
 })
 
--- Fecha e renomeia a tag par em HTML, HEEx (Phoenix), templates do Django/Go e JSX.
 lazy.install({ gh("windwp/nvim-ts-autotag") })
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("pcastr.autotag", { clear = true }),
@@ -128,7 +122,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = lazy.loader({ "nvim-ts-autotag" }, function() require("nvim-ts-autotag").setup() end),
 })
 
--- Ctrl+setas redimensiona a janela (no lugar do smart-splits).
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "[Janela] Diminuir a largura" })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "[Janela] Aumentar a largura" })
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "[Janela] Diminuir a altura" })

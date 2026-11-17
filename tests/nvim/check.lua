@@ -20,7 +20,6 @@ local ok, err = pcall(dofile, vim.fn.stdpath("config") .. "/init.lua")
 if not ok then table.insert(errors, "init.lua: " .. tostring(err)) end
 
 if vim.v.errmsg ~= "" then table.insert(errors, "errmsg: " .. vim.v.errmsg) end
--- Teclas e comandos sob demanda existem antes de carregar (pcastr.lazy).
 local leader = vim.g.mapleader
 for _, lhs in ipairs({ "ac", "cf", "db", "ni", "zn", "pu" }) do
   if not vim.fn.maparg(leader .. lhs, "n", false, true).desc then
@@ -30,11 +29,16 @@ end
 for _, cmd in ipairs({ "ClaudeCode", "Mason", "Obsidian", "ConformInfo" }) do
   if vim.fn.exists(":" .. cmd) ~= 2 then table.insert(errors, "comando faltando: " .. cmd) end
 end
--- Carrega um a um, capturando de novo antes de cada loader (um plugin pode trocar o vim.notify).
+local our_capabilities = vim.deepcopy(vim.lsp.config["*"].capabilities)
 for _, load in ipairs(require("pcastr.lazy").loaders) do
   capture()
   local okl, errl = pcall(load)
   if not okl then table.insert(errors, "loader: " .. tostring(errl)) end
+end
+local expected = require("blink.cmp").get_lsp_capabilities({}, true)
+local ours = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), our_capabilities or {})
+if not vim.deep_equal(ours, expected) then
+  table.insert(errors, "lsp.lua: blink_capabilities não bate com o get_lsp_capabilities do blink")
 end
 -- Os quatro temas aplicam sem erro (o `theme` troca entre eles com o editor aberto).
 local theme = require("pcastr.theme")

@@ -22,8 +22,7 @@ o.cursorline = true
 o.termguicolors = true
 o.showmode = false -- o modo aparece na statusline
 o.laststatus = 3 -- uma statusline global
-o.cmdheight = 0 -- mensagens e linha de comando em janelas flutuantes (ui2, abaixo)
--- Cursor sempre em bloco; a cor muda com o modo (grupos Cursor<Modo>, em autocmds.lua).
+o.cmdheight = 0
 o.guicursor = "n-c-sm:block-CursorNormal,i-ci-ve:block-CursorInsert,v:block-CursorVisual,"
   .. "r-cr-o:block-CursorReplace,t:block-TermCursor"
 o.pumheight = 12

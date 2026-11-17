@@ -1,7 +1,6 @@
 local au = vim.api.nvim_create_autocmd
 local group = vim.api.nvim_create_augroup("pcastr", { clear = true })
 
--- Cor do cursor por modo, tirada de grupos que todo tema define; refeita a cada troca de tema.
 local cursor_colors = {
   CursorNormal = "Cursor",
   CursorInsert = "DiagnosticOk",

@@ -23,7 +23,6 @@ end
 
 ---@type table<string, { plugin?: string, apply: fun(transparent: boolean) }>
 M.schemes = {
-  -- Fica em colors/everforest.lua (padrão do everforest-vscode), sem plugin.
   everforest = {
     apply = function(t)
       vim.g.everforest_transparent = t
@@ -70,7 +69,6 @@ function M.apply(id)
   if not ok then vim.notify(("[tema] erro ao aplicar %s:\n%s"):format(id, err), vim.log.levels.ERROR) end
 end
 
--- Instala os outros três sem carregar nenhum. O M.apply faz o packadd só do escolhido.
 vim.pack.add({
   { src = gh("rose-pine/neovim"), name = "rose-pine" },
   { src = gh("catppuccin/nvim"), name = "catppuccin" },

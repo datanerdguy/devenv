@@ -11,7 +11,6 @@ lazy.install({ gh("mfussenegger/nvim-dap"), gh("igorlfs/nvim-dap-view"), gh("mfu
 lazy.keys(
   lazy.loader({ "nvim-dap", "nvim-dap-view", "nvim-dap-python" }, function()
     require("dap-view").setup({ auto_toggle = true })
-    -- Python: usa o ambiente do projeto via uv (debugpy precisa estar nas dependências de dev).
     require("dap-python").setup("uv")
     vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticError" })
     vim.fn.sign_define("DapStopped", { text = "▶", texthl = "DiagnosticOk", linehl = "Visual" })

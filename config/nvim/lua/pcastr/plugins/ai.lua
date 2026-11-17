@@ -1,5 +1,3 @@
--- IA no editor: claudecode.nvim, a integração de IDE do Claude Code (diffs revisados aqui no Neovim).
--- Carrega na primeira tecla de <leader>a ou no primeiro :ClaudeCode*.
 local lazy = require("pcastr.lazy")
 
 lazy.install({ "https://github.com/coder/claudecode.nvim" })

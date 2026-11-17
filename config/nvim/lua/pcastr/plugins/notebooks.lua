@@ -25,7 +25,6 @@ local function marimo(sub)
   end
 end
 
--- Plugin remoto em Python: registra os comandos depois de instalar ou atualizar.
 lazy.on_change("molten-nvim", function()
   vim.cmd.packadd("molten-nvim")
   vim.cmd("UpdateRemotePlugins")
@@ -36,7 +35,7 @@ lazy.keys(
   lazy.loader({ "image.nvim", "molten-nvim" }, function()
     require("image").setup({
       backend = "kitty", -- protocolo de imagens do kitty, que o Ghostty também entende
-      processor = "magick_cli", -- usa o ImageMagick instalado pelo Nix, sem rock de Lua
+      processor = "magick_cli",
       integrations = { markdown = { enabled = false } },
       max_height_window_percentage = 50,
       tmux_show_only_in_active_window = true,

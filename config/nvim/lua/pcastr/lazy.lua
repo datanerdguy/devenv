@@ -1,5 +1,3 @@
--- Carga sob demanda com o vim.pack: instala sem carregar e faz packadd + setup no primeiro uso.
--- Requerer este módulo não executa nada.
 local M = {}
 
 --- Instala sem carregar. Quem usa chama o loader no gatilho.

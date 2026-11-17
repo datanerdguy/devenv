@@ -79,7 +79,6 @@ map("x", "<leader>yl", function()
   vim.notify("Caminho com linhas: " .. text)
 end, { desc = "[Copiar] Caminho:linhas da seleção" })
 
--- Janelas e abas, como nas dotfiles do craftzdog. C-h/j/k/l também anda entre janelas e o tmux.
 map("n", "ss", "<cmd>split<cr>", { desc = "[Janela] Dividir abaixo" })
 map("n", "sv", "<cmd>vsplit<cr>", { desc = "[Janela] Dividir à direita" })
 map("n", "sh", "<C-w>h", { desc = "[Janela] Ir para a da esquerda" })

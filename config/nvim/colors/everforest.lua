@@ -1,5 +1,5 @@
 -- Everforest Dark (fundo medium) no padrão do tema oficial do VS Code: sainnhe/everforest-vscode @ b17f8af.
--- Paleta de src/palette/dark; cada grupo cita a regra (`name`) ou a chave de `colors` do themes/everforest-dark.json.
+-- Paleta de src/palette/dark; os comentários citam a regra (`name`) ou a chave de `colors` do themes/everforest-dark.json.
 -- Cores com alfa do VS Code viram a mistura com o fundo, porque o Neovim não tem transparência por cor.
 -- vim.g.everforest_transparent = true deixa o fundo vazio (terminal com opacidade, pcastr/theme.lua).
 
@@ -31,7 +31,6 @@ local p = {
   dim_purple = "#b87b9d",
 }
 
--- `#rrggbbaa` do VS Code sobre o fundo.
 local function blend(color, alpha)
   local a = tonumber(alpha, 16) / 255
   local function ch(hex, i) return tonumber(hex:sub(i, i + 1), 16) end
@@ -53,7 +52,7 @@ local hl = {
   NormalNC = { link = "Normal" },
   NormalFloat = { fg = p.fg, bg = float_bg }, -- editorHoverWidget.background
   FloatBorder = { fg = p.bg4, bg = float_bg }, -- editorHoverWidget.border
-  FloatTitle = { fg = p.green, bg = float_bg, bold = true }, -- peekViewTitleLabel
+  FloatTitle = { fg = p.green, bg = float_bg, bold = true }, -- peekViewTitleLabel.foreground
   Cursor = { fg = p.bg, bg = p.fg }, -- editorCursor.foreground
   lCursor = { link = "Cursor" },
   TermCursor = { link = "Cursor" },
@@ -75,14 +74,14 @@ local hl = {
   NonText = { fg = p.bg4 }, -- editorWhitespace.foreground
   Whitespace = { fg = p.bg4 },
   SpecialKey = { fg = p.bg4 },
-  EndOfBuffer = { fg = p.bg }, -- esconde o ~ das linhas vazias
+  EndOfBuffer = { fg = p.bg },
   WinSeparator = { fg = p.bg5 }, -- editorWidget.border
   Directory = { fg = p.green },
   Title = { fg = p.green, bold = true },
   Conceal = { fg = p.grey0 },
   QuickFixLine = { bg = blend(p.dim_aqua, "50") }, -- peekViewResult.selectionBackground
 
-  -- Menu de completar e listas (editorSuggestWidget, list.*)
+  -- Menu de completar (editorSuggestWidget.*)
   Pmenu = { fg = p.fg, bg = p.bg3 },
   PmenuSel = { bg = p.bg4 },
   PmenuMatch = { fg = p.green },
@@ -102,7 +101,6 @@ local hl = {
   WinBar = { fg = p.grey2, bg = bg },
   WinBarNC = { fg = p.grey0, bg = bg },
 
-  -- Mensagens
   ErrorMsg = { fg = p.red, bold = true },
   WarningMsg = { fg = p.yellow, bold = true },
   MoreMsg = { fg = p.green },
@@ -119,13 +117,12 @@ local hl = {
   Changed = { fg = p.blue },
   Removed = { fg = p.red },
 
-  -- Ortografia
   SpellBad = { undercurl = true, sp = p.red },
   SpellCap = { undercurl = true, sp = p.blue },
   SpellLocal = { undercurl = true, sp = p.aqua },
   SpellRare = { undercurl = true, sp = p.purple },
 
-  -- Diagnósticos (editorOverviewRuler.*Foreground no texto, editor*.foreground no sublinhado)
+  -- Diagnósticos (editor*.foreground no sublinhado)
   DiagnosticError = { fg = p.red },
   DiagnosticWarn = { fg = p.yellow },
   DiagnosticInfo = { fg = p.blue },
@@ -246,7 +243,6 @@ local hl = {
   ["@diff.minus"] = { fg = p.red }, -- Diff red
   ["@diff.delta"] = { fg = p.blue }, -- Diff blue
 
-  -- Markdown
   ["@markup.heading.1"] = { fg = p.red, bold = true }, -- Markdown heading1
   ["@markup.heading.2"] = { fg = p.orange, bold = true },
   ["@markup.heading.3"] = { fg = p.yellow, bold = true },
@@ -269,7 +265,6 @@ local hl = {
   ["@punctuation.special.markdown"] = { fg = p.grey1 }, -- Markdown heading delimiter
   ["@label.markdown"] = { fg = p.yellow }, -- Markdown code type
 
-  -- Regras por linguagem do tema oficial
   ["@keyword.import.python"] = { fg = p.purple }, -- Python purple
   ["@constant.builtin.python"] = { fg = p.aqua }, -- Python aqua (constant.language.python)
   ["@boolean.python"] = { fg = p.aqua },
@@ -318,12 +313,11 @@ local hl = {
   GitSignsAdd = { fg = blend(p.dim_green, "a0") },
   GitSignsChange = { fg = blend(p.dim_blue, "a0") },
   GitSignsDelete = { fg = blend(p.dim_red, "a0") },
-  -- snacks (editorIndentGuide.*, peekView*)
+  -- snacks (editorIndentGuide.*)
   SnacksIndent = { fg = blend(p.grey2, "20") },
   SnacksIndentScope = { fg = blend(p.grey2, "50") },
   SnacksPickerMatch = { fg = p.green },
   SnacksPickerDir = { fg = p.grey1 },
-  -- treesitter-context
   TreesitterContext = { bg = p.bg2 },
   TreesitterContextLineNumber = { fg = p.grey1, bg = p.bg2 },
   -- blink.cmp (editorSuggestWidget.*)
@@ -333,7 +327,6 @@ local hl = {
   BlinkCmpLabelMatch = { fg = p.green },
   BlinkCmpDoc = { link = "NormalFloat" },
   BlinkCmpDocBorder = { link = "FloatBorder" },
-  -- mini.statusline: o VS Code não tem modo; os destaques vêm das cores de acento da paleta
   MiniStatuslineModeNormal = { fg = p.bg, bg = p.green, bold = true },
   MiniStatuslineModeInsert = { fg = p.bg, bg = p.blue, bold = true },
   MiniStatuslineModeVisual = { fg = p.bg, bg = p.purple, bold = true },
@@ -344,7 +337,6 @@ local hl = {
   MiniStatuslineFilename = { fg = p.grey2, bg = float_bg },
   MiniStatuslineFileinfo = { fg = p.grey2, bg = p.bg3 },
   MiniStatuslineInactive = { fg = p.grey0, bg = bg },
-  -- which-key, oil
   WhichKey = { fg = p.green },
   WhichKeyGroup = { fg = p.blue },
   WhichKeyDesc = { fg = p.fg },
