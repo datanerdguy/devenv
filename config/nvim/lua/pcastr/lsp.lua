@@ -48,6 +48,27 @@ vim.lsp.config("basedpyright", {
   settings = { basedpyright = { analysis = { typeCheckingMode = "standard" } } },
 })
 
+-- O que o blink.cmp muda nas capacidades nativas (get_lsp_capabilities, blink 1.x). Fica aqui porque o
+-- blink só carrega no primeiro insert, depois de os servidores subirem. Confira ao atualizar o blink.
+vim.lsp.config("*", {
+  capabilities = {
+    textDocument = {
+      completion = {
+        insertTextMode = 1,
+        completionItem = {
+          commitCharactersSupport = false,
+          preselectSupport = false,
+          insertTextModeSupport = { valueSet = { 1 } },
+          resolveSupport = { properties = { "documentation", "detail", "additionalTextEdits", "command", "data" } },
+        },
+      },
+    },
+  },
+})
+
+-- O nvim-lspconfig só entra no runtimepath no primeiro arquivo (coding.lua instala sem carregar).
+local function lspconfig() vim.cmd.packadd("nvim-lspconfig") end
+
 local function executable(name)
   local cfg = vim.lsp.config[name]
   if not cfg then return false end
@@ -60,10 +81,14 @@ end
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   once = true,
   group = vim.api.nvim_create_augroup("pcastr.lsp.enable", { clear = true }),
-  callback = function() vim.lsp.enable(vim.tbl_filter(executable, servers)) end,
+  callback = function()
+    lspconfig()
+    vim.lsp.enable(vim.tbl_filter(executable, servers))
+  end,
 })
 
 vim.api.nvim_create_user_command("LspServers", function()
+  lspconfig()
   local lines = {}
   for _, s in ipairs(servers) do
     table.insert(lines, (executable(s) and "● " or "○ ") .. s)
