@@ -223,7 +223,7 @@ Completion: `Enter` aceita (o primeiro item já vem marcado), setas ou `Ctrl-n`/
 | `<leader>nd` / `<leader>nI` | Apagar célula / interromper kernel |
 | `<leader>nm` / `<leader>nM` | marimo: editar o notebook / rodar como app |
 
-O molten usa o kernel do projeto: tenha `ipykernel` nas dependências de dev (`uv add --dev ipykernel`) e registre com `uv run python -m ipykernel install --user --name <projeto>`. Imagens aparecem no Ghostty (protocolo do kitty). O marimo roda com `uvx`, sem instalar nada.
+O molten usa o kernel do projeto: tenha `ipykernel` nas dependências de dev (`uv add --dev ipykernel`) e registre com `uv run python -m ipykernel install --user --name <projeto>`. Sem kernel registrado, o `<leader>ni` não tem o que iniciar (`:MoltenAvailableKernels` lista os que existem). Na primeira tecla, a config gera o manifesto do plugin remoto (`:UpdateRemotePlugins`) se ele faltar e cria a pasta `runtime` do Jupyter. Imagens aparecem no Ghostty (protocolo do kitty). O marimo roda com `uvx`, sem instalar nada.
 
 ### Notas (`<leader>z`)
 

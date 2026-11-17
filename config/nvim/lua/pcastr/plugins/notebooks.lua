@@ -25,14 +25,25 @@ local function marimo(sub)
   end
 end
 
-lazy.on_change("molten-nvim", function()
+-- Os comandos do molten (plugin remoto em Python) vêm do manifesto que o :UpdateRemotePlugins grava.
+-- Sem ele (o molten chegou antes deste build), gera e carrega na hora, sem reiniciar.
+local function register_molten()
   vim.cmd.packadd("molten-nvim")
   vim.cmd("UpdateRemotePlugins")
-end)
+  vim.cmd.source(vim.fn.stdpath("data") .. "/rplugin.vim")
+end
+lazy.on_change("molten-nvim", register_molten)
 lazy.install({ gh("3rd/image.nvim"), { src = gh("benlubas/molten-nvim"), version = vim.version.range("1.*") } })
 
 lazy.keys(
   lazy.loader({ "image.nvim", "molten-nvim" }, function()
+    vim.cmd.runtime("plugin/rplugin.vim") -- no `nvim -l` (tests/nvim/check.lua) os plugins do runtime não carregam
+    if vim.fn.exists(":MoltenInit") ~= 2 then register_molten() end
+    -- O molten grava o arquivo de conexão do kernel em <data_dir do jupyter>/runtime e não cria a pasta
+    -- (rplugin/python3/molten/runtime.py).
+    local data = vim.env.JUPYTER_DATA_DIR
+      or vim.fs.joinpath(vim.env.XDG_DATA_HOME or vim.fn.expand("~/.local/share"), "jupyter")
+    vim.fn.mkdir(vim.fs.joinpath(data, "runtime"), "p")
     require("image").setup({
       backend = "kitty", -- protocolo de imagens do kitty, que o Ghostty também entende
       processor = "magick_cli",
