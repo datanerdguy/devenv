@@ -44,15 +44,16 @@ end
 
 local transparent = vim.g.everforest_transparent == true
 local bg = transparent and "NONE" or p.bg
+local float_bg = transparent and "NONE" or p.bg2
 
 ---@type table<string, vim.api.keyset.highlight>
 local hl = {
   -- Editor (colors)
   Normal = { fg = p.fg, bg = bg }, -- editor.background / editor.foreground
   NormalNC = { link = "Normal" },
-  NormalFloat = { fg = p.fg, bg = transparent and "NONE" or p.bg2 }, -- editorHoverWidget.background
-  FloatBorder = { fg = p.bg4, bg = transparent and "NONE" or p.bg2 }, -- editorHoverWidget.border
-  FloatTitle = { fg = p.green, bg = transparent and "NONE" or p.bg2, bold = true }, -- peekViewTitleLabel
+  NormalFloat = { fg = p.fg, bg = float_bg }, -- editorHoverWidget.background
+  FloatBorder = { fg = p.bg4, bg = float_bg }, -- editorHoverWidget.border
+  FloatTitle = { fg = p.green, bg = float_bg, bold = true }, -- peekViewTitleLabel
   Cursor = { fg = p.bg, bg = p.fg }, -- editorCursor.foreground
   lCursor = { link = "Cursor" },
   TermCursor = { link = "Cursor" },
@@ -340,7 +341,7 @@ local hl = {
   MiniStatuslineModeCommand = { fg = p.bg, bg = p.yellow, bold = true },
   MiniStatuslineModeOther = { fg = p.bg, bg = p.aqua, bold = true },
   MiniStatuslineDevinfo = { fg = p.grey2, bg = p.bg3 },
-  MiniStatuslineFilename = { fg = p.grey2, bg = transparent and "NONE" or p.bg2 },
+  MiniStatuslineFilename = { fg = p.grey2, bg = float_bg },
   MiniStatuslineFileinfo = { fg = p.grey2, bg = p.bg3 },
   MiniStatuslineInactive = { fg = p.grey0, bg = bg },
   -- which-key, oil
