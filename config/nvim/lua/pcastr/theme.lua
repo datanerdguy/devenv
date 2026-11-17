@@ -21,15 +21,12 @@ local function transparent()
   return o ~= nil and o < 1
 end
 
----@type table<string, { plugin: string, apply: fun(transparent: boolean) }>
+---@type table<string, { plugin?: string, apply: fun(transparent: boolean) }>
 M.schemes = {
+  -- Fica em colors/everforest.lua (padrão do everforest-vscode), sem plugin.
   everforest = {
-    plugin = "everforest",
     apply = function(t)
-      vim.g.everforest_background = "medium"
-      vim.g.everforest_better_performance = 1
-      vim.g.everforest_enable_italic = 1
-      vim.g.everforest_transparent_background = t and 1 or 0
+      vim.g.everforest_transparent = t
       vim.cmd.colorscheme("everforest")
     end,
   },
@@ -68,14 +65,13 @@ end
 function M.apply(id)
   id = id or M.current()
   local s = M.schemes[id] or M.schemes[M.default]
-  vim.cmd.packadd(s.plugin)
+  if s.plugin then vim.cmd.packadd(s.plugin) end
   local ok, err = pcall(s.apply, transparent())
   if not ok then vim.notify(("[tema] erro ao aplicar %s:\n%s"):format(id, err), vim.log.levels.ERROR) end
 end
 
--- Instala os quatro sem carregar nenhum. O M.apply faz o packadd só do escolhido.
+-- Instala os outros três sem carregar nenhum. O M.apply faz o packadd só do escolhido.
 vim.pack.add({
-  gh("sainnhe/everforest"),
   { src = gh("rose-pine/neovim"), name = "rose-pine" },
   { src = gh("catppuccin/nvim"), name = "catppuccin" },
   gh("Mofiqul/dracula.nvim"),
