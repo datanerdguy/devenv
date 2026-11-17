@@ -25,7 +25,6 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "BufReadPost" }, {
 -- snacks.nvim: carrega na abertura, mas cada módulo só é usado quando chamado.
 require("snacks").setup({
   bigfile = { enabled = true }, -- arquivo grande: desliga o que pesa
-  quickfile = { enabled = true }, -- mostra o arquivo antes dos plugins
   notifier = { enabled = true, timeout = 3000 },
   input = { enabled = true },
   indent = { enabled = true, animate = { enabled = false } },
