@@ -4,7 +4,7 @@ Neovim nightly (0.13) instalado pelo [bob](https://github.com/MordechaiHadad/bob
 
 Princípios:
 
-- **Leve.** Só o tema, ícones, statusline e o snacks carregam na abertura; todo o resto carrega quando é usado (evento, tipo de arquivo, comando ou tecla). O CI falha se a abertura passar de 80 ms (mediana de 7 execuções; local fica em torno de 25 ms).
+- **Leve.** Só o tema, ícones, statusline, snacks, oil, treesitter e o vim-tmux-navigator carregam na abertura; o resto carrega quando é usado (evento, comando ou tecla), pelo [`lazy.lua`](../config/nvim/lua/pcastr/lazy.lua). O treesitter liga depois de a tela desenhar, e o blink.cmp só no primeiro insert. O CI falha se a abertura passar de 80 ms (mediana de 7 execuções).
 - **Nativo primeiro.** `vim.pack` para plugins, `vim.lsp.config`/`vim.lsp.enable` para LSP, sem lazy.nvim nem mason-lspconfig.
 - **Reproduzível.** As versões dos plugins ficam em [`nvim-pack-lock.json`](../config/nvim/nvim-pack-lock.json), versionado no git.
 
@@ -18,19 +18,20 @@ fixa no rodapé (`cmdheight=0`). A fonte do Ghostty e da barra do i3 é a BlexMo
 config/nvim/
   init.lua                 ordem de carga
   nvim-pack-lock.json      versões travadas dos plugins (gerado pelo vim.pack)
+  colors/everforest.lua    tema everforest no padrão do everforest-vscode
   lua/pcastr/
     options.lua            opções do editor
     keymaps.lua            atalhos gerais
     data.lua               dados: harlequin, tabiew e SQL no DuckDB (sem plugin)
     autocmds.lua           automações (destaque ao copiar, voltar à última posição...)
-    pack.lua               carga sob demanda + gerenciador :Pack
+    lazy.lua               carga sob demanda sobre o vim.pack (install, loader, keys, cmds, on_change)
     lsp.lua                servidores LSP e diagnósticos
     theme.lua              colorscheme do tema atual (segue o comando `theme`)
     plugins/
       ui.lua               mini, snacks, oil, which-key
-      editor.lua           treesitter, gitsigns, smart-splits
+      editor.lua           treesitter, gitsigns, vim-tmux-navigator
       coding.lua           blink.cmp, tiny-inline-diagnostic, conform, nvim-lint, mason
-      ai.lua               sidekick (qualquer CLI de agente), claudecode
+      ai.lua               claudecode
       notebooks.lua        molten + image.nvim, marimo
       notes.lua            obsidian.nvim (notas no cofre do Obsidian)
       debug.lua            nvim-dap, dap-view, dap-python
@@ -40,46 +41,39 @@ config/nvim/
 
 | Plugin | Para que | Quando carrega |
 | --- | --- | --- |
-| everforest, rose-pine, catppuccin, dracula.nvim | temas; só o escolhido pelo `theme` carrega ([themes.md](themes.md)) | abertura |
+| rose-pine, catppuccin, dracula.nvim | temas; só o escolhido pelo `theme` carrega ([themes.md](themes.md)). O everforest não é plugin: fica em `colors/everforest.lua` | abertura |
 | mini.nvim | ícones, statusline, textobjects, surround, pares | abertura (ícones e statusline); o resto no primeiro arquivo |
 | snacks.nvim | picker, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
 | oil.nvim | explorer: a pasta vira um buffer editável | abertura |
 | which-key.nvim | mostra as teclas depois do `<leader>` | depois da interface abrir |
-| nvim-treesitter | realce, indentação e dobras | primeiro arquivo |
+| nvim-treesitter | realce, indentação e dobras | abertura (o realce liga depois de a tela desenhar) |
 | nvim-treesitter-context | fixa no topo a função ou classe atual | primeiro arquivo |
 | nvim-ts-autotag | fecha e renomeia a tag par (HTML, HEEx, templates) | arquivo HTML ou template |
 | gitsigns.nvim | marcas e ações de git por trecho | primeiro arquivo |
-| smart-splits.nvim | navegar entre janelas do Neovim e painéis do tmux | tecla |
-| nvim-lspconfig | configurações prontas dos servidores (só dados) | abertura |
+| vim-tmux-navigator | `Ctrl-h/j/k/l` entre janelas do Neovim e painéis do tmux | abertura |
+| nvim-lspconfig | configurações prontas dos servidores (só dados) | primeiro arquivo |
 | mason.nvim | instalador de LSPs e ferramentas | `:Mason` |
-| blink.cmp | completion | modo de inserção, linha de comando ou arquivo |
+| blink.cmp | completion | primeiro insert ou linha de comando |
 | tiny-inline-diagnostic.nvim | diagnóstico inline | primeiro diagnóstico |
 | conform.nvim | formatar ao salvar | ao salvar |
 | nvim-lint | linters extras | primeiro arquivo |
-| sidekick.nvim | terminal de agentes (Claude, Codex, Gemini, opencode) | tecla |
 | claudecode.nvim | integração de IDE do Claude Code | tecla ou comando |
 | molten-nvim + image.nvim | rodar células Jupyter no buffer | tecla |
 | obsidian.nvim | notas no cofre do Obsidian (links, nota do dia, modelos) | tecla, `:Obsidian` ou nota do cofre |
 | nvim-dap + dap-view + dap-python | debug | tecla |
 
-## Gerenciador de plugins (:Pack)
+## Gerenciar plugins
 
-O `vim.pack` instala e atualiza, mas não mostra o estado. O [`pack.lua`](../config/nvim/lua/pcastr/pack.lua) acrescenta isso:
+Com os comandos nativos do `vim.pack` (Neovim 0.13):
 
 | Comando | O que faz |
 | --- | --- |
-| `:Pack` (`<leader>pp`) | Lista os plugins: estado, versão, gatilho de carga e tempo de carga. A prévia mostra os últimos commits |
-| `:Pack!` (`<leader>pc`) | O mesmo, buscando atualizações na rede (mostra `↑` com a nova versão) |
-| `:PackUpdate [nomes]` (`<leader>pu`) | Atualiza; abre a revisão do `vim.pack` antes de aplicar (`:w` confirma, `:q` cancela) |
-| `:PackRestore [nomes]` | Volta os plugins às versões do `nvim-pack-lock.json` (sem rede) |
-| `:PackClean` | Remove plugins instalados que saíram da config |
-| `:PackStatus` (`<leader>ps`) | Resumo: quantos plugins, quantos carregados e o tempo total |
+| `:packupdate [nomes]` (`<leader>pu`) | Atualiza; abre a revisão antes de aplicar (`:w` confirma, `:q` cancela) |
+| `:packupdate ++offline ++lockfile` (`<leader>pl`) | Volta os plugins às versões do `nvim-pack-lock.json`, sem rede |
+| `:packdel ++all` | Remove os plugins instalados que saíram da config |
+| `:checkhealth vim.pack` | Estado dos plugins |
 
-Dentro do `:Pack`: `Alt-u` atualiza os selecionados, `Alt-U` atualiza todos, `Alt-x` remove, `Alt-c` busca atualizações.
-
-Estados: `●` carregado, `○` sob demanda (ainda não usado), `✗` instalado mas fora da config.
-
-Depois de atualizar, faça commit do `nvim-pack-lock.json`. Para voltar uma versão: `git checkout -- config/nvim/nvim-pack-lock.json` e `:PackRestore`.
+Depois de atualizar, faça commit do `nvim-pack-lock.json`. Para voltar uma versão: `git checkout -- config/nvim/nvim-pack-lock.json` e `<leader>pl`.
 
 Vindo de outra config que também usava o `vim.pack`, os plugins dela ficam em `~/.local/share/nvim/site/pack/core`,
 e o devenv usa o que achar ali, mesmo de outra versão (ex.: `blink.cmp v2 requires "saghen/blink.lib"`). Mova a
@@ -87,25 +81,22 @@ pasta para **fora** de `site/pack` (o Neovim lê todas as pastas ali dentro) e a
 
 ### Acrescentar um plugin
 
-Escolha o arquivo em `plugins/` pelo assunto e acrescente uma entrada em `pack.add`:
+Escolha o arquivo em `plugins/` pelo assunto. Plugin leve que precisa estar na abertura entra direto no `vim.pack.add`.
+O resto usa o [`lazy.lua`](../config/nvim/lua/pcastr/lazy.lua): instala sem carregar e carrega no gatilho.
 
 ```lua
-pack.add({
-  {
-    src = gh("dono/plugin.nvim"),
-    version = vim.version.range("1.*"), -- opcional: tag, branch ou faixa semver
-    event = "BufReadPost",              -- carrega no evento
-    -- ft = { "python" },               -- ou no tipo de arquivo
-    -- cmd = { "Comando" },             -- ou no comando
-    -- keys = { { "<leader>x", fn, desc = "..." } }, -- ou na tecla
-    deps = { "outro-plugin" },          -- carrega antes deste
-    build = function(path) end,         -- roda depois de instalar ou atualizar
-    config = function() require("plugin").setup({}) end,
-  },
-})
+local lazy = require("pcastr.lazy")
+
+lazy.install({ { src = gh("dono/plugin.nvim"), version = vim.version.range("1.*") } })
+local load = lazy.loader({ "plugin.nvim" }, function() require("plugin").setup({}) end)
+
+lazy.keys(load, { { "<leader>x", function() require("plugin").run() end, desc = "[Área] Ação" } })
+lazy.cmds(load, { "Plugin" })                                   -- ou no comando
+vim.api.nvim_create_autocmd("BufReadPost", { group = group, once = true, callback = load }) -- ou no evento
+lazy.on_change("plugin.nvim", function() vim.cmd("PluginBuild") end) -- build: antes do lazy.install
 ```
 
-Sem `event`, `ft`, `cmd` ou `keys` o plugin carrega na abertura; prefira sempre um gatilho. `keys = {}` faz o plugin carregar só como dependência de outro. Rode `just nvim-test` para conferir que tudo carrega e que a abertura continua rápida.
+Rode `just nvim-test` para conferir que tudo carrega e que a abertura continua rápida.
 
 ## LSP
 
@@ -216,18 +207,10 @@ Completion: `Tab` aceita (o primeiro item já vem marcado) e pula para o próxim
 
 | Tecla | Ação |
 | --- | --- |
-| `<leader>aa` | Abrir/fechar o terminal do agente |
-| `<leader>as` | Escolher o CLI (Claude, Codex, Gemini, opencode...) |
-| `<leader>at` / `<leader>af` / `<leader>av` | Mandar o trecho / arquivo / seleção |
-| `<leader>ap` | Prompts prontos |
-| `<leader>ad` | Encerrar a sessão |
-| `Ctrl-.` | Focar o agente |
 | `<leader>ac` | Claude Code (integração de IDE) |
 | `<leader>ab` / `<leader>ae` | Mandar arquivo / seleção ao Claude Code |
 | `<leader>ay` / `<leader>an` | Aceitar / recusar diff proposto |
 | `<leader>am` | Escolher o modelo |
-
-As sessões do sidekick rodam no tmux, então continuam vivas se o Neovim fechar.
 
 ### Notebooks (`<leader>n`)
 

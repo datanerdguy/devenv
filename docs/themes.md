@@ -8,7 +8,7 @@ Decisão: [ADR 0005](adr/0005-temas.md).
 
 | Tema | Nome no comando | Variante |
 | --- | --- | --- |
-| [Everforest](https://github.com/sainnhe/everforest) | `everforest` | Dark, contraste médio |
+| [Everforest](https://github.com/sainnhe/everforest) | `everforest` | Dark, contraste médio. No Neovim segue o [everforest-vscode](https://github.com/sainnhe/everforest-vscode) (`config/nvim/colors/everforest.lua`) |
 | [Rosé Pine](https://rosepinetheme.com) | `rose-pine` | Main |
 | [Catppuccin](https://catppuccin.com) | `catppuccin` | Mocha |
 | [Dracula](https://draculatheme.com) | `dracula` | Dracula |
