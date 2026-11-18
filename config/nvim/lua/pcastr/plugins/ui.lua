@@ -8,6 +8,7 @@ vim.pack.add({
 
 require("mini.icons").setup()
 MiniIcons.mock_nvim_web_devicons()
+vim.o.tabline = "%!v:lua.require'pcastr.tabline'.render()"
 require("mini.statusline").setup({ use_icons = true })
 vim.api.nvim_create_autocmd({ "InsertEnter", "BufReadPost" }, {
   group = vim.api.nvim_create_augroup("pcastr.mini", { clear = true }),

@@ -88,6 +88,7 @@ map("n", "sl", "<C-w>l", { desc = "[Janela] Ir para a da direita" })
 map("n", "<leader>=", "<C-w>=", { desc = "[Janela] Igualar tamanhos" })
 -- Abas no gt/gT nativo: mapear o <Tab> quebraria o <C-i> (avançar no jumplist), que no tmux chega igual.
 map("n", "te", "<cmd>tabedit<cr>", { desc = "[Aba] Nova" })
+map("n", "tc", "<cmd>tabclose<cr>", { desc = "[Aba] Fechar" })
 
 -- Buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "[Buffer] Anterior" })
