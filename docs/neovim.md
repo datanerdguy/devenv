@@ -182,6 +182,8 @@ No oil a pasta é um buffer. Renomeie ou apague editando o texto e salve com `:w
 | `]d` / `[d` | Próximo / anterior diagnóstico (nativo) |
 
 Completion: `Enter` aceita (o primeiro item já vem marcado), setas ou `Ctrl-n`/`Ctrl-p` escolhem, `Tab`/`Shift-Tab` pulam entre os campos do snippet, `Ctrl-Space` abre, `Ctrl-e` fecha.
+Na linha de comando (`:`), as setas ↑/↓ escolhem e o `Enter` roda com a opção marcada. Sem opção marcada, o `Enter`
+roda o que foi digitado. Com o menu fechado, ↑/↓ voltam a andar pelo histórico.
 
 ### Diagnósticos e listas (`<leader>x`)
 

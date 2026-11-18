@@ -40,7 +40,19 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
         },
         signature = { enabled = true },
         sources = { default = { "lsp", "path", "snippets", "buffer" } },
-        cmdline = { enabled = true, completion = { menu = { auto_show = true } } },
+        cmdline = {
+          enabled = true,
+          keymap = {
+            preset = "cmdline",
+            ["<CR>"] = { "accept_and_enter", "fallback" },
+            ["<Up>"] = { "select_prev", "fallback" },
+            ["<Down>"] = { "select_next", "fallback" },
+          },
+          completion = {
+            menu = { auto_show = true },
+            list = { selection = { preselect = false, auto_insert = true } },
+          },
+        },
         fuzzy = { implementation = "prefer_rust_with_warning" },
       })
     end
