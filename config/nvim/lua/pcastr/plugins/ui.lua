@@ -91,6 +91,8 @@ map({ "n", "x" }, "<leader>fw", function() S.picker.grep_word() end, { desc = "[
 map("n", "<leader>fr", function() S.picker.recent() end, { desc = "[Busca] Arquivos recentes" })
 map("n", "<leader>fh", function() S.picker.help() end, { desc = "[Busca] Ajuda do Neovim" })
 map("n", "<leader>fk", function() S.picker.keymaps() end, { desc = "[Busca] Atalhos (keymaps)" })
+map("n", "<leader>fl", function() S.picker.lines() end, { desc = "[Busca] Linhas do arquivo" })
+map("n", "<leader>f:", function() S.picker.commands() end, { desc = "[Busca] Comandos do Neovim" })
 map(
   "n",
   "<leader>fc",
@@ -118,8 +120,8 @@ map("n", "gd", function() S.picker.lsp_definitions() end, { desc = "[LSP] Ir par
 map("n", "gD", function() S.picker.lsp_declarations() end, { desc = "[LSP] Ir para declaração" })
 map("n", "gy", function() S.picker.lsp_type_definitions() end, { desc = "[LSP] Ir para definição do tipo" })
 map("n", "gr", function() S.picker.lsp_references() end, { desc = "[LSP] Referências", nowait = true })
-map("n", "]]", function() S.words.jump(1, true) end, { desc = "[Navegação] Próxima ocorrência da palavra" })
-map("n", "[[", function() S.words.jump(-1, true) end, { desc = "[Navegação] Ocorrência anterior da palavra" })
+map("n", ";w", function() S.words.jump(1, true) end, { desc = "[Navegação] Próxima ocorrência da palavra" })
+map("n", ";b", function() S.words.jump(-1, true) end, { desc = "[Navegação] Ocorrência anterior da palavra" })
 
 map({ "n", "t" }, "<C-/>", function() S.terminal() end, { desc = "[Terminal] Abrir/fechar flutuante" })
 map("n", "<leader>bd", function() S.bufdelete() end, { desc = "[Buffer] Fechar" })

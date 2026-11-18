@@ -163,6 +163,7 @@ As teclas seguem as dotfiles do craftzdog. Todas as buscas mostram arquivos ocul
 | `\\` | Buffers abertos |
 | `<leader>fw` | Palavra sob o cursor (ou seleção) |
 | `<leader>fr` / `<leader>fh` / `<leader>fk` | Recentes / ajuda / atalhos |
+| `<leader>fl` / `<leader>f:` | Linhas do arquivo / comandos do Neovim |
 | `<leader>fc` / `<leader>fp` | Arquivos da config / projetos |
 | `<leader>fs` / `<leader>fS` | Símbolos do arquivo / do projeto |
 | `sf` | Explorer (oil) numa janela flutuante |
@@ -175,7 +176,7 @@ No oil a pasta é um buffer. Renomeie ou apague editando o texto e salve com `:w
 | --- | --- |
 | `gd` / `gD` / `gy` / `gr` | Definição / declaração / tipo / referências |
 | `K` | Documentação |
-| `]]` / `[[` | Próxima / anterior ocorrência da palavra |
+| `;w` / `;b` | Próxima / anterior ocorrência da palavra (precisa de LSP) |
 | `<leader>ca` | Ações de código |
 | `<leader>cr` | Renomear |
 | `<leader>cf` | Formatar |
