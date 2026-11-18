@@ -137,7 +137,8 @@ Toda `desc` de atalho segue `[Categoria] Ação`, ou `[Categoria/Sub] Ação` qu
 | `J` / `K` (no modo visual) | Mover a seleção |
 | `ss` / `sv` / `<leader>=` | Dividir abaixo / à direita / igualar |
 | `sh` / `sj` / `sk` / `sl` | Ir para a janela ao lado |
-| `te` / `tc` / `gt` / `gT` | Nova aba / fechar / próxima / anterior (o `<Tab>` fica livre para o `<C-i>` do jumplist); `3gt` vai para a aba 3 |
+| `te` / `tc` | Nova aba / fechar |
+| `Tab` / `Shift-Tab` (ou `gt` / `gT`) | Próxima / anterior aba; `3gt` vai para a aba 3. O `Ctrl-i` continua no jumplist |
 | `Ctrl-h/j/k/l` | Ir para a janela (ou painel do tmux) ao lado |
 | `Ctrl-setas` | Redimensionar janela |
 | `Shift-h` / `Shift-l` / `<leader>bb` | Buffer anterior / próximo / último |

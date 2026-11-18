@@ -86,7 +86,9 @@ map("n", "sj", "<C-w>j", { desc = "[Janela] Ir para a de baixo" })
 map("n", "sk", "<C-w>k", { desc = "[Janela] Ir para a de cima" })
 map("n", "sl", "<C-w>l", { desc = "[Janela] Ir para a da direita" })
 map("n", "<leader>=", "<C-w>=", { desc = "[Janela] Igualar tamanhos" })
--- Abas no gt/gT nativo: mapear o <Tab> quebraria o <C-i> (avançar no jumplist), que no tmux chega igual.
+-- O <Tab> não quebra o <C-i> do jumplist: o tmux (extended-keys) e o Ghostty mandam as duas teclas separadas.
+map("n", "<Tab>", "gt", { desc = "[Aba] Próxima" })
+map("n", "<S-Tab>", "gT", { desc = "[Aba] Anterior" })
 map("n", "te", "<cmd>tabedit<cr>", { desc = "[Aba] Nova" })
 map("n", "tc", "<cmd>tabclose<cr>", { desc = "[Aba] Fechar" })
 
