@@ -10,6 +10,8 @@ binds {
     Super+E hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
     Super+B hotkey-overlay-title="Navegador" { spawn "devenv-browser"; }
     Super+N hotkey-overlay-title="Nota do dia (Neovim)" { spawn "ghostty" "-e" "nvim" "+Obsidian today"; }
+    // Teste do agent-panel (~/projects/agent-panel). O Painel fecha com q.
+    Mod+a hotkey-overlay-title="Painel dos agentes" { spawn "ghostty" "--class=dev.devenv.agent-panel" "-e" "/home/pcastr/.local/bin/agent-panel" "tui"; }
     Super+D hotkey-overlay-title="Desenhar na tela (wayscriber)" { spawn "wayscriber" "--daemon-toggle"; }
     Super+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Super+Comma hotkey-overlay-title="Configurações do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
