@@ -24,6 +24,19 @@ window-rule {
     default-window-height { fixed 420; }
 }
 
+// Painel do agent-panel (Mod+a ou clique no Indicador da barra).
+window-rule {
+    match app-id="^dev\\.devenv\\.agent-panel$"
+    open-floating true
+    open-focused true
+    default-column-width { fixed 1100; }
+    default-window-height { fixed 720; }
+    // Fundo transparente do tema com borrão, como a barra do Noctalia: o texto de trás não atrapalha.
+    background-effect {
+        blur true
+    }
+}
+
 // Diálogos e janelas pequenas flutuando.
 window-rule {
     match title="^Picture-in-Picture$"
