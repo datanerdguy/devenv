@@ -1,0 +1,12 @@
+# O que o devenv precisa para existir: o bootstrap instala estes pacotes antes de tudo.
+
+[arch]
+packages = [
+  "chezmoi", # configs em links (home/)
+  "metapac", # este gerenciador de pacotes (AUR)
+  "age", # cifra os segredos do chezmoi
+  "rbw", # cliente do Bitwarden: traz a chave age e os tokens
+  "git",
+  "github-cli", # gh
+  "paru", # helper do AUR, usado pelo metapac
+]

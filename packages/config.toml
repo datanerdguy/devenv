@@ -1,0 +1,19 @@
+# Config do metapac. O ~/.config/metapac é um link para esta pasta (chezmoi).
+
+# Gerenciadores que o metapac cuida. A ordem do sync é fixa: arch, cargo, mise, uv.
+# Então o rustup (arch) já está pronto quando o cargo roda.
+enabled_backends = ["arch", "uv", "cargo", "mise"]
+
+# Cada máquina usa só os grupos da sua entrada em [hostname_groups].
+hostname_groups_enabled = true
+
+# O paru instala os pacotes do AUR (como o próprio metapac) junto com os dos repositórios.
+[arch]
+package_manager = "paru"
+
+# Grupos por máquina. O nome é o hostname e o caminho é relativo a groups/, sem o .toml.
+[hostname_groups]
+# O notebook do Lucas, com tudo.
+cachyos = ["base", "repo", "linguagens", "debug", "maquinas/cachyos"]
+# O container do CI (docker run --hostname ci): só o que o bootstrap e o lint precisam.
+ci = ["base", "repo"]

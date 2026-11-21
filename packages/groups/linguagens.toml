@@ -1,0 +1,85 @@
+# Toolchains, LSPs, formatadores e linters (ADR 0010). A ferramenta do projeto vence a daqui.
+#
+# Não entram: Node, Erlang, Elixir, Java e Lua. Cada projeto fixa a versão e o mise instala.
+# Um pacote só aparece uma vez entre todos os grupos:
+# - stylua, shellcheck e uv estão em repo.toml.
+
+[arch]
+packages = [
+  # Rust (a toolchain e o rust-analyzer vêm do rustup, pelo hook)
+  { name = "rustup", hooks = { after_install = ["sh", "-c", "rustup default stable && rustup component add rust-analyzer"] } },
+
+  # Go
+  "go",
+  "gopls",
+  "gofumpt",
+  "golangci-lint",
+
+  # Python (o uv está em repo.toml)
+  "ruff", # formatador e linter
+  "ty", # LSP padrão
+  "basedpyright", # LSP de reserva
+
+  # TypeScript e JavaScript
+  "vtsls",
+  "typescript",
+  "prettier", # formata também HTML, CSS, JSON, YAML e Markdown
+  "eslint",
+
+  # Erlang
+  "elp",
+
+  # Lua (o stylua está em repo.toml)
+  "lua-language-server",
+  "selene",
+
+  # C e C++ (o clang traz o clangd e o clang-format)
+  "clang",
+  "cmake",
+  "ninja",
+
+  # Java
+  "jdtls",
+  "google-java-format",
+
+  # Assembly
+  "nasm",
+  "asm-lsp",
+
+  # Web
+  "vscode-html-languageserver",
+  "vscode-css-languageserver",
+  "vscode-json-languageserver",
+  "superhtml",
+  "tailwindcss-language-server",
+  "yaml-language-server",
+
+  # Config e texto
+  "tombi", # TOML
+  "marksman", # Markdown
+  "markdownlint-cli2",
+
+  # Shell (o shellcheck está em repo.toml)
+  "bash-language-server",
+  "shfmt",
+  "fish-lsp",
+
+  # Docker e just
+  "dockerfile-language-server",
+  "hadolint",
+  "just-lsp",
+
+  # Instala as versões de Node, Erlang, Elixir, Java e Lua que cada projeto pede
+  "mise",
+]
+
+[cargo]
+packages = [
+  "htmx-lsp", # htmx
+]
+
+# Só existe no GitHub, não há pacote na distro nem no AUR (exceção do ADR 0010).
+[mise]
+packages = [
+  { name = "github:elixir-lang/expert", options = { version = "latest" } }, # LSP do Elixir
+]
