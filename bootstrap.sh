@@ -69,7 +69,7 @@ if [ -n "${CI:-}" ]; then
   metapac sync --no-confirm
 elif [ ! -t 0 ] || [ ! -t 1 ]; then
   # O metapac pergunta antes de instalar e precisa de um terminal (sem pipe, como `| tee`).
-  echo "O metapac precisa de um terminal para perguntar. Rode sem pipe: just sync" >&2
+  echo "O metapac precisa de um terminal para perguntar. Rode sem pipe: metapac sync" >&2
   exit 1
 else
   metapac sync
