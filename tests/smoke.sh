@@ -39,7 +39,9 @@ if command -v ghostty >/dev/null; then
     echo "FALTA: config do Ghostty inválida" >&2
     fail=1
   fi
-  if fc-list | grep -q "BlexMono Nerd Font"; then
+  # Sem pipe direto: com pipefail, o grep -q sai cedo e o fc-list morre de SIGPIPE, o que conta como falha.
+  fonts="$(fc-list : family)"
+  if grep -q "BlexMono Nerd Font" <<<"${fonts}"; then
     echo "ok: fonte BlexMono Nerd Font"
   else
     echo "FALTA: fonte BlexMono Nerd Font" >&2
