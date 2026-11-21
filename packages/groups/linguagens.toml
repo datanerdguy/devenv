@@ -43,7 +43,7 @@ packages = [
 
   # Assembly
   "nasm",
-  "asm-lsp",
+  # asm-lsp: vem do cargo (abaixo). O do AUR trava o openssl-sys 0.9.107, que não aceita o OpenSSL 4.
 
   # Web
   "vscode-html-languageserver",
@@ -75,6 +75,7 @@ packages = [
 [cargo]
 packages = [
   "htmx-lsp", # htmx
+  "asm-lsp", # Assembly; sem --locked, o cargo pega um openssl-sys que aceita o OpenSSL 4
 ]
 
 # Só existe no GitHub, não há pacote na distro nem no AUR (exceção do ADR 0010).
