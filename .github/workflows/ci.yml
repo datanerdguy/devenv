@@ -26,7 +26,7 @@ jobs:
       - name: Instala as ferramentas
         run: |
           pacman -Syu --noconfirm just shellcheck actionlint python uv
-          uv tool install keymap-drawer
+          uv tool install keymap-drawer==0.23.0 # a versão muda os SVGs; suba junto com o just keyboard
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Lint
         run: just lint
