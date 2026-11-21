@@ -1,1 +1,0 @@
-../../../../python/{% if kind == 'fastapi-htmx' %}src{% endif %}/{{ package }}/static/style.css

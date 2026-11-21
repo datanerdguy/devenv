@@ -1,11 +1,4 @@
-result
-result-*
-.direnv/
-
-# Dicionário compilado pelo Neovim (o .add é a fonte)
-config/nvim/spell/*.spl
-
-# Segredos: nunca no repo (os cifrados ficam em secrets/*.yaml; docs/secrets.md)
+# Segredos: nunca no repo (docs/adr/0010-devenv-sem-nix-chezmoi-metapac.md)
 .env
 .env.*
 !.env.example
@@ -13,8 +6,3 @@ keys.txt
 *.pem
 *.key
 .mcp.json
-nvim.log
-
-# Gerado pelo tema everforest (better_performance)
-config/nvim/after/
-config/nvim/before/

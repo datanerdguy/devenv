@@ -7,16 +7,16 @@ O `AGENTS.md` de cada projeto completa estas regras.
 
 - Lucas. Engenharia de ML/IA/LLM, MLOps, dados. Python, Go, Rust; aprendendo Elixir/Phoenix e htmx.
 - Responda em português (pt-BR). Código, commits e identificadores em inglês, salvo se o projeto usar outro padrão.
-- Ambiente: Fedora, fish, tmux, Neovim, Nix + home-manager (repo `~/devenv`).
+- Ambiente: CachyOS, fish, tmux, Neovim, chezmoi + metapac (repo `~/devenv`).
 
 ## Como trabalhar
 
 - Antes de mudar código, leia o que já existe e siga o estilo do projeto.
 - Mudanças pequenas e verificáveis. Rode os testes e o lint do projeto antes de dizer que terminou.
 - Commits no padrão Conventional Commits (`feat(escopo): ...`). Não faça push nem abra PR sem eu pedir.
-- Nunca coloque segredos em arquivos ou commits. Segredos vêm do Bitwarden (`rbw get <nome>`) ou do sops (`secrets edit`).
-- Python: `uv` (nunca `pip install` global). Go: módulos. Rust: cargo. Nix: `nix develop` / direnv.
-- Ferramentas disponíveis: `rg`, `fd`, `jq`, `yq`, `duckdb`, `gh`, `just`.
+- Nunca coloque segredos em arquivos ou commits. Segredos vêm do Bitwarden (`rbw get <nome>`) ou do chezmoi com age.
+- Python: `uv` (nunca `pip install` global). Go: módulos. Rust: cargo.
+- Ferramentas disponíveis: `rg`, `fd`, `gh`, `just`.
 - Antes de usar a API de uma biblioteca, consulte a documentação da versão do projeto (MCP `context7`, depois
   MCP `docs`). Não invente parâmetros nem funções.
 

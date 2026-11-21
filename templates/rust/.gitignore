@@ -1,9 +1,0 @@
-# Rust
-/target/
-
-# Ambiente local
-.direnv/
-.devenv/
-.envrc.local
-.env
-result
