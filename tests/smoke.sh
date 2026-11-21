@@ -23,6 +23,14 @@ else
   fail=1
 fi
 
+# Binários que o chezmoi baixa do GitHub (home/.chezmoiexternal.toml).
+if [ -x "${HOME}/.local/bin/asm-lsp" ]; then
+  echo "ok: asm-lsp (chezmoi)"
+else
+  echo "FALTA: asm-lsp em ~/.local/bin (chezmoi apply)" >&2
+  fail=1
+fi
+
 # O hook do rustup (grupo base) deixou a toolchain e o rust-analyzer.
 if rustup which rustc >/dev/null 2>&1 && rustup which rust-analyzer >/dev/null 2>&1; then
   echo "ok: rustup com rustc e rust-analyzer"

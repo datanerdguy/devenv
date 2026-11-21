@@ -31,9 +31,11 @@ foi tomada numa sessão de perguntas e respostas e vale para o repo inteiro: o d
 
 - rustup, a toolchain do Go e o uv escolhem a versão dentro de cada projeto.
 - mise só entra para Node, Erlang/Elixir, Java e Lua, e a versão vem do arquivo do projeto.
-- Exceção: o mise instala um pacote da máquina quando não há pacote na distro nem no AUR. Hoje são dois: o Expert
-  (`github:elixir-lang/expert`), que só existe no GitHub, e o asm-lsp (`github:bergercookie/asm-lsp`), porque o
-  pacote do AUR e o `cargo install` não compilam com o OpenSSL 4.
+- Exceção: o mise instala um pacote da máquina quando não há pacote na distro nem no AUR. Hoje é só o Expert
+  (`expert`, no registro do mise), que não tem pacote. O metapac só aceita nomes do registro do mise.
+- O que só existe como binário no GitHub e não está no registro do mise vem pelo chezmoi
+  (`home/.chezmoiexternal.toml`), com a versão na URL. Hoje é só o asm-lsp: o pacote do AUR e o `cargo install`
+  não compilam com o OpenSSL 4.
 
 **Ferramenta do projeto.** A ferramenta que o projeto declara vence a da lista. O metapac instala só o padrão
 da máquina (LSPs, formatadores e linters), usado quando o projeto não traz o seu.
@@ -51,7 +53,7 @@ da máquina (LSPs, formatadores e linters), usado quando o projeto não traz o s
 | Lua | lua-language-server | stylua, selene |
 | C, C++ | clangd (pacote `clang`) | clang-format (`clang`), cmake, ninja |
 | Java | jdtls | google-java-format |
-| Assembly | asm-lsp (mise) | nasm |
+| Assembly | asm-lsp (binário, pelo chezmoi) | nasm |
 | HTML | vscode-html-languageserver, superhtml | prettier |
 | CSS, Tailwind | vscode-css-languageserver, tailwindcss-language-server | prettier |
 | JSON | vscode-json-languageserver | prettier |

@@ -1,0 +1,10 @@
+# Programas que só existem como binário no GitHub e não cabem no metapac.
+# O chezmoi baixa no `chezmoi apply`. Para atualizar, troque a versão na URL.
+
+# asm-lsp (LSP de Assembly): o pacote do AUR e o cargo install não compilam com o OpenSSL 4,
+# e o metapac só aceita no backend do mise os nomes do registro, onde ele não está.
+[".local/bin/asm-lsp"]
+type = "archive-file"
+url = "https://github.com/bergercookie/asm-lsp/releases/download/v0.10.1/asm-lsp-x86_64-unknown-linux-gnu.tar.gz"
+path = "asm-lsp"
+executable = true
