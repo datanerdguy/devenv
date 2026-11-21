@@ -11,7 +11,8 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
 - **Pesquisar antes de criar:** área nova (ferramenta, módulo, fluxo) começa com opções comparadas e uma
   recomendação para o Lucas decidir. Não implemente uma área nova sem essa decisão.
 - **Pacote novo vai no grupo certo do metapac** (`packages/groups/`): `base` para o que o devenv precisa para
-  existir, `repo` para mexer neste repo, `linguagens` para toolchains, LSPs e formatadores, `debug` para DAP.
+  existir, `repo` para mexer neste repo, `linguagens` para toolchains, LSPs e formatadores, `dados` para SQL e afins, `api` para
+  clientes HTTP, `debug` para DAP.
   Um pacote aparece uma vez só entre todos os grupos. O que é só desta máquina fica em `maquinas/<máquina>`.
 - **Configs em `home/` são links para o repo** (editar já vale). O chezmoi cria os links no `just apply`.
 - **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Java, Lua) escolhem a versão dentro de cada
