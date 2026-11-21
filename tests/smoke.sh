@@ -6,55 +6,31 @@ export PATH="${HOME}/.local/bin:${PATH}"
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fail=0
 
+# check <o que> <comando...>: imprime ok ou FALTA e marca a falha.
+check() {
+  local what="$1"
+  shift
+  if "$@" >/dev/null 2>&1; then
+    echo "ok: ${what}"
+  else
+    echo "FALTA: ${what}" >&2
+    fail=1
+  fi
+}
+
 for cmd in chezmoi metapac just cz; do
-  if command -v "${cmd}" >/dev/null; then
-    echo "ok: ${cmd}"
-  else
-    echo "FALTA: ${cmd} fora do PATH" >&2
-    fail=1
-  fi
+  check "${cmd} no PATH" command -v "${cmd}"
 done
+check "${HOME}/.config/metapac -> ${repo}/packages" test "$(readlink -f "${HOME}/.config/metapac")" = "${repo}/packages"
+check "asm-lsp em ${HOME}/.local/bin (chezmoi)" test -x "${HOME}/.local/bin/asm-lsp"
+check "rustup com rustc e rust-analyzer" rustup which rust-analyzer
 
-link="${HOME}/.config/metapac"
-if [ "$(readlink -f "${link}")" = "${repo}/packages" ]; then
-  echo "ok: ${link} -> ${repo}/packages"
-else
-  echo "FALTA: ${link} não aponta para ${repo}/packages" >&2
-  fail=1
-fi
-
-# Binários que o chezmoi baixa do GitHub (home/.chezmoiexternal.toml).
-if [ -x "${HOME}/.local/bin/asm-lsp" ]; then
-  echo "ok: asm-lsp (chezmoi)"
-else
-  echo "FALTA: asm-lsp em ~/.local/bin (chezmoi apply)" >&2
-  fail=1
-fi
-
-# O hook do rustup (grupo base) deixou a toolchain e o rust-analyzer.
-if rustup which rustc >/dev/null 2>&1 && rustup which rust-analyzer >/dev/null 2>&1; then
-  echo "ok: rustup com rustc e rust-analyzer"
-else
-  echo "FALTA: rustup sem toolchain ou sem rust-analyzer (hook do metapac)" >&2
-  fail=1
-fi
-
-# Com o grupo terminal: a config do Ghostty é válida e a fonte está instalada.
+# Com o grupo terminal.
 if command -v ghostty >/dev/null; then
-  if ghostty +validate-config --config-file="${HOME}/.config/ghostty/config"; then
-    echo "ok: config do Ghostty"
-  else
-    echo "FALTA: config do Ghostty inválida" >&2
-    fail=1
-  fi
+  check "config do Ghostty" ghostty +validate-config --config-file="${HOME}/.config/ghostty/config"
   # Sem pipe direto: com pipefail, o grep -q sai cedo e o fc-list morre de SIGPIPE, o que conta como falha.
   fonts="$(fc-list : family)"
-  if grep -q "BlexMono Nerd Font" <<<"${fonts}"; then
-    echo "ok: fonte BlexMono Nerd Font"
-  else
-    echo "FALTA: fonte BlexMono Nerd Font" >&2
-    fail=1
-  fi
+  check "fonte BlexMono Nerd Font" grep -q "BlexMono Nerd Font" <<<"${fonts}"
 fi
 
 exit "${fail}"
