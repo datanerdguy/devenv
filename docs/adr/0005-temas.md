@@ -1,6 +1,6 @@
 # 0005. Temas: uma paleta por tema, arquivos gerados pelo Nix, troca na hora pelo `theme`
 
-Data: 2026-10-23 · Status: aceita
+Data: 2026-10-23 · Status: substituída pela [0010](0010-devenv-sem-nix-chezmoi-metapac.md)
 
 ## Contexto
 

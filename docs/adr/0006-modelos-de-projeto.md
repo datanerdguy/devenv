@@ -1,6 +1,6 @@
 # 0006. Modelos de projeto: copier com um comando `new`, uv no Python e o mesmo `just ci` em todo lugar
 
-Data: 2026-10-23 · Status: aceita
+Data: 2026-10-23 · Status: substituída pela [0010](0010-devenv-sem-nix-chezmoi-metapac.md)
 
 ## Contexto
 
