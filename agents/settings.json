@@ -24,6 +24,16 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
+    "filesystem": {
+      "allowWrite": [
+        "~/.cache/uv",
+        "~/.cache/go-build",
+        "~/go/pkg/mod",
+        "~/.cargo/registry",
+        "~/.cargo/git",
+        "~/.npm"
+      ]
+    },
     "network": {
       "allowedDomains": [
         "github.com",

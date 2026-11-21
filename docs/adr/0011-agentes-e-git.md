@@ -22,7 +22,8 @@ dois MCPs. As decisões abaixo saíram de uma sessão de perguntas e respostas.
 - **MCP.** Só o `context7`, que é remoto e não pede chave. O índice local `docs-mcp` sai (pedia Node e npx).
 - **Sandbox.** O Bash do Claude roda isolado (bubblewrap + socat): escreve só no projeto e sai só para os domínios
   liberados. Dentro dele, roda sem pedir permissão. Regras `deny` impedem ler a chave age, `~/.ssh`, o `rbw`, as
-  credenciais do Claude e os `.env`.
+  credenciais do Claude e os `.env`. Os caches das linguagens são graváveis; as pastas dos binários das
+  toolchains não.
 - **Workmux fica de fora.** Ele depende do tmux, que é área do Lucas, e volta junto com ela se fizer falta.
 - **Git.** O config fica em `~/.config/git/config` (link); o `~/.gitconfig` fica para o helper do `gh`.
   Delta é o pager, lazygit é a interface. HTTPS pelo `gh`, sem assinar commits.

@@ -27,7 +27,10 @@ Os pacotes ficam nos grupos `agentes` (claude-code, bubblewrap, socat) e `git` (
   equivalente na API e branch. Verde abaixo de 50%, amarelo abaixo de 80%, vermelho acima. A cota também vai
   para `~/.cache/devenv/claude-usage`, para a barra do tmux.
 - **Sandbox:** o Bash do Claude escreve só no projeto e acessa só os domínios de `sandbox.network.allowedDomains`.
-  Para liberar um domínio, adicione-o lá.
+  Para liberar um domínio, adicione-o lá. Os caches das linguagens (uv, Go, cargo, npm) também são graváveis,
+  em `sandbox.filesystem.allowWrite`. As pastas das toolchains (`~/.rustup`, mise, `~/go/bin`, `~/.cargo/bin`)
+  não: instalar uma toolchain pede permissão, porque um binário trocado ali rodaria fora do sandbox. O sandbox
+  só libera pasta que já existe, então o chezmoi cria as que faltam vazias (`home/dot_cache/go-build/.keep` e afins).
 - **MCP:** `context7`, para a documentação de bibliotecas na versão do projeto.
 
 ## Git
