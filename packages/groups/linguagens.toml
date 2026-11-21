@@ -65,7 +65,7 @@ packages = [
 
   # Docker e just
   "dockerfile-language-server",
-  "hadolint",
+  "hadolint-bin", # binário pronto; o "hadolint" compila Haskell (baixa o GHC, vários GB)
   "just-lsp",
 
   # Instala as versões de Node, Erlang, Elixir, Java e Lua que cada projeto pede
