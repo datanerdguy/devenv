@@ -6,8 +6,7 @@
 
 [arch]
 packages = [
-  # Rust (a toolchain e o rust-analyzer vêm do rustup, pelo hook)
-  { name = "rustup", hooks = { after_install = ["sh", "-c", "rustup default stable && rustup component add rust-analyzer"] } },
+  # Rust: o rustup está em base.toml (o metapac precisa dele para ser compilado)
 
   # Go
   "go",

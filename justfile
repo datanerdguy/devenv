@@ -27,7 +27,7 @@ diff:
 # Lint: scripts, workflows e o mapa do teclado (o mesmo que o CI roda)
 lint:
     shellcheck bootstrap.sh .githooks/* tests/*.sh
-    actionlint
+    actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
 
 # Regenera as imagens das camadas e o keyboard/README.md depois de salvar o .vil no Vial

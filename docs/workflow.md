@@ -68,7 +68,7 @@ O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, 
 `maquinas/cachyos` ficam de fora, porque pesam (vários pacotes do AUR são compilados).
 
 Depois de mexer nessas listas, rode o CI completo à mão: `gh workflow run ci.yml --ref <branch> -f completo=true`.
-Ele usa o hostname `ci-completo` (`base`, `repo`, `linguagens` e `dados`), confere o hook do rustup e pode levar
+Ele usa o hostname `ci-completo` (`base`, `repo`, `linguagens` e `dados`) e pode levar
 até duas horas. O `maquinas/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
 
 ### `pr.yml`: só em PR

@@ -37,8 +37,11 @@ if ! command -v paru >/dev/null; then
   rm -rf "${tmp}"
 fi
 
-# 3. O mínimo para o resto.
-say "Instalando chezmoi, metapac, age e rbw"
+# 3. O mínimo para o resto. O rustup vem antes: ele dá o cargo que compila o metapac do AUR.
+# Sem isso, o paru instala o pacote rust, que conflita com o rustup do grupo base.
+say "Instalando rustup, chezmoi, metapac, age e rbw"
+paru -S --needed "${yes_flag[@]}" rustup
+rustup default stable
 paru -S --needed "${yes_flag[@]}" chezmoi metapac age rbw
 
 # 4. Chave age: traz do Bitwarden se faltar. Sem rbw logado, segue sem ela.
