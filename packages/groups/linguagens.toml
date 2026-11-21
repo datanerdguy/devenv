@@ -43,7 +43,7 @@ packages = [
 
   # Assembly
   "nasm",
-  # asm-lsp: vem do cargo (abaixo). O do AUR trava o openssl-sys 0.9.107, que não aceita o OpenSSL 4.
+  # asm-lsp: vem do mise (abaixo). O do AUR e o do cargo travam o openssl-sys 0.9.107, que não compila com o OpenSSL 4.
 
   # Web
   "vscode-html-languageserver",
@@ -75,11 +75,11 @@ packages = [
 [cargo]
 packages = [
   "htmx-lsp", # htmx
-  "asm-lsp", # Assembly; sem --locked, o cargo pega um openssl-sys que aceita o OpenSSL 4
 ]
 
 # Só existe no GitHub, não há pacote na distro nem no AUR (exceção do ADR 0010).
 [mise]
 packages = [
   { name = "github:elixir-lang/expert", options = { version = "latest" } }, # LSP do Elixir
+  { name = "github:bergercookie/asm-lsp", options = { version = "latest" } }, # Assembly: o binário pronto não usa o OpenSSL
 ]
