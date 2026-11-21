@@ -1,0 +1,52 @@
+# CI: em todo PR e à mão. Roda no Arch (archlinux:latest), a base do CachyOS.
+# Não roda no push para dev e main: o que chega lá já passou pelo mesmo CI no PR.
+name: ci
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # shellcheck, actionlint e o mapa do teclado: o mesmo `just lint` do dia a dia.
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: archlinux:latest
+      options: --hostname ci
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Instala as ferramentas
+        run: |
+          pacman -Syu --noconfirm just shellcheck actionlint python uv
+          uv tool install keymap-drawer
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Lint
+        run: just lint
+
+  # Máquina nova de verdade: o bootstrap com um usuário comum, no grupo `ci` do metapac (base e repo).
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: archlinux:latest
+      options: --hostname ci
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Cria um usuário com sudo sem senha
+        run: |
+          pacman -Syu --noconfirm sudo git
+          useradd --create-home dev
+          echo 'dev ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dev
+          chown -R dev "$GITHUB_WORKSPACE"
+      - name: Bootstrap (sem rbw logado)
+        run: sudo -u dev -H env CI=true ./bootstrap.sh
+      - name: Smoke
+        run: sudo -u dev -H tests/smoke.sh
