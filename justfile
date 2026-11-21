@@ -11,8 +11,9 @@ setup:
 apply:
     chezmoi apply
 
-# Instala o que falta nos grupos de packages/ (metapac)
+# Atualiza o sistema e instala o que falta nos grupos de packages/ (metapac)
 sync:
+    paru -Syu
     metapac sync
 
 # Remove o que não está nos grupos: mostra a lista e pede confirmação

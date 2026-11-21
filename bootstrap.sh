@@ -40,7 +40,9 @@ fi
 # 3. O mínimo para o resto. O rustup vem antes: ele dá o cargo que compila o metapac do AUR.
 # Sem isso, o paru instala o pacote rust, que conflita com o rustup do grupo base.
 say "Instalando rustup, chezmoi, metapac, age e rbw"
-paru -S --needed "${yes_flag[@]}" rustup
+# Antes de tudo, o sistema em dia: com o banco de pacotes velho, o espelho pode já não ter a versão pedida (404).
+# No Arch é sempre -Syu, nunca só -Sy: atualizar o banco sem os pacotes deixa o sistema pela metade.
+paru -Syu --needed "${yes_flag[@]}" rustup
 rustup default stable
 paru -S --needed "${yes_flag[@]}" chezmoi metapac age rbw
 
