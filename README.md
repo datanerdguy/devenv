@@ -21,7 +21,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 | --- | --- |
 | `just setup` | Liga os hooks do git (lint antes do commit, mensagem no padrão) |
 | `just apply` | Aplica as configs de `home/` (`chezmoi apply`) |
-| `just sync` | Atualiza o sistema (`paru -Syu`) e instala o que falta nos grupos de `packages/` (`metapac sync`) |
+| `just sync` | Atualiza o sistema (`paru -Syu`), instala o que falta nos grupos de `packages/` (`metapac sync`) e marca as dependências como dependências (`packages/marca-deps.sh`) |
 | `just clean` | Remove o que não está nos grupos, depois de mostrar e pedir confirmação |
 | `just diff` | Mostra o que mudaria nas configs e o que está instalado fora dos grupos |
 | `just lint` | shellcheck, actionlint e o mapa do teclado (o mesmo do CI) |

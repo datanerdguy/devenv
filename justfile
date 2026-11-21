@@ -15,6 +15,7 @@ apply:
 sync:
     paru -Syu
     metapac sync
+    packages/marca-deps.sh
 
 # Remove o que não está nos grupos: mostra a lista e pede confirmação
 clean:
@@ -27,7 +28,7 @@ diff:
 
 # Lint: scripts, workflows e o mapa do teclado (o mesmo que o CI roda)
 lint:
-    shellcheck bootstrap.sh .githooks/* tests/*.sh
+    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh
     actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
 

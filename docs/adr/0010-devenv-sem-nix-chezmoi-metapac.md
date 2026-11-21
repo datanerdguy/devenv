@@ -123,4 +123,7 @@ dados (a repensar). O Lucas escreve shell, terminal, tmux e Neovim; o agente aju
   A chave age e os arquivos cifrados valem só contra olhos no repo, não contra o disco.
 - `metapac clean` remove tudo o que não está na lista. Por isso o grupo `maquinas/cachyos` guarda o que o
   instalador do CachyOS deixou e se regera com `metapac unmanaged`.
+- O metapac instala com `paru --asexplicit`, e o pacman marca as dependências como explícitas também. O
+  `packages/marca-deps.sh` roda depois de cada sync (no `just sync` e no bootstrap) e as devolve a dependências.
+  Sem isso, o `metapac clean` tentaria remover as dependências dos pacotes da lista.
 - Outras distros entram depois com os seus grupos e backends no `config.toml`.

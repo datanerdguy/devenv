@@ -76,4 +76,6 @@ elif [ ! -t 0 ] || [ ! -t 1 ]; then
 else
   metapac sync
 fi
+# O metapac marca as dependências como explícitas; aqui elas voltam a ser dependências.
+"${repo}/packages/marca-deps.sh"
 say "Pronto"
