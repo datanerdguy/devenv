@@ -1,0 +1,7 @@
+# Git no terminal. O git e o gh ficam no base.
+
+[arch]
+packages = [
+  "git-delta", # pager dos diffs
+  "lazygit", # interface do git no terminal
+]

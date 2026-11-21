@@ -1,13 +1,13 @@
 # Instruções globais para agentes de código
 
-Valem para o Claude Code. Fonte única no repo devenv (`agents/AGENTS.md`).
-O `AGENTS.md` de cada projeto completa estas regras.
+Valem para o Claude Code em todo projeto. A fonte fica no repo devenv (`agents/AGENTS.md`), e o chezmoi liga
+`~/.claude/CLAUDE.md` a este arquivo. O `AGENTS.md` de cada projeto completa estas regras.
 
 ## Quem sou eu
 
 - Lucas. Engenharia de ML/IA/LLM, MLOps, dados. Python, Go, Rust; aprendendo Elixir/Phoenix e htmx.
 - Responda em português (pt-BR). Código, commits e identificadores em inglês, salvo se o projeto usar outro padrão.
-- Ambiente: CachyOS, fish, tmux, Neovim, chezmoi + metapac (repo `~/devenv`).
+- Ambiente: CachyOS, fish, Neovim, chezmoi + metapac (repo `~/devenv`).
 
 ## Como trabalhar
 
@@ -15,20 +15,18 @@ O `AGENTS.md` de cada projeto completa estas regras.
 - Mudanças pequenas e verificáveis. Rode os testes e o lint do projeto antes de dizer que terminou.
 - Commits no padrão Conventional Commits (`feat(escopo): ...`). Não faça push nem abra PR sem eu pedir.
 - Nunca coloque segredos em arquivos ou commits. Segredos vêm do Bitwarden (`rbw get <nome>`) ou do chezmoi com age.
-- Python: `uv` (nunca `pip install` global). Go: módulos. Rust: cargo.
-- Ferramentas disponíveis: `rg`, `fd`, `gh`, `just`.
-- Antes de usar a API de uma biblioteca, consulte a documentação da versão do projeto (MCP `context7`, depois
-  MCP `docs`). Não invente parâmetros nem funções.
+- Python: `uv` (nunca `pip install` global). Go: módulos. Rust: cargo. A versão de cada linguagem é a do projeto
+  (rustup, `GOTOOLCHAIN`, uv, mise).
+- Ferramentas disponíveis: `rg`, `fd`, `jq`, `gh`, `just`.
+- Antes de usar a API de uma biblioteca, consulte a documentação da versão do projeto pelo MCP `context7`.
+  Não invente parâmetros nem funções.
 
-## Agentes e modelos
+## Modelos
 
-- Só o que o Claude Code oferece: modelos `haiku`, `sonnet`, `opus` e `opusplan`, effort `low` a `max` e
-  subagentes (`Explore`, `Plan`, `general-purpose`). A skill `route` escolhe modelo e effort por tarefa.
-- Assinatura Claude Pro: Haiku gasta pouco, Sonnet é o padrão, Opus gasta bem mais. **Fable não entra no Pro:**
-  não use, nem em subagente, salvo pedido meu.
-- Escolha o menor modelo e effort que resolvem, e suba se o resultado não servir. Antes de trocar de modelo,
-  tente subir o effort. `max` só quando `xhigh` falhou numa tarefa crítica. Planejar, arquitetura e segurança
-  pedem Opus; sugira `/model opus` ou `opusplan` antes de começar.
-- Subagente só para busca ampla, partes independentes em paralelo ou revisão com olhar limpo. No máximo 3.
-  Sempre com o modelo explícito (sem isso herda o da sessão) e um pedido autocontido. Subagente não cria outro.
-- Trabalho longo em paralelo: uma tarefa por worktree com `workmux add <nome> -a claude -p "<pedido>"`.
+- Assinatura Claude Pro, sem chave de API. Sonnet é o padrão da sessão; Opus gasta bem mais cota e fica para
+  planejar, arquitetura, bugs difíceis e segurança (sugira `/model opus` antes de começar).
+- **Não use Fable**, nem em subagente, salvo pedido meu.
+- Antes de trocar de modelo, tente subir o effort.
+- Os modelos dos papéis do pstack estão na tabela abaixo.
+
+@~/.claude/pstack-models.md

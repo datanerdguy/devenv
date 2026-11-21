@@ -12,7 +12,7 @@ cd ~/devenv
 ./bootstrap.sh
 ```
 
-O bootstrap confere que a distro é Arch ou derivada, garante o `paru`, instala `chezmoi metapac age rbw`, traz a
+O bootstrap confere que a distro é Arch ou derivada, garante o `paru`, instala `chezmoi metapac age rbw jq`, traz a
 chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `metapac sync`. Pode rodar de novo.
 
 ## Dia a dia
@@ -33,25 +33,26 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 ```text
 .chezmoiroot      aponta para home/
 home/             fonte do chezmoi: só links e templates
-packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, terminal, editor, debug, maquinas/<máquina>)
+packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, terminal, editor, agentes, git, debug, maquinas/<máquina>)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
-agents/AGENTS.md  regras globais dos agentes
-docs/             workflow.md e adr/
+agents/           Claude Code: regras globais, settings, statusline, MCP
+docs/             workflow.md, agents.md e adr/
 ```
 
 ## Áreas
 
-O devenv é refeito uma área por PR. A base está pronta. O Lucas escreve as áreas de shell, terminal (com os
-temas), tmux e Neovim. Depois vêm agentes, desktop, teclado e dados.
+O devenv é refeito uma área por PR. A base e os agentes estão prontos. O Lucas escreve as áreas de shell, terminal (com os
+temas), tmux e Neovim. Depois vêm desktop, teclado e dados.
 
 | Área | Estado |
 | --- | --- |
 | Base (chezmoi, metapac, bootstrap, CI) | pronta |
+| Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
 | Teclado | em `keyboard/`, sem mudança |
 | Shell, terminal e temas, tmux, Neovim | a fazer, pelo Lucas |
-| Agentes, desktop, dados | a fazer |
+| Desktop, dados | a fazer |
 
 ## Contribuindo
 

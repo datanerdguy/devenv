@@ -1,0 +1,6 @@
+# Lazygit. As cores entram com o script `theme`.
+git:
+  # Diffs pelo delta, como no `git diff`.
+  diffRenderers:
+    - type: stdinFilter
+      command: delta --dark --paging=never

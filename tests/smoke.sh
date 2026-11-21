@@ -38,4 +38,17 @@ if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
 fi
 
+# Agentes: instruções, settings mesclado, statusline e MCP.
+check "${HOME}/.claude/CLAUDE.md -> agents/AGENTS.md" test "$(readlink -f "${HOME}/.claude/CLAUDE.md")" = "${repo}/agents/AGENTS.md"
+check "settings do Claude com sandbox e statusline" jq -e '.sandbox.enabled and .statusLine.command' "${HOME}/.claude/settings.json"
+check "MCP context7 no ~/.claude.json" jq -e '.mcpServers.context7.url' "${HOME}/.claude.json"
+check "${HOME}/.claude.json só para o dono (0600)" test "$(stat -c %a "${HOME}/.claude.json")" = 600
+check "statusline roda" bash "${HOME}/.claude/statusline.sh" <<<'{"model":{"display_name":"Sonnet"}}'
+
+# Git.
+check "git com o delta de pager" test "$(git config --get core.pager)" = delta
+if command -v lazygit >/dev/null; then
+  check "delta e lazygit instalados" command -v delta
+fi
+
 exit "${fail}"

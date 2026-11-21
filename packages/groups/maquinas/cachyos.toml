@@ -44,7 +44,6 @@ packages = [
   "cachyos-zsh-config",
   "cantarell-fonts",
   "chwd",
-  "claude-code",
   "cpupower",
   "cryptsetup",
   "device-mapper",

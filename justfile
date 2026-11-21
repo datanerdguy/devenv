@@ -28,7 +28,7 @@ diff:
 
 # Lint: scripts, workflows e o mapa do teclado (o mesmo que o CI roda)
 lint:
-    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh
+    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
     actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
 
