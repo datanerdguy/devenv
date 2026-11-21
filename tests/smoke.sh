@@ -33,4 +33,9 @@ if command -v ghostty >/dev/null; then
   check "fonte BlexMono Nerd Font" grep -q "BlexMono Nerd Font" <<<"${fonts}"
 fi
 
+# Com o grupo editor: o hook do bob deixou o nightly em uso.
+if command -v bob >/dev/null; then
+  check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
+fi
+
 exit "${fail}"
