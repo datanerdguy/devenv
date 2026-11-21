@@ -33,7 +33,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 ```text
 .chezmoiroot      aponta para home/
 home/             fonte do chezmoi: só links e templates
-packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, debug, maquinas/<máquina>)
+packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, terminal, debug, maquinas/<máquina>)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
 keyboard/         Corne (Vial), a fonte é corne/corne.vil

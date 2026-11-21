@@ -1,0 +1,18 @@
+# Ghostty. O resto da config do terminal (tema, atalhos) entra na área do terminal.
+
+# Fonte: BlexMono Nerd Font (pacote ttf-ibmplex-mono-nerd).
+font-family = "BlexMono Nerd Font"
+font-size = 16
+
+# Clipboard junto com o do sistema.
+# Selecionar com o mouse já copia para o clipboard do sistema (Ctrl+V cola em qualquer app).
+copy-on-select = clipboard
+# Ctrl+Shift+C e Ctrl+Shift+V são os padrões; ficam explícitos aqui.
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+# OSC 52: o tmux, o Neovim e programas via SSH copiam para o clipboard do sistema sem perguntar.
+clipboard-write = allow
+# Ler o clipboard pelo OSC 52 pede confirmação: um programa não lê o que você copiou sem você saber.
+clipboard-read = ask
+# Tira os espaços do fim das linhas ao copiar.
+clipboard-trim-trailing-spaces = true

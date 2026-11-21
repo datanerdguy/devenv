@@ -31,4 +31,20 @@ else
   fail=1
 fi
 
+# Com o grupo terminal: a config do Ghostty é válida e a fonte está instalada.
+if command -v ghostty >/dev/null; then
+  if ghostty +validate-config --config-file="${HOME}/.config/ghostty/config"; then
+    echo "ok: config do Ghostty"
+  else
+    echo "FALTA: config do Ghostty inválida" >&2
+    fail=1
+  fi
+  if fc-list | grep -q "BlexMono Nerd Font"; then
+    echo "ok: fonte BlexMono Nerd Font"
+  else
+    echo "FALTA: fonte BlexMono Nerd Font" >&2
+    fail=1
+  fi
+fi
+
 exit "${fail}"
