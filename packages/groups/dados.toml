@@ -1,0 +1,6 @@
+# Dados no terminal. A área de dados ainda vai ser repensada; por enquanto, só o essencial.
+
+[arch]
+packages = [
+  "duckdb", # SQL direto em CSV, Parquet e JSON, sem servidor
+]

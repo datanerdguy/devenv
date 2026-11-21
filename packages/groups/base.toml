@@ -1,4 +1,5 @@
 # O que o devenv precisa para existir: o bootstrap instala estes pacotes antes de tudo.
+# O paru fica fora: o bootstrap garante ele (no CachyOS vem do repo, no Arch é o paru-bin do AUR).
 
 [arch]
 packages = [
@@ -8,5 +9,6 @@ packages = [
   "rbw", # cliente do Bitwarden: traz a chave age e os tokens
   "git",
   "github-cli", # gh
-  "paru", # helper do AUR, usado pelo metapac
+  "jq", # filtra e formata JSON (gh, APIs, scripts)
+  "go-yq", # yq: o mesmo para YAML e TOML
 ]

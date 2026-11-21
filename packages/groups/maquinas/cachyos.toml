@@ -128,6 +128,7 @@ packages = [
   "openssh",
   "os-prober",
   "pacman-contrib",
+  "paru", # helper do AUR (no CachyOS vem do repo); o metapac usa ele
   "pavucontrol",
   "perl",
   "pipewire-alsa",

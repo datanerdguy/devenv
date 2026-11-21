@@ -64,8 +64,12 @@ Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI 
 | `lint` | `just lint`: shellcheck, actionlint e o mapa do teclado (precisa do `keymap-drawer`, instalado com `uv tool`) |
 | `apply` | Cria um usuário com sudo sem senha, roda o `./bootstrap.sh` (sem rbw logado) e depois `tests/smoke.sh`: `chezmoi`, `metapac`, `just` e `cz` no PATH e o link `~/.config/metapac` apontando para `packages/` |
 
-O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`, mas os grupos `linguagens` e
-`maquinas/cachyos` não rodam no CI (pesam e dependem do hardware).
+O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, os grupos `linguagens`, `dados` e
+`maquinas/cachyos` ficam de fora, porque pesam (vários pacotes do AUR são compilados).
+
+Depois de mexer nessas listas, rode o CI completo à mão: `gh workflow run ci.yml --ref <branch> -f completo=true`.
+Ele usa o hostname `ci-completo` (`base`, `repo`, `linguagens` e `dados`), confere o hook do rustup e pode levar
+até duas horas. O `maquinas/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
 
 ### `pr.yml`: só em PR
 

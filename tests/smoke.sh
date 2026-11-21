@@ -23,4 +23,14 @@ else
   fail=1
 fi
 
+# Com o grupo linguagens: o hook do rustup deixou a toolchain e o rust-analyzer.
+if command -v rustup >/dev/null; then
+  if rustup which rustc >/dev/null 2>&1 && rustup which rust-analyzer >/dev/null 2>&1; then
+    echo "ok: rustup com rustc e rust-analyzer"
+  else
+    echo "FALTA: rustup sem toolchain ou sem rust-analyzer (hook do metapac)" >&2
+    fail=1
+  fi
+fi
+
 exit "${fail}"
