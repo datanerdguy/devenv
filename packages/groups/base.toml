@@ -13,5 +13,6 @@ packages = [
   # O hook roda a cada sync e não faz nada se já estiver pronto: toolchain estável e o rust-analyzer.
   { name = "rustup", hooks = { after_sync = ["sh", "-c", "rustup default stable && rustup component add rust-analyzer"] } },
   "jq", # filtra e formata JSON (gh, APIs, scripts)
+  "ripgrep", # rg: busca em arquivos (os agentes contam com ele)
   "go-yq", # yq: o mesmo para YAML e TOML
 ]

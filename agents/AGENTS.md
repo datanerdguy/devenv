@@ -27,6 +27,6 @@ Valem para o Claude Code em todo projeto. A fonte fica no repo devenv (`agents/A
   planejar, arquitetura, bugs difíceis e segurança (sugira `/model opus` antes de começar).
 - **Não use Fable**, nem em subagente, salvo pedido meu.
 - Antes de trocar de modelo, tente subir o effort.
-- Os modelos dos papéis do pstack estão na tabela abaixo.
+- Os modelos dos papéis do pstack ficam em `~/.claude/pstack-models.md`, importado abaixo.
 
 @~/.claude/pstack-models.md

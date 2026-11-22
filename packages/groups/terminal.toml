@@ -4,5 +4,5 @@
 packages = [
   "ghostty",
   "ttf-ibmplex-mono-nerd", # BlexMono Nerd Font: a IBM Plex Mono com os ícones
-  "wl-clipboard", # wl-copy e wl-paste: o clipboard do Wayland, usado pelo tmux e pelo Neovim
+  "wl-clipboard", # wl-copy e wl-paste: o clipboard do Wayland (usado pelo satty e pelo histórico de cópias)
 ]

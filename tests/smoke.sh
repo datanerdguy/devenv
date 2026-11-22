@@ -81,7 +81,7 @@ check "statusline roda" bash "${HOME}/.claude/statusline.sh" <<<'{"model":{"disp
 # Git.
 check "git com o delta de pager" test "$(git config --get core.pager)" = delta
 if command -v lazygit >/dev/null; then
-  check "delta e lazygit instalados" command -v delta
+  check "delta instalado (o git usa de pager)" command -v delta
 fi
 
 # Nenhum programa escreveu no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia...). Só no CI:

@@ -1,8 +1,8 @@
 # Config do metapac. O ~/.config/metapac é um link para esta pasta (chezmoi).
 
-# Gerenciadores que o metapac cuida. A ordem do sync é fixa: arch, cargo, mise, uv.
+# Gerenciadores que o metapac cuida, na ordem em que ele sincroniza (fixa, não depende desta lista).
 # Então o rustup (arch) já está pronto quando o cargo roda.
-enabled_backends = ["arch", "uv", "cargo", "mise"]
+enabled_backends = ["arch", "cargo", "mise", "uv"]
 
 # Cada máquina usa só os grupos da sua entrada em [hostname_groups].
 hostname_groups_enabled = true

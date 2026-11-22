@@ -4,8 +4,8 @@
 
 ## Como testei
 
-- [ ] `just lint` e `just check` passam
-- [ ] `just switch` aplicado na minha máquina (quando muda algo instalado)
+- [ ] `just lint` passa
+- [ ] `just apply` e `just sync` rodados na minha máquina (quando muda algo instalado)
 
 ## Notas
 

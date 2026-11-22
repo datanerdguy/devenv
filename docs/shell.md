@@ -15,7 +15,7 @@ A config fica em `home/dot_config/fish/`: `config.fish`, as funções em `functi
 | `z <parte do nome>` | Entra direto na pasta mais usada que combina (zoxide) |
 
 O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
-`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o script `theme` definir outras.
+`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([temas.md](temas.md)).
 
 ## Manuais
 
@@ -51,8 +51,8 @@ grupo `shell` reinstala o tide e refaz essa config a cada `just sync`.
 
 ## Desempenho
 
-O fish abre em uns 12 ms nesta máquina (2 ms sem config); a config própria custa 1,4 ms (medido com
-`fish --profile-startup`).
+O fish interativo abre em uns 12 ms nesta máquina, contra 2 ms sem config nenhuma. Desses 10 ms, o `config.fish`
+custa 1,4 ms; o resto é o tide e a carga interativa do próprio fish (medido com `fish --profile-startup`).
 
 - A saída do `zoxide init` e do `fzf --fish` fica em cache em `~/.cache/fish/` e só é gerada de novo quando o
   programa é atualizado.

@@ -44,11 +44,11 @@ docs: explica o fluxo de release
 | `feat!` ou `BREAKING CHANGE:` no corpo | Muda algo de forma incompatível | major (enquanto estiver em 0.x, sobe o minor) |
 | `docs`, `chore`, `ci`, `refactor`, `style`, `test`, `perf`, `build` | Resto | nenhum |
 
-Escopos sugeridos: a área (`base`, `shell`, `terminal`, `nvim`, `tmux`, `desktop`, `agents`, `keyboard`), ou `ci`, `deps`, `adr`.
+Escopos sugeridos: a área (`base`, `shell`, `terminal`, `temas`, `nvim`, `tmux`, `desktop`, `agentes`, `teclado`), ou `ci`, `deps`, `adr`, `docs`, `repo`.
 
 **Hooks locais.** Rode `just setup` uma vez: ele liga os hooks de `.githooks/`.
 
-- `pre-commit` roda `just lint` (shellcheck, actionlint e o mapa do teclado).
+- `pre-commit` roda `just lint`.
 - `commit-msg` roda `cz check` na mensagem.
 
 ## Pipeline
@@ -61,15 +61,15 @@ Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI 
 
 | Job | O que verifica |
 | --- | --- |
-| `lint` | `just lint`: shellcheck, actionlint e o mapa do teclado (precisa do `keymap-drawer`, instalado com `uv tool`) |
-| `apply` | Cria um usuário com sudo sem senha, roda o `./bootstrap.sh` (sem rbw logado) e depois `tests/smoke.sh`: `chezmoi`, `metapac`, `just` e `cz` no PATH e o link `~/.config/metapac` apontando para `packages/` |
+| `lint` | `just lint`: shellcheck, actionlint, os grupos do metapac e o mapa do teclado (precisa do `keymap-drawer`, instalado com `uv tool`) |
+| `apply` | Cria um usuário com sudo sem senha, roda o `./bootstrap.sh` (sem rbw logado), um segundo `metapac sync` (que não pode instalar nada) e o `tests/smoke.sh`: ferramentas no PATH, os links do chezmoi e as configs dos grupos instalados |
 
-O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, os grupos `linguagens`, `dados`, `api`, `terminal`, `editor` e
-`maquinas/cachyos` ficam de fora, porque pesam (vários pacotes do AUR são compilados).
+O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, o CI instala só `base` e `repo`. O resto fica de fora porque
+pesa (vários pacotes do AUR são compilados).
 
 Depois de mexer nessas listas, rode o CI completo à mão: `gh workflow run ci.yml --ref <branch> -f completo=true`.
-Ele usa o hostname `ci-completo` (`base`, `repo`, `linguagens`, `dados`, `api`, `terminal` e `editor`) e pode levar
-até duas horas. O `maquinas/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
+Ele usa o hostname `ci-completo` (todos os grupos menos `debug` e `maquinas/`, conferido pelo `packages/checar.py`) e
+pode levar até duas horas. O `maquinas/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
 
 ### `pr.yml`: só em PR
 

@@ -12,7 +12,7 @@ cd ~/devenv
 ./bootstrap.sh
 ```
 
-O bootstrap confere que a distro é Arch ou derivada, garante o `paru`, instala `chezmoi metapac age rbw jq`, traz a
+O bootstrap confere que a distro é Arch ou derivada, garante o `paru`, instala `rustup chezmoi metapac age rbw jq`, traz a
 chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `metapac sync`. Pode rodar de novo.
 
 ## Dia a dia
@@ -25,7 +25,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 | `just clean` | Remove o que não está nos grupos, depois de mostrar e pedir confirmação |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia, para trazer ao repo |
 | `just diff` | Mostra o que mudaria nas configs e o que está instalado fora dos grupos |
-| `just lint` | shellcheck, actionlint e o mapa do teclado (o mesmo do CI) |
+| `just lint` | shellcheck, actionlint, os grupos do metapac, o mapa do teclado e, se instalados, o niri e as paletas (o mesmo do CI) |
 | `just keyboard` | Regenera as imagens das camadas depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
 | `just commit` | Commit guiado no padrão Conventional Commits |
 
@@ -37,6 +37,8 @@ home/             fonte do chezmoi: só links e templates
 packages/         metapac: config.toml (grupos de cada máquina) e groups/ (o topo de cada arquivo diz para que serve)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
+tests/            smoke.sh: o que o bootstrap deve deixar pronto (roda no CI)
+.github/          CI e modelo de PR
 temas/            gerador das paletas dos temas (gerar.py)
 wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
 keyboard/         Corne (Vial), a fonte é corne/corne.vil

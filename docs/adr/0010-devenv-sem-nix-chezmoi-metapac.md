@@ -73,11 +73,11 @@ O `basedpyright` fica instalado como segunda opção do Python, mas o padrão é
 
 **Aparência.**
 
-- Temas trocáveis por um script `theme` próprio, só com as variantes escuras oficiais: Nord (padrão),
+- Temas trocáveis pelo comando `theme` (como, no ADR 0013), só com as variantes escuras oficiais: Nord (padrão),
   Everforest, Rosé Pine, Catppuccin, Dracula e Kanagawa.
 - Fonte BlexMono Nerd Font.
 - fish novo: vi mode, tide via fisher, zoxide + fd + fzf num atalho, abbr e nenhuma config do CachyOS. O cursor
-  é sempre bloco e a cor por modo sai do tema. tmux 3.8.
+  é sempre bloco e a cor por modo sai do tema. tmux 3.8 (área a fazer).
 
 **Estrutura do repo.**
 

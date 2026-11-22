@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 jobs:
-  # shellcheck, actionlint e o mapa do teclado: o mesmo `just lint` do dia a dia.
+  # O mesmo `just lint` do dia a dia.
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10

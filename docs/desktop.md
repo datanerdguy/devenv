@@ -23,7 +23,7 @@ O `just lint` roda o `niri validate`.
 
 ## Atalhos
 
-`Alt+Shift+/` mostra todos na tela. **Alt** cuida das janelas, como no i3. **Super** abre apps e o sistema.
+Abaixo, os principais; `Alt+Shift+/` mostra todos na tela. **Alt** cuida das janelas, como no i3. **Super** abre apps e o sistema.
 
 | Tecla | O que faz |
 | --- | --- |
@@ -69,5 +69,5 @@ As capturas vão para o clipboard e para `~/Pictures/Screenshots`.
 - **Corne:** o layout vive no firmware (Vial). Para mudar, abra o `Vial`, mude ao vivo e salve por cima de
   `keyboard/corne/corne.vil`; o passo a passo está no [keyboard/README.md](../keyboard/README.md). O pacote
   `vial-appimage` já traz a regra udev que deixa o Vial falar com o teclado.
-- **Teclado do notebook:** sem remapeamento por enquanto. Se fizer falta, o kanata pode virar o Caps Lock em
-  Esc no toque e Ctrl segurado, como o Corne já faz.
+- **Teclado do notebook:** sem remapeamento. O Corne já faz o Caps como Esc e Ctrl no firmware; o kanata ficou como
+  alternativa no [ADR 0012](adr/0012-desktop-e-teclado.md).

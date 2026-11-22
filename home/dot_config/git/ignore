@@ -1,5 +1,5 @@
 .envrc.local
 .DS_Store
 
-# Pasta temporária do sandbox do Claude Code (ele mesmo acrescentou esta linha).
+# Pasta temporária do sandbox do Claude Code.
 **/.claude/.cc-writes/

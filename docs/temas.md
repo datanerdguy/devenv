@@ -54,7 +54,7 @@ do Noctalia já tem os dois modelos.
 4. `just apply` liga a paleta nova, e o `just lint` confere que as paletas batem com o gerador.
 
 As cores do terminal vêm do arquivo oficial do Ghostty. As da interface saem delas: fundo, texto e três cores de
-destaque por família (o ciano no Nord, o verde no Everforest, a íris no Rosé Pine e o azul nos outros).
+destaque por família (o ciano no Nord, o verde no Everforest, a íris no Rosé Pine e o azul do ANSI nos outros).
 
 ## Papéis de parede
 

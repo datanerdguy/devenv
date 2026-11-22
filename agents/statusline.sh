@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Statusline do Claude Code: modelo, contexto, cota do plano, custo e branch.
 # Recebe o JSON da sessão no stdin (https://code.claude.com/docs/en/statusline).
-# Também grava a cota em ~/.cache/devenv/claude-usage para o tmux mostrar na barra.
+# Também grava a cota em ~/.cache/devenv/claude-usage, para a barra do tmux quando ela existir.
 set -uo pipefail
 
 input="$(cat)"

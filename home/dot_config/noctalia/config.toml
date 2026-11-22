@@ -31,7 +31,7 @@ community_ids = ["zen-browser", "yazi"]
 [theme.templates.user.fish_cursor]
 input_path = "templates/fish-cursor.fish"
 output_path = "$XDG_STATE_HOME/devenv/fish-cursor.fish"
-post_hook = "fish -c 'source ~/.local/state/devenv/fish-cursor.fish'"
+post_hook = "fish -c \"source ${XDG_STATE_HOME:-$HOME/.local/state}/devenv/fish-cursor.fish\""
 
 # lazygit: modelo nosso, sem o script da comunidade (ele reescreveria o config.yml, que é um link para o repo).
 [theme.templates.user.lazygit]

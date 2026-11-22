@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Antes de cada commit: formatação e lint. Ligue com `just setup`.
+# Antes de cada commit: o lint. Ligue com `just setup`.
 set -euo pipefail
 just lint

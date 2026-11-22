@@ -105,7 +105,6 @@ def main() -> int:
     if not GHOSTTY.is_dir():
         print(f"Sem os temas do Ghostty em {GHOSTTY}: instale o grupo terminal.", file=sys.stderr)
         return 1
-    SAIDA.mkdir(parents=True, exist_ok=True)
     diferentes = []
     for variante, nome in VARIANTES.items():
         texto = json.dumps(paleta(variante, ler_ghostty(nome)), indent=2) + "\n"
@@ -114,13 +113,14 @@ def main() -> int:
             if not arquivo.is_file() or arquivo.read_text() != texto:
                 diferentes.append(arquivo.name)
         else:
+            SAIDA.mkdir(parents=True, exist_ok=True)
             arquivo.write_text(texto)
     sobrando = sorted({a.stem for a in SAIDA.glob("*.json")} - VARIANTES.keys())
     if checar and (diferentes or sobrando):
         print("Paletas fora do gerador (rode `python3 temas/gerar.py`):", *diferentes, *sobrando, file=sys.stderr)
         return 1
     if not checar:
-        print(f"{len(VARIANTES)} paletas em {SAIDA.relative_to(Path.cwd()) if SAIDA.is_relative_to(Path.cwd()) else SAIDA}")
+        print(f"{len(VARIANTES)} paletas em {SAIDA}")
     return 0
 
 

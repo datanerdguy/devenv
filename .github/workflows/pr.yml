@@ -1,5 +1,4 @@
-# Checagens que só existem em PR: de onde vem o PR e se os commits seguem o padrão.
-# Ficam fora do ci.yml para não aparecerem como "skipped" nos pushes para dev e main.
+# Checagens que só fazem sentido em PR: de onde vem o PR e se os commits seguem o padrão.
 name: pr
 
 on:

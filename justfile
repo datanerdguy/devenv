@@ -26,7 +26,7 @@ diff:
     chezmoi diff
     metapac unmanaged
 
-# Lint: scripts, workflows e o mapa do teclado (o mesmo que o CI roda)
+# Lint: scripts, workflows, grupos do metapac, mapa do teclado e, se instalados, niri e paletas (o mesmo do CI)
 lint:
     shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
     python3 packages/checar.py

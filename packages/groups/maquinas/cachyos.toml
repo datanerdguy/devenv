@@ -139,7 +139,6 @@ packages = [
   "realtime-privileges",
   "rebuild-detector",
   "reflector",
-  "ripgrep",
   "rsync",
   "s-nail",
   "sddm",
