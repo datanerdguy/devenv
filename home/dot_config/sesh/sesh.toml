@@ -1,0 +1,11 @@
+# Sessões do tmux por projeto. P s (ou `t` fora do tmux) abre a lista: sessões abertas, as fixas daqui e os
+# projetos do zoxide.
+sort_order = ["tmux", "config", "zoxide"]
+
+[default_session]
+preview_command = "eza --all --git --icons --color=always {}"
+
+[[session]]
+name = "devenv"
+path = "~/Projects/devenv"
+startup_command = "nvim"

@@ -1,6 +1,6 @@
 # 0011. Agentes e git
 
-Data: 2026-11-21 · Status: aceita
+Data: 2026-11-21 · Status: aceita. A parte do workmux foi substituída pelo ADR 0014.
 
 ## Contexto
 

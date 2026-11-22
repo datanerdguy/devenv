@@ -1,0 +1,17 @@
+# workmux: uma tarefa = um branch + um worktree + uma janela do tmux com o Claude.
+# O status do agente na janela vem dos hooks em agents/settings.json (sem o plugin do marketplace).
+nerdfont: true
+agent: claude
+base_branch: auto # novas tarefas saem da main/dev, não do branch atual
+merge_strategy: rebase
+window_placement: after_current
+# A barra do tmux.conf já mostra o @workmux_status; o workmux não precisa mexer no formato.
+status_format: false
+
+# Agente em cima, shell embaixo para rodar testes.
+# Nada de copiar o .env para o worktree: segredos vêm do rbw na hora.
+panes:
+  - command: <agent>
+    focus: true
+  - split: vertical
+    percentage: 25

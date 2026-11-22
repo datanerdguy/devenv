@@ -11,8 +11,9 @@ A config fica em `home/dot_config/fish/`: `config.fish`, as funções em `functi
 | `Ctrl+G` | Vai para uma pasta: as que você mais usa (zoxide) primeiro, depois todas do `~` (fd). O que já está digitado vira a busca |
 | `Ctrl+R` | Busca no histórico (fzf) |
 | `Ctrl+T` | Cola o caminho de um arquivo (fzf) |
-| `Ctrl+K` ou `mf <busca>` | Busca nos manuais por nome ou assunto, com o manual ao lado; `Enter` abre no Neovim |
+| `Ctrl+O` ou `mf <busca>` | Busca nos manuais por nome ou assunto, com o manual ao lado; `Enter` abre no Neovim |
 | `z <parte do nome>` | Entra direto na pasta mais usada que combina (zoxide) |
+| `t` | Abre ou volta para uma sessão do tmux, pela lista do sesh ([tmux.md](tmux.md)) |
 
 O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
 `devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([temas.md](temas.md)).

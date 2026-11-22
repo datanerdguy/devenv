@@ -26,6 +26,8 @@ Os pacotes ficam nos grupos `agentes` (claude-code, bubblewrap, socat) e `git` (
 - **Statusline:** mostra modelo, contexto usado, cota de 5h (com o tempo até zerar), cota de 7 dias, custo
   equivalente na API e branch. Verde abaixo de 50%, amarelo abaixo de 80%, vermelho acima. A cota também vai
   para `~/.cache/devenv/claude-usage`, para a barra do tmux.
+- **workmux:** os hooks em `agents/settings.json` mostram na janela do tmux se o agente está trabalhando, esperando
+  ou terminou. Fora do tmux eles não fazem nada. Veja [tmux.md](tmux.md).
 - **Sandbox:** o Bash do Claude escreve só no projeto e acessa só os domínios de `sandbox.network.allowedDomains`.
   Para liberar um domínio, adicione-o lá. Os caches das linguagens (uv, Go, cargo, npm) também são graváveis,
   em `sandbox.filesystem.allowWrite`. As pastas das toolchains (`~/.rustup`, mise, `~/go/bin`, `~/.cargo/bin`)

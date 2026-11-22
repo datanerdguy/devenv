@@ -1,5 +1,5 @@
 # Busca nos manuais: digite o nome ou o assunto, veja o manual ao lado, e o Enter abre no Neovim.
-# O Ctrl+K abre esta busca no prompt (fish_user_key_bindings.fish), como o K do vim abre o manual.
+# O Ctrl+O abre esta busca no prompt (fish_user_key_bindings.fish).
 function mf --description 'Busca e abre um manual'
     # man -k lista "nome (seção) - descrição"; vira seção, nome e descrição separados por tab.
     set -l page (man -k . 2>/dev/null \

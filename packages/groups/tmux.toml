@@ -1,0 +1,8 @@
+# tmux, sessões por projeto (sesh) e uma janela por agente com worktree (workmux).
+
+[arch]
+packages = [
+  "tmux",
+  "sesh-bin", # lista de sessões e projetos (P s)
+  "workmux-bin", # tarefa = branch + worktree + janela do tmux com o Claude
+]

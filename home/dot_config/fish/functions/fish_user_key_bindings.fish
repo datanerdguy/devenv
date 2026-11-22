@@ -6,7 +6,7 @@ function fish_user_key_bindings
     for modo in insert default
         # Ctrl+G: ir para uma pasta (zoxide + fd + fzf).
         bind -M $modo ctrl-g _devenv_jump
-        # Ctrl+K: buscar e abrir um manual (mf).
-        bind -M $modo ctrl-k 'mf (commandline --current-token); commandline --function repaint'
+        # Ctrl+O: buscar e abrir um manual (mf). O Ctrl+K anda entre painéis do tmux.
+        bind -M $modo ctrl-o 'mf (commandline --current-token); commandline --function repaint'
     end
 end

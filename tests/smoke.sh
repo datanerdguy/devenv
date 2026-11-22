@@ -49,6 +49,13 @@ if command -v fish >/dev/null; then
     function commandline; end; cd /; _devenv_jump; test "$PWD" != /'
 fi
 
+# Com o grupo tmux: a config carrega sem erro (tmux-check.sh) e o sesh lê a sua.
+if command -v tmux >/dev/null; then
+  check "config do tmux" "${repo}/tests/tmux-check.sh" "${HOME}/.config/tmux/tmux.conf"
+  check "config do sesh" sesh list -c
+  check "função t do fish (sesh)" fish -c 'type -q t'
+fi
+
 # Com o grupo desktop: as configs do niri e do Noctalia valem (o Noctalia só avisa, então aviso conta como falha).
 if command -v niri >/dev/null; then
   check "config do niri" niri validate -c "${HOME}/.config/niri/config.kdl"
