@@ -16,6 +16,7 @@ packages = [
   "zen-browser-bin", # navegador (Super+B)
   "satty", # anotar capturas (Super+Print)
   "grim", # captura para o satty
+  "wl-clipboard", # wl-copy e wl-paste: o clipboard do Wayland (satty e scripts)
   "slurp", # seleção de área para o satty
   "wayscriber-bin", # desenhar na tela (Alt+Shift+D)
 ]

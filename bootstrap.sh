@@ -16,6 +16,19 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
+# O metapac pergunta antes de instalar: sem terminal (com pipe, como `| tee`), ele falha no meio. Melhor parar antes.
+if [ -z "${CI:-}" ] && { [ ! -t 0 ] || [ ! -t 1 ]; }; then
+  echo "Rode num terminal, sem pipe: ./bootstrap.sh" >&2
+  exit 1
+fi
+
+# Cada máquina precisa da sua entrada em packages/config.toml; sem ela, o metapac não sabe o que instalar.
+host="$(cat /etc/hostname 2>/dev/null || uname -n)"
+if ! grep -q "^${host} = " "${repo}/packages/config.toml"; then
+  echo "A máquina '${host}' não está em [hostname_groups] de packages/config.toml. Acrescente uma linha para ela." >&2
+  exit 1
+fi
+
 # 1. Só Arch e derivadas.
 # shellcheck disable=SC1091
 . /etc/os-release
@@ -30,7 +43,7 @@ esac
 # 2. paru: no CachyOS já vem; senão compila o paru-bin do AUR.
 if ! command -v paru >/dev/null; then
   say "Instalando o paru (AUR)"
-  sudo pacman -S --needed "${yes_flag[@]}" base-devel git
+  sudo pacman -Syu --needed "${yes_flag[@]}" base-devel git
   tmp="$(mktemp -d)"
   git clone --depth 1 https://aur.archlinux.org/paru-bin.git "${tmp}/paru-bin"
   (cd "${tmp}/paru-bin" && makepkg -si --needed "${yes_flag[@]}")
@@ -70,10 +83,6 @@ chezmoi init --source "${repo}" --apply
 say "Sincronizando os pacotes (metapac)"
 if [ -n "${CI:-}" ]; then
   metapac sync --no-confirm
-elif [ ! -t 0 ] || [ ! -t 1 ]; then
-  # O metapac pergunta antes de instalar e precisa de um terminal (sem pipe, como `| tee`).
-  echo "O metapac precisa de um terminal para perguntar. Rode sem pipe: metapac sync" >&2
-  exit 1
 else
   metapac sync
 fi

@@ -5,7 +5,7 @@ function theme --description 'Troca o tema do desktop'
     set -l atual (noctalia msg color-scheme-get 2>/dev/null | string split ' ')[2]
     set -l escolha $argv[1]
     if test -z "$escolha"
-        set escolha (printf '%s\n' $variantes | fzf --prompt="tema (atual: $atual)> " --height=100% \
+        set escolha (printf '%s\n' $variantes | fzf --with-shell='fish -c' --prompt="tema (atual: $atual)> " --height=100% \
             --preview='_devenv_theme_preview {}' --preview-window=right,55%)
         or return
     end

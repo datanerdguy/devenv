@@ -76,7 +76,12 @@ check "${HOME}/.claude.json só para o dono (0600)" test "$(stat -c %a "${HOME}/
 for d in .cache/go-build go/pkg/mod .cargo/git; do
   check "cache ${HOME}/${d} existe para o sandbox" test -d "${HOME}/${d}"
 done
-check "statusline roda" bash "${HOME}/.claude/statusline.sh" <<<'{"model":{"display_name":"Sonnet"}}'
+# shellcheck disable=SC2329 # chamada pelo check
+statusline() {
+  local out
+  out="$(bash "${HOME}/.claude/statusline.sh" <<<'{"model":{"display_name":"Sonnet"}}')" && [[ "${out}" == *Sonnet* ]]
+}
+check "statusline mostra o modelo" statusline
 
 # Git.
 check "git com o delta de pager" test "$(git config --get core.pager)" = delta

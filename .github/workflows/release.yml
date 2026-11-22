@@ -16,6 +16,8 @@ permissions:
 
 jobs:
   release:
+    # As tags só existem na main; disparado em outra branch, calcularia uma versão que já existe.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -26,12 +28,12 @@ jobs:
       - name: Calcula a próxima versão
         id: version
         run: |
-          # 21 é o NO_COMMITS_TO_BUMP do commitizen; qualquer outro erro falha o job.
+          # 3 (NO_COMMITS_FOUND) e 21 (NO_INCREMENT) do commitizen: nada a publicar. Outro erro falha o job.
           code=0
           next=$(cz bump --get-next --yes) || code=$?
           case "$code" in
             0) echo "next=$next" >> "$GITHUB_OUTPUT" ;;
-            21) echo "Nenhum commit que gere versão (feat/fix/breaking). Nada a publicar." ;;
+            3 | 21) echo "Nenhum commit que gere versão (feat/fix/breaking). Nada a publicar." ;;
             *) exit "$code" ;;
           esac
       - name: Gera as notas e publica a release

@@ -18,7 +18,9 @@ for p in tomllib.loads(sys.stdin.read()).get("arch", {}).get("packages", []):
 
 deps=()
 for pkg in "${unmanaged[@]}"; do
-  if ! LC_ALL=C pacman -Qi "${pkg}" | grep -q '^Required By *: None'; then
+  # Sem pipe direto para o grep -q: com pipefail, o pacman morreria de SIGPIPE e contaria como falha.
+  info="$(LC_ALL=C pacman -Qi "${pkg}")"
+  if ! grep -q '^Required By *: None' <<<"${info}"; then
     deps+=("${pkg}")
   fi
 done

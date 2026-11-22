@@ -45,10 +45,13 @@ jobs:
       image: archlinux:latest
       options: --hostname ${{ inputs.completo && 'ci-completo' || 'ci' }}
     steps:
+      # O git vem antes do checkout: sem ele, o checkout baixa o código sem o .git, e o smoke não consegue ver se
+      # algum programa escreveu no repo.
+      - name: Instala o git e o sudo
+        run: pacman -Syu --noconfirm sudo git
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Cria um usuário com sudo sem senha
         run: |
-          pacman -Syu --noconfirm sudo git
           useradd --create-home dev
           echo 'dev ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dev
           chown -R dev "$GITHUB_WORKSPACE"
