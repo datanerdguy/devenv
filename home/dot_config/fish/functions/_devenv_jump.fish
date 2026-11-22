@@ -4,7 +4,7 @@ function _devenv_jump
     set -l dir (
         begin
             zoxide query --list 2>/dev/null
-            fd --type directory --hidden --absolute-path --strip-cwd-prefix=never \
+            fd --type directory --hidden --absolute-path \
                 --exclude .git --exclude node_modules --exclude target --exclude .venv \
                 --exclude .cache --exclude .cargo --exclude .rustup --exclude go --exclude .npm \
                 --exclude .local/share --exclude .local/state . $HOME 2>/dev/null | string trim --right --chars=/

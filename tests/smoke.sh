@@ -38,6 +38,12 @@ if command -v fish >/dev/null; then
   # shellcheck disable=SC2016 # a variável é do fish, não do bash
   check "config do fish sem erro" fish -i -c 'test "$fish_key_bindings" = fish_vi_key_bindings'
   check "tide pelo fisher" fish -c 'type -q tide'
+  # Ctrl+G: com o fzf trocado por um filtro (que falha se a lista vier vazia) e o zoxide vazio, o fd tem que
+  # achar uma pasta do ~ para entrar.
+  # shellcheck disable=SC2016 # as variáveis são do fish, não do bash
+  check "Ctrl+G lista pastas e entra" fish -c 'set -x _ZO_DATA_DIR (mktemp -d)
+    function fzf; command fzf --filter=/ | read -l first; and echo $first; end
+    function commandline; end; cd /; _devenv_jump; test "$PWD" != /'
 fi
 
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
