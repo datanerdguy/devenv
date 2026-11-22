@@ -31,6 +31,12 @@ lint:
     shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
     actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
+    # O niri só existe na máquina com o grupo desktop; no CI ele entra pelo smoke do CI completo.
+    if command -v niri >/dev/null; then niri validate -c home/dot_config/niri/config.kdl; fi
+
+# Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
+noctalia-diff:
+    @cat ~/.local/state/noctalia/settings.toml 2>/dev/null || echo "Nenhum ajuste feito pela tela do Noctalia."
 
 # Regenera as imagens das camadas e o keyboard/README.md depois de salvar o .vil no Vial
 keyboard:

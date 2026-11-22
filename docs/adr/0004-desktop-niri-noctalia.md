@@ -1,6 +1,6 @@
 # 0004. Desktop: niri + Noctalia pela distro, config ligada ao repo
 
-Data: 2026-10-23 · Status: aceita
+Data: 2026-10-23 · Status: substituída pela [0012](0012-desktop-e-teclado.md)
 
 ## Contexto
 

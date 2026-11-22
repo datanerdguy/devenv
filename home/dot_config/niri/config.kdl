@@ -1,0 +1,116 @@
+// niri. Atalhos em binds.kdl, regras de janela em rules.kdl. Doc: docs/desktop.md.
+// Editar já vale: o niri recarrega sozinho ao salvar. `niri validate` confere antes.
+
+include "binds.kdl"
+include "rules.kdl"
+
+input {
+    // Alt cuida das janelas, como no i3 (ADR 0008). Dentro de um niri aninhado, Super.
+    mod-key "Alt"
+    mod-key-nested "Super"
+
+    keyboard {
+        // us intl: acentos por teclas mortas (' + a = á). Igual em qualquer máquina.
+        xkb {
+            layout "us"
+            variant "intl"
+        }
+        numlock
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+    }
+
+    focus-follows-mouse
+    // Alt+N na área em que você já está volta para a anterior.
+    workspace-auto-back-and-forth
+}
+
+// Monitores pelo modelo (`niri msg outputs` mostra os nomes). O que não estiver ligado é ignorado,
+// então um monitor novo é só mais um bloco. Com a tampa fechada, o niri apaga a tela do notebook sozinho.
+output "LG Electronics LG ULTRAWIDE 0x01010101" {
+    mode "2560x1080@60.000"
+    position x=0 y=0
+    focus-at-startup
+}
+
+// Notebook embaixo do ultrawide, centralizado: (2560 - 1366) / 2 = 597.
+output "AU Optronics 0x71EC Unknown" {
+    position x=597 y=1080
+}
+
+layout {
+    gaps 16
+    center-focused-column "never"
+    // Transparente para o Noctalia desenhar o papel de parede.
+    background-color "transparent"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+}
+
+spawn-at-startup "noctalia"
+// Desenhar na tela (Alt+Shift+D): fica em segundo plano para abrir na hora.
+spawn-at-startup "wayscriber" "--daemon"
+
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+}
+
+cursor {
+    xcursor-theme "capitaine-cursors"
+    xcursor-size 24
+}
+
+blur {
+    passes 2
+    offset 3.0
+    noise 0.03
+    saturation 1.0
+}
+
+// Animações rápidas (as do CachyOS): molas sem quicar e 200 ms para abrir e fechar.
+animations {
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    window-open {
+        duration-ms 200
+        curve "ease-out-quad"
+    }
+    window-close {
+        duration-ms 200
+        curve "ease-out-cubic"
+    }
+    horizontal-view-movement {
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+    }
+    window-movement {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+    }
+}
+
+debug {
+    // Apps que pedem foco com um token velho (links abertos do terminal) ainda ganham o foco.
+    honor-xdg-activation-with-invalid-serial
+}

@@ -1,0 +1,6 @@
+# Teclado: Vial para mudar o layout do Corne ao vivo (keyboard/). O pacote já traz a regra udev.
+
+[arch]
+packages = [
+  "vial-appimage",
+]

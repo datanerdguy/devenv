@@ -1,0 +1,20 @@
+# Noctalia. O que você muda pela tela de ajustes (Super+,) vai para ~/.local/state/noctalia/settings.toml,
+# que vale por cima deste arquivo. `just noctalia-diff` mostra esses ajustes, para trazer ao repo o que ficar.
+# Referência: https://docs.noctalia.dev/noctalia/configuration/
+
+[shell]
+# Pedidos de senha do polkit (Wi-Fi, montar disco) pelo próprio Noctalia.
+polkit_agent = true
+# Na visão geral do niri (Alt+O), começar a digitar abre o launcher.
+niri_overview_type_to_launch_enabled = true
+niri_overview_close_on_launch_enabled = true
+# Histórico de cópias (Super+V): texto e imagens, os 30 últimos.
+clipboard_history_max_entries = 30
+
+# Cores do tema nos apps GTK e Qt.
+[theme.templates]
+enable_builtin_templates = true
+builtin_ids = ["gtk3", "gtk4", "qt"]
+
+[lockscreen]
+lock_before_suspend = true

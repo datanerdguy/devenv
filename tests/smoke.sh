@@ -46,6 +46,17 @@ if command -v fish >/dev/null; then
     function commandline; end; cd /; _devenv_jump; test "$PWD" != /'
 fi
 
+# Com o grupo desktop: as configs do niri e do Noctalia valem (o Noctalia só avisa, então aviso conta como falha).
+if command -v niri >/dev/null; then
+  check "config do niri" niri validate -c "${HOME}/.config/niri/config.kdl"
+  check "config do Noctalia sem aviso" sh -c "noctalia config validate '${HOME}/.config/noctalia/config.toml' 2>&1 | grep -q 'valid\$'"
+fi
+
+# Com o grupo teclado: o Vial e a regra udev que deixa ele falar com o Corne.
+if command -v Vial >/dev/null; then
+  check "regra udev do Vial" test -f /usr/lib/udev/rules.d/59-vial.rules
+fi
+
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"

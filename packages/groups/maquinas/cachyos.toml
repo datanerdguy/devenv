@@ -30,7 +30,6 @@ packages = [
   "cachyos-keyring",
   "cachyos-micro-settings",
   "cachyos-mirrorlist",
-  "cachyos-niri-noctalia",
   "cachyos-packageinstaller",
   "cachyos-plymouth-bootanimation",
   "cachyos-plymouth-theme",
@@ -114,9 +113,7 @@ packages = [
   "networkmanager-openvpn",
   "nfs-utils",
   "nilfs-utils",
-  "noto-fonts",
   "noto-fonts-cjk",
-  "noto-fonts-emoji",
   "nss-mdns",
   "nvidia-580xx-dkms",
   "nvidia-580xx-settings",
@@ -178,5 +175,4 @@ packages = [
   "xdg-user-dirs",
   "xfsprogs",
   "xl2tpd",
-  "zen-browser-bin",
 ]
