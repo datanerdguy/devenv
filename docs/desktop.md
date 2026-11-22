@@ -65,7 +65,8 @@ As capturas vão para o clipboard e para `~/Pictures/Screenshots`.
 ## Teclado
 
 - **Layout:** `us intl` (acentos por teclas mortas: `'` e depois `a` dá `á`), escrito no `config.kdl` para valer
-  igual em qualquer máquina.
+  igual em qualquer máquina. Nos apps GTK (o Ghostty), as teclas mortas dependem do `GTK_IM_MODULE=simple` do
+  `environment`: desde o GTK 4.20, sem um método de entrada (ibus, fcitx), o GTK no Wayland não compõe sozinho.
 - **Corne:** o layout vive no firmware (Vial). Para mudar, abra o `Vial`, mude ao vivo e salve por cima de
   `keyboard/corne/corne.vil`; o passo a passo está no [keyboard/README.md](../keyboard/README.md). O pacote
   `vial-appimage` já traz a regra udev que deixa o Vial falar com o teclado.

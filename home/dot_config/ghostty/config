@@ -1,5 +1,8 @@
 # Ghostty. Os atalhos entram na área do terminal.
 
+# Ctrl+Enter é tela cheia por padrão; fica livre para os programas (o niri já tem tela cheia).
+keybind = ctrl+enter=unbind
+
 # Fonte: BlexMono Nerd Font (pacote ttf-ibmplex-mono-nerd).
 font-family = "BlexMono Nerd Font"
 font-size = 16

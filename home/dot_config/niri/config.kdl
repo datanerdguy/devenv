@@ -65,6 +65,9 @@ hotkey-overlay {
 }
 
 environment {
+    // Teclas mortas do us intl (' + a = á) nos apps GTK, como o Ghostty: desde o GTK 4.20, sem um método de
+    // entrada rodando, o GTK no Wayland não compõe sozinho. O "simple" é a composição embutida do GTK.
+    GTK_IM_MODULE "simple"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     QT_QPA_PLATFORM "wayland"
     QT_QPA_PLATFORMTHEME "gtk3"
