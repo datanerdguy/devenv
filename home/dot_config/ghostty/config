@@ -5,7 +5,7 @@ keybind = ctrl+enter=unbind
 
 # Fonte: BlexMono Nerd Font (pacote ttf-ibmplex-mono-nerd).
 font-family = "BlexMono Nerd Font"
-font-size = 16
+font-size = 17
 
 # Selecionar com o mouse já copia para o clipboard do sistema (Ctrl+V cola em qualquer app).
 copy-on-select = clipboard
