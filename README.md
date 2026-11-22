@@ -42,7 +42,6 @@ tests/            smoke.sh: o que o bootstrap deve deixar pronto (roda no CI)
 temas/            gerador das paletas dos temas (gerar.py)
 wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
-nvim/             config do Neovim (ligada em ~/.config/nvim)
 agents/           Claude Code: regras globais, settings, statusline, MCP
 docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, temas.md e adr/
 ```
@@ -60,7 +59,7 @@ Neovim e dados.
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
 | Temas (`theme`, Super+T) | pronta, veja [docs/temas.md](docs/temas.md) |
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
-| Neovim | começando: navegar pelos arquivos, veja [docs/neovim.md](docs/neovim.md) |
+| Neovim | começando: só nativo, navegar pelos arquivos, veja [docs/neovim.md](docs/neovim.md) |
 | Dados | a fazer |
 
 ## Contribuindo

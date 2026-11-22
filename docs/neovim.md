@@ -1,10 +1,11 @@
 # Neovim
 
-O Neovim é o nightly, instalado pelo `bob` (grupo `editor`). A config fica em `nvim/`, na raiz do repo, e o chezmoi
-liga a pasta inteira em `~/.config/nvim`. Por isso o que o Neovim grava ali, como o `nvim-pack-lock.json`, vai
-direto para o repo.
+O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em
+`home/dot_config/nvim/init.lua`.
 
-Por enquanto a config só tem o básico para entrar e andar pelos arquivos. O resto entra aos poucos.
+A regra é usar o que é nativo do Neovim e não ter plugins. Buscar arquivos, buscar texto e a árvore de pastas vêm
+das receitas da ajuda do próprio Neovim (`:help cmdline-autocompletion` e `:help fuzzy-file-picker`). Por
+enquanto a config tem só isso; o resto entra aos poucos.
 
 ## Atalhos
 
@@ -12,27 +13,36 @@ O `<leader>` é o **Espaço**.
 
 | Tecla | O que faz |
 | --- | --- |
-| `<leader><space>` | Busca arquivos: os recentes primeiro, depois os do projeto |
-| `<leader>ff` | Busca arquivos do projeto |
-| `<leader>fg` | Busca texto no projeto |
-| `<leader>fb` | Arquivos abertos |
-| `<leader>fr` | Arquivos recentes |
-| `<leader>e` | Abre ou fecha a árvore de pastas |
+| `<leader>ff` | `:find`: busca arquivos do projeto |
+| `<leader>fg` | `:grep`: busca texto no projeto; o resultado abre no quickfix |
+| `<leader>fb` | `:b`: arquivos abertos |
+| `<leader>fr` | `:Recentes`: arquivos abertos antes |
+| `<leader>e` | Árvore de pastas (netrw) na pasta do arquivo atual |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 
-`nvim .` (ou `nvim <pasta>`) abre direto na árvore. Nas buscas, os arquivos ocultos aparecem, e os ignorados pelo
-git não.
+`nvim .` (ou `nvim <pasta>`) abre direto na árvore.
 
-Na árvore: `Enter` ou `l` abre, `h` fecha a pasta, `a` cria (termine com `/` para pasta), `d` apaga (vai para a
-lixeira), `r` renomeia, `c` copia, `m` move, `H` mostra os ocultos, `I` os ignorados e `?` lista todas as teclas.
+## Buscar
 
-## Plugins
+Em `:find`, `:b` e `:Recentes`, um menu de sugestões aparece enquanto você digita, com busca fuzzy (letras fora
+de ordem valem: `tmuxconf` acha `home/dot_config/tmux/tmux.conf`). `Tab` e `Shift-Tab` andam no menu, e o
+`Enter` abre a escolhida, ou a primeira se você não escolher nenhuma. O mesmo menu aparece no `:` e na busca com `/`.
 
-Pelo `vim.pack`, nativo do Neovim. As versões ficam em `nvim/nvim-pack-lock.json`, no git.
+O `:find` lista os arquivos com o `fd`: os ocultos aparecem, e o `.git` e o que o git ignora não.
 
-| Plugin | Para que |
-| --- | --- |
-| snacks.nvim | Busca de arquivos e de texto, e a árvore de pastas |
+O `:grep` usa o `rg`, com as mesmas regras. Os resultados vão para o quickfix: `Enter` abre o resultado, `]q` e
+`[q` andam entre eles, e `:cclose` fecha a lista. Texto com espaço vai entre aspas: `:grep "duas palavras"`.
 
-Para atualizar: `:lua vim.pack.update()`. Ele mostra o que muda antes; `:w` confirma. Depois, faça commit do
-lockfile.
+## Árvore (netrw)
+
+`Enter` abre, `-` sobe uma pasta, `%` cria arquivo, `d` cria pasta, `D` apaga, `R` renomeia e `gh` mostra os
+ocultos. `:help netrw-quickmap` lista todas as teclas.
+
+## Arquivos
+
+O Neovim não cria swap (`.swp`) nem backup (`arquivo~`). O histórico fica com o git.
+
+## Reiniciar
+
+`<leader>R` é `:wall` seguido do `:restart` nativo. Ele salva a sessão (janelas e arquivos), fecha, abre um Neovim
+novo com a config relida e restaura a sessão. `ZR` faz o mesmo sem salvar os arquivos antes.
