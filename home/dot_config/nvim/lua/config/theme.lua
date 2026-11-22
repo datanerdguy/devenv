@@ -46,6 +46,18 @@ local function palette()
   end
 end
 
+-- Fundo transparente: o do Ghostty aparece por trás, com a mesma cor e a mesma opacidade (background-opacity).
+-- As janelas flutuantes e a barra de status ficam com o fundo do tema, para se destacarem.
+local transparent = { "Normal", "NormalNC", "SignColumn", "FoldColumn", "LineNr", "CursorLineNr", "EndOfBuffer" }
+
+local function clear_background()
+  for _, group in ipairs(transparent) do
+    local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+    hl.bg, hl.ctermbg = nil, nil
+    vim.api.nvim_set_hl(0, group, hl)
+  end
+end
+
 local current
 local function apply()
   local ok, name = pcall(palette)
@@ -57,6 +69,7 @@ local function apply()
   local theme = themes[name]
   vim.o.background = "dark"
   vim.cmd.colorscheme(type(theme) == "function" and theme() or theme)
+  clear_background()
 end
 
 apply()

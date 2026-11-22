@@ -67,6 +67,9 @@ O Neovim usa o tema do desktop ([temas.md](temas.md)): cada paleta do Noctalia a
 Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `theme.lua` lê a paleta escolhida em
 `~/.local/state/noctalia/settings.toml` e vigia esse arquivo; sem escolha (máquina nova), fica o Nord.
 
+O fundo é transparente: aparece o do Ghostty, com a mesma cor e a mesma opacidade (`background-opacity`). Janelas
+flutuantes e a barra de status ficam com o fundo do tema.
+
 | Paleta | Plugin |
 | --- | --- |
 | `catppuccin-*` | `catppuccin/nvim` |
