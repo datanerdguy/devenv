@@ -11,10 +11,36 @@ niri_overview_close_on_launch_enabled = true
 # Histórico de cópias (Super+V): texto e imagens, os 30 últimos.
 clipboard_history_max_entries = 30
 
-# Cores do tema nos apps GTK e Qt.
+# Tema: uma das paletas de palettes/ (geradas por temas/gerar.py). O comando `theme` troca; a escolha fica
+# no estado do Noctalia, por cima deste padrão. docs/temas.md.
+[theme]
+mode = "dark"
+source = "custom"
+custom_palette = "nord"
+
+# Apps que seguem o tema: o Noctalia regenera a config de cada um a cada troca e recarrega o que está aberto.
+# fzf, bat, eza e o prompt usam as 16 cores do terminal, então seguem o Ghostty sem modelo próprio.
 [theme.templates]
 enable_builtin_templates = true
-builtin_ids = ["gtk3", "gtk4", "qt"]
+builtin_ids = ["ghostty", "niri", "gtk3", "gtk4", "qt", "btop"]
+enable_community_templates = true
+community_ids = ["zen-browser", "yazi"]
+
+# Cor do cursor do fish em cada modo do vi (verde escreve, vermelho normal, amarelo visual).
+# Variáveis universais: valem na hora em todos os fish abertos.
+[theme.templates.user.fish_cursor]
+input_path = "templates/fish-cursor.fish"
+output_path = "$XDG_STATE_HOME/devenv/fish-cursor.fish"
+post_hook = "fish -c 'source ~/.local/state/devenv/fish-cursor.fish'"
+
+# lazygit: modelo nosso, sem o script da comunidade (ele reescreveria o config.yml, que é um link para o repo).
+[theme.templates.user.lazygit]
+input_path = "templates/lazygit.yml"
+output_path = "$XDG_CONFIG_HOME/lazygit/themes/noctalia.yml"
+
+# Papéis de parede: a pasta wallpapers/ do repo, ligada em ~/Pictures/Wallpapers.
+[wallpaper]
+directory = "~/Pictures/Wallpapers"
 
 [lockscreen]
 lock_before_suspend = true

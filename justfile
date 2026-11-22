@@ -33,6 +33,8 @@ lint:
     python3 keyboard/render.py --check
     # O niri só existe na máquina com o grupo desktop; no CI ele entra pelo smoke do CI completo.
     if command -v niri >/dev/null; then niri validate -c home/dot_config/niri/config.kdl; fi
+    # As paletas saem dos temas do Ghostty (grupo terminal); sem ele, quem confere é o smoke do CI completo.
+    if [ -d /usr/share/ghostty/themes ]; then python3 temas/gerar.py --check; fi
 
 # Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
 noctalia-diff:

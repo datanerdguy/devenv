@@ -12,6 +12,7 @@ binds {
     Super+B hotkey-overlay-title="Navegador (Zen)" { spawn "zen-browser"; }
     Super+E hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
     Super+N hotkey-overlay-title="Nota do dia" { spawn "ghostty" "-e" "fish" "-c" "mkdir -p ~/notas; and nvim ~/notas/(date +%F).md"; }
+    Super+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "fish" "-c" "theme"; }
     Mod+Shift+D hotkey-overlay-title="Desenhar na tela" { spawn "wayscriber" "--daemon-toggle"; }
 
     // Noctalia

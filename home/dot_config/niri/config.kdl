@@ -114,3 +114,7 @@ debug {
     // Apps que pedem foco com um token velho (links abertos do terminal) ainda ganham o foco.
     honor-xdg-activation-with-invalid-serial
 }
+
+// Cores das bordas e do foco: o Noctalia gera noctalia.kdl a cada troca de tema (comando theme).
+// optional: numa máquina nova, o arquivo só existe depois que o Noctalia abre.
+include optional=true "noctalia.kdl"

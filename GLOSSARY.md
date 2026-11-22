@@ -25,3 +25,12 @@ _Evite_: runtime, toolchain global
 Ferramenta que o próprio projeto declara e instala para si (por exemplo, um linter nas dependências dele), e que
 tem prioridade sobre a mesma ferramenta como pacote da máquina.
 _Evite_: ferramenta local, dev dependency
+
+**Tema**:
+Uma família de cores com nome próprio, que vale para o desktop inteiro de uma vez (Nord, Catppuccin, Kanagawa...).
+_Evite_: esquema de cores, colorscheme
+
+**Variante**:
+Uma versão de um tema, com as suas próprias cores oficiais (o Mocha e o Frappé do Catppuccin). É o que se escolhe ao
+trocar de tema.
+_Evite_: flavor, sabor, estilo

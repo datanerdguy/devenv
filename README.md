@@ -37,15 +37,17 @@ home/             fonte do chezmoi: só links e templates
 packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, shell, terminal, editor, agentes, git, desktop, teclado, debug, maquinas/<máquina>)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
+temas/            gerador das paletas dos temas (gerar.py)
+wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
-docs/             workflow.md, agents.md, shell.md, desktop.md e adr/
+docs/             workflow.md, agents.md, shell.md, desktop.md, temas.md e adr/
 ```
 
 ## Áreas
 
-O devenv é refeito uma área por PR. Base, agentes, shell, desktop e teclado estão prontos. Faltam terminal e temas
-(os temas vêm a seguir), tmux, Neovim e dados.
+O devenv é refeito uma área por PR. Base, agentes, shell, desktop, teclado e temas estão prontos. Faltam
+tmux, Neovim e dados.
 
 | Área | Estado |
 | --- | --- |
@@ -53,7 +55,8 @@ O devenv é refeito uma área por PR. Base, agentes, shell, desktop e teclado es
 | Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
 | Desktop e teclado (niri, Noctalia, Vial) | pronta, veja [docs/desktop.md](docs/desktop.md) |
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
-| Terminal e temas, tmux, Neovim | a fazer, pelo Lucas |
+| Temas (`theme`, Super+T) | pronta, veja [docs/temas.md](docs/temas.md) |
+| tmux, Neovim | a fazer, pelo Lucas |
 | Dados | a fazer |
 
 ## Contribuindo

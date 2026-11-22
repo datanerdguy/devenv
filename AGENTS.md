@@ -46,6 +46,7 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
 | Máquina nova | `bootstrap.sh`, `tests/smoke.sh` | README |
 | Shell (fish) | `home/dot_config/fish/` | [docs/shell.md](docs/shell.md) |
 | Desktop | `home/dot_config/niri/`, `home/dot_config/noctalia/` | [docs/desktop.md](docs/desktop.md), [ADR 0012](docs/adr/0012-desktop-e-teclado.md) |
+| Temas | `temas/gerar.py`, `home/dot_config/noctalia/palettes/` e `templates/` | [docs/temas.md](docs/temas.md), [ADR 0013](docs/adr/0013-temas-pelo-noctalia.md) |
 | Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md), [docs/desktop.md](docs/desktop.md) |
 | Agentes e git | `agents/`, `home/dot_claude/`, `home/dot_config/git/` | [docs/agents.md](docs/agents.md), [ADR 0011](docs/adr/0011-agentes-e-git.md) |
 | CI | `.github/workflows/` | [docs/workflow.md](docs/workflow.md) |

@@ -14,6 +14,8 @@ set -gx VISUAL nvim
 set -gx BAT_THEME ansi
 # O man abre no Neovim: / busca, gO mostra as seções, K abre o manual citado, Ctrl+O volta.
 set -gx MANPAGER 'nvim +Man!'
+# lazygit lê também as cores do tema, geradas pelo Noctalia.
+set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml,~/.config/lazygit/themes/noctalia.yml
 set -gx FZF_DEFAULT_COMMAND 'fd --type file --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
 set -gx FZF_DEFAULT_OPTS '--height=40% --layout=reverse --border'

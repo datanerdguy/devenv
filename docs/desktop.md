@@ -52,6 +52,7 @@ O `just lint` roda o `niri validate`.
 | `Super+s` | Central de controle |
 | `Super+,` | Ajustes do Noctalia |
 | `Super+l` | Bloquear a tela |
+| `Super+t` | Trocar o tema ([temas.md](temas.md)) |
 | `Print` | Captura de uma área (ajuste e confirme com `Enter`) |
 | `Ctrl+Print` / `Alt+Print` | Captura da tela / da janela |
 | `Super+Print` | Captura com anotação no satty: setas, texto, borrão. `Enter` copia; `Ctrl+S` salva |

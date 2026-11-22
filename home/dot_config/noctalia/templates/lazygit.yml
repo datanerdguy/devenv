@@ -1,0 +1,31 @@
+# Gerado pelo Noctalia a cada troca de tema (comando theme). A fonte é home/dot_config/noctalia/templates/.
+# Baseado no modelo lazygit da comunidade do Noctalia, sem o script que reescreve o config.yml: o lazygit lê
+# este arquivo junto com o config.yml pelo LG_CONFIG_FILE (home/dot_config/fish/config.fish).
+gui:
+  theme:
+    activeBorderColor:
+      - "{{colors.primary.default.hex}}"
+      - bold
+    inactiveBorderColor:
+      - "{{colors.outline.default.hex}}"
+    searchingActiveBorderColor:
+      - "{{colors.tertiary.default.hex}}"
+      - bold
+    optionsTextColor:
+      - "{{colors.on_surface_variant.default.hex}}"
+    selectedLineBgColor:
+      - "{{colors.surface_container_high.default.hex}}"
+    inactiveViewSelectedLineBgColor:
+      - bold
+    cherryPickedCommitFgColor:
+      - "{{colors.on_surface_variant.default.hex}}"
+    cherryPickedCommitBgColor:
+      - "{{colors.tertiary.default.hex}}"
+    markedBaseCommitFgColor:
+      - "{{colors.tertiary.default.hex}}"
+    markedBaseCommitBgColor:
+      - "{{colors.error.default.hex}}"
+    unstagedChangesColor:
+      - "{{colors.error.default.hex}}"
+    defaultFgColor:
+      - "{{colors.on_surface.default.hex}}"
