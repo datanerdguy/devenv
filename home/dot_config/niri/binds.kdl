@@ -30,7 +30,8 @@ binds {
     XF86AudioPause allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
     XF86AudioNext allow-when-locked=true { spawn-sh "noctalia msg media next"; }
     XF86AudioPrev allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
-    XF86AudioStop allow-when-locked=true { spawn-sh "noctalia msg media stop"; }
+    // Stop pausa: o "stop" de verdade encerra a sessão de mídia do navegador (YouTube), e aí nada volta a tocar.
+    XF86AudioStop allow-when-locked=true { spawn-sh "noctalia msg media pause"; }
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
 
