@@ -37,8 +37,9 @@ lint:
     # As paletas saem dos temas do Ghostty (grupo terminal); sem ele, quem confere é o smoke do CI completo.
     if [ -d /usr/share/ghostty/themes ]; then python3 temas/gerar.py --check; fi
     if command -v tmux >/dev/null; then tests/checar-tmux.sh home/dot_config/tmux/tmux.conf; fi
-    # O Neovim abre com a config do repo (não a de ~/.config) e falha em qualquer erro.
-    if command -v nvim >/dev/null; then XDG_CONFIG_HOME="$PWD/home/dot_config" nvim --headless -c 'lua if vim.v.errmsg ~= "" then vim.cmd.cquit(1) end' -c qa; fi
+    # O Neovim abre com a config do repo (não a de ~/.config) e falha em qualquer erro. A pasta temporária
+    # recebe o config.toml que o bob cria quando não acha um; apontar o XDG para o repo o deixava lá.
+    if command -v nvim >/dev/null; then d=$(mktemp -d) && ln -s "$PWD/home/dot_config/nvim" "$d/nvim" && XDG_CONFIG_HOME="$d" nvim --headless -c 'lua if vim.v.errmsg ~= "" then vim.cmd.cquit(1) end' -c qa; s=$?; rm -rf "$d"; exit $s; fi
 
 # Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
 noctalia-diff:
