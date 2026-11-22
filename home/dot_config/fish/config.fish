@@ -10,10 +10,10 @@ fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/.local/share/bob/nvim-bin 
 
 set -gx EDITOR nvim
 set -gx VISUAL nvim
-# bat e o manual seguem as cores do terminal, então trocam junto com o tema.
+# bat segue as cores do terminal, então troca junto com o tema.
 set -gx BAT_THEME ansi
-set -gx MANPAGER "sh -c 'col -bx | bat --language man --plain'"
-set -gx MANROFFOPT -c
+# O man abre no Neovim: / busca, gO mostra as seções, K abre o manual citado, Ctrl+O volta.
+set -gx MANPAGER 'nvim +Man!'
 set -gx FZF_DEFAULT_COMMAND 'fd --type file --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
 set -gx FZF_DEFAULT_OPTS '--height=40% --layout=reverse --border'

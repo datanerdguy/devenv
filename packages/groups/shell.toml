@@ -11,5 +11,7 @@ packages = [
   "zoxide", # pastas que você mais usa
   "fd", # busca de arquivos e pastas
   "eza", # ls
-  "bat", # cat com cores e o MANPAGER
+  "bat", # cat com cores e a prévia dos manuais no mf
+  # tldr: exemplos curtos de cada comando. O hook baixa as páginas.
+  { name = "tealdeer", hooks = { after_sync = ["tldr", "--update"] } },
 ]
