@@ -60,6 +60,7 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Pacotes (metapac) | `packages/config.toml`, `packages/groups/` | [ADR 0010](docs/adr/0010-devenv-sem-nix-chezmoi-metapac.md) |
 | Máquina nova | `bootstrap.sh`, `tests/smoke.sh` | README |
 | Shell (fish) | `home/dot_config/fish/` | [docs/shell.md](docs/shell.md) |
+| Neovim | `nvim/` (ligada em `~/.config/nvim`) | [docs/neovim.md](docs/neovim.md) |
 | tmux | `home/dot_config/tmux/`, `home/dot_config/sesh/`, `home/dot_config/workmux/` | [docs/tmux.md](docs/tmux.md), [ADR 0014](docs/adr/0014-tmux.md) |
 | Desktop | `home/dot_config/niri/`, `home/dot_config/noctalia/` | [docs/desktop.md](docs/desktop.md), [ADR 0012](docs/adr/0012-desktop-e-teclado.md) |
 | Temas | `temas/gerar.py`, `home/dot_config/noctalia/palettes/` e `templates/` | [docs/temas.md](docs/temas.md), [ADR 0013](docs/adr/0013-temas-pelo-noctalia.md) |

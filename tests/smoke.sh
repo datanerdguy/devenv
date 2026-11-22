@@ -72,6 +72,9 @@ fi
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
+  # Abre sem interface: instala os plugins pelo lockfile e falha se a config der erro.
+  check "Neovim abre com a config" "${HOME}/.local/share/bob/nvim-bin/nvim" --headless \
+    -c 'lua if not (Snacks and Snacks.picker) then vim.cmd.cquit(1) end' -c qa
 fi
 
 # Agentes: instruções, settings mesclado, statusline e MCP.
@@ -104,7 +107,7 @@ if [ -n "${CI:-}" ]; then
   # shellcheck disable=SC2329 # chamada pelo check
   repo_limpo() {
     local out
-    out="$(git -C "${repo}" status --porcelain -- home agents)" && [ -z "${out}" ]
+    out="$(git -C "${repo}" status --porcelain -- home agents nvim)" && [ -z "${out}" ]
   }
   check "nada escreveu no repo pelos links" repo_limpo
 fi
