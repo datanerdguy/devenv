@@ -56,6 +56,8 @@ Abaixo, os principais; `Alt+Shift+/` mostra todos na tela. **Alt** cuida das jan
 | `Print` | Captura de uma área (ajuste e confirme com `Enter`) |
 | `Ctrl+Print` / `Alt+Print` | Captura da tela / da janela |
 | `Super+Print` | Captura com anotação no satty: setas, texto, borrão. `Enter` copia; `Ctrl+S` salva |
+| Teclas de mídia | Tocar/pausar, próxima, anterior e parar, no player que está tocando (o mesmo da barra) |
+| Teclas de volume e brilho | Volume, mudo e brilho da tela (pelo Noctalia) |
 | `Super+Shift+p` | Apaga os monitores |
 | `Super+Escape` | Libera os atalhos para o app em foco (ex.: uma máquina virtual) |
 | `Alt+Shift+e` | Sai do niri |
