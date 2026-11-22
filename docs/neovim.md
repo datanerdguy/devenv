@@ -1,11 +1,30 @@
 # Neovim
 
-O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em
-`home/dot_config/nvim/init.lua`.
+O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
 A regra é usar o que é nativo do Neovim e não ter plugins. Buscar arquivos, buscar texto e a árvore de pastas vêm
 das receitas da ajuda do próprio Neovim (`:help cmdline-autocompletion` e `:help fuzzy-file-picker`). Por
 enquanto a config tem só isso; o resto entra aos poucos.
+
+## Estrutura
+
+```text
+home/dot_config/nvim/
+  init.lua            líder (Espaço) e a ordem em que os módulos carregam
+  lua/config/
+    opcoes.lua        opções gerais: swap e backup, menu da linha de comando, grep, netrw
+    busca.lua         :find, :Recentes e o menu fuzzy enquanto digita
+    atalhos.lua       todos os atalhos com <leader>
+```
+
+Assunto novo ganha um arquivo em `lua/config/` e uma linha `require` no `init.lua`. Para o que o Neovim já
+procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
+
+- `lsp/<servidor>.lua`: config de um LSP, lida pelo `vim.lsp.config`;
+- `after/ftplugin/<linguagem>.lua`: ajustes por tipo de arquivo (indentação, por exemplo).
+
+O chezmoi liga cada arquivo, inclusive os das subpastas. Arquivo novo só aparece em `~/.config/nvim` depois do
+`just apply`; editar um que já existe vale na hora (`<leader>R` para o Neovim ler de novo).
 
 ## Atalhos
 
