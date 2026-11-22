@@ -12,8 +12,8 @@ enquanto a config tem só isso; o resto entra aos poucos.
 home/dot_config/nvim/
   init.lua            líder (Espaço) e a ordem em que os módulos carregam
   lua/config/
-    options.lua        opções gerais: swap e backup, menu da linha de comando, grep, netrw
-    search.lua         :find, :Recent e o menu fuzzy enquanto digita
+    options.lua       opções gerais: swap e backup, menu da linha de comando, grep, netrw
+    search.lua        :find, :Recent e o menu fuzzy enquanto digita
     keymaps.lua       todos os atalhos com <leader>
 ```
 
