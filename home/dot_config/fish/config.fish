@@ -78,10 +78,6 @@ abbr -a lg lazygit
 abbr -a v nvim
 abbr -a j just
 abbr -a dv just --justfile '$DEVENV/justfile'
-abbr -a ls eza --group-directories-first --icons=auto
-abbr -a ll eza -l --git --group-directories-first --icons=auto
-abbr -a la eza -la --git --group-directories-first --icons=auto
-abbr -a lt eza -T --level=2 --group-directories-first --icons=auto
 # .. sobe uma pasta, ... sobe duas, e assim por diante.
 abbr -a dotdot --regex '^\.\.+$' --function _devenv_multicd
 # !! vira o último comando (ex.: sudo !!).

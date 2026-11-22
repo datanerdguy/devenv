@@ -27,9 +27,11 @@ Viram o comando inteiro quando você aperta espaço, então o histórico guarda 
 | `lg` | `lazygit` |
 | `v` | `nvim` |
 | `j`, `dv` | `just`; `just` do devenv de qualquer pasta (`dv sync`, `dv apply`) |
-| `ls`, `ll`, `la`, `lt` | `eza` em lista, longa, com ocultos, em árvore |
 | `..`, `...`, `....` | `cd ../`, `cd ../../`, e assim por diante |
 | `!!` | o último comando (ex.: `sudo !!`) |
+
+`ls`, `ll`, `la` e `lt` são funções, não abreviações: a linha continua mostrando só `ls`, e por baixo roda o
+`eza` (lista, longa com git, com ocultos, em árvore).
 
 ## Prompt
 
