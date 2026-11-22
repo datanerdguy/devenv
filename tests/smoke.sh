@@ -84,4 +84,17 @@ if command -v lazygit >/dev/null; then
   check "delta e lazygit instalados" command -v delta
 fi
 
+# Nenhum programa escreveu no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia...). Só no CI:
+# lá o checkout começa limpo; na máquina, o repo muda porque você edita. Se falhar, a config que mudou precisa já
+# ter no repo a linha que o programa acrescenta (veja docs/temas.md).
+if [ -n "${CI:-}" ]; then
+  # Se o próprio git falhar, a checagem falha (não passa com a saída vazia).
+  # shellcheck disable=SC2329 # chamada pelo check
+  repo_limpo() {
+    local out
+    out="$(git -C "${repo}" status --porcelain -- home agents)" && [ -z "${out}" ]
+  }
+  check "nada escreveu no repo pelos links" repo_limpo
+fi
+
 exit "${fail}"

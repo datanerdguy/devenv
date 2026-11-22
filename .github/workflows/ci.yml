@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       completo:
-        description: "Instala a lista inteira (linguagens e dados), não só base e repo"
+        description: "Instala todos os grupos (o ci-completo de packages/config.toml), não só base e repo"
         type: boolean
         default: false
 
@@ -37,7 +37,7 @@ jobs:
         run: just lint
 
   # Máquina nova de verdade: o bootstrap com um usuário comum. No PR, o grupo `ci` do metapac (base e repo);
-  # à mão com completo=true, o `ci-completo` (também linguagens e dados, com os pacotes do AUR).
+  # à mão com completo=true, o `ci-completo` (todos os grupos menos debug e as máquinas, com os pacotes do AUR).
   apply:
     runs-on: ubuntu-latest
     timeout-minutes: ${{ inputs.completo && 120 || 30 }}
@@ -59,4 +59,4 @@ jobs:
       - name: Sync de novo
         run: sudo -u dev -H metapac sync --no-confirm
       - name: Smoke
-        run: sudo -u dev -H tests/smoke.sh
+        run: sudo -u dev -H env CI=true tests/smoke.sh
