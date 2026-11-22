@@ -15,3 +15,7 @@ vim.o.grepprg = "rg --vimgrep --smart-case --hidden --glob=!.git/"
 -- Árvore de pastas (netrw), sem o cabeçalho.
 vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 3
+
+-- Números das linhas: a atual mostra o número dela; as outras, a distância até ela (para 5j, 3k...).
+vim.o.number = true
+vim.o.relativenumber = true

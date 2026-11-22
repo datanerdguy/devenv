@@ -12,7 +12,7 @@ enquanto a config tem só isso; o resto entra aos poucos.
 home/dot_config/nvim/
   init.lua            líder (Espaço) e a ordem em que os módulos carregam
   lua/config/
-    options.lua       opções gerais: swap e backup, menu da linha de comando, grep, netrw
+    options.lua       opções gerais: números das linhas, swap e backup, menu da linha de comando, grep, netrw
     search.lua        :find, :Recent e o menu fuzzy enquanto digita
     keymaps.lua       todos os atalhos com <leader>
     navigation.lua    Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
@@ -90,6 +90,10 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 | --- | --- |
 | `:packupdate` | Mostra as atualizações; `:write` confirma, `:quit` descarta. Depois, commit do `nvim-pack-lock.json` |
 | `:packdel <nome>` | Apaga um plugin que saiu da config |
+
+## Números das linhas
+
+A linha do cursor mostra o número dela; as outras mostram a distância até o cursor, para pular com `5j` ou `3k`.
 
 ## Arquivos
 
