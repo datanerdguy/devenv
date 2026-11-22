@@ -19,3 +19,4 @@ clipboard-trim-trailing-spaces = true
 # Cores: o Noctalia gera themes/noctalia a cada troca de tema (comando theme). Com esta linha aqui, ele não
 # precisa editar este arquivo. Numa máquina nova, o chezmoi cria um themes/noctalia inicial com o Nord.
 theme = noctalia
+background-opacity = 0.8

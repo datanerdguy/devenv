@@ -3,3 +3,5 @@
 
 # Pasta temporária do sandbox do Claude Code.
 **/.claude/.cc-writes/
+
+**/.claude/settings.local.json
