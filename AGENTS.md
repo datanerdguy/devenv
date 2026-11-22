@@ -29,7 +29,7 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Regra | Quem garante |
 | --- | --- |
 | Um pacote aparece em um grupo só; todo grupo começa com um comentário, está em uma máquina e no `ci-completo` | `packages/checar.py` (`just lint`) |
-| Nenhum programa escreve no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia) | `tests/smoke.sh` no CI. A config precisa já ter a linha que o programa acrescenta |
+| Nenhum programa escreve no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia) | `tests/smoke.sh` no CI. A config precisa já ter a linha que o programa acrescenta, ou o programa ganha um arquivo comum fora do repo (`create_`, como o `~/.gitconfig`) |
 | As paletas batem com o gerador | `temas/gerar.py --check` (`just lint` e smoke) |
 | O mapa do teclado bate com o `.vil` | `keyboard/render.py --check` (`just lint`) |
 | Scripts e workflows sem erro | `shellcheck` e `actionlint` (`just lint`) |

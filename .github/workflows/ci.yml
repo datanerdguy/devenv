@@ -55,11 +55,16 @@ jobs:
           useradd --create-home dev
           echo 'dev ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dev
           chown -R dev "$GITHUB_WORKSPACE"
+      # O token do workflow sobe o limite da API do GitHub: sem ele, o bob (Neovim nightly) e o mise esbarram nele.
       - name: Bootstrap (sem rbw logado)
-        run: sudo -u dev -H env CI=true ./bootstrap.sh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: sudo -u dev -H env CI=true GITHUB_TOKEN="${GITHUB_TOKEN}" ./bootstrap.sh
       # O segundo sync tem que passar sem fazer nada. Ele valida a lista com tudo já instalado
       # (o mise, por exemplo, só valida os nomes depois que existe).
       - name: Sync de novo
-        run: sudo -u dev -H metapac sync --no-confirm
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: sudo -u dev -H env GITHUB_TOKEN="${GITHUB_TOKEN}" metapac sync --no-confirm
       - name: Smoke
         run: sudo -u dev -H env CI=true tests/smoke.sh
