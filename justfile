@@ -29,6 +29,7 @@ diff:
 # Lint: scripts, workflows e o mapa do teclado (o mesmo que o CI roda)
 lint:
     shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
+    python3 packages/checar.py
     actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
     # O niri só existe na máquina com o grupo desktop; no CI ele entra pelo smoke do CI completo.

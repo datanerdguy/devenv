@@ -10,10 +10,8 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
 - **Desempenho importa:** tudo leve. Antes de acrescentar uma ferramenta, veja se uma que já existe resolve.
 - **Pesquisar antes de criar:** área nova (ferramenta, módulo, fluxo) começa com opções comparadas e uma
   recomendação para o Lucas decidir. Não implemente uma área nova sem essa decisão.
-- **Pacote novo vai no grupo certo do metapac** (`packages/groups/`): `base` para o que o devenv precisa para
-  existir, `repo` para mexer neste repo, `linguagens` para toolchains, LSPs e formatadores, `dados` para SQL e afins, `api` para
-  clientes HTTP, `shell` para o fish e o que a config dele usa, `agentes` para o Claude Code, `git` para delta e lazygit, `desktop` para o niri e o Noctalia, `teclado` para o Vial,
-  `debug` para DAP.
+- **Pacote novo vai no grupo certo do metapac** (`packages/groups/`): o comentário no topo de cada arquivo diz para
+  que serve o grupo. Grupo novo entra em uma máquina e no `ci-completo` de `packages/config.toml`.
   Um pacote aparece uma vez só entre todos os grupos. O que é só desta máquina fica em `maquinas/<máquina>`.
 - **Configs em `home/` são links para o repo** (editar já vale). O chezmoi cria os links no `just apply`.
 - **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Java, Lua) escolhem a versão dentro de cada
@@ -23,6 +21,22 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
   O disco não é cifrado, então arquivo com segredo fica com permissão 0600.
 - **Agentes:** assinatura Claude Pro, sem chave de API. Nada que dependa de API key paga.
 - **Documente tudo:** mudou algo que o usuário vê, atualize o README e o doc da área.
+
+## Regras e o que as garante
+
+Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checagem pedem julgamento.
+
+| Regra | Quem garante |
+| --- | --- |
+| Um pacote aparece em um grupo só; todo grupo começa com um comentário, está em uma máquina e no `ci-completo` | `packages/checar.py` (`just lint`) |
+| Nenhum programa escreve no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia) | `tests/smoke.sh` no CI. A config precisa já ter a linha que o programa acrescenta |
+| As paletas batem com o gerador | `temas/gerar.py --check` (`just lint` e smoke) |
+| O mapa do teclado bate com o `.vil` | `keyboard/render.py --check` (`just lint`) |
+| Scripts e workflows sem erro | `shellcheck` e `actionlint` (`just lint`) |
+| Config do niri e do Noctalia válida | `niri validate` (`just lint`) e smoke |
+| Mensagem de commit e título do PR no padrão | `.githooks/commit-msg` e `pr.yml` |
+| Uma checagem nova falha no erro que ela previne | julgamento: rode contra o erro antes de confiar |
+| Docs dizem o que o código faz | julgamento: confira contra o arquivo antes de escrever |
 
 ## Fluxo de git
 

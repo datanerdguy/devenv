@@ -34,7 +34,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 ```text
 .chezmoiroot      aponta para home/
 home/             fonte do chezmoi: só links e templates
-packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, shell, terminal, editor, agentes, git, desktop, teclado, debug, maquinas/<máquina>)
+packages/         metapac: config.toml (grupos de cada máquina) e groups/ (o topo de cada arquivo diz para que serve)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
 temas/            gerador das paletas dos temas (gerar.py)
