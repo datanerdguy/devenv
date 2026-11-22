@@ -5,7 +5,7 @@ vim.o.swapfile = false
 vim.o.backup = false
 vim.o.writebackup = false
 
--- Menu de sugestões na linha de comando (o que abre o menu enquanto digita fica em busca.lua).
+-- Menu de sugestões na linha de comando (o que abre o menu enquanto digita fica em search.lua).
 vim.o.wildmode = "noselect:lastused,full"
 vim.o.wildoptions = "pum,fuzzy"
 

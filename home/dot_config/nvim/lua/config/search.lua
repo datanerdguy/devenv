@@ -12,30 +12,30 @@ vim.keymap.set("c", "<Down>", function() return vim.fn.wildmenumode() == 1 and "
 
 -- :find lista os arquivos pelo fd (ocultos sim; .git e o que o git ignora não) e filtra fuzzy.
 -- A lista é refeita a cada vez que a linha de comando abre.
-local arquivos
-vim.o.findfunc = function(busca)
-  arquivos = arquivos or vim.fn.systemlist({ "fd", "--type", "file", "--hidden", "--exclude", ".git" })
-  return busca == "" and arquivos or vim.fn.matchfuzzy(arquivos, busca)
+local files
+vim.o.findfunc = function(query)
+  files = files or vim.fn.systemlist({ "fd", "--type", "file", "--hidden", "--exclude", ".git" })
+  return query == "" and files or vim.fn.matchfuzzy(files, query)
 end
-vim.api.nvim_create_autocmd("CmdlineEnter", { pattern = ":", callback = function() arquivos = nil end })
+vim.api.nvim_create_autocmd("CmdlineEnter", { pattern = ":", callback = function() files = nil end })
 
--- :Recentes: os arquivos abertos antes (que ainda existem), no mesmo menu do :find.
-vim.api.nvim_create_user_command("Recentes", function(o) vim.cmd.edit(o.args) end, {
+-- :Recent: os arquivos abertos antes (que ainda existem), no mesmo menu do :find.
+vim.api.nvim_create_user_command("Recent", function(o) vim.cmd.edit(o.args) end, {
   nargs = 1,
-  complete = function(busca)
-    local recentes = vim.tbl_filter(function(f) return vim.fn.filereadable(f) == 1 end, vim.v.oldfiles)
-    recentes = vim.tbl_map(function(f) return vim.fn.fnamemodify(f, ":~:.") end, recentes)
-    return busca == "" and recentes or vim.fn.matchfuzzy(recentes, busca)
+  complete = function(query)
+    local recent = vim.tbl_filter(function(f) return vim.fn.filereadable(f) == 1 end, vim.v.oldfiles)
+    recent = vim.tbl_map(function(f) return vim.fn.fnamemodify(f, ":~:.") end, recent)
+    return query == "" and recent or vim.fn.matchfuzzy(recent, query)
   end,
 })
 
--- No :find, :b e :Recentes, o Enter sem escolher nada abre a primeira sugestão.
+-- No :find, :b e :Recent, o Enter sem escolher nada abre a primeira sugestão.
 vim.api.nvim_create_autocmd("CmdlineLeavePre", {
   pattern = ":",
   callback = function()
     local cmd = vim.fn.getcmdline():match("^%s*(%a+)%s")
     local info = vim.fn.cmdcomplete_info()
-    if vim.list_contains({ "fin", "find", "b", "buffer", "Recentes" }, cmd) and info.selected == -1 and #(info.matches or {}) > 0 then
+    if vim.list_contains({ "fin", "find", "b", "buffer", "Recent" }, cmd) and info.selected == -1 and #(info.matches or {}) > 0 then
       vim.fn.setcmdline(cmd .. " " .. info.matches[1])
     end
   end,

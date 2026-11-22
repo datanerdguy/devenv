@@ -12,9 +12,9 @@ enquanto a config tem só isso; o resto entra aos poucos.
 home/dot_config/nvim/
   init.lua            líder (Espaço) e a ordem em que os módulos carregam
   lua/config/
-    opcoes.lua        opções gerais: swap e backup, menu da linha de comando, grep, netrw
-    busca.lua         :find, :Recentes e o menu fuzzy enquanto digita
-    atalhos.lua       todos os atalhos com <leader>
+    options.lua        opções gerais: swap e backup, menu da linha de comando, grep, netrw
+    search.lua         :find, :Recent e o menu fuzzy enquanto digita
+    keymaps.lua       todos os atalhos com <leader>
 ```
 
 Assunto novo ganha um arquivo em `lua/config/` e uma linha `require` no `init.lua`. Para o que o Neovim já
@@ -35,7 +35,7 @@ O `<leader>` é o **Espaço**.
 | `<leader>ff` | `:find`: busca arquivos do projeto |
 | `<leader>fg` | `:grep`: busca texto no projeto; o resultado abre no quickfix |
 | `<leader>fb` | `:b`: arquivos abertos |
-| `<leader>fr` | `:Recentes`: arquivos abertos antes |
+| `<leader>fr` | `:Recent`: arquivos abertos antes |
 | `<leader>e` | Árvore de pastas (netrw) na pasta do arquivo atual |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 
@@ -43,7 +43,7 @@ O `<leader>` é o **Espaço**.
 
 ## Buscar
 
-Em `:find`, `:b` e `:Recentes`, um menu de sugestões aparece enquanto você digita, com busca fuzzy (letras fora
+Em `:find`, `:b` e `:Recent`, um menu de sugestões aparece enquanto você digita, com busca fuzzy (letras fora
 de ordem valem: `tmuxconf` acha `home/dot_config/tmux/tmux.conf`). `Tab` e `Shift-Tab` andam no menu, e o
 `Enter` abre a escolhida, ou a primeira se você não escolher nenhuma. O mesmo menu aparece no `:` e na busca com `/`.
 

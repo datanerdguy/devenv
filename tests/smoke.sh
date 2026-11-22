@@ -72,9 +72,9 @@ fi
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
-  # Abre sem interface e falha se a config der erro (o :Recentes é criado depois de quase tudo).
+  # Abre sem interface e falha se a config der erro (o :Recent é criado depois de quase tudo).
   check "Neovim abre com a config" "${HOME}/.local/share/bob/nvim-bin/nvim" --headless \
-    -c 'lua if vim.v.errmsg ~= "" or vim.fn.exists(":Recentes") == 0 then vim.cmd.cquit(1) end' -c qa
+    -c 'lua if vim.v.errmsg ~= "" or vim.fn.exists(":Recent") == 0 then vim.cmd.cquit(1) end' -c qa
 fi
 
 # Agentes: instruções, settings mesclado, statusline e MCP.

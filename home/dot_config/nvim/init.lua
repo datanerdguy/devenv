@@ -3,6 +3,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("config.opcoes")
-require("config.busca")
-require("config.atalhos")
+require("config.options")
+require("config.search")
+require("config.keymaps")
