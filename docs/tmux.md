@@ -13,9 +13,10 @@ Prefixo: **`Ctrl-Space`**. Na tabela, `P` é o prefixo.
 
 | Tecla | O que faz |
 | --- | --- |
-| `Ctrl-h/j/k/l` | Anda entre painéis do tmux e janelas do Neovim (sem prefixo) |
-| `P h/j/k/l` | Anda entre painéis (o mesmo, com prefixo) |
-| `P H/J/K/L` | Redimensiona (repete sem o prefixo) |
+| `Ctrl-j/k/l/;` | Anda entre painéis do tmux e janelas do Neovim: esquerda, baixo, cima, direita (as teclas do niri, com Ctrl) |
+| `P j/k/l/;` | Anda entre painéis (o mesmo, com prefixo) |
+| `P H/J/K/L` | Redimensiona como no Vim: esquerda, baixo, cima, direita (repete sem o prefixo) |
+| `P Ctrl-l` | Limpa a tela do shell (o `Ctrl-l` sozinho anda para cima) |
 | `P \|` / `P -` | Divide na vertical / horizontal, na pasta atual |
 | `P c` | Janela nova na pasta atual |
 | `P p` / `P n` / `P Tab` | Janela anterior / próxima / última |
@@ -59,5 +60,7 @@ recarrega o tmux aberto. Antes do primeiro `theme`, o chezmoi deixa um com o Nor
 
 ## Neovim
 
-O `Ctrl-h/j/k/l` passa para o Neovim quando o painel tem a marca `@pane-is-vim`. A marca e o lado do Neovim entram
-com a área do Neovim. Até lá, essas teclas sempre trocam de painel.
+O `Ctrl-j/k/l/;` passa para o Neovim quando o painel tem a marca `@pane-is-vim`, que o Neovim põe ao abrir e tira
+ao sair (`lua/config/navigation.lua`). No Neovim, a tecla troca de janela; na última janela daquele lado, ela
+segue para o painel vizinho do tmux. Fora do Neovim, o `Ctrl-k` não apaga mais a linha no fish e o `Ctrl-j` não
+faz o papel do `Enter`.

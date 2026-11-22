@@ -2,7 +2,7 @@
 
 O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
-A regra é usar o que é nativo do Neovim e não ter plugins. Buscar arquivos, buscar texto e a árvore de pastas vêm
+A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre, como os temas. Buscar arquivos, buscar texto e a árvore de pastas vêm
 das receitas da ajuda do próprio Neovim (`:help cmdline-autocompletion` e `:help fuzzy-file-picker`). Por
 enquanto a config tem só isso; o resto entra aos poucos.
 
@@ -15,6 +15,9 @@ home/dot_config/nvim/
     options.lua       opções gerais: swap e backup, menu da linha de comando, grep, netrw
     search.lua        :find, :Recent e o menu fuzzy enquanto digita
     keymaps.lua       todos os atalhos com <leader>
+    navigation.lua    Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
+    theme.lua         os temas (plugins) e qual deles segue o desktop
+  nvim-pack-lock.json versões dos plugins, gravada pelo vim.pack
 ```
 
 Assunto novo ganha um arquivo em `lua/config/` e uma linha `require` no `init.lua`. Para o que o Neovim já
@@ -38,6 +41,7 @@ O `<leader>` é o **Espaço**.
 | `<leader>fr` | `:Recent`: arquivos abertos antes |
 | `<leader>e` | Árvore de pastas (netrw) na pasta do arquivo atual |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
+| `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
 
 `nvim .` (ou `nvim <pasta>`) abre direto na árvore.
 
@@ -56,6 +60,33 @@ O `:grep` usa o `rg`, com as mesmas regras. Os resultados vão para o quickfix: 
 
 `Enter` abre, `-` sobe uma pasta, `%` cria arquivo, `d` cria pasta, `D` apaga, `R` renomeia e `gh` mostra os
 ocultos. `:help netrw-quickmap` lista todas as teclas.
+
+## Tema
+
+O Neovim usa o tema do desktop ([temas.md](temas.md)): cada paleta do Noctalia abre o tema oficial equivalente.
+Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `theme.lua` lê a paleta escolhida em
+`~/.local/state/noctalia/settings.toml` e vigia esse arquivo; sem escolha (máquina nova), fica o Nord.
+
+| Paleta | Plugin |
+| --- | --- |
+| `catppuccin-*` | `catppuccin/nvim` |
+| `kanagawa-*` | `rebelot/kanagawa.nvim` |
+| `rose-pine`, `rose-pine-moon` | `rose-pine/neovim` |
+| `everforest-*` | `sainnhe/everforest` (o contraste vai em `g:everforest_background`) |
+| `nord` | `gbprod/nord.nvim` (o oficial é de Vim e não cobre treesitter nem LSP) |
+| `dracula` | `Mofiqul/dracula.nvim` (pelo mesmo motivo) |
+
+Variante nova em `temas/gerar.py` precisa de uma linha na tabela `themes` do `theme.lua`.
+
+## Plugins
+
+O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins sozinho. As versões ficam em
+`nvim-pack-lock.json`, no repo, então toda máquina instala as mesmas.
+
+| Comando | O que faz |
+| --- | --- |
+| `:packupdate` | Mostra as atualizações; `:write` confirma, `:quit` descarta. Depois, commit do `nvim-pack-lock.json` |
+| `:packdel <nome>` | Apaga um plugin que saiu da config |
 
 ## Arquivos
 

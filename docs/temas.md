@@ -40,11 +40,11 @@ O Noctalia guarda a paleta e, a cada troca, regenera a config de cada app a part
 | Zen, yazi | da comunidade do Noctalia |
 | lazygit | nosso, em `home/dot_config/noctalia/templates/lazygit.yml` |
 | Cursor do fish (verde escreve, vermelho normal, amarelo visual) | nosso, em `home/dot_config/noctalia/templates/fish-cursor.fish` |
+| Neovim | o tema oficial de cada paleta, pelo `vim.pack` (veja [neovim.md](neovim.md#tema)) |
 | tmux (barra, bordas, popups) | nosso, em `home/dot_config/noctalia/templates/tmux.conf`; recarrega o tmux aberto |
 | fzf, bat, eza, prompt (tide), delta | sem modelo: usam as 16 cores do terminal, então seguem o Ghostty |
 
-O Zen só pega as cores novas depois de reaberto. O Neovim entra quando a área dele existir: a comunidade do Noctalia
-já tem o modelo.
+O Zen só pega as cores novas depois de reaberto.
 
 ## Acrescentar uma variante
 
