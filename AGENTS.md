@@ -35,6 +35,7 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Scripts e workflows sem erro | `shellcheck` e `actionlint` (`just lint`) |
 | Config do niri e do Noctalia válida | `niri validate` (`just lint`) e smoke |
 | Config do tmux sem erro | tmux num socket próprio (`just lint` e smoke) |
+| Config do Neovim sem erro | o Neovim abre com a config do repo (`just lint` e smoke) |
 | Mensagem de commit e título do PR no padrão | `.githooks/commit-msg` e `pr.yml` |
 | Uma checagem nova falha no erro que ela previne | julgamento: rode contra o erro antes de confiar |
 | Docs dizem o que o código faz | julgamento: confira contra o arquivo antes de escrever |

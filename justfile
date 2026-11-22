@@ -26,7 +26,7 @@ diff:
     chezmoi diff
     metapac unmanaged
 
-# Lint: scripts, workflows, grupos do metapac, mapa do teclado e, se instalados, niri, paletas e tmux (o mesmo do CI)
+# Lint: scripts, workflows, grupos do metapac, mapa do teclado e, se instalados, niri, paletas, tmux e Neovim (o mesmo do CI)
 lint:
     shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
     python3 packages/checar.py
@@ -37,6 +37,8 @@ lint:
     # As paletas saem dos temas do Ghostty (grupo terminal); sem ele, quem confere é o smoke do CI completo.
     if [ -d /usr/share/ghostty/themes ]; then python3 temas/gerar.py --check; fi
     if command -v tmux >/dev/null; then tests/checar-tmux.sh home/dot_config/tmux/tmux.conf; fi
+    # O Neovim abre com a config do repo (não a de ~/.config) e falha em qualquer erro.
+    if command -v nvim >/dev/null; then XDG_CONFIG_HOME="$PWD/home/dot_config" nvim --headless -c 'lua if vim.v.errmsg ~= "" then vim.cmd.cquit(1) end' -c qa; fi
 
 # Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
 noctalia-diff:
