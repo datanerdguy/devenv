@@ -7,7 +7,7 @@ function _devenv_urls --argument-names painel
         return
     end
     set -l escolha (printf '%s\n' $links | fzf --height=100% --layout=reverse --border=none --color=16 \
-        --prompt '  ' --pointer '▌' --gutter ' ' --no-scrollbar --header 'Enter abre no navegador')
+        --prompt '❯ ' --pointer '▌' --gutter ' ' --no-scrollbar --header 'Enter abre no navegador')
     or return
     # setsid: o navegador continua aberto quando o popup fecha.
     setsid -f xdg-open $escolha >/dev/null 2>&1
