@@ -24,7 +24,6 @@ packages = [
   "btrfs-assistant",
   "btrfs-progs",
   "cachyos-drm-awaiter",
-  "cachyos-fish-config",
   "cachyos-hello",
   "cachyos-hooks",
   "cachyos-kernel-manager",

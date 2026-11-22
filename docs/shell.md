@@ -1,0 +1,49 @@
+# Shell (fish)
+
+A config fica em `home/dot_config/fish/`: `config.fish`, as funções em `functions/` e os plugins do fisher em
+`fish_plugins`. Os pacotes ficam no grupo `shell`.
+
+## Atalhos
+
+| Atalho | O que faz |
+| --- | --- |
+| `Esc` | Modo normal do vi (cursor vermelho). `i` volta para a escrita (verde); `v` seleciona (amarelo) |
+| `Ctrl+G` | Vai para uma pasta: as que você mais usa (zoxide) primeiro, depois todas do `~` (fd). O que já está digitado vira a busca |
+| `Ctrl+R` | Busca no histórico (fzf) |
+| `Ctrl+T` | Cola o caminho de um arquivo (fzf) |
+| `z <parte do nome>` | Entra direto na pasta mais usada que combina (zoxide) |
+
+O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
+`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o script `theme` definir outras.
+
+## Abreviações
+
+Viram o comando inteiro quando você aperta espaço, então o histórico guarda o comando de verdade.
+
+| Abreviação | Vira |
+| --- | --- |
+| `g`, `gs`, `ga`, `gc`, `gca` | `git`, `git status -sb`, `git add`, `git commit`, `git commit --amend` |
+| `gp`, `gl`, `gd`, `gds`, `gsw`, `glg` | push, pull, diff, diff --staged, switch, log em grafo |
+| `lg` | `lazygit` |
+| `v` | `nvim` |
+| `j`, `dv` | `just`; `just` do devenv de qualquer pasta (`dv sync`, `dv apply`) |
+| `ls`, `ll`, `la`, `lt` | `eza` em lista, longa, com ocultos, em árvore |
+| `..`, `...`, `....` | `cd ../`, `cd ../../`, e assim por diante |
+| `!!` | o último comando (ex.: `sudo !!`) |
+
+## Prompt
+
+O tide no estilo Lean, em duas linhas: pasta e branch em cima, e à direita o status do último comando, o tempo
+dele quando passa de 3 s e as versões da linguagem do projeto (Python, Node, Rust, Go, Elixir...). Usa as 16 cores
+do terminal, então segue o tema. O prompt anterior encolhe depois de cada comando (transient). O hook do fisher no
+grupo `shell` reinstala o tide e refaz essa config a cada `just sync`.
+
+## Desempenho
+
+O fish abre em uns 16 ms nesta máquina; a config própria custa 1,4 ms (medido com `fish --profile-startup`).
+
+- A saída do `zoxide init` e do `fzf --fish` fica em cache em `~/.cache/fish/` e só é gerada de novo quando o
+  programa é atualizado.
+- O mise entra pelos shims, não pelo `mise activate`, que custava uns 15 ms a cada prompt. A versão continua
+  sendo a do projeto; só o `[env]` do `mise.toml` fica de fora.
+- As funções ficam em `functions/` e só carregam no primeiro uso.

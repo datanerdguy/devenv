@@ -33,12 +33,12 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 ```text
 .chezmoiroot      aponta para home/
 home/             fonte do chezmoi: só links e templates
-packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, terminal, editor, agentes, git, debug, maquinas/<máquina>)
+packages/         metapac: config.toml e groups/ (base, repo, linguagens, dados, api, shell, terminal, editor, agentes, git, debug, maquinas/<máquina>)
 bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
-docs/             workflow.md, agents.md e adr/
+docs/             workflow.md, agents.md, shell.md e adr/
 ```
 
 ## Áreas
@@ -51,7 +51,8 @@ temas), tmux e Neovim. Depois vêm desktop, teclado e dados.
 | Base (chezmoi, metapac, bootstrap, CI) | pronta |
 | Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
 | Teclado | em `keyboard/`, sem mudança |
-| Shell, terminal e temas, tmux, Neovim | a fazer, pelo Lucas |
+| Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
+| Terminal e temas, tmux, Neovim | a fazer, pelo Lucas |
 | Desktop, dados | a fazer |
 
 ## Contribuindo

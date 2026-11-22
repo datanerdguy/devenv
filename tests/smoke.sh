@@ -33,6 +33,13 @@ if command -v ghostty >/dev/null; then
   check "fonte BlexMono Nerd Font" grep -q "BlexMono Nerd Font" <<<"${fonts}"
 fi
 
+# Com o grupo shell: a config carrega sem erro e o hook do fisher instalou o tide.
+if command -v fish >/dev/null; then
+  # shellcheck disable=SC2016 # a variável é do fish, não do bash
+  check "config do fish sem erro" fish -i -c 'test "$fish_key_bindings" = fish_vi_key_bindings'
+  check "tide pelo fisher" fish -c 'type -q tide'
+fi
+
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"

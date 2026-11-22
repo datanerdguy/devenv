@@ -12,7 +12,7 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
   recomendação para o Lucas decidir. Não implemente uma área nova sem essa decisão.
 - **Pacote novo vai no grupo certo do metapac** (`packages/groups/`): `base` para o que o devenv precisa para
   existir, `repo` para mexer neste repo, `linguagens` para toolchains, LSPs e formatadores, `dados` para SQL e afins, `api` para
-  clientes HTTP, `agentes` para o Claude Code, `git` para delta e lazygit, `debug` para DAP.
+  clientes HTTP, `shell` para o fish e o que a config dele usa, `agentes` para o Claude Code, `git` para delta e lazygit, `debug` para DAP.
   Um pacote aparece uma vez só entre todos os grupos. O que é só desta máquina fica em `maquinas/<máquina>`.
 - **Configs em `home/` são links para o repo** (editar já vale). O chezmoi cria os links no `just apply`.
 - **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Java, Lua) escolhem a versão dentro de cada
@@ -43,6 +43,7 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
 | Configs (chezmoi) | `home/`, `.chezmoiroot` | README |
 | Pacotes (metapac) | `packages/config.toml`, `packages/groups/` | [ADR 0010](docs/adr/0010-devenv-sem-nix-chezmoi-metapac.md) |
 | Máquina nova | `bootstrap.sh`, `tests/smoke.sh` | README |
+| Shell (fish) | `home/dot_config/fish/` | [docs/shell.md](docs/shell.md) |
 | Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md) |
 | Agentes e git | `agents/`, `home/dot_claude/`, `home/dot_config/git/` | [docs/agents.md](docs/agents.md), [ADR 0011](docs/adr/0011-agentes-e-git.md) |
 | CI | `.github/workflows/` | [docs/workflow.md](docs/workflow.md) |

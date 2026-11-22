@@ -14,8 +14,8 @@ package_manager = "paru"
 # Grupos por máquina. O nome é o hostname e o caminho é relativo a groups/, sem o .toml.
 [hostname_groups]
 # O notebook do Lucas, com tudo.
-cachyos = ["base", "repo", "linguagens", "dados", "api", "terminal", "editor", "agentes", "git", "debug", "maquinas/cachyos"]
+cachyos = ["base", "repo", "linguagens", "dados", "api", "shell", "terminal", "editor", "agentes", "git", "debug", "maquinas/cachyos"]
 # O container do CI (docker run --hostname ci): só o que o bootstrap e o lint precisam.
 ci = ["base", "repo"]
 # O CI completo, à mão (gh workflow run ci.yml -f completo=true): testa a lista inteira.
-ci-completo = ["base", "repo", "linguagens", "dados", "api", "terminal", "editor", "agentes", "git"]
+ci-completo = ["base", "repo", "linguagens", "dados", "api", "shell", "terminal", "editor", "agentes", "git"]
