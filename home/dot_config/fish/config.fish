@@ -18,7 +18,8 @@ set -gx MANPAGER 'nvim +Man!'
 set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml,~/.config/lazygit/themes/noctalia.yml
 set -gx FZF_DEFAULT_COMMAND 'fd --type file --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
-set -gx FZF_DEFAULT_OPTS '--height=40% --layout=reverse --border'
+# Visual de toda lista do fzf. --color=16: as cores do terminal, que seguem o tema.
+set -gx FZF_DEFAULT_OPTS "--height=40% --layout=reverse --border --color=16 --pointer=▌ --gutter=' ' --no-scrollbar --info=inline-right"
 
 status is-interactive; or return
 

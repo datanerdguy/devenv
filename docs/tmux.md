@@ -55,7 +55,7 @@ Fica no topo e mostra a sessão (amarela enquanto o prefixo está apertado), as 
 A cota vem de `~/.cache/devenv/claude-usage`, que a statusline do Claude grava.
 
 As cores seguem o tema ([temas.md](temas.md)). O Noctalia gera `~/.config/tmux/noctalia.conf` a cada `theme` e
-recarrega o tmux aberto. Antes do primeiro `theme`, valem as cores do Nord que estão no `tmux.conf`.
+recarrega o tmux aberto. Antes do primeiro `theme`, o chezmoi deixa um com o Nord.
 
 ## Neovim
 

@@ -36,7 +36,7 @@ lint:
     if command -v niri >/dev/null; then niri validate -c home/dot_config/niri/config.kdl; fi
     # As paletas saem dos temas do Ghostty (grupo terminal); sem ele, quem confere é o smoke do CI completo.
     if [ -d /usr/share/ghostty/themes ]; then python3 temas/gerar.py --check; fi
-    if command -v tmux >/dev/null; then tests/tmux-check.sh home/dot_config/tmux/tmux.conf; fi
+    if command -v tmux >/dev/null; then tests/checar-tmux.sh home/dot_config/tmux/tmux.conf; fi
 
 # Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
 noctalia-diff:

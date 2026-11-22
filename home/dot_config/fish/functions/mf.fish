@@ -4,7 +4,7 @@ function mf --description 'Busca e abre um manual'
     # man -k lista "nome (seção) - descrição"; vira seção, nome e descrição separados por tab.
     set -l page (man -k . 2>/dev/null \
         | sed -E 's/^([^ ]+) +\(([^)]+)\) +- (.*)$/\2\t\1\t\3/' \
-        | fzf --delimiter=\t --with-nth=2,1,3 --tiebreak=begin,chunk --height=90% --prompt='man> ' --query="$argv" \
+        | fzf --delimiter=\t --with-nth=2,1,3 --tiebreak=begin,chunk --height=90% --prompt='manual ❯ ' --query="$argv" \
             --preview='man {1} {2} 2>/dev/null | col -bx | bat --language man --plain --color=always' \
             --preview-window=right,60%)
     or return

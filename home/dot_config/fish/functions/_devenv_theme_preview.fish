@@ -1,5 +1,5 @@
 # Amostra de uma variante para a lista do theme: as 16 cores do terminal e as de destaque da interface.
-function _devenv_theme_preview -a variante
+function _devenv_theme_preview --argument-names variante
     set -l arquivo ~/.config/noctalia/palettes/$variante.json
     set -l t (jq -r '.dark.terminal | .background, .foreground, (.normal | .[]), (.bright | .[])' $arquivo)
     set -l ui (jq -r '.dark | .mPrimary, .mSecondary, .mTertiary' $arquivo)
