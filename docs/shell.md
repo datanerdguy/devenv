@@ -40,7 +40,8 @@ grupo `shell` reinstala o tide e refaz essa config a cada `just sync`.
 
 ## Desempenho
 
-O fish abre em uns 16 ms nesta máquina; a config própria custa 1,4 ms (medido com `fish --profile-startup`).
+O fish abre em uns 12 ms nesta máquina (2 ms sem config); a config própria custa 1,4 ms (medido com
+`fish --profile-startup`).
 
 - A saída do `zoxide init` e do `fzf --fish` fica em cache em `~/.cache/fish/` e só é gerada de novo quando o
   programa é atualizado.
