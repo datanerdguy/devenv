@@ -37,6 +37,8 @@ Viram o comando inteiro quando você aperta espaço, então o histórico guarda 
 | `..`, `...`, `....` | `cd ../`, `cd ../../`, e assim por diante |
 | `!!` | o último comando (ex.: `sudo !!`) |
 
+`ns` guarda as notas de `~/notas` no GitHub (commit e push), de qualquer pasta.
+
 `ls`, `ll`, `la` e `lt` são funções, não abreviações: a linha continua mostrando só `ls`, e por baixo roda o
 `eza` (lista, longa com git, com ocultos, em árvore).
 
