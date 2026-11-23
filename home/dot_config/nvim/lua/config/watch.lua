@@ -1,5 +1,6 @@
--- Segue um arquivo de ~/.local/state que o Noctalia regrava a cada `theme`: chama on_change(path) agora e a cada
--- mudança. Vigia a pasta, e não o arquivo, porque o arquivo pode ser trocado por outro (e o vigia perderia o rastro).
+-- Segue um arquivo de ~/.local/state que o Noctalia regrava a cada `theme`:
+-- chama on_change(path) agora e a cada mudança. Vigia a pasta, e não o arquivo,
+-- porque o arquivo pode ser trocado por outro (e o vigia perderia o rastro).
 local state = vim.env.XDG_STATE_HOME or vim.fs.normalize("~/.local/state")
 
 return function(dir, file, on_change)

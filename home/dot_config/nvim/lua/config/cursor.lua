@@ -1,9 +1,12 @@
--- Cursor sempre em bloco, com a cor do modo igual à do fish: verde escreve, vermelho normal, amarelo visual.
--- As cores vêm do mesmo arquivo do fish, que o Noctalia regrava a cada `theme` (docs/temas.md).
+-- Cursor sempre em bloco, com a cor do modo igual à do fish: verde escreve,
+-- vermelho normal, amarelo visual. As cores vêm do mesmo arquivo do fish, que o
+-- Noctalia regrava a cada `theme` (docs/temas.md).
 
-vim.o.guicursor = "n-c-o-r-cr-sm:block-CursorNormal,i-ci-ve:block-CursorInsert,v:block-CursorVisual"
+vim.o.guicursor =
+  "n-c-o-r-cr-sm:block-CursorNormal,i-ci-ve:block-CursorInsert,v:block-CursorVisual"
 
-local groups = { insert = "CursorInsert", normal = "CursorNormal", visual = "CursorVisual" }
+local groups =
+  { insert = "CursorInsert", normal = "CursorNormal", visual = "CursorVisual" }
 -- O padrão é o Nord, como no fish antes do primeiro `theme`.
 local colors = { insert = "A3BE8C", normal = "BF616A", visual = "EBCB8B" }
 
