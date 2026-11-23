@@ -39,6 +39,7 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Lua e scripts no estilo do repo (`.stylua.toml`, `.editorconfig`) | `stylua --check` e `shfmt -d` (`just lint`) |
 | Mensagem de commit e título do PR no padrão | `.githooks/commit-msg` e `pr.yml` |
 | Uma checagem nova falha no erro que ela previne | julgamento: rode contra o erro antes de confiar |
+| As configs de `modelos/` abrem na ferramenta de cada uma | `tests/checar-modelos.sh` (`just lint`) |
 | Arquivo citado nos docs existe (caminho, nome entre crases, árvore de pastas) | `tests/checar-docs.py` (`just lint`) |
 | Docs dizem o que o código faz | julgamento: confira contra o arquivo antes de escrever |
 
@@ -69,4 +70,5 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Temas | `temas/gerar.py`, `home/dot_config/noctalia/palettes/` e `templates/` | [docs/temas.md](docs/temas.md), [ADR 0013](docs/adr/0013-temas-pelo-noctalia.md) |
 | Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md), [docs/desktop.md](docs/desktop.md) |
 | Agentes e git | `agents/`, `home/dot_claude/`, `home/dot_config/git/` | [docs/agents.md](docs/agents.md), [ADR 0011](docs/adr/0011-agentes-e-git.md) |
+| Modelos de projeto | `modelos/` | [modelos/README.md](modelos/README.md) |
 | CI | `.github/workflows/` | [docs/workflow.md](docs/workflow.md) |

@@ -1,0 +1,25 @@
+# Estilo básico de qualquer projeto. O Neovim lê sozinho: a indentação e o
+# max_line_length (vira o textwidth, a linha vertical e a quebra ao digitar).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 80
+
+# Python e Rust usam 4 espaços.
+[*.{py,rs}]
+indent_size = 4
+
+# Go e Makefile usam tab.
+[{*.go,Makefile,go.mod}]
+indent_style = tab
+indent_size = 4
+
+# No Markdown, dois espaços no fim da linha quebram a linha.
+[*.md]
+trim_trailing_whitespace = false

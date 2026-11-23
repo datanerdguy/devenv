@@ -41,6 +41,7 @@ tests/            smoke.sh: o que o bootstrap deve deixar pronto (roda no CI)
 .github/          CI e modelo de PR
 temas/            gerador das paletas dos temas (gerar.py)
 wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
+modelos/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja modelos/README.md
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
 docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, temas.md e adr/

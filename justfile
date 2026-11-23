@@ -41,6 +41,7 @@ lint:
     # As paletas saem dos temas do Ghostty (grupo terminal); sem ele, quem confere é o smoke do CI completo.
     if [ -d /usr/share/ghostty/themes ]; then python3 temas/gerar.py --check; fi
     if command -v tmux >/dev/null; then tests/checar-tmux.sh home/dot_config/tmux/tmux.conf; fi
+    tests/checar-modelos.sh
     if command -v nvim >/dev/null; then tests/checar-nvim.sh home/dot_config/nvim; fi
 
 # Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
