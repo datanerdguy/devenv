@@ -17,5 +17,8 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
   callback = function() vim.fn.wildtrigger() end,
 })
 -- Com o menu aberto, as setas saem dele e andam no histórico, como sem o menu.
-vim.keymap.set("c", "<Up>", function() return vim.fn.wildmenumode() == 1 and "<C-e><Up>" or "<Up>" end, { expr = true })
-vim.keymap.set("c", "<Down>", function() return vim.fn.wildmenumode() == 1 and "<C-e><Down>" or "<Down>" end, { expr = true })
+local function history(key)
+  return function() return vim.fn.wildmenumode() == 1 and "<C-e>" .. key or key end
+end
+vim.keymap.set("c", "<Up>", history("<Up>"), { expr = true })
+vim.keymap.set("c", "<Down>", history("<Down>"), { expr = true })

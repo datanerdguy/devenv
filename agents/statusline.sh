@@ -19,7 +19,8 @@ branch="$(git -C "${dir:-.}" branch --show-current 2>/dev/null || true)"
 # Cores pela gravidade: verde < 50%, amarelo < 80%, vermelho acima.
 color() {
   local v="${1%.*}"
-  if [ -z "${v}" ]; then printf '\033[2m'; elif [ "${v}" -ge 80 ]; then printf '\033[31m'
+  if [ -z "${v}" ]; then printf '\033[2m'; elif [ "${v}" -ge 80 ]; then
+    printf '\033[31m'
   elif [ "${v}" -ge 50 ]; then printf '\033[33m'; else printf '\033[32m'; fi
 }
 dim=$'\033[2m'

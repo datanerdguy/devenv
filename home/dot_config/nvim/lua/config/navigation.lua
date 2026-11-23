@@ -3,17 +3,13 @@
 
 local pane = vim.env.TMUX_PANE
 
-local function tmux(...)
-  vim.system({ "tmux", ... })
-end
+local function tmux(...) vim.system({ "tmux", ... }) end
 
 local function go(wincmd, tmux_dir)
   return function()
     local win = vim.api.nvim_get_current_win()
     vim.cmd.wincmd(wincmd)
-    if pane and vim.api.nvim_get_current_win() == win then
-      tmux("select-pane", "-t", pane, "-" .. tmux_dir)
-    end
+    if pane and vim.api.nvim_get_current_win() == win then tmux("select-pane", "-t", pane, "-" .. tmux_dir) end
   end
 end
 
@@ -28,14 +24,10 @@ if pane then
   local group = vim.api.nvim_create_augroup("devenv_tmux", {})
   vim.api.nvim_create_autocmd({ "VimEnter", "VimResume" }, {
     group = group,
-    callback = function()
-      tmux("set-option", "-p", "-t", pane, "@pane-is-vim", "1")
-    end,
+    callback = function() tmux("set-option", "-p", "-t", pane, "@pane-is-vim", "1") end,
   })
   vim.api.nvim_create_autocmd({ "VimLeavePre", "VimSuspend" }, {
     group = group,
-    callback = function()
-      vim.system({ "tmux", "set-option", "-p", "-u", "-t", pane, "@pane-is-vim" }):wait()
-    end,
+    callback = function() vim.system({ "tmux", "set-option", "-p", "-u", "-t", pane, "@pane-is-vim" }):wait() end,
   })
 end

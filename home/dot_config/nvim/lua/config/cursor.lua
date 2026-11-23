@@ -13,9 +13,7 @@ local function read_colors()
   if ok then
     for line in lines do
       local mode, hex = line:match("devenv_cursor_(%a+)%s+(%x+)")
-      if mode then
-        colors[mode] = hex
-      end
+      if mode then colors[mode] = hex end
     end
   end
   return colors
@@ -36,8 +34,6 @@ vim.api.nvim_create_autocmd("ColorScheme", { callback = apply })
 local watcher = vim.uv.new_fs_event()
 if watcher and vim.uv.fs_stat(state_dir) then
   watcher:start(state_dir, {}, function(_, file)
-    if file == "fish-cursor.fish" then
-      vim.schedule(apply)
-    end
+    if file == "fish-cursor.fish" then vim.schedule(apply) end
   end)
 end

@@ -40,9 +40,7 @@ local settings = vim.fs.joinpath(state_dir, "settings.toml")
 local function palette()
   for line in io.lines(settings) do
     local name = line:match('^custom_palette%s*=%s*"(.-)"')
-    if name then
-      return name
-    end
+    if name then return name end
   end
 end
 
@@ -52,7 +50,7 @@ local transparent = { "Normal", "NormalNC", "SignColumn", "FoldColumn", "LineNr"
 
 local function clear_background()
   for _, group in ipairs(transparent) do
-    local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+    local hl = vim.api.nvim_get_hl(0, { name = group, link = false }) --[[@as vim.api.keyset.highlight]]
     hl.bg, hl.ctermbg = nil, nil
     vim.api.nvim_set_hl(0, group, hl)
   end
@@ -62,9 +60,7 @@ local current
 local function apply()
   local ok, name = pcall(palette)
   name = ok and themes[name] and name or "nord"
-  if name == current then
-    return
-  end
+  if name == current then return end
   current = name
   local theme = themes[name]
   vim.o.background = "dark"
@@ -79,8 +75,6 @@ apply()
 local watcher = vim.uv.new_fs_event()
 if watcher and vim.uv.fs_stat(state_dir) then
   watcher:start(state_dir, {}, function(_, file)
-    if file == "settings.toml" then
-      vim.schedule(apply)
-    end
+    if file == "settings.toml" then vim.schedule(apply) end
   end)
 end

@@ -1,0 +1,7 @@
+# Estilo dos scripts do repo, lido pelo shfmt ao salvar no Neovim e no `just lint`.
+root = true
+
+[*.sh]
+indent_style = space
+indent_size = 2
+switch_case_indent = true
