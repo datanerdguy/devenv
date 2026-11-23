@@ -3,6 +3,7 @@
 local map = vim.keymap.set
 
 map("i", "jk", "<Esc>", { desc = "[Geral] Sair do modo de inserção" })
+map("n", "<leader>w", "<cmd>write<cr>", { desc = "[Geral] Salvar o arquivo" })
 
 -- Salva tudo e reinicia: a config é lida de novo, e os arquivos e janelas
 -- voltam como estavam.

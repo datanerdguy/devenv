@@ -3,7 +3,7 @@
 O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
 A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre: os temas, a busca
-(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig e lazydev), os erros na tela
+(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig, lazydev e SchemaStore), os erros na tela
 (tiny-inline-diagnostic), os parsers do treesitter (nvim-treesitter), o formatar (conform), o completar (blink.cmp)
 e o Claude no editor (claudecode.nvim).
 
@@ -15,19 +15,20 @@ home/dot_config/nvim/
   lua/config/           o que é nativo, sem plugin
     options.lua         líder (Espaço), números das linhas, linha na coluna 80, indentação, clipboard, busca, menu da linha de comando
     cursor.lua          cursor em bloco, com a cor do modo igual à do fish
-    keymaps.lua         atalhos sem plugin (jk, <leader>R)
+    keymaps.lua         atalhos sem plugin (jk, <leader>w, <leader>R)
     navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
     watch.lua           segue um arquivo que o `theme` regrava (usado pelo cursor e pelo tema)
   lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
     theme.lua           os temas e qual deles segue o desktop
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
     explorer.lua        explorer de arquivos (oil)
-    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev)
+    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev, SchemaStore)
     treesitter.lua      realce e fold pela estrutura do código (nvim-treesitter)
     diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
     format.lua          formatador de cada linguagem, ao salvar (conform)
     completion.lua      completar enquanto digita (blink.cmp)
     claude.lua          o Claude Code do painel do tmux conectado ao Neovim (claudecode.nvim)
+  after/lsp/            ajuste de um servidor LSP, por cima do nvim-lspconfig
   nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack
 ```
 
@@ -38,7 +39,7 @@ Assunto novo ganha um arquivo: em `lua/config/` se for nativo, em `lua/plugins/`
 `vim.pack.add` dele fica no próprio arquivo). Depois, uma linha `require` no `init.lua`. Para o que o Neovim já
 procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
 
-- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig (a pasta aparece com o primeiro);
+- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig;
 - `after/ftplugin/<linguagem>.lua`: ajustes por tipo de arquivo (indentação, por exemplo).
 
 O chezmoi liga cada arquivo, inclusive os das subpastas. Arquivo novo só aparece em `~/.config/nvim` depois do
@@ -65,6 +66,7 @@ O `<leader>` é o **Espaço**.
 | `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
 | `<leader>E` | Explorer na raiz do projeto |
 | `jk` | Sai do modo de inserção, como o `Esc` |
+| `<leader>w` | Salva o arquivo (e formata) |
 | `y` / `d` / `p` | Usam o clipboard do sistema (o mesmo do navegador) |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 | `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
@@ -179,6 +181,18 @@ O completar e a documentação enxergam as bibliotecas do projeto:
 `linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
 cada servidor da lista existe.
 
+Regras de lint e de estilo ficam na config de cada projeto (`pyproject.toml`, `Cargo.toml`, `.golangci.yml`), para
+valer igual no Neovim, no CI e em outro editor. O `after/lsp/` só tem o que é do editor:
+
+| Servidor | Ajuste |
+| --- | --- |
+| `rust_analyzer` | Ao salvar, roda o `clippy` em vez do `cargo check` |
+| `gopls` | staticcheck, parâmetro sem uso, variável que esconde outra; estilo do gofumpt |
+| `clangd` | Avisos do clang-tidy; o completar não acrescenta `#include` sozinho |
+| `vtsls` | Usa o TypeScript do projeto (`node_modules`) quando ele existe |
+| `lua_ls` | Sem o formatador dele: quem formata é o stylua |
+| `jsonls`, `yamlls` | Os formatos de centenas de arquivos (`package.json`, workflows do GitHub, `docker-compose.yml`...), pelo SchemaStore: completa as chaves e acusa a chave errada |
+
 ## Treesitter
 
 O realce do código, o fold e o realce de uma linguagem dentro de outra (SQL numa string do Python, JS no HTML) vêm
@@ -198,9 +212,10 @@ o que está instalado.
 
 ## Erros
 
-Todo erro e aviso ganha um sinal na margem. Na linha do cursor, a mensagem aparece numa caixa ao lado do código,
-com o servidor que a deu (tiny-inline-diagnostic); mensagem longa quebra em várias linhas. A barra de status mostra
-quantos há no arquivo.
+Todo erro e aviso ganha um emoji na margem, e o número da linha fica com a cor dele: ⛔ erro, ⚠️ aviso, ℹ️
+informação, 💡 dica. Na linha do cursor, a mensagem aparece numa caixa ao lado do código, com o emoji e o servidor
+que a deu (tiny-inline-diagnostic); mensagem longa quebra em várias linhas. A barra de status mostra quantos há no
+arquivo (`⛔ 2 ⚠️ 1`), e o erro vem sempre antes do aviso.
 
 ## Formatar
 
