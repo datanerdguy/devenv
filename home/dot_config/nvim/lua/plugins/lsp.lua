@@ -8,16 +8,13 @@ vim.pack.add({
   "https://github.com/b0o/SchemaStore.nvim",
 }, { confirm = false })
 
--- Lua do Neovim: o lazydev ensina ao lua_ls a API do Neovim (vim.*) e a de cada
--- plugin que o arquivo usa com require, para completar e conferir os tipos. Os
--- tipos do vim.uv entram quando o arquivo usa vim.uv.
+-- Lua do Neovim: o lazydev ensina ao lua_ls a API do Neovim e a dos plugins que
+-- o arquivo usa com require.
 require("lazydev").setup({
   library = { { path = "${3rd}/luv/library", words = { "vim%.uv" } } },
 })
 
--- Um servidor só sobe quando um arquivo do tipo dele abre. O basedpyright fica
--- instalado, mas desligado (o ty é o padrão do Python). O smoke confere que o
--- comando de cada um existe.
+-- O basedpyright fica instalado, mas desligado (o ty é o padrão do Python).
 local servers = {
   "rust_analyzer",
   "gopls",
@@ -50,11 +47,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("devenv_lsp", {}),
   callback = function(ev)
     local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-    -- No Python, a documentação (K) é do ty; o ruff cuida só do lint e das
-    -- correções.
-    if client.name == "ruff" then
-      client.server_capabilities.hoverProvider = false
-    end
     -- Editar a tag de abertura no HTML muda a de fechamento junto.
     if client:supports_method("textDocument/linkedEditingRange") then
       vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
