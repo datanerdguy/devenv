@@ -1,4 +1,5 @@
-// Atalhos. Mod é o Alt (ADR 0008): Alt cuida das janelas, Super abre apps e o sistema.
+// Atalhos. Mod é o Alt (ADR 0008): Alt cuida das janelas; Alt+Shift também abre apps e o sistema
+// (o Corne não tem Super na camada de uso normal).
 // Alt+Shift+/ mostra todos na tela.
 // Apps que precisam do PATH do fish (nvim do bob) abrem por `fish -c`.
 
@@ -7,17 +8,16 @@ binds {
 
     Mod+Return hotkey-overlay-title="Terminal" { spawn "ghostty"; }
     Mod+D hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Super+D hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Super+B hotkey-overlay-title="Navegador (Zen)" { spawn "zen-browser"; }
-    Super+E hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
-    Super+N hotkey-overlay-title="Nota do dia" { spawn "ghostty" "-e" "fish" "-c" "mkdir -p ~/notas; and nvim ~/notas/(date +%F).md"; }
-    Super+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "fish" "-c" "theme"; }
+    Mod+Shift+B hotkey-overlay-title="Navegador (Zen)" { spawn "zen-browser"; }
+    Mod+Shift+Y hotkey-overlay-title="Arquivos (yazi)" { spawn "ghostty" "-e" "yazi"; }
+    Mod+Shift+N hotkey-overlay-title="Nota do dia" { spawn "ghostty" "-e" "fish" "-c" "mkdir -p ~/notas; and nvim ~/notas/(date +%F).md"; }
+    Mod+Shift+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "fish" "-c" "theme"; }
     Mod+Shift+D hotkey-overlay-title="Desenhar na tela" { spawn "wayscriber" "--daemon-toggle"; }
 
-    Super+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
-    Super+Comma hotkey-overlay-title="Ajustes do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
-    Super+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Super+L hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
+    Mod+Shift+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+Comma hotkey-overlay-title="Ajustes do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+Shift+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+Shift+X hotkey-overlay-title="Bloquear a tela" { spawn-sh "noctalia msg session lock"; }
     Mod+Tab { spawn-sh "noctalia msg window-switcher hold"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
@@ -38,7 +38,7 @@ binds {
     Ctrl+Print hotkey-overlay-title="Captura da tela" { screenshot-screen; }
     Alt+Print hotkey-overlay-title="Captura da janela" { screenshot-window; }
     // Área e anotação no satty (setas, texto, borrão). Enter copia; Ctrl+S salva.
-    Super+Print hotkey-overlay-title="Captura com anotação" {
+    Mod+Shift+Print hotkey-overlay-title="Captura com anotação" {
         spawn-sh "grim -g \"$(slurp)\" -t ppm - | satty --filename - --copy-command wl-copy --output-filename ~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S-satty.png --actions-on-enter save-to-clipboard,exit";
     }
 
@@ -131,7 +131,7 @@ binds {
     Mod+Space { switch-focus-between-floating-and-tiling; }
     Mod+W { toggle-column-tabbed-display; }
 
-    Super+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    Super+Shift+P { power-off-monitors; }
+    Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Shift+P { power-off-monitors; }
     Mod+Shift+E { quit; }
 }

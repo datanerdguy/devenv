@@ -12,7 +12,7 @@ packages = [
   "fd", # busca de arquivos e pastas
   "eza", # ls
   "bat", # cat com cores e a prévia dos manuais no mf
-  "yazi", # arquivos no terminal (Super+E)
+  "yazi", # arquivos no terminal (Alt+Shift+Y)
   # tldr: exemplos curtos de cada comando. O hook baixa as páginas.
   { name = "tealdeer", hooks = { after_sync = ["tldr", "--update"] } },
 ]

@@ -44,7 +44,7 @@ lint:
     tests/checar-modelos.sh
     if command -v nvim >/dev/null; then tests/checar-nvim.sh home/dot_config/nvim; fi
 
-# Ajustes feitos pela tela do Noctalia (Super+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
+# Ajustes feitos pela tela do Noctalia (Alt+Shift+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
 noctalia-diff:
     @cat ~/.local/state/noctalia/settings.toml 2>/dev/null || echo "Nenhum ajuste feito pela tela do Noctalia."
 

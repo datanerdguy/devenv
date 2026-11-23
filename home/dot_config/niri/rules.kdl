@@ -23,7 +23,7 @@ window-rule {
     open-floating true
 }
 
-// Lista de temas (Super+T): janela pequena e flutuante.
+// Lista de temas (Alt+Shift+T): janela pequena e flutuante.
 window-rule {
     match app-id="dev.devenv.theme"
     open-floating true

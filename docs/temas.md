@@ -6,7 +6,7 @@ Um comando troca o tema do desktop inteiro de uma vez. O porquê está no [ADR 0
 
 | Como | O que faz |
 | --- | --- |
-| `Super+t` | Abre a lista das variantes numa janela flutuante, com a amostra das cores ao lado |
+| `Alt+Shift+t` | Abre a lista das variantes numa janela flutuante, com a amostra das cores ao lado |
 | `theme` | A mesma lista, no terminal |
 | `theme catppuccin-mocha` | Troca direto (o `Tab` completa os nomes) |
 

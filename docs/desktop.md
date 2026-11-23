@@ -18,17 +18,19 @@ O `just lint` roda o `niri validate`.
 
 - **Monitores:** cada monitor é reconhecido pelo modelo (`niri msg outputs` mostra os nomes). Um monitor novo é só
   mais um bloco `output` no `config.kdl`. Com a tampa fechada, o niri apaga a tela do notebook sozinho.
-- **Noctalia:** o que você muda pela tela de ajustes (`Super+,`) vai para `~/.local/state/noctalia/settings.toml`,
+- **Noctalia:** o que você muda pela tela de ajustes (`Alt+Shift+,`) vai para `~/.local/state/noctalia/settings.toml`,
   por cima do repo. `just noctalia-diff` mostra esses ajustes; o que quiser manter, copie para o `config.toml`.
 
 ## Atalhos
 
-Abaixo, os principais; `Alt+Shift+/` mostra todos na tela. **Alt** cuida das janelas, como no i3. **Super** abre apps e o sistema.
+Abaixo, os principais; `Alt+Shift+/` mostra todos na tela. **Alt** cuida das janelas, como no i3. **Alt+Shift**
+também abre apps e o sistema: o Corne não tem Super na camada de uso normal. Use o Alt da esquerda; o da direita
+é o AltGr, dos acentos.
 
 | Tecla | O que faz |
 | --- | --- |
 | `Alt+Enter` | Terminal (Ghostty) |
-| `Alt+d` ou `Super+d` | Launcher |
+| `Alt+d` | Launcher |
 | `Alt+Shift+q` | Fecha a janela |
 | `Alt+Tab` | Troca de janela |
 | `Alt+o` | Visão geral (digite para buscar um app) |
@@ -45,21 +47,21 @@ Abaixo, os principais; `Alt+Shift+/` mostra todos na tela. **Alt** cuida das jan
 | `Alt+Shift+Space` / `Alt+Space` | Janela flutuante / alterna entre flutuantes e lado a lado |
 | `Alt+w` | Coluna em abas |
 | `Alt+Shift+d` | Desenhar na tela (wayscriber); de novo para sair |
-| `Super+b` | Navegador (Zen) |
-| `Super+e` | Arquivos (yazi) |
-| `Super+n` | Nota do dia no Neovim (`~/notas/AAAA-MM-DD.md`) |
-| `Super+v` | Histórico de cópias |
-| `Super+s` | Central de controle |
-| `Super+,` | Ajustes do Noctalia |
-| `Super+l` | Bloquear a tela |
-| `Super+t` | Trocar o tema ([temas.md](temas.md)) |
+| `Alt+Shift+b` | Navegador (Zen) |
+| `Alt+Shift+y` | Arquivos (yazi) |
+| `Alt+Shift+n` | Nota do dia no Neovim (`~/notas/AAAA-MM-DD.md`) |
+| `Alt+Shift+v` | Histórico de cópias |
+| `Alt+Shift+s` | Central de controle |
+| `Alt+Shift+,` | Ajustes do Noctalia |
+| `Alt+Shift+x` | Bloquear a tela |
+| `Alt+Shift+t` | Trocar o tema ([temas.md](temas.md)) |
 | `Print` | Captura de uma área (ajuste e confirme com `Enter`) |
 | `Ctrl+Print` / `Alt+Print` | Captura da tela / da janela |
-| `Super+Print` | Captura com anotação no satty: setas, texto, borrão. `Enter` copia; `Ctrl+S` salva |
+| `Alt+Shift+Print` | Captura com anotação no satty: setas, texto, borrão. `Enter` copia; `Ctrl+S` salva |
 | Teclas de mídia | Tocar/pausar, próxima e anterior, no player que está tocando (o mesmo da barra). O stop pausa: o stop de verdade fecha a sessão do YouTube e nada volta a tocar. No Corne, a tecla `Play` do Vial (`KC_MPLY`) é tocar/pausar |
 | Teclas de volume e brilho | Volume, mudo e brilho da tela (pelo Noctalia) |
-| `Super+Shift+p` | Apaga os monitores |
-| `Super+Escape` | Libera os atalhos para o app em foco (ex.: uma máquina virtual) |
+| `Alt+Shift+p` | Apaga os monitores |
+| `Alt+Shift+Escape` | Libera os atalhos para o app em foco (ex.: uma máquina virtual) |
 | `Alt+Shift+e` | Sai do niri |
 
 As capturas vão para o clipboard e para `~/Pictures/Screenshots`.

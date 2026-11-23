@@ -58,7 +58,7 @@ Neovim e dados.
 | Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
 | Desktop e teclado (niri, Noctalia, Vial) | pronta, veja [docs/desktop.md](docs/desktop.md) |
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
-| Temas (`theme`, Super+T) | pronta, veja [docs/temas.md](docs/temas.md) |
+| Temas (`theme`, Alt+Shift+T) | pronta, veja [docs/temas.md](docs/temas.md) |
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
 | Neovim | quase pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
 | Dados | a fazer |
