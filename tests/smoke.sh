@@ -27,7 +27,7 @@ check "rustup com rustc e rust-analyzer" rustup which rust-analyzer
 
 # Com o grupo languages: as versões globais do mise, para usar fora de projeto.
 if command -v mise >/dev/null; then
-  for cmd in npm mix luarocks; do
+  for cmd in npm mix luarocks java; do
     check "${cmd} do mise, fora de projeto" mise which "${cmd}"
   done
 fi

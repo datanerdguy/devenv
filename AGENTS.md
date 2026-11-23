@@ -14,7 +14,7 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); as decisões e o po
   que serve o grupo. Grupo novo entra em uma máquina e no `ci-full` de `packages/config.toml`.
   Um pacote aparece uma vez só entre todos os grupos. O que é só desta máquina fica em `machines/<máquina>`.
 - **Configs em `home/` são links para o repo** (editar já vale). O chezmoi cria os links no `just apply`.
-- **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Lua) escolhem a versão dentro de cada
+- **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Lua, Java) escolhem a versão dentro de cada
   projeto. A ferramenta do projeto vence a da lista de pacotes. Fora de projeto, valem as versões globais mais
   novas do mise (`packages/groups/languages.toml`).
 - **As áreas shell, terminal e temas, tmux e Neovim são do Lucas.** O agente só ajuda quando ele pedir.

@@ -31,8 +31,8 @@ foi tomada numa sessão de perguntas e respostas e vale para o repo inteiro: o d
 
 - rustup, a toolchain do Go e o uv escolhem a versão dentro de cada projeto.
 - mise só entra para Node, Erlang/Elixir, Java e Lua, e a versão vem do arquivo do projeto.
-- Atualização (2026-11-23): fora de projeto, o mise deixa a versão mais nova de Node, Erlang, Elixir e Lua como
-  global (`mise use -g`, pelo grupo `languages`), para scripts soltos e o `mix phx.new`. Java não entra.
+- Atualização (2026-11-23): fora de projeto, o mise deixa a versão mais nova de Node, Erlang, Elixir, Lua e Java como
+  global (`mise use -g`, pelo grupo `languages`), para scripts soltos e o `mix phx.new`. O Java também.
 - Exceção: o mise instala um pacote da máquina quando não há pacote na distro nem no AUR. Hoje é só o Expert
   (`expert`, no registro do mise), que não tem pacote. O metapac só aceita nomes do registro do mise.
 - O que só existe como binário no GitHub e não está no registro do mise vem pelo chezmoi
