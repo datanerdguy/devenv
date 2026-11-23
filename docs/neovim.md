@@ -18,6 +18,7 @@ home/dot_config/nvim/
     keymaps.lua         atalhos sem plugin (jk, <leader>w, <leader>R)
     navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
     watch.lua           segue um arquivo que o `theme` regrava (usado pelo cursor e pelo tema)
+    lsp_without.lua     tira de um servidor LSP os avisos que outro já dá (usado pelo ruff e pelo ty)
   lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
     theme.lua           os temas e qual deles segue o desktop
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
@@ -191,6 +192,7 @@ valer igual no Neovim, no CI e em outro editor. O `after/lsp/` só tem o que é 
 | `clangd` | Avisos do clang-tidy; o completar não acrescenta `#include` sozinho |
 | `vtsls` | Usa o TypeScript do projeto (`node_modules`) quando ele existe |
 | `lua_ls` | Sem o formatador dele: quem formata é o stylua |
+| `ruff`, `ty` | Sem aviso repetido: o erro de sintaxe e o nome não definido ficam com o ty; a variável sem uso, com o ruff (que traz a correção). Vale em todo projeto |
 | `jsonls`, `yamlls` | Os formatos de centenas de arquivos (`package.json`, workflows do GitHub, `docker-compose.yml`...), pelo SchemaStore: completa as chaves e acusa a chave errada |
 
 ## Treesitter
