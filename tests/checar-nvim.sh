@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Abre o Neovim sem interface com a config da pasta $1 e falha se houver erro ou aviso ao abrir, se o tema não
-# carregar, se um servidor LSP ligado não tiver o comando instalado ou se faltar um parser do treesitter. Usado pelo just lint (a config do repo) e pelo
+# carregar, se um servidor LSP ligado não tiver o comando instalado, se faltar um parser do treesitter ou se
+# o lua_ls achar um uso errado da API do Neovim ou de um plugin. Usado pelo just lint (a config do repo) e pelo
 # smoke (a instalada). O nvim vem de $NVIM, ou do PATH.
 #
 # O XDG_CONFIG_HOME é uma pasta temporária com um link para a config: o nvim do bob cria um config.toml no
@@ -28,4 +29,5 @@ run -c 'lua
     vim.cmd.cquit(1)
   end' -c qa || exit 1
 run -c "luafile ${tests}/checar-lsp.lua" || exit 1
-run -c "luafile ${tests}/checar-treesitter.lua"
+run -c "luafile ${tests}/checar-treesitter.lua" || exit 1
+run -c "luafile ${tests}/checar-lua.lua"
