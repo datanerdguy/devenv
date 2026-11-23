@@ -10,27 +10,29 @@ A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o na
 
 ```text
 home/dot_config/nvim/
-  init.lua            líder (Espaço) e a ordem em que os módulos carregam
-  lua/config/
-    options.lua       opções gerais: números das linhas, swap e backup, menu da linha de comando
-    cursor.lua        cursor em bloco, com a cor do modo igual à do fish
-    theme.lua         os temas (plugins) e qual deles segue o desktop
-    search.lua        busca de arquivos, pastas e texto (fzf-lua)
-    explorer.lua      explorer de arquivos (oil)
-    lsp.lua           quais servidores LSP ligam e os atalhos deles
-    diagnostics.lua   como os erros aparecem
-    format.lua        formatador de cada linguagem, ao salvar
-    completion.lua    completar enquanto digita (blink.cmp)
-    keymaps.lua       todos os atalhos com <leader>
-    navigation.lua    Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
-  after/lsp/          ajustes de um servidor, por cima do nvim-lspconfig (lua_ls.lua: o Lua do Neovim)
-  nvim-pack-lock.json versões dos plugins, gravada pelo vim.pack
+  init.lua              líder (Espaço) e a ordem em que os módulos carregam
+  lua/config/           o que é nativo, sem plugin
+    options.lua         opções gerais: números das linhas, swap e backup, menu da linha de comando
+    cursor.lua          cursor em bloco, com a cor do modo igual à do fish
+    keymaps.lua         atalhos sem plugin (jk, <leader>R)
+    navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
+  lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
+    theme.lua           os temas e qual deles segue o desktop
+    search.lua          busca de arquivos, pastas e texto (fzf-lua)
+    explorer.lua        explorer de arquivos (oil)
+    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig)
+    diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
+    format.lua          formatador de cada linguagem, ao salvar (conform)
+    completion.lua      completar enquanto digita (blink.cmp)
+  after/lsp/            ajustes de um servidor, por cima do nvim-lspconfig (lua_ls.lua: o Lua do Neovim)
+  nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack
 ```
 
 O estilo do Lua fica no `.stylua.toml` e o dos scripts no `.editorconfig`, na raiz do repo. O Neovim formata assim
 ao salvar, e o `just lint` confere.
 
-Assunto novo ganha um arquivo em `lua/config/` e uma linha `require` no `init.lua`. Para o que o Neovim já
+Assunto novo ganha um arquivo: em `lua/config/` se for nativo, em `lua/plugins/` se precisar de plugin (o
+`vim.pack.add` dele fica no próprio arquivo). Depois, uma linha `require` no `init.lua`. Para o que o Neovim já
 procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
 
 - `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig;
@@ -112,7 +114,7 @@ LSP, que corrige os imports.
 ## Tema
 
 O Neovim usa o tema do desktop ([temas.md](temas.md)): cada paleta do Noctalia abre o tema oficial equivalente.
-Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `theme.lua` lê a paleta escolhida em
+Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `plugins/theme.lua` lê a paleta escolhida em
 `~/.local/state/noctalia/settings.toml` e vigia esse arquivo; sem escolha (máquina nova), fica o Nord.
 
 O fundo é transparente: aparece o do Ghostty, com a mesma cor e a mesma opacidade (`background-opacity`). Janelas
@@ -127,7 +129,7 @@ flutuantes e a barra de status ficam com o fundo do tema.
 | `nord` | `gbprod/nord.nvim` (o oficial é de Vim e não cobre treesitter nem LSP) |
 | `dracula` | `Mofiqul/dracula.nvim` (pelo mesmo motivo) |
 
-Variante nova em `temas/gerar.py` precisa de uma linha na tabela `themes` do `theme.lua`.
+Variante nova em `temas/gerar.py` precisa de uma linha na tabela `themes` do `plugins/theme.lua`.
 
 ## Plugins
 
@@ -142,7 +144,7 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 ## LSP
 
 Os servidores vêm do metapac (`packages/groups/linguagens.toml`, a tabela do [ADR 0010](adr/0010-devenv-sem-nix-chezmoi-metapac.md)),
-sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `lsp.lua`
+sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `plugins/lsp.lua`
 liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
 documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.
 
@@ -162,7 +164,7 @@ documentação, e o ruff do lint e das correções. O basedpyright fica instalad
 | `<leader>lr` | Reinicia os servidores |
 
 `:checkhealth vim.lsp` mostra quais servidores estão ligados no arquivo atual. Servidor novo: o pacote em
-`linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `lsp.lua`. O smoke confere que o comando de
+`linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
 cada servidor da lista existe.
 
 ## Erros

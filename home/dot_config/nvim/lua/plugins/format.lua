@@ -43,3 +43,5 @@ require("conform").setup({
 
 -- gq também formata pelo conform.
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+vim.keymap.set({ "n", "x" }, "<leader>lf", function() require("conform").format() end, { desc = "[LSP] Formatar" })

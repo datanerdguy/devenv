@@ -30,7 +30,7 @@ apply()
 -- O tema novo apaga os grupos de realce; o cursor volta logo depois.
 vim.api.nvim_create_autocmd("ColorScheme", { callback = apply })
 
--- O Noctalia regrava o arquivo de cores a cada `theme` (vigia a pasta, como o theme.lua).
+-- O Noctalia regrava o arquivo de cores a cada `theme` (vigia a pasta, como o plugins/theme.lua).
 local watcher = vim.uv.new_fs_event()
 if watcher and vim.uv.fs_stat(state_dir) then
   watcher:start(state_dir, {}, function(_, file)

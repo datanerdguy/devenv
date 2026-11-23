@@ -22,3 +22,8 @@ require("oil").setup({
     ["gh"] = { "actions.select", opts = { horizontal = true }, desc = "Abrir embaixo" },
   },
 })
+
+local map = vim.keymap.set
+map("n", "-", "<cmd>Oil<cr>", { desc = "[Explorer] Pasta do arquivo atual" })
+map("n", "<leader>e", "<cmd>Oil<cr>", { desc = "[Explorer] Pasta do arquivo atual" })
+map("n", "<leader>E", function() require("oil").open(vim.fn.getcwd()) end, { desc = "[Explorer] Raiz do projeto" })

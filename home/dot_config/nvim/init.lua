@@ -4,14 +4,18 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Nativo (lua/config/): opções e atalhos sem plugin.
 require("config.options")
 require("config.cursor")
-require("config.theme")
-require("config.search")
-require("config.explorer")
-require("config.lsp")
-require("config.diagnostics")
-require("config.format")
-require("config.completion")
 require("config.keymaps")
 require("config.navigation")
+
+-- Plugins (lua/plugins/): um arquivo por assunto, com a config e os atalhos dele. O tema vem primeiro, porque os
+-- outros tiram as cores dele.
+require("plugins.theme")
+require("plugins.search")
+require("plugins.explorer")
+require("plugins.lsp")
+require("plugins.diagnostics")
+require("plugins.format")
+require("plugins.completion")
