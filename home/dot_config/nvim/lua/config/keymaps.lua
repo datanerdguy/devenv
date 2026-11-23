@@ -2,7 +2,6 @@
 -- Toda desc segue "[Categoria] Ação".
 local map = vim.keymap.set
 
--- jk sai do modo de inserção, como o Esc.
 map("i", "jk", "<Esc>", { desc = "[Geral] Sair do modo de inserção" })
 
 -- Salva tudo e reinicia: a config é lida de novo, e os arquivos e janelas voltam como estavam.

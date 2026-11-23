@@ -36,7 +36,7 @@ VARIANTES = {
 # 2 verde, 4 azul, 5 magenta, 6 ciano. O padrão serve para quem não está na tabela.
 DESTAQUES = {
     "nord": (6, 4, 5),  # frost: ciano #88c0d0 em destaque
-    "everforest": (2, 4, 5),  # verde
+    "everforest": (2, 4, 5),
     "rose-pine": (5, 6, 4),  # iris
 }
 PADRAO = (4, 5, 6)

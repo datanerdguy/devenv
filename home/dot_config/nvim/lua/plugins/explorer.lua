@@ -4,11 +4,9 @@
 vim.pack.add({ "https://github.com/stevearc/oil.nvim" }, { confirm = false })
 
 require("oil").setup({
-  -- Apagar manda para a lixeira (dá para desfazer).
   delete_to_trash = true,
   -- Renomear ou mover um arquivo só não pede confirmação; apagar e mudanças maiores pedem.
   skip_confirm_for_simple_edits = true,
-  -- Atualiza sozinho quando um arquivo muda fora do Neovim.
   watch_for_changes = true,
   view_options = { show_hidden = true },
   keymaps = {

@@ -7,9 +7,7 @@ vim.pack.add({
 
 local fzf = require("fzf-lua")
 fzf.setup({
-  -- As cores vêm do tema do Neovim.
   fzf_colors = true,
-  -- O menu de opções do Neovim (vim.ui.select) também abre no fzf.
   ui_select = {},
   -- Modo normal, como no Vim: Esc para de escrever (o prompt ganha "NORMAL"), j/k andam na lista, i volta a escrever
   -- e q ou Esc fecham. O fzf não tem modos; o Esc liga as teclas j, k, i e q, e o i as desliga de novo.

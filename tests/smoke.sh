@@ -94,7 +94,6 @@ statusline() {
 }
 check "statusline mostra o modelo" statusline
 
-# Git.
 check "git com o delta de pager" test "$(git config --get core.pager)" = delta
 if command -v lazygit >/dev/null; then
   check "delta instalado (o git usa de pager)" command -v delta

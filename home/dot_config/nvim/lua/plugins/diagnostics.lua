@@ -8,9 +8,7 @@ require("tiny-inline-diagnostic").setup({
   -- O fundo do editor é transparente (plugins/theme.lua); a caixa segue.
   transparent_bg = true,
   options = {
-    -- Mostra de qual servidor veio a mensagem (ty, ruff...).
     show_source = { enabled = true },
-    -- Mensagem longa quebra em várias linhas em vez de sumir na borda.
     multilines = { enabled = true },
   },
 })

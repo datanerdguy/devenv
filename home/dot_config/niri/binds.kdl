@@ -5,7 +5,6 @@
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    // Apps
     Mod+Return hotkey-overlay-title="Terminal" { spawn "ghostty"; }
     Mod+D hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Super+D hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
@@ -15,7 +14,6 @@ binds {
     Super+T hotkey-overlay-title="Trocar o tema" { spawn "ghostty" "--class=dev.devenv.theme" "-e" "fish" "-c" "theme"; }
     Mod+Shift+D hotkey-overlay-title="Desenhar na tela" { spawn "wayscriber" "--daemon-toggle"; }
 
-    // Noctalia
     Super+S hotkey-overlay-title="Central de controle" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Super+Comma hotkey-overlay-title="Ajustes do Noctalia" { spawn-sh "noctalia msg settings-toggle"; }
     Super+V hotkey-overlay-title="Histórico de cópias" { spawn-sh "noctalia msg panel-toggle clipboard"; }
@@ -81,7 +79,6 @@ binds {
     Mod+Ctrl+Shift+L { move-column-to-monitor-up; }
     Mod+Ctrl+Shift+Semicolon { move-column-to-monitor-right; }
 
-    // Áreas de trabalho
     Mod+Page_Down { focus-workspace-down; }
     Mod+Page_Up { focus-workspace-up; }
     Mod+Shift+Page_Down { move-column-to-workspace-down; }
@@ -134,7 +131,6 @@ binds {
     Mod+Space { switch-focus-between-floating-and-tiling; }
     Mod+W { toggle-column-tabbed-display; }
 
-    // Sistema
     Super+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     Super+Shift+P { power-off-monitors; }
     Mod+Shift+E { quit; }
