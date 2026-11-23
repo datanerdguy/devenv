@@ -6,4 +6,5 @@ packages = [
   # O hook roda a cada sync e não faz nada se o nightly já estiver instalado e em uso.
   # O nvim fica em ~/.local/share/bob/nvim-bin, que precisa estar no PATH (área do shell).
   { name = "bob", hooks = { after_sync = ["bob", "use", "nightly"] } },
+  "tree-sitter-cli", # compila os parsers que o nvim-treesitter baixa
 ]

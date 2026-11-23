@@ -4,7 +4,8 @@ O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica
 
 A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre: os temas, a busca
 (fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig e lazydev), os erros na tela
-(tiny-inline-diagnostic), o formatar (conform) e o completar (blink.cmp).
+(tiny-inline-diagnostic), os parsers do treesitter (nvim-treesitter), o formatar (conform), o completar (blink.cmp)
+e o Claude no editor (claudecode.nvim).
 
 ## Estrutura
 
@@ -22,9 +23,11 @@ home/dot_config/nvim/
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
     explorer.lua        explorer de arquivos (oil)
     lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev)
+    treesitter.lua      realce e fold pela estrutura do código (nvim-treesitter)
     diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
     format.lua          formatador de cada linguagem, ao salvar (conform)
     completion.lua      completar enquanto digita (blink.cmp)
+    claude.lua          o Claude Code do painel do tmux conectado ao Neovim (claudecode.nvim)
   nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack
 ```
 
@@ -175,6 +178,23 @@ O completar e a documentação enxergam as bibliotecas do projeto:
 `linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
 cada servidor da lista existe.
 
+## Treesitter
+
+O realce do código, o fold e o realce de uma linguagem dentro de outra (SQL numa string do Python, JS no HTML) vêm
+do treesitter, que é do Neovim. O nvim-treesitter só baixa e compila os parsers, com o `tree-sitter-cli` (grupo
+`editor`). As linguagens são as dos servidores do `plugins/lsp.lua`, então linguagem nova no LSP ganha o parser
+junto. Na primeira vez que o Neovim abre, ele compila todos (uns minutos); depois, só o que faltar. Linguagem sem
+parser fica com o realce antigo, por regex.
+
+| Tecla | O que faz |
+| --- | --- |
+| `zc` / `zo` | Fecha / abre o bloco do cursor (função, classe, `if`) |
+| `zM` / `zR` | Fecha / abre todos (o arquivo abre com tudo aberto) |
+| `za` | Fecha ou abre o bloco |
+
+O `:packupdate` do nvim-treesitter atualiza os parsers junto (`:TSUpdate`). `:checkhealth nvim-treesitter` mostra
+o que está instalado.
+
 ## Erros
 
 Todo erro e aviso ganha um sinal na margem. Na linha do cursor, a mensagem aparece numa caixa ao lado do código,
@@ -225,3 +245,15 @@ O Neovim não cria swap (`.swp`) nem backup (`arquivo~`). O histórico fica com 
 
 `<leader>R` é `:wall` seguido do `:restart` nativo. Ele salva a sessão (janelas e arquivos), fecha, abre um Neovim
 novo com a config relida e restaura a sessão. `ZR` faz o mesmo sem salvar os arquivos antes.
+
+## Claude
+
+O Claude Code roda num painel do tmux, ao lado do Neovim. O claudecode.nvim conecta os dois pelo mesmo protocolo da
+extensão do VS Code: no Claude, `/ide` escolhe este Neovim. Conectado, o Claude vê o arquivo aberto e a seleção, e a
+mudança que ele propõe abre no Neovim como diff: `:w` aceita (dá para editar antes), `:q` recusa.
+
+| Tecla | O que faz |
+| --- | --- |
+| `<leader>as` | Manda a seleção (modo visual) ou, no explorer, o arquivo da linha. O foco vai para o painel do Claude |
+| `<leader>ab` | Manda o arquivo atual |
+| `<leader>aa` / `<leader>ad` | Aceita / recusa a mudança proposta |

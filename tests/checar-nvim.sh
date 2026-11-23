@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Abre o Neovim sem interface com a config da pasta $1 e falha se houver erro ou aviso ao abrir, se o tema não
-# carregar ou se um servidor LSP ligado não tiver o comando instalado. Usado pelo just lint (a config do repo) e pelo
+# carregar, se um servidor LSP ligado não tiver o comando instalado ou se faltar um parser do treesitter. Usado pelo just lint (a config do repo) e pelo
 # smoke (a instalada). O nvim vem de $NVIM, ou do PATH.
 #
 # O XDG_CONFIG_HOME é uma pasta temporária com um link para a config: o nvim do bob cria um config.toml no
@@ -17,12 +17,15 @@ trap 'rm -rf "${tmp}"' EXIT
 ln -s "${config}" "${tmp}/nvim"
 export XDG_CONFIG_HOME="${tmp}"
 
-# Na primeira vez, o vim.pack baixa os plugins; as mensagens dele não contam como aviso.
-run -c qa || exit 1
+# Na primeira vez, o vim.pack baixa os plugins e o nvim-treesitter compila os parsers; as mensagens deles não contam
+# como aviso. Compilar todos leva alguns minutos, por isso o timeout maior.
+timeout 900 "${nvim}" --headless \
+  -c 'lua require("nvim-treesitter").install(require("plugins.treesitter").languages):wait(900000)' -c qa || exit 1
 run -c 'lua
   local messages = vim.fn.execute("messages")
   if vim.v.errmsg ~= "" or messages ~= "" or not vim.g.colors_name then
     io.stderr:write(messages, "\n", vim.v.errmsg, "\n")
     vim.cmd.cquit(1)
   end' -c qa || exit 1
-run -c "luafile ${tests}/checar-lsp.lua"
+run -c "luafile ${tests}/checar-lsp.lua" || exit 1
+run -c "luafile ${tests}/checar-treesitter.lua"

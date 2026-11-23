@@ -59,7 +59,7 @@ Neovim e dados.
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
 | Temas (`theme`, Super+T) | pronta, veja [docs/temas.md](docs/temas.md) |
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
-| Neovim | começando: nativo primeiro, navegar pelos arquivos, tema do desktop, veja [docs/neovim.md](docs/neovim.md) |
+| Neovim | quase pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
 | Dados | a fazer |
 
 ## Contribuindo
