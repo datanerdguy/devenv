@@ -55,7 +55,7 @@ vêm do `rbw` na hora.
 Fica no topo e mostra a sessão (amarela enquanto o prefixo está apertado), as janelas, a cota do Claude e a hora.
 A cota vem de `~/.cache/devenv/claude-usage`, que a statusline do Claude grava.
 
-As cores seguem o tema ([temas.md](temas.md)). O Noctalia gera `~/.config/tmux/noctalia.conf` a cada `theme` e
+As cores seguem o tema ([themes.md](themes.md)). O Noctalia gera `~/.config/tmux/noctalia.conf` a cada `theme` e
 recarrega o tmux aberto. Antes do primeiro `theme`, o chezmoi deixa um com o Nord.
 
 ## Neovim

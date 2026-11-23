@@ -1,6 +1,6 @@
 -- Cursor sempre em bloco, com a cor do modo igual à do fish: verde escreve,
 -- vermelho normal, amarelo visual. As cores vêm do mesmo arquivo do fish, que o
--- Noctalia regrava a cada `theme` (docs/temas.md).
+-- Noctalia regrava a cada `theme` (docs/themes.md).
 
 vim.o.guicursor =
   "n-c-o-r-cr-sm:block-CursorNormal,i-ci-ve:block-CursorInsert,v:block-CursorVisual"

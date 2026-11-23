@@ -1,6 +1,6 @@
 # Agentes e git
 
-O porquê de cada escolha está no [ADR 0011](adr/0011-agentes-e-git.md).
+O porquê de cada escolha está no [ADR 0011](adr/0011-agents-and-git.md).
 
 ## Onde fica cada coisa
 
@@ -14,7 +14,7 @@ O porquê de cada escolha está no [ADR 0011](adr/0011-agentes-e-git.md).
 | `home/dot_config/git/` | `~/.config/git/config` e `ignore` | link |
 | `home/dot_config/lazygit/` | `~/.config/lazygit/config.yml` | link |
 
-Os pacotes ficam nos grupos `agentes` (claude-code, bubblewrap, socat) e `git` (git-delta, lazygit).
+Os pacotes ficam nos grupos `agents` (claude-code, bubblewrap, socat) e `git` (git-delta, lazygit).
 
 ## Claude Code
 

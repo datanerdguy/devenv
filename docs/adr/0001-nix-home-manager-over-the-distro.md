@@ -1,6 +1,6 @@
 # 0001. Nix + home-manager sobre a distro
 
-Data: 2026-10-23 · Status: substituída pela [0010](0010-devenv-sem-nix-chezmoi-metapac.md)
+Data: 2026-10-23 · Status: substituída pela [0010](0010-devenv-without-nix-chezmoi-metapac.md)
 
 ## Contexto
 

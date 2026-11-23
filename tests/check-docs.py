@@ -18,7 +18,7 @@ NVIM = REPO / "home/dot_config/nvim"
 PASTAS_DO_REPO = {"home", "docs", "tests", "packages", "agents", "keyboard", "temas", "wallpapers", "modelos", ".github", ".githooks"}
 PASTAS_DO_NVIM = {"lua", "after"}
 EXTENSOES_DE_CODIGO = {".lua", ".sh", ".py", ".fish", ".kdl"}
-DOCS = [*REPO.glob("*.md"), *REPO.glob("docs/*.md"), *REPO.glob("keyboard/*.md"), *REPO.glob("modelos/*.md")]
+DOCS = [*REPO.glob("*.md"), *REPO.glob("docs/*.md"), *REPO.glob("keyboard/*.md"), *REPO.glob("templates/*.md")]
 CRASES = re.compile(r"`([^`\s]+)`")
 NOMES_NO_REPO = {p.name for p in REPO.rglob("*") if ".git" not in p.parts}
 

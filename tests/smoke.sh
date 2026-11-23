@@ -31,7 +31,7 @@ if command -v ghostty >/dev/null; then
   # Sem pipe direto: com pipefail, o grep -q sai cedo e o fc-list morre de SIGPIPE, o que conta como falha.
   fonts="$(fc-list : family)"
   check "fonte BlexMono Nerd Font" grep -q "BlexMono Nerd Font" <<<"${fonts}"
-  check "paletas dos temas batem com o gerador" python3 "${repo}/temas/gerar.py" --check
+  check "paletas dos temas batem com o gerador" python3 "${repo}/themes/generate.py" --check
   check "tema inicial do Ghostty" test -f "${HOME}/.config/ghostty/themes/noctalia"
 fi
 
@@ -53,7 +53,7 @@ fi
 
 # Com o grupo tmux: a config carrega sem erro, o tema inicial existe e o sesh lê a sua config.
 if command -v tmux >/dev/null; then
-  check "config do tmux" "${repo}/tests/checar-tmux.sh" "${HOME}/.config/tmux/tmux.conf"
+  check "config do tmux" "${repo}/tests/check-tmux.sh" "${HOME}/.config/tmux/tmux.conf"
   check "tema inicial do tmux" test -f "${HOME}/.config/tmux/noctalia.conf"
   check "config do sesh" sesh list -c
 fi
@@ -76,7 +76,7 @@ if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
   # Sem erro nem aviso, com o tema e com o comando de cada servidor LSP ligado.
   check "Neovim abre com a config, o tema e os LSPs" env NVIM="${HOME}/.local/share/bob/nvim-bin/nvim" \
-    "${repo}/tests/checar-nvim.sh" "${HOME}/.config/nvim"
+    "${repo}/tests/check-nvim.sh" "${HOME}/.config/nvim"
 fi
 
 # Agentes: instruções, settings mesclado, statusline e MCP.
@@ -101,7 +101,7 @@ if command -v lazygit >/dev/null; then
 fi
 
 # Nenhum programa escreveu no repo pelos links do chezmoi. Só no CI, onde o checkout começa limpo.
-# Se falhar, a config precisa já ter a linha que o programa acrescenta (docs/temas.md).
+# Se falhar, a config precisa já ter a linha que o programa acrescenta (docs/themes.md).
 if [ -n "${CI:-}" ]; then
   # Se o próprio git falhar, a checagem falha (não passa com a saída vazia).
   # shellcheck disable=SC2329 # chamada pelo check

@@ -2,8 +2,8 @@
 """Gera as paletas do Noctalia a partir dos temas oficiais que vêm no Ghostty.
 
 Uso:
-  python3 temas/gerar.py          escreve home/dot_config/noctalia/palettes/<variante>.json
-  python3 temas/gerar.py --check  falha se alguma paleta do repo não bate com o que seria gerado
+  python3 themes/generate.py          escreve home/dot_config/noctalia/palettes/<variante>.json
+  python3 themes/generate.py --check  falha se alguma paleta do repo não bate com o que seria gerado
 
 As cores do terminal vêm do arquivo do Ghostty. As cores da interface (barra, bordas, botões) saem delas:
 o fundo, o texto e três cores de destaque escolhidas por família na tabela DESTAQUES.
@@ -117,7 +117,7 @@ def main() -> int:
             arquivo.write_text(texto)
     sobrando = sorted({a.stem for a in SAIDA.glob("*.json")} - VARIANTES.keys())
     if checar and (diferentes or sobrando):
-        print("Paletas fora do gerador (rode `python3 temas/gerar.py`):", *diferentes, *sobrando, file=sys.stderr)
+        print("Paletas fora do gerador (rode `python3 themes/generate.py`):", *diferentes, *sobrando, file=sys.stderr)
         return 1
     if not checar:
         print(f"{len(VARIANTES)} paletas em {SAIDA}")

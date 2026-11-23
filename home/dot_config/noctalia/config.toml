@@ -11,8 +11,8 @@ niri_overview_close_on_launch_enabled = true
 # Histórico de cópias (Alt+Shift+V): texto e imagens, os 30 últimos.
 clipboard_history_max_entries = 30
 
-# Tema: uma das paletas de palettes/ (geradas por temas/gerar.py). O comando `theme` troca; a escolha fica
-# no estado do Noctalia, por cima deste padrão. docs/temas.md.
+# Tema: uma das paletas de palettes/ (geradas por themes/generate.py). O comando `theme` troca; a escolha fica
+# no estado do Noctalia, por cima deste padrão. docs/themes.md.
 [theme]
 mode = "dark"
 source = "custom"

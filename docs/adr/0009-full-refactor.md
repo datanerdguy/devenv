@@ -1,6 +1,6 @@
 # 0009. Refatoração completa: menos camadas, Neovim no estilo craftzdog
 
-Data: 2026-11-16 · Status: substituída pela [0010](0010-devenv-sem-nix-chezmoi-metapac.md)
+Data: 2026-11-16 · Status: substituída pela [0010](0010-devenv-without-nix-chezmoi-metapac.md)
 
 ## Contexto
 

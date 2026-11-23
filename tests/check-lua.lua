@@ -1,5 +1,5 @@
 -- Passa o lua_ls em cada arquivo da config do Neovim (com os tipos do Neovim e
--- dos plugins): qualquer aviso falha. Roda pelo tests/checar-nvim.sh.
+-- dos plugins): qualquer aviso falha. Roda pelo tests/check-nvim.sh.
 local files = vim.fn.globpath(vim.fn.stdpath("config"), "**/*.lua", false, true)
 for _, file in ipairs(files) do
   vim.cmd.edit(file)

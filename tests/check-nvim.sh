@@ -24,6 +24,6 @@ run -c 'lua
     io.stderr:write(messages, "\n", vim.v.errmsg, "\n")
     vim.cmd.cquit(1)
   end' -c qa || exit 1
-run -c "luafile ${tests}/checar-lsp.lua" || exit 1
-run -c "luafile ${tests}/checar-treesitter.lua" || exit 1
-run -c "luafile ${tests}/checar-lua.lua"
+run -c "luafile ${tests}/check-lsp.lua" || exit 1
+run -c "luafile ${tests}/check-treesitter.lua" || exit 1
+run -c "luafile ${tests}/check-lua.lua"

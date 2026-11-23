@@ -135,7 +135,7 @@ LSP, que corrige os imports.
 
 ## Tema
 
-O Neovim usa o tema do desktop ([temas.md](temas.md)): cada paleta do Noctalia abre o tema oficial equivalente.
+O Neovim usa o tema do desktop ([themes.md](themes.md)): cada paleta do Noctalia abre o tema oficial equivalente.
 Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `plugins/theme.lua` lê a paleta escolhida em
 `~/.local/state/noctalia/settings.toml` e vigia esse arquivo; sem escolha (máquina nova), fica o Nord.
 
@@ -151,7 +151,7 @@ flutuantes e a barra de status ficam com o fundo do tema.
 | `nord` | `gbprod/nord.nvim` (o oficial é de Vim e não cobre treesitter nem LSP) |
 | `dracula` | `Mofiqul/dracula.nvim` (pelo mesmo motivo) |
 
-Variante nova em `temas/gerar.py` precisa de uma linha na tabela `themes` do `plugins/theme.lua`.
+Variante nova em `themes/generate.py` precisa de uma linha na tabela `themes` do `plugins/theme.lua`.
 
 ## Plugins
 
@@ -165,7 +165,7 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 
 ## LSP
 
-Os servidores vêm do metapac (`packages/groups/linguagens.toml`, a tabela do [ADR 0010](adr/0010-devenv-sem-nix-chezmoi-metapac.md)),
+Os servidores vêm do metapac (`packages/groups/languages.toml`, a tabela do [ADR 0010](adr/0010-devenv-without-nix-chezmoi-metapac.md)),
 sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `plugins/lsp.lua`
 liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
 documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.
@@ -194,7 +194,7 @@ O completar e a documentação enxergam as bibliotecas do projeto:
 | `<leader>lr` | Reinicia os servidores |
 
 `:checkhealth vim.lsp` mostra quais servidores estão ligados no arquivo atual. Servidor novo: o pacote em
-`linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
+`languages.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
 cada servidor da lista existe.
 
 Regras de lint e de estilo ficam na config de cada projeto (`pyproject.toml`, `Cargo.toml`, `.golangci.yml`), para

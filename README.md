@@ -2,7 +2,7 @@
 
 O ambiente de desenvolvimento do Lucas no CachyOS (Arch). As configs vão pelo **chezmoi**, em links para este repo,
 e os pacotes pelo **metapac**, em listas. As decisões ficam em [`docs/adr/`](docs/adr/), a começar pelo
-[ADR 0010](docs/adr/0010-devenv-sem-nix-chezmoi-metapac.md). Os termos estão no [GLOSSARY](GLOSSARY.md).
+[ADR 0010](docs/adr/0010-devenv-without-nix-chezmoi-metapac.md). Os termos estão no [GLOSSARY](GLOSSARY.md).
 
 ## Máquina nova
 
@@ -21,7 +21,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 | --- | --- |
 | `just setup` | Liga os hooks do git (lint antes do commit, mensagem no padrão) |
 | `just apply` | Aplica as configs de `home/` (`chezmoi apply`) |
-| `just sync` | Atualiza o sistema (`paru -Syu`), instala o que falta nos grupos de `packages/` (`metapac sync`) e marca as dependências como dependências (`packages/marca-deps.sh`) |
+| `just sync` | Atualiza o sistema (`paru -Syu`), instala o que falta nos grupos de `packages/` (`metapac sync`) e marca as dependências como dependências (`packages/mark-deps.sh`) |
 | `just clean` | Remove o que não está nos grupos, depois de mostrar e pedir confirmação |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia, para trazer ao repo |
 | `just diff` | Mostra o que mudaria nas configs e o que está instalado fora dos grupos |
@@ -39,12 +39,12 @@ bootstrap.sh      máquina nova
 justfile          comandos do dia a dia
 tests/            smoke.sh: o que o bootstrap deve deixar pronto (roda no CI)
 .github/          CI e modelo de PR
-temas/            gerador das paletas dos temas (gerar.py)
+themes/            gerador das paletas dos temas (generate.py)
 wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
-modelos/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja modelos/README.md
+templates/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja templates/README.md
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
-docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, temas.md e adr/
+docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md e adr/
 ```
 
 ## Áreas
@@ -58,7 +58,7 @@ Neovim e dados.
 | Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
 | Desktop e teclado (niri, Noctalia, Vial) | pronta, veja [docs/desktop.md](docs/desktop.md) |
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
-| Temas (`theme`, Alt+Shift+T) | pronta, veja [docs/temas.md](docs/temas.md) |
+| Temas (`theme`, Alt+Shift+T) | pronta, veja [docs/themes.md](docs/themes.md) |
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
 | Neovim | quase pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
 | Dados | a fazer |

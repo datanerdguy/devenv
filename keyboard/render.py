@@ -65,6 +65,11 @@ def layer_name(i):
     return f"Camada {i}"
 
 
+def image_name(layer: str) -> str:
+    """Nome do arquivo da imagem de uma camada: "Camada 2" vira layer-2."""
+    return "layer-" + layer.split()[-1]
+
+
 def key(code, macros):
     """Legenda de uma tecla no formato do keymap-drawer."""
     if code in (-1, "KC_NO"):
@@ -158,8 +163,7 @@ def readme(keymap):
         "",
     ]
     for name in layers:
-        slug = name.lower().replace(" ", "-")
-        lines += [f"## {name}", "", f"![{name}](img/{slug}.svg)", ""]
+        lines += [f"## {name}", "", f"![{name}](img/{image_name(name)}.svg)", ""]
     if keymap["combos"]:
         lines += ["## Combos", "", "Teclas apertadas juntas.", "", "| Teclas | Resultado | Camada |", "| --- | --- | --- |"]
         for c in keymap["combos"]:
@@ -180,8 +184,7 @@ def draw(keymap, out_dir):
         base = [exe, "-c", str(STYLE), "draw", str(src)]
         subprocess.run([*base, "-o", str(out_dir / "corne.svg")], check=True)
         for name in keymap["layers"]:
-            slug = name.lower().replace(" ", "-")
-            subprocess.run([*base, "-s", name, "-o", str(out_dir / f"{slug}.svg")], check=True)
+            subprocess.run([*base, "-s", name, "-o", str(out_dir / f"{image_name(name)}.svg")], check=True)
 
 
 def main():

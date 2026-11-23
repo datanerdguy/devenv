@@ -1,5 +1,5 @@
 -- Confere cada servidor de plugins/lsp.lua: o nome existe no nvim-lspconfig e o
--- comando está instalado. Roda pelo tests/checar-nvim.sh. Servidores com o
+-- comando está instalado. Roda pelo tests/check-nvim.sh. Servidores com o
 -- comando montado por função ficam de fora: só abrindo um arquivo dá para ver.
 local problems = {}
 for _, name in ipairs(require("plugins.lsp").servers) do

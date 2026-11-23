@@ -1,4 +1,4 @@
--- Tema: o mesmo do desktop (docs/temas.md). Cada paleta do Noctalia abre o tema
+-- Tema: o mesmo do desktop (docs/themes.md). Cada paleta do Noctalia abre o tema
 -- oficial do Neovim equivalente, e o Neovim aberto troca junto quando o `theme`
 -- muda a paleta.
 

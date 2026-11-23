@@ -15,7 +15,7 @@ dois MCPs. As decisões abaixo saíram de uma sessão de perguntas e respostas.
   `~/.claude.json` (login, estado). Um link faria o Claude escrever no repo. O chezmoi usa scripts `modify_`:
   o `agents/merge-json.sh` mescla com o `jq` as chaves de `agents/settings.json` e `agents/mcp.json` no arquivo
   atual. As chaves do devenv vencem; as outras ficam. O `~/.claude.json` continua 0600.
-- **Pacote.** `claude-code` pelo metapac (grupo `agentes`), com o auto-update desligado: quem atualiza é o pacman.
+- **Pacote.** `claude-code` pelo metapac (grupo `agents`), com o auto-update desligado: quem atualiza é o pacman.
 - **Modelo.** Sonnet é o padrão da sessão. O pstack usa `agents/pstack-models.md`, sem Fable em nenhum papel,
   para não gastar a cota do Pro.
 - **Plugins.** pstack e mattpocock-skills ficam declarados no settings. Sem skills próprias por enquanto.

@@ -1,6 +1,6 @@
 # Temas
 
-Um comando troca o tema do desktop inteiro de uma vez. O porquê está no [ADR 0013](adr/0013-temas-pelo-noctalia.md).
+Um comando troca o tema do desktop inteiro de uma vez. O porquê está no [ADR 0013](adr/0013-themes-via-noctalia.md).
 
 ## Trocar
 
@@ -49,9 +49,9 @@ O Zen só pega as cores novas depois de reaberto.
 ## Acrescentar uma variante
 
 1. Confira o nome do tema no Ghostty: `ghostty +list-themes`.
-2. Acrescente a linha em `VARIANTES`, em `temas/gerar.py`. Se for uma família nova, escolha as cores de destaque em
+2. Acrescente a linha em `VARIANTES`, em `themes/generate.py`. Se for uma família nova, escolha as cores de destaque em
    `DESTAQUES`.
-3. Rode `python3 temas/gerar.py`. Ele escreve as paletas em `home/dot_config/noctalia/palettes/`.
+3. Rode `python3 themes/generate.py`. Ele escreve as paletas em `home/dot_config/noctalia/palettes/`.
 4. `just apply` liga a paleta nova, e o `just lint` confere que as paletas batem com o gerador.
 
 As cores do terminal vêm do arquivo oficial do Ghostty. As da interface saem delas: fundo, texto e três cores de

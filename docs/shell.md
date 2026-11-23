@@ -20,7 +20,7 @@ para de escrever (o prompt mostra `NORMAL`), `j` / `k` andam, `i` volta a escrev
 ficam no `FZF_DEFAULT_OPTS` (`config.fish`), e o script `fzf-mode` (`home/dot_local/bin/`) troca de modo.
 
 O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
-`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([temas.md](temas.md)).
+`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([themes.md](themes.md)).
 
 ## Manuais
 

@@ -84,5 +84,5 @@ else
   metapac sync
 fi
 # O metapac marca as dependências como explícitas; aqui elas voltam a ser dependências.
-"${repo}/packages/marca-deps.sh"
+"${repo}/packages/mark-deps.sh"
 say "Pronto"

@@ -4,7 +4,7 @@
 - Um pacote aparece uma vez só entre todos os grupos.
 - Todo grupo de groups/ está em alguma máquina de config.toml, e toda máquina só cita grupos que existem.
 - Todo grupo começa com um comentário dizendo para que serve (é onde se decide em qual grupo vai um pacote).
-- O ci-completo testa todos os grupos, menos o debug (comentado) e os de maquinas/ (o hardware de cada uma).
+- O ci-full testa todos os grupos, menos o debug (comentado) e os de machines/ (o hardware de cada uma).
 """
 
 import sys
@@ -42,10 +42,10 @@ def main() -> int:
     for g in sorted(grupos.keys() - citados):
         erros.append(f"O grupo {g} não está em nenhuma máquina de config.toml: ele nunca seria instalado.")
 
-    esperado = {g for g in grupos if g not in FORA_DO_CI and not g.startswith("maquinas/")}
-    faltam = sorted(esperado - set(maquinas.get("ci-completo", [])))
+    esperado = {g for g in grupos if g not in FORA_DO_CI and not g.startswith("machines/")}
+    faltam = sorted(esperado - set(maquinas.get("ci-full", [])))
     if faltam:
-        erros.append(f"O ci-completo de config.toml não testa: {', '.join(faltam)}. Acrescente lá.")
+        erros.append(f"O ci-full de config.toml não testa: {', '.join(faltam)}. Acrescente lá.")
 
     for erro in erros:
         print(erro, file=sys.stderr)

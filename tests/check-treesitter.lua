@@ -1,6 +1,6 @@
 -- Confere cada linguagem de home/dot_config/nvim/lua/plugins/treesitter.lua: o
 -- parser precisa estar instalado. E num arquivo Python o realce precisa ser o
--- do treesitter, não o antigo, por regex. Roda pelo tests/checar-nvim.sh, com a
+-- do treesitter, não o antigo, por regex. Roda pelo tests/check-nvim.sh, com a
 -- config do Neovim já carregada.
 local missing = vim.tbl_filter(
   function(language) return not vim.treesitter.language.add(language) end,

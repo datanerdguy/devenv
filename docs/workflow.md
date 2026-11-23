@@ -33,7 +33,7 @@ Padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/), vali
 
 feat(shell): adiciona abreviações do git
 fix(terminal): corrige fonte do Ghostty
-chore(deps): atualiza o grupo linguagens
+chore(deps): atualiza o grupo languages
 docs: explica o fluxo de release
 ```
 
@@ -44,7 +44,7 @@ docs: explica o fluxo de release
 | `feat!` ou `BREAKING CHANGE:` no corpo | Muda algo de forma incompatível | major (enquanto estiver em 0.x, sobe o minor) |
 | `docs`, `chore`, `ci`, `refactor`, `style`, `test`, `perf`, `build` | Resto | nenhum |
 
-Escopos sugeridos: a área (`base`, `shell`, `terminal`, `temas`, `nvim`, `tmux`, `desktop`, `agentes`, `teclado`), ou `ci`, `deps`, `adr`, `docs`, `repo`.
+Escopos sugeridos: a área (`base`, `shell`, `terminal`, `temas`, `nvim`, `tmux`, `desktop`, `agents`, `keyboard`), ou `ci`, `deps`, `adr`, `docs`, `repo`.
 
 **Hooks locais.** Rode `just setup` uma vez: ele liga os hooks de `.githooks/`.
 
@@ -67,9 +67,9 @@ Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI 
 O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, o CI instala só `base` e `repo`. O resto fica de fora porque
 pesa (vários pacotes do AUR são compilados).
 
-Depois de mexer nessas listas, rode o CI completo à mão: `gh workflow run ci.yml --ref <branch> -f completo=true`.
-Ele usa o hostname `ci-completo` (todos os grupos menos `debug` e `maquinas/`, conferido pelo `packages/checar.py`) e
-pode levar até duas horas. O `maquinas/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
+Depois de mexer nessas listas, rode o CI completo à mão: `gh workflow run ci.yml --ref <branch> -f full=true`.
+Ele usa o hostname `ci-full` (todos os grupos menos `debug` e `machines/`, conferido pelo `packages/check.py`) e
+pode levar até duas horas. O `machines/cachyos` nunca roda no CI: é o sistema do instalador desta máquina.
 
 ### `pr.yml`: só em PR
 

@@ -17,16 +17,16 @@ camada de baixo). Na camada ativa, a tecla que você está segurando aparece des
 
 ## Camada 0
 
-![Camada 0](img/camada-0.svg)
+![Camada 0](img/layer-0.svg)
 
 ## Camada 1
 
-![Camada 1](img/camada-1.svg)
+![Camada 1](img/layer-1.svg)
 
 ## Camada 2
 
-![Camada 2](img/camada-2.svg)
+![Camada 2](img/layer-2.svg)
 
 ## Camada 3
 
-![Camada 3](img/camada-3.svg)
+![Camada 3](img/layer-3.svg)

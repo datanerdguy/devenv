@@ -1,4 +1,4 @@
-# theme: troca o tema do desktop inteiro (Noctalia, Ghostty, niri, GTK, Qt, apps). docs/temas.md.
+# theme: troca o tema do desktop inteiro (Noctalia, Ghostty, niri, GTK, Qt, apps). docs/themes.md.
 # `theme` abre a lista com a amostra das cores; `theme <variante>` troca direto. Alt+Shift+T abre a lista.
 function theme --description 'Troca o tema do desktop'
     set -l variantes (path basename -E ~/.config/noctalia/palettes/*.json)

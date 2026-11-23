@@ -13,7 +13,7 @@ de outros apps a partir de modelos, com modelos prontos para Ghostty, niri, GTK,
 
 - **O Noctalia é o motor.** O `theme` (função do fish) só escolhe a variante e chama
   `noctalia msg color-scheme-set custom <variante>`. Cada app segue por um modelo.
-- **Paletas geradas** por `temas/gerar.py` a partir dos temas oficiais que vêm no Ghostty. As 12 paletas ficam no
+- **Paletas geradas** por `themes/generate.py` a partir dos temas oficiais que vêm no Ghostty. As 12 paletas ficam no
   repo, e o lint confere que batem com o gerador.
 - **Linhas fixas nas configs.** O `theme = noctalia` do Ghostty e o `include optional=true "noctalia.kdl"` do niri
   ficam no repo. Sem elas, os scripts dos modelos editariam essas configs, que são links para o repo.

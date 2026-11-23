@@ -2,7 +2,7 @@
 
 O compositor é o **niri**: as janelas ficam em colunas que rolam na horizontal. Em cima dele roda o
 **Noctalia**, com barra, launcher, notificações e tela de bloqueio. O porquê de cada escolha está no
-[ADR 0012](adr/0012-desktop-e-teclado.md), e os atalhos seguem o [ADR 0008](adr/0008-atalhos-alt-como-no-i3.md).
+[ADR 0012](adr/0012-desktop-and-keyboard.md), e os atalhos seguem o [ADR 0008](adr/0008-alt-shortcuts-like-i3.md).
 
 ## Onde fica cada coisa
 
@@ -13,7 +13,7 @@ O compositor é o **niri**: as janelas ficam em colunas que rolam na horizontal.
 | `home/dot_config/niri/rules.kdl` (regras de janela) | `~/.config/niri/rules.kdl` (link) |
 | `home/dot_config/noctalia/config.toml` | `~/.config/noctalia/config.toml` (link) |
 
-Os pacotes ficam nos grupos `desktop` e `teclado`. Editar e salvar já vale, porque o niri recarrega sozinho.
+Os pacotes ficam nos grupos `desktop` e `keyboard`. Editar e salvar já vale, porque o niri recarrega sozinho.
 O `just lint` roda o `niri validate`.
 
 - **Monitores:** cada monitor é reconhecido pelo modelo (`niri msg outputs` mostra os nomes). Um monitor novo é só
@@ -54,7 +54,7 @@ também abre apps e o sistema: o Corne não tem Super na camada de uso normal. U
 | `Alt+Shift+s` | Central de controle |
 | `Alt+Shift+,` | Ajustes do Noctalia |
 | `Alt+Shift+x` | Bloquear a tela |
-| `Alt+Shift+t` | Trocar o tema ([temas.md](temas.md)) |
+| `Alt+Shift+t` | Trocar o tema ([themes.md](themes.md)) |
 | `Print` | Captura de uma área (ajuste e confirme com `Enter`) |
 | `Ctrl+Print` / `Alt+Print` | Captura da tela / da janela |
 | `Alt+Shift+Print` | Captura com anotação no satty: setas, texto, borrão. `Enter` copia; `Ctrl+S` salva |
@@ -75,4 +75,4 @@ As capturas vão para o clipboard e para `~/Pictures/Screenshots`.
   `keyboard/corne/corne.vil`; o passo a passo está no [keyboard/README.md](../keyboard/README.md). O pacote
   `vial-appimage` já traz a regra udev que deixa o Vial falar com o teclado.
 - **Teclado do notebook:** sem remapeamento. O Corne já faz o Caps como Esc e Ctrl no firmware; o kanata ficou como
-  alternativa no [ADR 0012](adr/0012-desktop-e-teclado.md).
+  alternativa no [ADR 0012](adr/0012-desktop-and-keyboard.md).

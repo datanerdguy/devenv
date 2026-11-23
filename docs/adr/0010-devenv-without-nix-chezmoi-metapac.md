@@ -40,7 +40,7 @@ foi tomada numa sessão de perguntas e respostas e vale para o repo inteiro: o d
 **Ferramenta do projeto.** A ferramenta que o projeto declara vence a da lista. O metapac instala só o padrão
 da máquina (LSPs, formatadores e linters), usado quando o projeto não traz o seu.
 
-**Linguagens, LSPs e formatadores.** Tudo pelo metapac, em `packages/groups/linguagens.toml`. Sem Mason.
+**Linguagens, LSPs e formatadores.** Tudo pelo metapac, em `packages/groups/languages.toml`. Sem Mason.
 
 | Linguagem | LSP | Formatador e linter |
 | --- | --- | --- |
@@ -121,9 +121,9 @@ dados (a repensar). O Lucas escreve shell, terminal, tmux e Neovim; o agente aju
 - O snap-pac tira um snapshot do btrfs a cada transação do pacman, então ele cobre o rollback dos pacotes.
 - O disco não é cifrado. Segredo em arquivo com permissão 0600 fica legível sem LUKS, para quem tiver o disco.
   A chave age e os arquivos cifrados valem só contra olhos no repo, não contra o disco.
-- `metapac clean` remove tudo o que não está na lista. Por isso o grupo `maquinas/cachyos` guarda o que o
+- `metapac clean` remove tudo o que não está na lista. Por isso o grupo `machines/cachyos` guarda o que o
   instalador do CachyOS deixou e se regera com `metapac unmanaged`.
 - O metapac instala com `paru --asexplicit`, e o pacman marca as dependências como explícitas também. O
-  `packages/marca-deps.sh` roda depois de cada sync (no `just sync` e no bootstrap) e as devolve a dependências.
+  `packages/mark-deps.sh` roda depois de cada sync (no `just sync` e no bootstrap) e as devolve a dependências.
   Sem isso, o `metapac clean` tentaria remover as dependências dos pacotes da lista.
 - Outras distros entram depois com os seus grupos e backends no `config.toml`.

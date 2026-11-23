@@ -1,4 +1,4 @@
-# Segredos: nunca no repo (docs/adr/0010-devenv-sem-nix-chezmoi-metapac.md)
+# Segredos: nunca no repo (docs/adr/0010-devenv-without-nix-chezmoi-metapac.md)
 .env
 .env.*
 !.env.example
