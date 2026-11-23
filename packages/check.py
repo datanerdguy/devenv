@@ -12,44 +12,44 @@ import tomllib
 from collections import defaultdict
 from pathlib import Path
 
-PASTA = Path(__file__).resolve().parent
-FORA_DO_CI = {"debug"}
+BASE_DIR = Path(__file__).resolve().parent
+OUTSIDE_CI = {"debug"}
 
 
-def nome(pacote) -> str:
-    return pacote if isinstance(pacote, str) else pacote["name"]
+def package_name(package) -> str:
+    return package if isinstance(package, str) else package["name"]
 
 
 def main() -> int:
-    grupos = {p.relative_to(PASTA / "groups").with_suffix("").as_posix(): p for p in (PASTA / "groups").rglob("*.toml")}
-    maquinas = tomllib.loads((PASTA / "config.toml").read_text())["hostname_groups"]
-    erros = []
+    groups = {p.relative_to(BASE_DIR / "groups").with_suffix("").as_posix(): p for p in (BASE_DIR / "groups").rglob("*.toml")}
+    machines = tomllib.loads((BASE_DIR / "config.toml").read_text())["hostname_groups"]
+    errors = []
 
-    onde = defaultdict(list)
-    for grupo, arquivo in grupos.items():
-        if not arquivo.read_text().startswith("# "):
-            erros.append(f"packages/groups/{grupo}.toml: comece com um comentário (# ...) dizendo para que serve o grupo.")
-        for backend, tabela in tomllib.loads(arquivo.read_text()).items():
-            for pacote in tabela.get("packages", []):
-                onde[(backend, nome(pacote))].append(grupo)
-    for (backend, pacote), lista in sorted(onde.items()):
-        if len(lista) > 1:
-            erros.append(f"{pacote} ({backend}) está em mais de um grupo: {', '.join(lista)}. Deixe em um só.")
+    groups_by_package = defaultdict(list)
+    for group, file in groups.items():
+        if not file.read_text().startswith("# "):
+            errors.append(f"packages/groups/{group}.toml: comece com um comentário (# ...) dizendo para que serve o grupo.")
+        for backend, table in tomllib.loads(file.read_text()).items():
+            for package in table.get("packages", []):
+                groups_by_package[(backend, package_name(package))].append(group)
+    for (backend, package), group_names in sorted(groups_by_package.items()):
+        if len(group_names) > 1:
+            errors.append(f"{package} ({backend}) está em mais de um grupo: {', '.join(group_names)}. Deixe em um só.")
 
-    citados = {g for lista in maquinas.values() for g in lista}
-    for g in sorted(citados - grupos.keys()):
-        erros.append(f"config.toml cita o grupo {g}, mas não existe packages/groups/{g}.toml.")
-    for g in sorted(grupos.keys() - citados):
-        erros.append(f"O grupo {g} não está em nenhuma máquina de config.toml: ele nunca seria instalado.")
+    cited = {g for group_names in machines.values() for g in group_names}
+    for g in sorted(cited - groups.keys()):
+        errors.append(f"config.toml cita o grupo {g}, mas não existe packages/groups/{g}.toml.")
+    for g in sorted(groups.keys() - cited):
+        errors.append(f"O grupo {g} não está em nenhuma máquina de config.toml: ele nunca seria instalado.")
 
-    esperado = {g for g in grupos if g not in FORA_DO_CI and not g.startswith("machines/")}
-    faltam = sorted(esperado - set(maquinas.get("ci-full", [])))
-    if faltam:
-        erros.append(f"O ci-full de config.toml não testa: {', '.join(faltam)}. Acrescente lá.")
+    expected = {g for g in groups if g not in OUTSIDE_CI and not g.startswith("machines/")}
+    missing = sorted(expected - set(machines.get("ci-full", [])))
+    if missing:
+        errors.append(f"O ci-full de config.toml não testa: {', '.join(missing)}. Acrescente lá.")
 
-    for erro in erros:
-        print(erro, file=sys.stderr)
-    return 1 if erros else 0
+    for error in errors:
+        print(error, file=sys.stderr)
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":

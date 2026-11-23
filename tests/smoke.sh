@@ -105,11 +105,11 @@ fi
 if [ -n "${CI:-}" ]; then
   # Se o próprio git falhar, a checagem falha (não passa com a saída vazia).
   # shellcheck disable=SC2329 # chamada pelo check
-  repo_limpo() {
+  repo_clean() {
     local out
     out="$(git -C "${repo}" status --porcelain -- home agents)" && [ -z "${out}" ]
   }
-  check "nada escreveu no repo pelos links" repo_limpo
+  check "nada escreveu no repo pelos links" repo_clean
 fi
 
 exit "${fail}"

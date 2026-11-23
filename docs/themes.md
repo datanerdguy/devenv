@@ -49,8 +49,8 @@ O Zen só pega as cores novas depois de reaberto.
 ## Acrescentar uma variante
 
 1. Confira o nome do tema no Ghostty: `ghostty +list-themes`.
-2. Acrescente a linha em `VARIANTES`, em `themes/generate.py`. Se for uma família nova, escolha as cores de destaque em
-   `DESTAQUES`.
+2. Acrescente a linha em `VARIANTS`, em `themes/generate.py`. Se for uma família nova, escolha as cores de destaque em
+   `ACCENTS`.
 3. Rode `python3 themes/generate.py`. Ele escreve as paletas em `home/dot_config/noctalia/palettes/`.
 4. `just apply` liga a paleta nova, e o `just lint` confere que as paletas batem com o gerador.
 
