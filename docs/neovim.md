@@ -2,8 +2,9 @@
 
 O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
-A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre. Hoje são três
-assuntos: os temas, a busca (fzf-lua, o mesmo fzf do shell) e o explorer (oil). O resto entra aos poucos.
+A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre: os temas, a busca
+(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig), os erros na tela
+(tiny-inline-diagnostic), o formatar (conform) e o completar (blink.cmp).
 
 ## Estrutura
 
@@ -16,15 +17,23 @@ home/dot_config/nvim/
     theme.lua         os temas (plugins) e qual deles segue o desktop
     search.lua        busca de arquivos, pastas e texto (fzf-lua)
     explorer.lua      explorer de arquivos (oil)
+    lsp.lua           quais servidores LSP ligam e os atalhos deles
+    diagnostics.lua   como os erros aparecem
+    format.lua        formatador de cada linguagem, ao salvar
+    completion.lua    completar enquanto digita (blink.cmp)
     keymaps.lua       todos os atalhos com <leader>
     navigation.lua    Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
+  after/lsp/          ajustes de um servidor, por cima do nvim-lspconfig (lua_ls.lua: o Lua do Neovim)
   nvim-pack-lock.json versões dos plugins, gravada pelo vim.pack
 ```
+
+O estilo do Lua fica no `.stylua.toml` e o dos scripts no `.editorconfig`, na raiz do repo. O Neovim formata assim
+ao salvar, e o `just lint` confere.
 
 Assunto novo ganha um arquivo em `lua/config/` e uma linha `require` no `init.lua`. Para o que o Neovim já
 procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
 
-- `lsp/<servidor>.lua`: config de um LSP, lida pelo `vim.lsp.config`;
+- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig;
 - `after/ftplugin/<linguagem>.lua`: ajustes por tipo de arquivo (indentação, por exemplo).
 
 O chezmoi liga cada arquivo, inclusive os das subpastas. Arquivo novo só aparece em `~/.config/nvim` depois do
@@ -45,6 +54,8 @@ O `<leader>` é o **Espaço**.
 | `<leader>fb` | Arquivos abertos |
 | `<leader>fr` | Arquivos recentes |
 | `<leader>fh` / `<leader>fk` | Ajuda do Neovim / atalhos |
+| `<leader>fe` / `<leader>fE` | Erros e avisos do arquivo / do projeto |
+| `<leader>fs` | Símbolos do projeto (funções, tipos), pelo LSP |
 | `<leader>f.` | Volta à última busca, como estava |
 | `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
 | `<leader>E` | Explorer na raiz do projeto |
@@ -126,6 +137,63 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 | --- | --- |
 | `:packupdate` | Mostra as atualizações; `:write` confirma, `:quit` descarta. Depois, commit do `nvim-pack-lock.json` |
 | `:packdel <nome>` | Apaga um plugin que saiu da config |
+
+## LSP
+
+Os servidores vêm do metapac (`packages/groups/linguagens.toml`, a tabela do [ADR 0010](adr/0010-devenv-sem-nix-chezmoi-metapac.md)),
+sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `lsp.lua`
+liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
+documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.
+
+| Tecla | O que faz |
+| --- | --- |
+| `K` | Documentação do que está no cursor |
+| `gd` | Definição |
+| `grr` / `gri` / `grt` | Referências / implementação / definição do tipo (no fzf, com prévia) |
+| `gO` | Símbolos do arquivo |
+| `grn` | Renomeia em todo o projeto |
+| `gra` | Ações de código (corrigir, importar...) |
+| `Ctrl-s` (no modo de inserção) | Assinatura da função |
+| `]d` / `[d` | Próximo erro / anterior |
+| `Ctrl-w d` | O erro inteiro numa janela |
+| `<leader>lf` | Formata (o arquivo ou a seleção) |
+| `<leader>lh` | Liga e desliga as dicas inline (tipos e nomes de parâmetros no meio do código) |
+| `<leader>lr` | Reinicia os servidores |
+
+`:checkhealth vim.lsp` mostra quais servidores estão ligados no arquivo atual. Servidor novo: o pacote em
+`linguagens.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `lsp.lua`. O smoke confere que o comando de
+cada servidor da lista existe.
+
+## Erros
+
+Todo erro e aviso ganha um sinal na margem. Na linha do cursor, a mensagem aparece numa caixa ao lado do código,
+com o servidor que a deu (tiny-inline-diagnostic); mensagem longa quebra em várias linhas. A barra de status mostra
+quantos há no arquivo.
+
+## Formatar
+
+O `:w` formata pelo conform, com o formatador de cada linguagem: stylua, ruff, gofumpt, rustfmt, `mix format`,
+clang-format, google-java-format, shfmt, `fish_indent`, tombi e `just --fmt`. Sem formatador na lista, vale o do
+LSP. O conform prefere o formatador do projeto (`node_modules/.bin`) ao da máquina.
+
+O prettier (JavaScript, TypeScript, HTML, CSS, JSON, YAML, Markdown) só roda em projeto que tem config dele
+(`.prettierrc` e afins). Sem isso, ele reescreveria os arquivos num estilo que não é o do projeto.
+
+## Completar
+
+O blink.cmp abre as sugestões enquanto você digita: do LSP, caminhos, snippets e palavras do arquivo, com a
+documentação ao lado. A assinatura da função aparece enquanto você escreve os argumentos.
+
+| Tecla | O que faz |
+| --- | --- |
+| `Ctrl-n` / `Ctrl-p` | Próxima / anterior |
+| `Ctrl-y` | Aceita |
+| `Ctrl-e` | Fecha |
+| `Ctrl-Space` | Abre as sugestões (ou a documentação) |
+| `Ctrl-k` | Mostra ou esconde a assinatura da função |
+| `Tab` / `Shift-Tab` | Anda nos campos de um snippet |
+
+A linha de comando (`:`) fica com o menu nativo.
 
 ## Cursor
 

@@ -16,6 +16,7 @@ fzf.setup({
   grep = { hidden = true, prompt = "texto ❯ " },
   buffers = { prompt = "aberto ❯ " },
   oldfiles = { prompt = "recente ❯ " },
+  blines = { prompt = "linha ❯ " },
   zoxide = { prompt = "zoxide ❯ " },
 })
 
