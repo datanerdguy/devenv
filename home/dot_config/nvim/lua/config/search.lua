@@ -11,8 +11,12 @@ fzf.setup({
   fzf_colors = true,
   -- O menu de opções do Neovim (vim.ui.select) também abre no fzf.
   ui_select = {},
-  files = { hidden = true },
-  grep = { hidden = true },
+  -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta atual abreviada (~/P/d/h/...).
+  files = { hidden = true, cwd_prompt = false, prompt = "arquivo ❯ " },
+  grep = { hidden = true, prompt = "texto ❯ " },
+  buffers = { prompt = "aberto ❯ " },
+  oldfiles = { prompt = "recente ❯ " },
+  zoxide = { prompt = "zoxide ❯ " },
 })
 
 -- Pastas do projeto (fd), e a escolhida abre no explorer (oil).
