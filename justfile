@@ -28,10 +28,10 @@ diff:
 
 # Lint: scripts, workflows, grupos do metapac, mapa do teclado e, se instalados, niri, paletas, tmux e Neovim (o mesmo do CI)
 lint:
-    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh
+    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh home/dot_local/bin/*
     # Estilo do repo (.stylua.toml e .editorconfig), o mesmo que o Neovim aplica ao salvar.
     if command -v stylua >/dev/null; then stylua --check home/dot_config/nvim tests/*.lua; fi
-    if command -v shfmt >/dev/null; then shfmt -d bootstrap.sh tests/*.sh packages/*.sh agents/*.sh; fi
+    if command -v shfmt >/dev/null; then shfmt -d bootstrap.sh tests/*.sh packages/*.sh agents/*.sh home/dot_local/bin/*; fi
     python3 packages/checar.py
     python3 tests/checar-docs.py
     actionlint .github/workflows/*.yml

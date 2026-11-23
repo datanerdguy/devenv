@@ -18,8 +18,13 @@ set -gx MANPAGER 'nvim +Man!'
 set -gx LG_CONFIG_FILE $HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/themes/noctalia.yml
 set -gx FZF_DEFAULT_COMMAND 'fd --type file --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
+set -gx FZF_CTRL_T_OPTS "--prompt='arquivo ❯ '"
+set -gx FZF_CTRL_R_OPTS "--prompt='histórico ❯ '"
 # Visual de toda lista do fzf. --color=16: as cores do terminal, que seguem o tema.
 set -gx FZF_DEFAULT_OPTS "--height=40% --layout=reverse --border --color=16 --pointer=▌ --gutter=' ' --no-scrollbar --info=inline-right"
+# Modo normal em toda lista do fzf, inclusive as do Neovim: Esc para de escrever, j/k andam, i volta a escrever, q ou
+# Esc fecham. Quem decide é o fzf-mode (home/dot_local/bin).
+set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --bind='start:+unbind(j,k,i,q),esc:transform(fzf-mode esc),i:transform(fzf-mode i),j:down,k:up,q:abort'"
 
 status is-interactive; or return
 

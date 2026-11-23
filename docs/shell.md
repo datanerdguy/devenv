@@ -15,6 +15,10 @@ A config fica em `home/dot_config/fish/`: `config.fish`, as funções em `functi
 | `z <parte do nome>` | Entra direto na pasta mais usada que combina (zoxide) |
 | `t` | Abre ou volta para uma sessão do tmux, pela lista do sesh ([tmux.md](tmux.md)) |
 
+Toda lista do fzf (as de cima, o `theme`, os links do tmux e as buscas do Neovim) tem modo normal, como no Vim: `Esc`
+para de escrever (o prompt mostra `NORMAL`), `j` / `k` andam, `i` volta a escrever, `q` ou `Esc` fecham. As teclas
+ficam no `FZF_DEFAULT_OPTS` (`config.fish`), e o script `fzf-mode` (`home/dot_local/bin/`) troca de modo.
+
 O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
 `devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([temas.md](temas.md)).
 

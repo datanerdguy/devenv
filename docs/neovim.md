@@ -88,7 +88,7 @@ Dentro da busca:
 | `Tab` | Marca vários (o `Enter` abre todos) |
 | `Alt-q` | Manda os resultados para o quickfix (`]q` e `[q` andam entre eles) |
 | `Alt-h` / `Alt-i` | Mostra ou esconde os ocultos / o que o git ignora |
-| `Esc` | Modo normal (o prompt mostra `NORMAL`): `j` / `k` andam na lista, `i` volta a escrever, `q` ou `Esc` fecham |
+| `Esc` | Modo normal (o prompt mostra `NORMAL`): `j` / `k` andam na lista, `i` volta a escrever, `q` ou `Esc` fecham. O mesmo de toda lista do fzf no shell ([shell.md](shell.md#atalhos)) |
 | `Ctrl-j` / `Ctrl-k` | Andam na lista sem sair do modo de escrever |
 
 Na linha de comando (`:`) e na busca com `/`, um menu fuzzy de sugestões aparece enquanto você digita. `Tab` e

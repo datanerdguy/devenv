@@ -41,6 +41,8 @@ if command -v fish >/dev/null; then
   check "config do fish sem erro" fish -i -c 'test "$fish_key_bindings" = fish_vi_key_bindings'
   check "tide pelo fisher" fish -c 'type -q tide'
   check "comando theme" fish -c 'type -q theme'
+  # O modo normal do fzf: o fzf-mode está no PATH do fish e fecha a lista no segundo Esc.
+  check "modo normal do fzf (fzf-mode)" fish -c 'test (env FZF_PROMPT="NORMAL x" fzf-mode esc) = abort'
   # Ctrl+G: com o fzf trocado por um filtro (que falha se a lista vier vazia) e o zoxide vazio, o fd tem que
   # achar uma pasta do ~ para entrar.
   # shellcheck disable=SC2016 # as variáveis são do fish, não do bash

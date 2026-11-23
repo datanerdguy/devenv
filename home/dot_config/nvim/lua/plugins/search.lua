@@ -10,23 +10,11 @@ local fzf = require("fzf-lua")
 fzf.setup({
   fzf_colors = true,
   ui_select = {},
-  -- Modo normal, como no Vim: Esc para de escrever (o prompt ganha "NORMAL"),
-  -- j/k andam na lista, i volta a escrever e q ou Esc fecham. O fzf não tem
-  -- modos; o Esc liga as teclas j, k, i e q, e o i as desliga de novo. O perfil
-  -- padrão do fzf-lua prende o Esc para só esconder a janela; aqui o Esc é do
-  -- modo normal.
-  defaults = { no_hide = true },
-  keymap = {
-    fzf = {
-      true, -- mantém os atalhos padrão do fzf-lua
-      ["start"] = "+unbind(j,k,i,q)",
-      ["esc"] = [[transform:case "$FZF_PROMPT" in "NORMAL "*) echo abort ;; *) echo "rebind(j,k,i,q)+change-prompt(NORMAL $FZF_PROMPT)" ;; esac]],
-      ["i"] = [[transform:echo "unbind(j,k,i,q)+change-prompt(${FZF_PROMPT#NORMAL })"]],
-      ["j"] = "down",
-      ["k"] = "up",
-      ["q"] = "abort",
-    },
-  },
+  -- O modo normal (Esc, j/k, i, q) vem do FZF_DEFAULT_OPTS, o mesmo de toda
+  -- lista do fzf (home/dot_config/fish/config.fish). O fzf-lua guarda o Esc
+  -- para fechar a janela: o no_hide e o esc no keymap devolvem a tecla ao fzf.
+  defaults = { no_hide = true, prompt = "❯ " },
+  keymap = { fzf = { true, esc = "transform(fzf-mode esc)" } },
   -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta
   -- atual abreviada (~/P/d/h/...).
   files = { hidden = true, cwd_prompt = false, prompt = "arquivo ❯ " },
@@ -35,6 +23,9 @@ fzf.setup({
   oldfiles = { prompt = "recente ❯ " },
   blines = { prompt = "linha ❯ " },
   zoxide = { prompt = "zoxide ❯ " },
+  helptags = { prompt = "ajuda ❯ " },
+  keymaps = { prompt = "atalho ❯ " },
+  diagnostics = { prompt = "erro ❯ " },
 })
 
 -- Pastas do projeto (fd), e a escolhida abre no explorer (oil).
