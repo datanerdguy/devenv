@@ -25,7 +25,7 @@ chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `
 | `just clean` | Remove o que não está nos grupos, depois de mostrar e pedir confirmação |
 | `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia, para trazer ao repo |
 | `just diff` | Mostra o que mudaria nas configs e o que está instalado fora dos grupos |
-| `just lint` | shellcheck, actionlint, os grupos do metapac, o mapa do teclado e, se instalados, o niri e as paletas (o mesmo do CI) |
+| `just lint` | shellcheck, actionlint, o estilo do Lua e dos scripts, os grupos do metapac, os arquivos citados nos docs, o mapa do teclado e, se instalados, o niri, as paletas, o tmux e o Neovim (o mesmo do CI) |
 | `just keyboard` | Regenera as imagens das camadas depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
 | `just commit` | Commit guiado no padrão Conventional Commits |
 

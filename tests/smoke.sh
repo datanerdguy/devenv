@@ -72,12 +72,10 @@ fi
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
-  # Abre sem interface e falha se a config der erro. O tema precisa dos plugins baixados pelo vim.pack nas versões
-  # do nvim-pack-lock.json (o repo_limpo, no fim, confere que ele não mudou).
-  check "Neovim abre com a config e o tema" "${HOME}/.local/share/bob/nvim-bin/nvim" --headless \
-    -c 'lua if vim.v.errmsg ~= "" or not vim.g.colors_name then vim.cmd.cquit(1) end' -c qa
-  check "cada servidor LSP ligado está instalado" "${HOME}/.local/share/bob/nvim-bin/nvim" --headless \
-    -c "luafile ${repo}/tests/checar-lsp.lua"
+  # Sem erro nem aviso, com o tema (os plugins vêm do nvim-pack-lock.json; o repo_limpo, no fim, confere que ele não
+  # mudou) e com o comando de cada servidor LSP ligado.
+  check "Neovim abre com a config, o tema e os LSPs" env NVIM="${HOME}/.local/share/bob/nvim-bin/nvim" \
+    "${repo}/tests/checar-nvim.sh" "${HOME}/.config/nvim"
 fi
 
 # Agentes: instruções, settings mesclado, statusline e MCP.

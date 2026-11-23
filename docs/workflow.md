@@ -61,7 +61,7 @@ Não roda no push para `dev` e `main`: o que chega lá já passou pelo mesmo CI 
 
 | Job | O que verifica |
 | --- | --- |
-| `lint` | `just lint`: shellcheck, actionlint, os grupos do metapac e o mapa do teclado (precisa do `keymap-drawer`, instalado com `uv tool`) |
+| `lint` | `just lint`: shellcheck, actionlint, os grupos do metapac, os arquivos citados nos docs e o mapa do teclado (precisa do `keymap-drawer`, instalado com `uv tool`) |
 | `apply` | Cria um usuário com sudo sem senha, roda o `./bootstrap.sh` (sem rbw logado), um segundo `metapac sync` (que não pode instalar nada) e o `tests/smoke.sh`: ferramentas no PATH, os links do chezmoi e as configs dos grupos instalados |
 
 O CI testa só o Arch. O CachyOS usa os mesmos pacotes e o mesmo `paru`. No PR, o CI instala só `base` e `repo`. O resto fica de fora porque

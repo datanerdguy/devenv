@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Abre o Neovim sem interface com a config da pasta $1 e falha se houver erro ou aviso ao abrir, se o tema não
+# carregar ou se um servidor LSP ligado não tiver o comando instalado. Usado pelo just lint (a config do repo) e pelo
+# smoke (a instalada). O nvim vem de $NVIM, ou do PATH.
+#
+# O XDG_CONFIG_HOME é uma pasta temporária com um link para a config: o nvim do bob cria um config.toml no
+# XDG_CONFIG_HOME quando não acha um, e apontar direto para o repo deixava o arquivo lá.
+set -uo pipefail
+
+nvim="${NVIM:-nvim}"
+# Um erro dentro de um -c deixa o Neovim sem interface esperando; o timeout garante que a checagem termina.
+run() { timeout 120 "${nvim}" --headless "$@"; }
+tests="$(cd "$(dirname "$0")" && pwd)"
+config="$(cd "$1" && pwd)" || exit 1
+tmp="$(mktemp -d)"
+trap 'rm -rf "${tmp}"' EXIT
+ln -s "${config}" "${tmp}/nvim"
+export XDG_CONFIG_HOME="${tmp}"
+
+# Na primeira vez, o vim.pack baixa os plugins; as mensagens dele não contam como aviso.
+run -c qa || exit 1
+run -c 'lua
+  local messages = vim.fn.execute("messages")
+  if vim.v.errmsg ~= "" or messages ~= "" or not vim.g.colors_name then
+    io.stderr:write(messages, "\n", vim.v.errmsg, "\n")
+    vim.cmd.cquit(1)
+  end' -c qa || exit 1
+run -c "luafile ${tests}/checar-lsp.lua"
