@@ -1,9 +1,6 @@
 #!/bin/sh
-# Modo normal no fzf, como no Vim. O fzf não tem modos: o Esc liga as teclas
-# j, k, i e q (andar, voltar a escrever, fechar) e o i as desliga de novo. O
-# prompt ganha "NORMAL " enquanto o modo está ligado. As teclas ficam no
-# FZF_DEFAULT_OPTS (home/dot_config/fish/config.fish).
-#
+# Modo normal no fzf, como no Vim: o Esc liga as teclas j, k, i e q; o i as desliga.
+# As teclas ficam no FZF_DEFAULT_OPTS (home/dot_config/fish/config.fish).
 # Uso, num bind do fzf: esc:transform(fzf-mode esc), i:transform(fzf-mode i).
 keys="j,k,i,q"
 case "$1" in

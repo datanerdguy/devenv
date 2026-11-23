@@ -10,13 +10,11 @@ local fzf = require("fzf-lua")
 fzf.setup({
   fzf_colors = true,
   ui_select = {},
-  -- O modo normal (Esc, j/k, i, q) vem do FZF_DEFAULT_OPTS, o mesmo de toda
-  -- lista do fzf (home/dot_config/fish/config.fish). O fzf-lua guarda o Esc
-  -- para fechar a janela: o no_hide e o esc no keymap devolvem a tecla ao fzf.
+  -- O modo normal vem do FZF_DEFAULT_OPTS (fish/config.fish). O fzf-lua guarda
+  -- o Esc para fechar a janela: no_hide e o esc no keymap devolvem ao fzf.
   defaults = { no_hide = true, prompt = "❯ " },
   keymap = { fzf = { true, esc = "transform(fzf-mode esc)" } },
-  -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta
-  -- atual abreviada (~/P/d/h/...).
+  -- Prompts curtos, como os do fzf no shell, sem a pasta atual abreviada.
   files = { hidden = true, cwd_prompt = false, prompt = "arquivo ❯ " },
   grep = { hidden = true, prompt = "texto ❯ " },
   buffers = { prompt = "aberto ❯ " },

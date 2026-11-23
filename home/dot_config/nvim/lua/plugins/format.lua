@@ -37,9 +37,8 @@ require("conform").setup({
     markdown = prettier,
   },
   formatters = {
-    -- O prettier só roda em projeto que tem config dele (.prettierrc e afins).
-    -- Sem isso, ele reescreveria docs e configs no estilo padrão dele, que não
-    -- é o de todo projeto (o deste repo, por exemplo).
+    -- Só com config do prettier no projeto: o estilo padrão dele reescreveria
+    -- docs e configs de projetos que não o usam.
     prettier = { require_cwd = true },
   },
   default_format_opts = { lsp_format = "fallback" },

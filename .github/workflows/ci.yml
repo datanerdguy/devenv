@@ -45,8 +45,7 @@ jobs:
       image: archlinux:latest
       options: --hostname ${{ inputs.completo && 'ci-completo' || 'ci' }}
     steps:
-      # O git vem antes do checkout: sem ele, o checkout baixa o código sem o .git, e o smoke não consegue ver se
-      # algum programa escreveu no repo.
+      # O git vem antes do checkout: sem ele, o código chega sem o .git e o smoke não vê o que escreveu no repo.
       - name: Instala o git e o sudo
         run: pacman -Syu --noconfirm sudo git
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -60,8 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: sudo -u dev -H env CI=true GITHUB_TOKEN="${GITHUB_TOKEN}" ./bootstrap.sh
-      # O segundo sync tem que passar sem fazer nada. Ele valida a lista com tudo já instalado
-      # (o mise, por exemplo, só valida os nomes depois que existe).
+      # O segundo sync tem que passar sem fazer nada: valida a lista com tudo já instalado.
       - name: Sync de novo
         env:
           GITHUB_TOKEN: ${{ github.token }}

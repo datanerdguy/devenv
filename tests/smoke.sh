@@ -74,8 +74,7 @@ fi
 # Com o grupo editor: o hook do bob deixou o nightly em uso.
 if command -v bob >/dev/null; then
   check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
-  # Sem erro nem aviso, com o tema (os plugins vêm do nvim-pack-lock.json; o repo_limpo, no fim, confere que ele não
-  # mudou) e com o comando de cada servidor LSP ligado.
+  # Sem erro nem aviso, com o tema e com o comando de cada servidor LSP ligado.
   check "Neovim abre com a config, o tema e os LSPs" env NVIM="${HOME}/.local/share/bob/nvim-bin/nvim" \
     "${repo}/tests/checar-nvim.sh" "${HOME}/.config/nvim"
 fi
@@ -101,9 +100,8 @@ if command -v lazygit >/dev/null; then
   check "delta instalado (o git usa de pager)" command -v delta
 fi
 
-# Nenhum programa escreveu no repo pelos links do chezmoi (hooks de pacote, modelos do Noctalia...). Só no CI:
-# lá o checkout começa limpo; na máquina, o repo muda porque você edita. Se falhar, a config que mudou precisa já
-# ter no repo a linha que o programa acrescenta (veja docs/temas.md).
+# Nenhum programa escreveu no repo pelos links do chezmoi. Só no CI, onde o checkout começa limpo.
+# Se falhar, a config precisa já ter a linha que o programa acrescenta (docs/temas.md).
 if [ -n "${CI:-}" ]; then
   # Se o próprio git falhar, a checagem falha (não passa com a saída vazia).
   # shellcheck disable=SC2329 # chamada pelo check

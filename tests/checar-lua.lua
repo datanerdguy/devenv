@@ -1,15 +1,11 @@
--- Passa o lua_ls em cada arquivo da config do Neovim, com os tipos do Neovim e
--- dos plugins (lazydev): pega opção com tipo errado, função com argumentos a
--- mais ou a menos e campo que não existe. Qualquer aviso falha. Roda pelo
--- tests/checar-nvim.sh, com a config do Neovim já carregada.
+-- Passa o lua_ls em cada arquivo da config do Neovim (com os tipos do Neovim e
+-- dos plugins): qualquer aviso falha. Roda pelo tests/checar-nvim.sh.
 local files = vim.fn.globpath(vim.fn.stdpath("config"), "**/*.lua", false, true)
 for _, file in ipairs(files) do
   vim.cmd.edit(file)
 end
 
--- O lua_ls avisa o progresso (carregar a biblioteca, analisar os arquivos) e
--- não manda nada para arquivo sem aviso. Terminou quando ficou 5 segundos sem
--- progresso nenhum.
+-- O lua_ls não avisa o fim: terminou quando ficou 5 segundos sem progresso.
 local last = vim.uv.now()
 vim.api.nvim_create_autocmd(
   { "LspAttach", "LspProgress" },

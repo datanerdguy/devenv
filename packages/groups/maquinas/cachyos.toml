@@ -1,7 +1,5 @@
 # O que o instalador do CachyOS deixou nesta máquina (pacman -Qqe), menos o que já está nos outros grupos.
-# Sem este grupo, o `metapac clean` removeria o sistema. Para regerar depois de instalar algo à mão:
-#   metapac unmanaged
-# A saída lista o que ficou de fora; mova cada item para o grupo certo ou cole aqui.
+# Sem este grupo, o `metapac clean` removeria o sistema. Para regerar: `metapac unmanaged`.
 
 [arch]
 packages = [

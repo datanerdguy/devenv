@@ -1,10 +1,8 @@
--- Treesitter: o nvim-treesitter só instala os parsers e as queries; o realce, o
--- fold e o realce de uma linguagem dentro de outra (SQL no Python, JS no HTML)
+-- Treesitter: o nvim-treesitter só instala parsers e queries; o realce e o fold
 -- são do Neovim. Compilar um parser pede o tree-sitter-cli (grupo editor) e um
 -- compilador C.
 
--- Depois de atualizar o plugin, os parsers precisam ser atualizados junto (as
--- queries mudam com ele).
+-- Depois de atualizar o plugin, os parsers também (as queries mudam com ele).
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(ev)
     if ev.data.spec.name ~= "nvim-treesitter" or ev.data.kind ~= "update" then
@@ -20,9 +18,9 @@ vim.pack.add(
   { confirm = false }
 )
 
--- As linguagens são as dos servidores LSP ligados (plugins/lsp.lua), mais as
--- que aparecem dentro de outras. O tailwindcss e o htmx ficam de fora: eles
--- entram em dezenas de tipos de arquivo de outros (svelte, twig, erb...).
+-- As linguagens dos servidores LSP ligados (plugins/lsp.lua), mais as que
+-- aparecem dentro de outras. Ficam de fora o tailwindcss e o htmx (entram em
+-- dezenas de tipos de arquivo).
 local languages =
   { "comment", "diff", "gitcommit", "markdown_inline", "regex", "sql" }
 local available = require("nvim-treesitter").get_available()
@@ -39,9 +37,8 @@ for _, server in ipairs(require("plugins.lsp").servers) do
 end
 languages = vim.list.unique(languages)
 
--- Só baixa o que falta; o que já está instalado não faz nada. Sem o
--- tree-sitter-cli não dá para compilar: um aviso só, em vez de um erro por
--- linguagem.
+-- Sem o tree-sitter-cli não dá para compilar: um aviso só, em vez de um erro
+-- por linguagem.
 if vim.fn.executable("tree-sitter") == 1 then
   require("nvim-treesitter").install(languages)
 else

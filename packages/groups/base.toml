@@ -9,8 +9,7 @@ packages = [
   "rbw", # cliente do Bitwarden: traz a chave age e os tokens
   "git",
   "github-cli", # gh
-  # cargo para compilar o metapac do AUR. Sem ele, o paru puxa o pacote rust, que conflita com o rustup.
-  # O hook roda a cada sync e não faz nada se já estiver pronto: toolchain estável e o rust-analyzer.
+  # cargo para compilar o metapac do AUR (sem ele, o paru puxa o pacote rust, que conflita). O hook é idempotente.
   { name = "rustup", hooks = { after_sync = ["sh", "-c", "rustup default stable && rustup component add rust-analyzer"] } },
   "jq", # filtra e formata JSON (gh, APIs, scripts)
   "ripgrep", # rg: busca em arquivos (os agentes contam com ele)

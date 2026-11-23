@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 # Depois do `metapac sync`: devolve às dependências o status de dependência.
-#
-# O metapac instala com `paru --sync --asexplicit`, e o pacman marca como explícito tudo o que entra na
-# transação, inclusive as dependências (ex.: python-textual, do posting). Assim elas aparecem no
-# `metapac unmanaged`, e o `metapac clean` tentaria remover. Este script marca como dependência todo pacote
-# fora das listas que algum outro pacote exige. O que ninguém exige (ex.: o stack que sobrou de um build do
-# AUR) continua explícito e aparece no `just clean`.
+# O metapac instala com `--asexplicit`, então as dependências viriam como explícitas e o `metapac clean`
+# tentaria removê-las. Aqui vira dependência todo pacote de fora das listas que outro pacote exige.
 set -euo pipefail
 
 mapfile -t unmanaged < <(

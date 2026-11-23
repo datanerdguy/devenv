@@ -3,19 +3,15 @@
 # Ctrl+Enter é tela cheia por padrão; fica livre para os programas (o niri já tem tela cheia).
 keybind = ctrl+enter=unbind
 
-# Fonte: BlexMono Nerd Font (pacote ttf-ibmplex-mono-nerd).
 font-family = "BlexMono Nerd Font"
 font-size = 17
 
-# Selecionar com o mouse já copia para o clipboard do sistema (Ctrl+V cola em qualquer app).
 copy-on-select = clipboard
-# OSC 52: programas no terminal e via SSH copiam para o clipboard do sistema sem perguntar.
+# OSC 52 (programas no terminal e via SSH): escrever vai direto; ler pede confirmação.
 clipboard-write = allow
-# Ler o clipboard pelo OSC 52 pede confirmação: um programa não lê o que você copiou sem você saber.
 clipboard-read = ask
 clipboard-trim-trailing-spaces = true
 
-# Cores: o Noctalia gera themes/noctalia a cada troca de tema (comando theme). Com esta linha aqui, ele não
-# precisa editar este arquivo. Numa máquina nova, o chezmoi cria um themes/noctalia inicial com o Nord.
+# Cores: o Noctalia regrava themes/noctalia a cada `theme`; numa máquina nova, o chezmoi cria um com o Nord.
 theme = noctalia
 background-opacity = 0.8

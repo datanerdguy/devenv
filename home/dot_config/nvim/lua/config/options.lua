@@ -4,14 +4,12 @@ local o = vim.o
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Tela. Números das linhas: a atual mostra o número dela; as outras, a
--- distância até ela (para 5j, 3k...).
+-- Tela. Números relativos: a linha atual mostra o número, as outras a distância.
 o.number = true
 o.relativenumber = true
 o.cursorline = true
 o.signcolumn = "yes"
--- Linha vertical na coluna 80; ao digitar, o texto que passa dela quebra
--- sozinho.
+-- Coluna 80: linha vertical, e o texto que passa dela quebra sozinho.
 o.textwidth = 80
 o.colorcolumn = "80"
 -- O modo já aparece na cor do cursor (config/cursor.lua).
@@ -28,7 +26,6 @@ o.shiftround = true
 o.smartindent = true
 o.breakindent = true
 o.virtualedit = "block"
--- y, d e p usam o clipboard do sistema.
 o.clipboard = "unnamedplus"
 
 -- Busca: sem maiúscula ignora maiúsculas; com uma, respeita.
@@ -42,8 +39,7 @@ o.swapfile = false
 o.backup = false
 o.writebackup = false
 
--- Menu fuzzy na linha de comando (: / ?), que aparece enquanto você digita
--- (:help cmdline-autocompletion).
+-- Menu fuzzy na linha de comando (: / ?) enquanto digita.
 o.wildmode = "noselect:lastused,full"
 o.wildoptions = "pum,fuzzy"
 vim.api.nvim_create_autocmd("CmdlineChanged", {

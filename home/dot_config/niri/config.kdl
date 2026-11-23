@@ -28,8 +28,7 @@ input {
     workspace-auto-back-and-forth
 }
 
-// Monitores pelo modelo (`niri msg outputs` mostra os nomes). O que não estiver ligado é ignorado,
-// então um monitor novo é só mais um bloco. Com a tampa fechada, o niri apaga a tela do notebook sozinho.
+// Monitores pelo modelo (`niri msg outputs` mostra os nomes); o que não estiver ligado é ignorado.
 output "LG Electronics LG ULTRAWIDE 0x01010101" {
     mode "2560x1080@60.000"
     position x=0 y=0
@@ -65,8 +64,7 @@ hotkey-overlay {
 }
 
 environment {
-    // Teclas mortas do us intl (' + a = á) nos apps GTK, como o Ghostty: desde o GTK 4.20, sem um método de
-    // entrada rodando, o GTK no Wayland não compõe sozinho. O "simple" é a composição embutida do GTK.
+    // Teclas mortas do us intl nos apps GTK: desde o GTK 4.20, sem método de entrada o GTK no Wayland não compõe.
     GTK_IM_MODULE "simple"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     QT_QPA_PLATFORM "wayland"

@@ -1,7 +1,5 @@
--- Notas em ~/notas (Markdown), de qualquer pasta: a nota do dia, uma nota nova
--- com título e as buscas pelo fzf-lua. A nota abre numa janela flutuante, para
--- anotar rápido e voltar ao que estava fazendo: q salva e fecha. O `ns` do fish
--- guarda no GitHub.
+-- Notas em ~/notas (Markdown), de qualquer pasta, numa janela flutuante (q
+-- salva e fecha). O `ns` do fish guarda no GitHub.
 
 local fzf = require("fzf-lua")
 local dir = vim.fs.normalize("~/notas")

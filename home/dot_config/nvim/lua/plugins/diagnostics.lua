@@ -1,6 +1,5 @@
--- Erros e avisos: um emoji na margem para cada um e, na linha do cursor, a
--- mensagem numa caixa ao lado do código (tiny-inline-diagnostic). Ctrl-w d
--- abre o erro inteiro; ]d e [d andam entre eles.
+-- Erros e avisos: emoji na margem e, na linha do cursor, a mensagem numa caixa
+-- (tiny-inline-diagnostic). Ctrl-w d abre o erro inteiro.
 
 vim.pack.add(
   { "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
@@ -9,8 +8,7 @@ vim.pack.add(
 
 local severity = vim.diagnostic.severity
 
--- Os emojis valem para a margem, a caixa ao lado do código, a janela do erro
--- (Ctrl-w d) e a contagem na barra de status.
+-- Os emojis valem também para a janela do erro e a barra de status.
 local icons = {
   [severity.ERROR] = "⛔",
   [severity.WARN] = "⚠️",

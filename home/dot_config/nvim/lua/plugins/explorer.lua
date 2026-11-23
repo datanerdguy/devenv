@@ -6,14 +6,12 @@ vim.pack.add({ "https://github.com/stevearc/oil.nvim" }, { confirm = false })
 
 require("oil").setup({
   delete_to_trash = true,
-  -- Renomear ou mover um arquivo só não pede confirmação; apagar e mudanças
-  -- maiores pedem.
+  -- Renomear ou mover não pede confirmação; apagar e mudanças maiores pedem.
   skip_confirm_for_simple_edits = true,
   watch_for_changes = true,
   view_options = { show_hidden = true },
   keymaps = {
-    -- O Ctrl-l é da navegação entre janelas (config/navigation.lua); atualizar
-    -- a lista passa para gR.
+    -- O Ctrl-l é da navegação entre janelas (config/navigation.lua).
     ["<C-l>"] = false,
     ["gR"] = "actions.refresh",
   },

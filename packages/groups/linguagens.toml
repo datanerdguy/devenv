@@ -1,8 +1,5 @@
 # Toolchains, LSPs, formatadores e linters (ADR 0010). A ferramenta do projeto vence a daqui.
-#
-# Não entram: Node, Erlang, Elixir, Java e Lua. Cada projeto fixa a versão e o mise instala.
-# Um pacote só aparece uma vez entre todos os grupos:
-# - stylua, shellcheck e uv estão em repo.toml.
+# Não entram Node, Erlang, Elixir, Java e Lua (o mise instala a versão do projeto) nem stylua, shellcheck e uv (repo.toml).
 
 [arch]
 packages = [

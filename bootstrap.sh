@@ -16,13 +16,13 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
-# O metapac pergunta antes de instalar: sem terminal (com pipe, como `| tee`), ele falha no meio. Melhor parar antes.
+# O metapac pergunta antes de instalar: sem terminal (com pipe, como `| tee`), ele falha no meio.
 if [ -z "${CI:-}" ] && { [ ! -t 0 ] || [ ! -t 1 ]; }; then
   echo "Rode num terminal, sem pipe: ./bootstrap.sh" >&2
   exit 1
 fi
 
-# Cada máquina precisa da sua entrada em packages/config.toml; sem ela, o metapac não sabe o que instalar.
+# Sem entrada da máquina em packages/config.toml, o metapac não sabe o que instalar.
 host="$(cat /etc/hostname 2>/dev/null || uname -n)"
 if ! grep -q "^${host} = " "${repo}/packages/config.toml"; then
   echo "A máquina '${host}' não está em [hostname_groups] de packages/config.toml. Acrescente uma linha para ela." >&2
@@ -50,12 +50,10 @@ if ! command -v paru >/dev/null; then
   rm -rf "${tmp}"
 fi
 
-# 3. O mínimo para o resto. O rustup vem antes: ele dá o cargo que compila o metapac do AUR.
-# Sem isso, o paru instala o pacote rust, que conflita com o rustup do grupo base.
-# O jq também vem antes: os modify_ do chezmoi (settings do Claude) usam ele no apply.
+# 3. O mínimo para o resto. O rustup vem antes (o cargo compila o metapac); sem ele, o paru instala o pacote
+# rust, que conflita. O jq vem antes porque os modify_ do chezmoi usam ele.
 say "Instalando rustup, chezmoi, metapac, age, rbw e jq"
-# Antes de tudo, o sistema em dia: com o banco de pacotes velho, o espelho pode já não ter a versão pedida (404).
-# No Arch é sempre -Syu, nunca só -Sy: atualizar o banco sem os pacotes deixa o sistema pela metade.
+# -Syu, nunca só -Sy: banco novo sem os pacotes deixa o sistema pela metade (e banco velho dá 404).
 paru -Syu --needed "${yes_flag[@]}" rustup
 rustup default stable
 paru -S --needed "${yes_flag[@]}" chezmoi metapac age rbw jq
@@ -78,8 +76,7 @@ fi
 say "Aplicando as configs (chezmoi)"
 chezmoi init --source "${repo}" --apply
 
-# 6. Pacotes. O metapac sempre sincroniza nesta ordem: arch, cargo, mise, uv.
-# Assim rustup, mise e uv já estão no lugar quando os outros backends rodam.
+# 6. Pacotes. O metapac sincroniza sempre nesta ordem: arch, cargo, mise, uv.
 say "Sincronizando os pacotes (metapac)"
 if [ -n "${CI:-}" ]; then
   metapac sync --no-confirm

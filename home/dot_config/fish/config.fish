@@ -4,8 +4,7 @@
 # Raiz do repo devenv: este arquivo é um link para home/dot_config/fish/config.fish dentro dele.
 set -gx DEVENV (path resolve (status filename) | path dirname | path dirname | path dirname | path dirname)
 
-# mise pelos shims, não pelo `mise activate`: o activate roda o mise a cada prompt (uns 15 ms); o shim só
-# quando o programa roda. A versão continua sendo a do projeto. O que fica de fora é o [env] do mise.toml.
+# mise pelos shims, não pelo `mise activate` (que roda o mise a cada prompt, uns 15 ms). Fica de fora o [env] do mise.toml.
 fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/.local/share/bob/nvim-bin ~/.local/share/mise/shims
 
 set -gx EDITOR nvim
@@ -22,8 +21,7 @@ set -gx FZF_CTRL_T_OPTS "--prompt='arquivo ❯ '"
 set -gx FZF_CTRL_R_OPTS "--prompt='histórico ❯ '"
 # Visual de toda lista do fzf. --color=16: as cores do terminal, que seguem o tema.
 set -gx FZF_DEFAULT_OPTS "--height=40% --layout=reverse --border --color=16 --pointer=▌ --gutter=' ' --no-scrollbar --info=inline-right"
-# Modo normal em toda lista do fzf, inclusive as do Neovim: Esc para de escrever, j/k andam, i volta a escrever, q ou
-# Esc fecham. Quem decide é o fzf-mode (home/dot_local/bin).
+# Modo normal em toda lista do fzf, inclusive as do Neovim. Quem decide é o fzf-mode (home/dot_local/bin).
 set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --bind='start:+unbind(j,k,i,q),esc:transform(fzf-mode esc),i:transform(fzf-mode i),j:down,k:up,q:abort'"
 
 status is-interactive; or return

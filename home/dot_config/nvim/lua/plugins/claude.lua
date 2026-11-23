@@ -1,8 +1,6 @@
--- Claude: o claudecode.nvim fala com o Claude Code pelo mesmo protocolo da
--- extensão do VS Code. O Claude roda num painel do tmux, fora do Neovim; nele,
--- /ide conecta a este Neovim. Com isso o Claude vê o arquivo aberto e a
--- seleção, e a mudança que ele propõe abre aqui como diff (:w aceita, :q
--- recusa).
+-- Claude: o claudecode.nvim liga o Claude Code (num painel do tmux, via /ide) a
+-- este Neovim: ele vê o arquivo e a seleção, e a mudança abre como diff (:w
+-- aceita, :q recusa).
 
 vim.pack.add(
   { "https://github.com/coder/claudecode.nvim" },
@@ -13,12 +11,10 @@ vim.pack.add(
 -- outros ficam no padrão do plugin.
 ---@type ClaudeCodeTerminalConfig|{}
 local terminal = { provider = "none" }
--- Só avisos e erros: o "integration stopped" de cada saída não precisa
--- aparecer.
+-- Só avisos e erros: sem o "integration stopped" de cada saída.
 require("claudecode").setup({ terminal = terminal, log_level = "warn" })
 
--- Depois de mandar um trecho, o foco vai para o painel do Claude (o último
--- painel usado no tmux).
+-- Depois de mandar um trecho, o foco vai para o painel do Claude.
 vim.api.nvim_create_autocmd("User", {
   pattern = "ClaudeCodeSendComplete",
   callback = function()
