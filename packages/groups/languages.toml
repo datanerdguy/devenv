@@ -1,5 +1,6 @@
 # Toolchains, LSPs, formatadores e linters (ADR 0010). A ferramenta do projeto vence a daqui.
-# Não entram Node, Erlang, Elixir, Java e Lua (o mise instala a versão do projeto) nem stylua, shellcheck e uv (repo.toml).
+# Node, Erlang, Elixir e Lua vêm do mise (no fim): a versão mais nova para usar fora de projeto; num projeto, a dele.
+# Não entram stylua, shellcheck e uv (repo.toml).
 
 [arch]
 packages = [
@@ -66,7 +67,7 @@ packages = [
   "hadolint-bin", # binário pronto; o "hadolint" compila Haskell (baixa o GHC, vários GB)
   "just-lsp",
 
-  # Instala as versões de Node, Erlang, Elixir, Java e Lua que cada projeto pede
+  # Node, Erlang, Elixir e Lua: a versão global (abaixo) e a que cada projeto pede
   "mise",
 ]
 
@@ -75,8 +76,13 @@ packages = [
   "htmx-lsp", # htmx
 ]
 
-# Só existe no GitHub, não há pacote na distro nem no AUR (exceção do ADR 0010).
+# A versão global, para usar fora de projeto (mise use -g). Num projeto, o mise.toml dele vence.
+# O Erlang vem antes do Elixir, que precisa dele.
 [mise]
 packages = [
+  { name = "node", options = { version = "latest" } }, # traz npm e npx
+  { name = "erlang", options = { version = "latest" } }, # compila na primeira vez (uns minutos)
+  { name = "elixir", options = { version = "latest" } },
+  { name = "lua", options = { version = "latest" } }, # traz o luarocks
   { name = "expert", options = { version = "latest" } }, # LSP do Elixir (o metapac só aceita nomes do registro do mise)
 ]

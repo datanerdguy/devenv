@@ -62,5 +62,6 @@ custa 1,4 ms; o resto é o tide e a carga interativa do próprio fish (medido co
 - A saída do `zoxide init` e do `fzf --fish` fica em cache em `~/.cache/fish/` e só é gerada de novo quando o
   programa é atualizado.
 - O mise entra pelos shims, não pelo `mise activate`, que custava uns 15 ms a cada prompt. A versão continua
-  sendo a do projeto; só o `[env]` do `mise.toml` fica de fora.
+  sendo a do projeto; só o `[env]` do `mise.toml` fica de fora. Fora de projeto, valem as globais: a versão mais
+  nova de Node (com npm), Erlang, Elixir e Lua (com luarocks).
 - As funções ficam em `functions/` e só carregam no primeiro uso.

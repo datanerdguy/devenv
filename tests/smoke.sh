@@ -25,6 +25,13 @@ check "${HOME}/.config/metapac -> ${repo}/packages" test "$(readlink -f "${HOME}
 check "asm-lsp em ${HOME}/.local/bin (chezmoi)" test -x "${HOME}/.local/bin/asm-lsp"
 check "rustup com rustc e rust-analyzer" rustup which rust-analyzer
 
+# Com o grupo languages: as versões globais do mise, para usar fora de projeto.
+if command -v mise >/dev/null; then
+  for cmd in npm mix luarocks; do
+    check "${cmd} do mise, fora de projeto" mise which "${cmd}"
+  done
+fi
+
 # Com o grupo terminal.
 if command -v ghostty >/dev/null; then
   check "config do Ghostty" ghostty +validate-config --config-file="${HOME}/.config/ghostty/config"
