@@ -38,6 +38,7 @@ O `<leader>` é o **Espaço**.
 | `<leader>ff` | Arquivos do projeto |
 | `<leader>fd` | Pastas do projeto; a escolhida abre no explorer |
 | `<leader>fz` | Pastas do zoxide (as que você mais usa, de qualquer projeto); abre no explorer |
+| `<leader>/` | Texto no arquivo atual, com a linha na prévia |
 | `<leader>fg` | Texto no projeto, enquanto digita |
 | `<leader>fw` | A palavra do cursor no projeto |
 | `<leader>fb` | Arquivos abertos |
