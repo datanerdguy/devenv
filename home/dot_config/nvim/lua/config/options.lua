@@ -9,6 +9,9 @@ o.number = true
 o.relativenumber = true
 o.cursorline = true
 o.signcolumn = "yes"
+-- Linha vertical na coluna 80; ao digitar, o texto que passa dela quebra sozinho.
+o.textwidth = 80
+o.colorcolumn = "80"
 -- O modo já aparece na cor do cursor (config/cursor.lua).
 o.showmode = false
 o.splitright = true

@@ -13,7 +13,7 @@ e o Claude no editor (claudecode.nvim).
 home/dot_config/nvim/
   init.lua              a ordem em que os módulos carregam
   lua/config/           o que é nativo, sem plugin
-    options.lua         líder (Espaço), números das linhas, indentação, clipboard, busca, menu da linha de comando
+    options.lua         líder (Espaço), números das linhas, linha na coluna 80, indentação, clipboard, busca, menu da linha de comando
     cursor.lua          cursor em bloco, com a cor do modo igual à do fish
     keymaps.lua         atalhos sem plugin (jk, <leader>R)
     navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
