@@ -98,8 +98,9 @@ Na linha de comando (`:`) e na busca com `/`, um menu fuzzy de sugestões aparec
 
 ## Notas
 
-As notas são arquivos Markdown em `~/notas`, um repo privado no GitHub. Os atalhos valem de qualquer pasta, sem sair
-do arquivo em que você está. Nota nova começa com o título; o `ns`, no fish, guarda tudo no GitHub
+As notas são arquivos Markdown em `~/notas`, um repo privado no GitHub. Os atalhos valem de qualquer pasta, e a nota
+abre numa janela flutuante por cima do que você está fazendo: anote e dê `q`, que salva, fecha e volta para onde
+estava. A nota escolhida nas buscas também abre assim. Nota nova começa com o título; o `ns`, no fish, guarda tudo no GitHub
 ([shell.md](shell.md)). Fora do Neovim, `Alt+Shift+n` abre a nota do dia ([desktop.md](desktop.md)).
 
 | Tecla | O que faz |
