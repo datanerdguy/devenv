@@ -2,9 +2,8 @@
 
 O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
-A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre, como os temas. Buscar arquivos, buscar texto e a árvore de pastas vêm
-das receitas da ajuda do próprio Neovim (`:help cmdline-autocompletion` e `:help fuzzy-file-picker`). Por
-enquanto a config tem só isso; o resto entra aos poucos.
+A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre. Hoje são três
+assuntos: os temas, a busca (fzf-lua, o mesmo fzf do shell) e o explorer (oil). O resto entra aos poucos.
 
 ## Estrutura
 
@@ -12,11 +11,12 @@ enquanto a config tem só isso; o resto entra aos poucos.
 home/dot_config/nvim/
   init.lua            líder (Espaço) e a ordem em que os módulos carregam
   lua/config/
-    options.lua       opções gerais: números das linhas, swap e backup, menu da linha de comando, grep, netrw
-    search.lua        :find, :Recent e o menu fuzzy enquanto digita
+    options.lua       opções gerais: números das linhas, swap e backup, menu da linha de comando
+    theme.lua         os temas (plugins) e qual deles segue o desktop
+    search.lua        busca de arquivos, pastas e texto (fzf-lua)
+    explorer.lua      explorer de arquivos (oil)
     keymaps.lua       todos os atalhos com <leader>
     navigation.lua    Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
-    theme.lua         os temas (plugins) e qual deles segue o desktop
   nvim-pack-lock.json versões dos plugins, gravada pelo vim.pack
 ```
 
@@ -35,31 +35,64 @@ O `<leader>` é o **Espaço**.
 
 | Tecla | O que faz |
 | --- | --- |
-| `<leader>ff` | `:find`: busca arquivos do projeto |
-| `<leader>fg` | `:grep`: busca texto no projeto; o resultado abre no quickfix |
-| `<leader>fb` | `:b`: arquivos abertos |
-| `<leader>fr` | `:Recent`: arquivos abertos antes |
-| `<leader>e` | Árvore de pastas (netrw) na pasta do arquivo atual |
+| `<leader>ff` | Arquivos do projeto |
+| `<leader>fd` | Pastas do projeto; a escolhida abre no explorer |
+| `<leader>fz` | Pastas do zoxide (as que você mais usa, de qualquer projeto); abre no explorer |
+| `<leader>fg` | Texto no projeto, enquanto digita |
+| `<leader>fw` | A palavra do cursor no projeto |
+| `<leader>fb` | Arquivos abertos |
+| `<leader>fr` | Arquivos recentes |
+| `<leader>fh` / `<leader>fk` | Ajuda do Neovim / atalhos |
+| `<leader>f.` | Volta à última busca, como estava |
+| `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
+| `<leader>E` | Explorer na raiz do projeto |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 | `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
 
-`nvim .` (ou `nvim <pasta>`) abre direto na árvore.
+`nvim .` (ou `nvim <pasta>`) abre direto no explorer.
 
 ## Buscar
 
-Em `:find`, `:b` e `:Recent`, um menu de sugestões aparece enquanto você digita, com busca fuzzy (letras fora
-de ordem valem: `tmuxconf` acha `home/dot_config/tmux/tmux.conf`). `Tab` e `Shift-Tab` andam no menu, e o
-`Enter` abre a escolhida, ou a primeira se você não escolher nenhuma. O mesmo menu aparece no `:` e na busca com `/`.
+A busca é o fzf-lua: o mesmo `fzf` do shell, com prévia ao lado e as cores do tema. A busca é fuzzy (letras fora de
+ordem valem: `tmuxconf` acha `home/dot_config/tmux/tmux.conf`). Arquivos e pastas vêm do `fd` e o texto vem do
+`rg`: os ocultos aparecem, e o `.git` e o que o git ignora não.
 
-O `:find` lista os arquivos com o `fd`: os ocultos aparecem, e o `.git` e o que o git ignora não.
+Dentro da busca:
 
-O `:grep` usa o `rg`, com as mesmas regras. Os resultados vão para o quickfix: `Enter` abre o resultado, `]q` e
-`[q` andam entre eles, e `:cclose` fecha a lista. Texto com espaço vai entre aspas: `:grep "duas palavras"`.
+| Tecla | O que faz |
+| --- | --- |
+| `Enter` | Abre |
+| `Ctrl-v` / `Ctrl-s` / `Ctrl-t` | Abre ao lado / embaixo / numa aba |
+| `Tab` | Marca vários (o `Enter` abre todos) |
+| `Alt-q` | Manda os resultados para o quickfix (`]q` e `[q` andam entre eles) |
+| `Alt-h` / `Alt-i` | Mostra ou esconde os ocultos / o que o git ignora |
+| `Esc` | Fecha |
 
-## Árvore (netrw)
+Na linha de comando (`:`) e na busca com `/`, um menu fuzzy de sugestões aparece enquanto você digita. `Tab` e
+`Shift-Tab` andam no menu.
 
-`Enter` abre, `-` sobe uma pasta, `%` cria arquivo, `d` cria pasta, `D` apaga, `R` renomeia e `gh` mostra os
-ocultos. `:help netrw-quickmap` lista todas as teclas.
+## Explorer (oil)
+
+O oil abre a pasta como um texto, e você mexe nos arquivos editando as linhas. Nada muda no disco até o `:w`, que
+mostra o que vai acontecer quando a mudança é grande.
+
+| Para | Faça |
+| --- | --- |
+| Abrir | `Enter` (pasta ou arquivo); `gv` / `gh` abre ao lado / embaixo |
+| Subir uma pasta | `-` |
+| Renomear | Edite o nome (`cw`, `A`...) e `:w` |
+| Criar | Uma linha nova com o nome; com `/` no fim é pasta (`a/b/c.txt` cria as pastas no caminho). `:w` |
+| Copiar | `yy` no arquivo, vá até a outra pasta, `p` e `:w` |
+| Mover | `dd` no arquivo, vá até a outra pasta, `p` e `:w` |
+| Apagar | `dd` e `:w`. Vai para a lixeira (`g\` mostra a lixeira) |
+| Desfazer antes do `:w` | `u`, como num texto |
+| Prévia | `Ctrl-p` |
+| Ocultos | `g.` mostra ou esconde (começam à mostra) |
+| Abrir fora do Neovim | `gx` |
+| Ajuda | `g?` lista todas as teclas |
+
+Vários de uma vez também valem: `Vjj` e `d` ou `y` em várias linhas. Renomear ou mover um arquivo pelo oil avisa o
+LSP, que corrige os imports.
 
 ## Tema
 

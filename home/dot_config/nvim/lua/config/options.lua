@@ -1,21 +1,21 @@
 -- Opções gerais.
 
+-- Números das linhas: a atual mostra o número dela; as outras, a distância até ela (para 5j, 3k...).
+vim.o.number = true
+vim.o.relativenumber = true
+
 -- Nada de swap (.swp) nem backup (arquivo~): o git guarda o histórico.
 vim.o.swapfile = false
 vim.o.backup = false
 vim.o.writebackup = false
 
--- Menu de sugestões na linha de comando (o que abre o menu enquanto digita fica em search.lua).
+-- Menu fuzzy na linha de comando (: / ?), que aparece enquanto você digita (:help cmdline-autocompletion).
 vim.o.wildmode = "noselect:lastused,full"
 vim.o.wildoptions = "pum,fuzzy"
-
--- :grep pelo rg, com os arquivos ocultos e sem o .git nem o que o git ignora.
-vim.o.grepprg = "rg --vimgrep --smart-case --hidden --glob=!.git/"
-
--- Árvore de pastas (netrw), sem o cabeçalho.
-vim.g.netrw_banner = 0
-vim.g.netrw_liststyle = 3
-
--- Números das linhas: a atual mostra o número dela; as outras, a distância até ela (para 5j, 3k...).
-vim.o.number = true
-vim.o.relativenumber = true
+vim.api.nvim_create_autocmd("CmdlineChanged", {
+  pattern = { ":", "/", "?" },
+  callback = function() vim.fn.wildtrigger() end,
+})
+-- Com o menu aberto, as setas saem dele e andam no histórico, como sem o menu.
+vim.keymap.set("c", "<Up>", function() return vim.fn.wildmenumode() == 1 and "<C-e><Up>" or "<Up>" end, { expr = true })
+vim.keymap.set("c", "<Down>", function() return vim.fn.wildmenumode() == 1 and "<C-e><Down>" or "<Down>" end, { expr = true })

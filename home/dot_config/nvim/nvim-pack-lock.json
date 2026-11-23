@@ -12,6 +12,10 @@
       "rev": "85a86eb62409e3ec88713bff3d1b9d7374e112e4",
       "src": "https://github.com/sainnhe/everforest"
     },
+    "fzf-lua": {
+      "rev": "a8312697c30b4d3b110fa3dc56e3699107aed9a0",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
     "kanagawa.nvim": {
       "rev": "bb85e4bfc8d89b0e62c8fa53ccdd13d12e2f77b3",
       "src": "https://github.com/rebelot/kanagawa.nvim"
@@ -19,6 +23,14 @@
     "nord.nvim": {
       "rev": "87394d4fc35c901bbe38326a78d31ab1ead826b6",
       "src": "https://github.com/gbprod/nord.nvim"
+    },
+    "nvim-web-devicons": {
+      "rev": "0dc0cfb0c6858041174a53c7aa4adaf65e994b3c",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
+      "src": "https://github.com/stevearc/oil.nvim"
     },
     "rose-pine": {
       "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
