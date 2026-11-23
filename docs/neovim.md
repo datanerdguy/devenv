@@ -46,6 +46,7 @@ O `<leader>` é o **Espaço**.
 | `<leader>f.` | Volta à última busca, como estava |
 | `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
 | `<leader>E` | Explorer na raiz do projeto |
+| `jk` | Sai do modo de inserção, como o `Esc` |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 | `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
 
