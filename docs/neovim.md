@@ -16,6 +16,7 @@ home/dot_config/nvim/
     cursor.lua          cursor em bloco, com a cor do modo igual à do fish
     keymaps.lua         atalhos sem plugin (jk, <leader>R)
     navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
+    watch.lua           segue um arquivo que o `theme` regrava (usado pelo cursor e pelo tema)
   lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
     theme.lua           os temas e qual deles segue o desktop
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
@@ -95,7 +96,7 @@ mostra o que vai acontecer quando a mudança é grande.
 
 | Para | Faça |
 | --- | --- |
-| Abrir | `Enter` (pasta ou arquivo); `gv` / `gh` abre ao lado / embaixo |
+| Abrir | `Enter` (pasta ou arquivo); `Ctrl-s` / `Ctrl-h` abre ao lado / embaixo, `Ctrl-t` numa aba |
 | Subir uma pasta | `-` |
 | Renomear | Edite o nome (`cw`, `A`...) e `:w` |
 | Criar | Uma linha nova com o nome; com `/` no fim é pasta (`a/b/c.txt` cria as pastas no caminho). `:w` |

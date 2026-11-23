@@ -11,7 +11,6 @@ fzf.setup({
   fzf_colors = true,
   -- O menu de opções do Neovim (vim.ui.select) também abre no fzf.
   ui_select = {},
-  -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta atual abreviada (~/P/d/h/...).
   -- Modo normal, como no Vim: Esc para de escrever (o prompt ganha "NORMAL"), j/k andam na lista, i volta a escrever
   -- e q ou Esc fecham. O fzf não tem modos; o Esc liga as teclas j, k, i e q, e o i as desliga de novo.
   -- O perfil padrão do fzf-lua prende o Esc para só esconder a janela; aqui o Esc é do modo normal.
@@ -27,6 +26,7 @@ fzf.setup({
       ["q"] = "abort",
     },
   },
+  -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta atual abreviada (~/P/d/h/...).
   files = { hidden = true, cwd_prompt = false, prompt = "arquivo ❯ " },
   grep = { hidden = true, prompt = "texto ❯ " },
   buffers = { prompt = "aberto ❯ " },
@@ -39,13 +39,17 @@ fzf.setup({
 local function folders()
   fzf.fzf_exec("fd --type directory --hidden --exclude .git", {
     prompt = "pasta ❯ ",
-    actions = { enter = function(selected) require("oil").open(selected[1]) end },
+    actions = {
+      enter = function(selected) require("oil").open(selected[1]) end,
+    },
   })
 end
 
 -- Pastas que o zoxide conhece (as que você mais usa, de qualquer projeto), abertas no explorer.
 local function zoxide()
-  fzf.zoxide({ actions = { enter = function(selected) require("oil").open(selected[1]:match("[^\t]+$")) end } })
+  fzf.zoxide({ actions = {
+    enter = function(selected) require("oil").open(selected[1]:match("[^\t]+$")) end,
+  } })
 end
 
 local map = vim.keymap.set

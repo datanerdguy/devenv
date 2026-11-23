@@ -1,5 +1,5 @@
 -- LSP: os servidores vêm do metapac (packages/groups/linguagens.toml, ADR 0010) e a config de cada um vem do
--- nvim-lspconfig (só a pasta lsp/ dele). Ajuste de um servidor vai em lsp/<servidor>.lua, que vale por cima.
+-- nvim-lspconfig (só a pasta lsp/ dele). Ajuste de um servidor vai em after/lsp/<servidor>.lua, que vale por cima.
 
 vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" }, { confirm = false })
 
@@ -47,17 +47,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Os atalhos nativos (grn, gra, K, ]d...) ficam; as listas abrem no fzf-lua, com prévia.
     local fzf = require("fzf-lua")
     local function map(keys, fn, desc) vim.keymap.set("n", keys, fn, { buffer = ev.buf, desc = desc }) end
+    local function toggle_hints()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
+    end
     map("gd", fzf.lsp_definitions, "[LSP] Definição")
     map("grr", fzf.lsp_references, "[LSP] Referências")
     map("gri", fzf.lsp_implementations, "[LSP] Implementação")
     map("grt", fzf.lsp_typedefs, "[LSP] Definição do tipo")
     map("gO", fzf.lsp_document_symbols, "[LSP] Símbolos do arquivo")
     map("<leader>fs", fzf.lsp_live_workspace_symbols, "[Buscar] Símbolos do projeto")
-    map(
-      "<leader>lh",
-      function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf }) end,
-      "[LSP] Dicas inline: liga e desliga"
-    )
+    map("<leader>lh", toggle_hints, "[LSP] Dicas inline: liga e desliga")
     map("<leader>lr", "<cmd>lsp restart<cr>", "[LSP] Reiniciar")
   end,
 })

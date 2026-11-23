@@ -12,14 +12,9 @@ require("oil").setup({
   watch_for_changes = true,
   view_options = { show_hidden = true },
   keymaps = {
-    -- Ctrl+j/k/l/; são da navegação entre janelas (navigation.lua).
-    ["<C-h>"] = false,
+    -- O Ctrl-l é da navegação entre janelas (config/navigation.lua); atualizar a lista passa para gR.
     ["<C-l>"] = false,
-    ["<C-s>"] = false,
-    ["<C-t>"] = false,
     ["gR"] = "actions.refresh",
-    ["gv"] = { "actions.select", opts = { vertical = true }, desc = "Abrir ao lado" },
-    ["gh"] = { "actions.select", opts = { horizontal = true }, desc = "Abrir embaixo" },
   },
 })
 

@@ -3,7 +3,7 @@
 
 local pane = vim.env.TMUX_PANE
 
-local function tmux(...) vim.system({ "tmux", ... }) end
+local function tmux(...) return vim.system({ "tmux", ... }) end
 
 local function go(wincmd, tmux_dir)
   return function()
@@ -28,6 +28,7 @@ if pane then
   })
   vim.api.nvim_create_autocmd({ "VimLeavePre", "VimSuspend" }, {
     group = group,
-    callback = function() vim.system({ "tmux", "set-option", "-p", "-u", "-t", pane, "@pane-is-vim" }):wait() end,
+    -- Espera o tmux: o Neovim pode sair antes de a marca sumir.
+    callback = function() tmux("set-option", "-p", "-u", "-t", pane, "@pane-is-vim"):wait() end,
   })
 end

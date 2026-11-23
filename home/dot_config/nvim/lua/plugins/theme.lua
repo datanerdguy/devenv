@@ -33,17 +33,6 @@ local themes = {
   ["kanagawa-dragon"] = "kanagawa-dragon",
 }
 
--- O `theme` grava a paleta no estado do Noctalia. Sem ela (máquina nova), vale o padrão do repo: Nord.
-local state_dir = vim.fs.joinpath(vim.env.XDG_STATE_HOME or vim.fs.normalize("~/.local/state"), "noctalia")
-local settings = vim.fs.joinpath(state_dir, "settings.toml")
-
-local function palette()
-  for line in io.lines(settings) do
-    local name = line:match('^custom_palette%s*=%s*"(.-)"')
-    if name then return name end
-  end
-end
-
 -- Fundo transparente: o do Ghostty aparece por trás, com a mesma cor e a mesma opacidade (background-opacity).
 -- As janelas flutuantes e a barra de status ficam com o fundo do tema, para se destacarem.
 local transparent = { "Normal", "NormalNC", "SignColumn", "FoldColumn", "LineNr", "CursorLineNr", "EndOfBuffer" }
@@ -56,9 +45,18 @@ local function clear_background()
   end
 end
 
+-- O `theme` grava a paleta no estado do Noctalia; os Neovims abertos trocam junto. Sem paleta (máquina nova), vale o
+-- padrão do repo: Nord. O Noctalia regrava esse arquivo também por outros ajustes, então só troca se a paleta mudou.
+local function palette(path)
+  for line in io.lines(path) do
+    local name = line:match('^custom_palette%s*=%s*"(.-)"')
+    if name then return name end
+  end
+end
+
 local current
-local function apply()
-  local ok, name = pcall(palette)
+require("config.watch")("noctalia", "settings.toml", function(path)
+  local ok, name = pcall(palette, path)
   name = ok and themes[name] and name or "nord"
   if name == current then return end
   current = name
@@ -66,15 +64,4 @@ local function apply()
   vim.o.background = "dark"
   vim.cmd.colorscheme(type(theme) == "function" and theme() or theme)
   clear_background()
-end
-
-apply()
-
--- Troca ao vivo: o Noctalia regrava o settings.toml a cada `theme`. Vigia a pasta, porque o arquivo pode ser
--- trocado por outro (e aí quem vigia só o arquivo perde o rastro).
-local watcher = vim.uv.new_fs_event()
-if watcher and vim.uv.fs_stat(state_dir) then
-  watcher:start(state_dir, {}, function(_, file)
-    if file == "settings.toml" then vim.schedule(apply) end
-  end)
-end
+end)

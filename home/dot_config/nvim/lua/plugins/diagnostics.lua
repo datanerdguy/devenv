@@ -5,7 +5,7 @@ vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" }, { 
 
 require("tiny-inline-diagnostic").setup({
   preset = "modern",
-  -- O fundo do editor é transparente (theme.lua); a caixa segue.
+  -- O fundo do editor é transparente (plugins/theme.lua); a caixa segue.
   transparent_bg = true,
   options = {
     -- Mostra de qual servidor veio a mensagem (ty, ruff...).
