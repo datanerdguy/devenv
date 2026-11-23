@@ -1,10 +1,7 @@
 -- Neovim do devenv (docs/neovim.md). O que é nativo do Neovim 0.13 primeiro; plugin só quando o nativo não cobre:
--- temas, busca, explorer, LSP, formatar e completar.
+-- temas, busca, explorer, LSP, treesitter, formatar, completar e o Claude.
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- Nativo (lua/config/): opções e atalhos sem plugin.
+-- Nativo (lua/config/): opções e atalhos sem plugin. As opções vêm primeiro, porque definem o <leader>.
 require("config.options")
 require("config.cursor")
 require("config.keymaps")

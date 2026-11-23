@@ -18,10 +18,11 @@ vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter" }, { confirm
 local languages = { "comment", "diff", "gitcommit", "markdown_inline", "regex", "sql" }
 local available = require("nvim-treesitter").get_available()
 local guests = { tailwindcss = true, htmx = true }
-for _, server in ipairs(vim.tbl_filter(function(s) return not guests[s] end, require("plugins.lsp").servers)) do
-  for _, filetype in ipairs(vim.lsp.config[server].filetypes or {}) do
+for _, server in ipairs(require("plugins.lsp").servers) do
+  local filetypes = not guests[server] and vim.lsp.config[server].filetypes or {}
+  for _, filetype in ipairs(filetypes) do
     local language = vim.treesitter.language.get_lang(filetype)
-    if language and vim.list_contains(available, language) then table.insert(languages, language) end
+    if vim.list_contains(available, language) then table.insert(languages, language) end
   end
 end
 languages = vim.list.unique(languages)

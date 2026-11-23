@@ -11,9 +11,9 @@ e o Claude no editor (claudecode.nvim).
 
 ```text
 home/dot_config/nvim/
-  init.lua              líder (Espaço) e a ordem em que os módulos carregam
+  init.lua              a ordem em que os módulos carregam
   lua/config/           o que é nativo, sem plugin
-    options.lua         opções gerais: números das linhas, swap e backup, menu da linha de comando
+    options.lua         líder (Espaço), números das linhas, indentação, clipboard, busca, menu da linha de comando
     cursor.lua          cursor em bloco, com a cor do modo igual à do fish
     keymaps.lua         atalhos sem plugin (jk, <leader>R)
     navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
@@ -65,6 +65,7 @@ O `<leader>` é o **Espaço**.
 | `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
 | `<leader>E` | Explorer na raiz do projeto |
 | `jk` | Sai do modo de inserção, como o `Esc` |
+| `y` / `d` / `p` | Usam o clipboard do sistema (o mesmo do navegador) |
 | `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
 | `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
 
