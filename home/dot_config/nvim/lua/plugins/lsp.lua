@@ -5,6 +5,7 @@
 vim.pack.add({
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/folke/lazydev.nvim",
+  "https://github.com/b0o/SchemaStore.nvim",
 }, { confirm = false })
 
 -- Lua do Neovim: o lazydev ensina ao lua_ls a API do Neovim (vim.*) e a de cada
