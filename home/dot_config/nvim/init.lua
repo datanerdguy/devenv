@@ -5,6 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("config.options")
+require("config.cursor")
 require("config.theme")
 require("config.search")
 require("config.explorer")

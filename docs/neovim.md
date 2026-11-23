@@ -12,6 +12,7 @@ home/dot_config/nvim/
   init.lua            líder (Espaço) e a ordem em que os módulos carregam
   lua/config/
     options.lua       opções gerais: números das linhas, swap e backup, menu da linha de comando
+    cursor.lua        cursor em bloco, com a cor do modo igual à do fish
     theme.lua         os temas (plugins) e qual deles segue o desktop
     search.lua        busca de arquivos, pastas e texto (fzf-lua)
     explorer.lua      explorer de arquivos (oil)
@@ -125,6 +126,12 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 | --- | --- |
 | `:packupdate` | Mostra as atualizações; `:write` confirma, `:quit` descarta. Depois, commit do `nvim-pack-lock.json` |
 | `:packdel <nome>` | Apaga um plugin que saiu da config |
+
+## Cursor
+
+O cursor é sempre um bloco, e a cor diz o modo, igual ao fish: verde no de inserção, vermelho no normal e amarelo no
+visual. As cores vêm do mesmo arquivo que o Noctalia gera para o fish (`~/.local/state/devenv/fish-cursor.fish`), e
+mudam junto com o `theme`.
 
 ## Números das linhas
 
