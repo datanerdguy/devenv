@@ -13,6 +13,7 @@ require("config.navigation")
 -- dele. O tema vem primeiro, porque os outros tiram as cores dele.
 require("plugins.theme")
 require("plugins.search")
+require("plugins.notes")
 require("plugins.explorer")
 require("plugins.lsp")
 require("plugins.treesitter")

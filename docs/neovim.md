@@ -22,6 +22,7 @@ home/dot_config/nvim/
   lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
     theme.lua           os temas e qual deles segue o desktop
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
+    notes.lua           notas em ~/notas: a do dia, nova com título e as buscas
     explorer.lua        explorer de arquivos (oil)
     lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev, SchemaStore)
     treesitter.lua      realce e fold pela estrutura do código (nvim-treesitter)
@@ -94,6 +95,19 @@ Dentro da busca:
 
 Na linha de comando (`:`) e na busca com `/`, um menu fuzzy de sugestões aparece enquanto você digita. `Tab` e
 `Shift-Tab` andam no menu.
+
+## Notas
+
+As notas são arquivos Markdown em `~/notas`, um repo privado no GitHub. Os atalhos valem de qualquer pasta, sem sair
+do arquivo em que você está. Nota nova começa com o título; o `ns`, no fish, guarda tudo no GitHub
+([shell.md](shell.md)). Fora do Neovim, `Alt+Shift+n` abre a nota do dia ([desktop.md](desktop.md)).
+
+| Tecla | O que faz |
+| --- | --- |
+| `<leader>nn` | Nota do dia (`~/notas/AAAA-MM-DD.md`) |
+| `<leader>nc` | Nota nova: pergunta o título, e "Ideias do Neovim" vira `ideias-do-neovim.md` |
+| `<leader>nf` | Acha uma nota pelo nome, a mais recente primeiro |
+| `<leader>ng` | Busca um texto em todas as notas, enquanto você digita |
 
 ## Explorer (oil)
 
