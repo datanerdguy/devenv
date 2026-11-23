@@ -13,6 +13,11 @@ require("blink.cmp").setup({
   },
   -- A assinatura da função aparece enquanto você escreve os argumentos.
   signature = { enabled = true },
-  -- A linha de comando (:) fica com o menu nativo (options.lua).
+  sources = {
+    default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+    -- Nos arquivos Lua, completa os nomes dos módulos em require("..."), pelo lazydev (plugins/lsp.lua).
+    providers = { lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 } },
+  },
+  -- A linha de comando (:) fica com o menu nativo (config/options.lua).
   cmdline = { enabled = false },
 })

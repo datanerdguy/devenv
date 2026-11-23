@@ -3,7 +3,7 @@
 O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
 A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre: os temas, a busca
-(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig), os erros na tela
+(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig e lazydev), os erros na tela
 (tiny-inline-diagnostic), o formatar (conform) e o completar (blink.cmp).
 
 ## Estrutura
@@ -21,11 +21,10 @@ home/dot_config/nvim/
     theme.lua           os temas e qual deles segue o desktop
     search.lua          busca de arquivos, pastas e texto (fzf-lua)
     explorer.lua        explorer de arquivos (oil)
-    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig)
+    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev)
     diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
     format.lua          formatador de cada linguagem, ao salvar (conform)
     completion.lua      completar enquanto digita (blink.cmp)
-  after/lsp/            ajustes de um servidor, por cima do nvim-lspconfig (lua_ls.lua: o Lua do Neovim)
   nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack
 ```
 
@@ -36,7 +35,7 @@ Assunto novo ganha um arquivo: em `lua/config/` se for nativo, em `lua/plugins/`
 `vim.pack.add` dele fica no próprio arquivo). Depois, uma linha `require` no `init.lua`. Para o que o Neovim já
 procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
 
-- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig;
+- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig (a pasta aparece com o primeiro);
 - `after/ftplugin/<linguagem>.lua`: ajustes por tipo de arquivo (indentação, por exemplo).
 
 O chezmoi liga cada arquivo, inclusive os das subpastas. Arquivo novo só aparece em `~/.config/nvim` depois do
@@ -149,6 +148,14 @@ sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem 
 liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
 documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.
 
+O completar e a documentação enxergam as bibliotecas do projeto:
+
+- **Lua da config do Neovim:** o lazydev ensina ao lua_ls a API do Neovim (`vim.`, `vim.o.`, `vim.api.`...) e a de
+  cada plugin que o arquivo usa com `require`. O `vim.g.` é a exceção: ele guarda variáveis livres, sem lista do que
+  existe; as de cada plugin estão no `:help` dele.
+- **Python:** o ty lê o `.venv` do projeto (o do `uv`), então as bibliotecas instaladas nele aparecem.
+- **Go, Rust, TypeScript:** o gopls lê o `go.mod`, o rust-analyzer o `Cargo.toml` e o vtsls o `node_modules`.
+
 | Tecla | O que faz |
 | --- | --- |
 | `K` | Documentação do que está no cursor |
@@ -185,7 +192,8 @@ O prettier (JavaScript, TypeScript, HTML, CSS, JSON, YAML, Markdown) só roda em
 
 ## Completar
 
-O blink.cmp abre as sugestões enquanto você digita: do LSP, caminhos, snippets e palavras do arquivo, com a
+O blink.cmp abre as sugestões enquanto você digita: do LSP, caminhos, snippets, palavras do arquivo e, no Lua, os
+módulos em `require("...")`, com a
 documentação ao lado. A assinatura da função aparece enquanto você escreve os argumentos.
 
 | Tecla | O que faz |

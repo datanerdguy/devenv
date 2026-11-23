@@ -1,7 +1,16 @@
 -- LSP: os servidores vêm do metapac (packages/groups/linguagens.toml, ADR 0010) e a config de cada um vem do
 -- nvim-lspconfig (só a pasta lsp/ dele). Ajuste de um servidor vai em after/lsp/<servidor>.lua, que vale por cima.
 
-vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" }, { confirm = false })
+vim.pack.add({
+  "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/folke/lazydev.nvim",
+}, { confirm = false })
+
+-- Lua do Neovim: o lazydev ensina ao lua_ls a API do Neovim (vim.*) e a de cada plugin que o arquivo usa com
+-- require, para completar e conferir os tipos. Os tipos do vim.uv entram quando o arquivo usa vim.uv.
+require("lazydev").setup({
+  library = { { path = "${3rd}/luv/library", words = { "vim%.uv" } } },
+})
 
 -- Um servidor só sobe quando um arquivo do tipo dele abre. O basedpyright fica instalado, mas desligado (o ty é o
 -- padrão do Python). O smoke confere que o comando de cada um existe.
