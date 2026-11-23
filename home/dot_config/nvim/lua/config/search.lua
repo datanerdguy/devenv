@@ -12,6 +12,21 @@ fzf.setup({
   -- O menu de opções do Neovim (vim.ui.select) também abre no fzf.
   ui_select = {},
   -- Prompts curtos, como os do fzf no shell (pasta ❯, tema ❯...), sem a pasta atual abreviada (~/P/d/h/...).
+  -- Modo normal, como no Vim: Esc para de escrever (o prompt ganha "NORMAL"), j/k andam na lista, i volta a escrever
+  -- e q ou Esc fecham. O fzf não tem modos; o Esc liga as teclas j, k, i e q, e o i as desliga de novo.
+  -- O perfil padrão do fzf-lua prende o Esc para só esconder a janela; aqui o Esc é do modo normal.
+  defaults = { no_hide = true },
+  keymap = {
+    fzf = {
+      true, -- mantém os atalhos padrão do fzf-lua
+      ["start"] = "+unbind(j,k,i,q)",
+      ["esc"] = [[transform:case "$FZF_PROMPT" in "NORMAL "*) echo abort ;; *) echo "rebind(j,k,i,q)+change-prompt(NORMAL $FZF_PROMPT)" ;; esac]],
+      ["i"] = [[transform:echo "unbind(j,k,i,q)+change-prompt(${FZF_PROMPT#NORMAL })"]],
+      ["j"] = "down",
+      ["k"] = "up",
+      ["q"] = "abort",
+    },
+  },
   files = { hidden = true, cwd_prompt = false, prompt = "arquivo ❯ " },
   grep = { hidden = true, prompt = "texto ❯ " },
   buffers = { prompt = "aberto ❯ " },
