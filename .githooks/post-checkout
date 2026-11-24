@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# As configs da máquina são links para esta pasta: trocar de branch troca as configs em uso (niri, Neovim, git...).
+set -euo pipefail
+[ "$3" = 1 ] || exit 0
+branch="$(git branch --show-current)"
+if [ "${branch}" != dev ]; then
+  echo "Atenção: a máquina agora usa as configs da '${branch:-commit solto}'. Volte com: git switch dev" >&2
+  echo "Para mexer em outra branch sem afetar a máquina: git worktree add /tmp/outra <branch>" >&2
+fi

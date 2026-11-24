@@ -9,6 +9,10 @@ Duas branches: a `dev`, onde você muda e testa, e a `main`, o que está bom. Se
 
 Mudança grande ou arriscada pode ir numa branch própria (`feat/...`) e entrar na `dev` quando estiver pronta.
 
+As configs da máquina são links para esta pasta. Trocar a branch aqui troca as configs em uso (niri, Neovim,
+git...), e o hook `post-checkout` avisa. Para olhar ou mexer em outra branch, use outra pasta:
+`git worktree add /tmp/main main`.
+
 ## Commits
 
 No padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/), em português:
