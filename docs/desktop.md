@@ -1,8 +1,7 @@
 # Desktop e teclado
 
 O compositor é o **niri**: as janelas ficam em colunas que rolam na horizontal. Em cima dele roda o
-**Noctalia**, com barra, launcher, notificações e tela de bloqueio. O porquê de cada escolha está no
-[ADR 0012](adr/0012-desktop-and-keyboard.md), e os atalhos seguem o [ADR 0008](adr/0008-alt-shortcuts-like-i3.md).
+**Noctalia**, com barra, launcher, notificações e tela de bloqueio.
 
 ## Onde fica cada coisa
 
@@ -74,5 +73,14 @@ As capturas vão para o clipboard e para `~/Pictures/Screenshots`.
 - **Corne:** o layout vive no firmware (Vial). Para mudar, abra o `Vial`, mude ao vivo e salve por cima de
   `keyboard/corne/corne.vil`; o passo a passo está no [keyboard/README.md](../keyboard/README.md). O pacote
   `vial-appimage` já traz a regra udev que deixa o Vial falar com o teclado.
-- **Teclado do notebook:** sem remapeamento. O Corne já faz o Caps como Esc e Ctrl no firmware; o kanata ficou como
-  alternativa no [ADR 0012](adr/0012-desktop-and-keyboard.md).
+- **Teclado do notebook:** sem remapeamento. O Corne já faz o Caps como Esc e Ctrl no firmware; o kanata volta se
+  fizer falta.
+
+## Por que assim
+
+- Pacotes explícitos no grupo `desktop`, sem o meta-pacote `cachyos-niri-noctalia`: a config dele fica fora do repo e
+  traz o que não usamos (alacritty, steam).
+- Um arquivo só para os monitores: o niri ignora o que não está ligado, então não há arquivo por máquina.
+- Alt nas janelas é o hábito do i3. Como o Alt é do niri, o tmux e o Neovim não têm atalhos com Alt.
+- Notas em Markdown, e não Org mode: o Org só abre no Neovim ou no Emacs.
+- O blur fica, mesmo suspeito de atrasos de até 357 ms na entrada (Intel). Se o atraso voltar, olhe o log do niri.

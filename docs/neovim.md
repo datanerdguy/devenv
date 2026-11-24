@@ -166,7 +166,7 @@ O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins soz
 
 ## LSP
 
-Os servidores vêm do metapac (`packages/groups/languages.toml`, a tabela do [ADR 0010](adr/0010-devenv-without-nix-chezmoi-metapac.md)),
+Os servidores vêm do metapac (`packages/groups/languages.toml`),
 sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `plugins/lsp.lua`
 liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
 documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.

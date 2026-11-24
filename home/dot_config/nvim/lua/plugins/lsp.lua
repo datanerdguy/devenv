@@ -1,4 +1,4 @@
--- LSP: os servidores vêm do metapac (packages/groups/languages.toml, ADR 0010)
+-- LSP: os servidores vêm do metapac (packages/groups/languages.toml)
 -- e a config de cada um vem do nvim-lspconfig (só a pasta lsp/ dele). Ajuste de
 -- um servidor vai em after/lsp/<servidor>.lua, que vale por cima.
 

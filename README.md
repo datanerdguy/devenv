@@ -1,8 +1,7 @@
 # devenv
 
 O ambiente de desenvolvimento do Lucas no CachyOS (Arch). As configs vão pelo **chezmoi**, em links para este repo,
-e os pacotes pelo **metapac**, em listas. As decisões ficam em [`docs/adr/`](docs/adr/), a começar pelo
-[ADR 0010](docs/adr/0010-devenv-without-nix-chezmoi-metapac.md). Os termos estão no [GLOSSARY](GLOSSARY.md).
+e os pacotes pelo **metapac**, em listas. O porquê de cada área fica no doc dela, na seção "Por que assim".
 
 ## Máquina nova
 
@@ -44,7 +43,7 @@ wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
 templates/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja templates/README.md
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
-docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md, data.md e adr/
+docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md e data.md
 ```
 
 ## Áreas
@@ -61,6 +60,18 @@ O devenv foi refeito uma área por vez; todas estão prontas.
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
 | Neovim | pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
 | Dados (Podman, duckdb, visidata, harlequin) | pronta, veja [docs/data.md](docs/data.md) |
+
+## Por que assim
+
+- Sem Nix: pesava nesta máquina e escondia as configs atrás de módulos. Aqui cada config é o arquivo do programa.
+- chezmoi, e não stow: além dos links, faz templates e segredos. metapac, e não decman ou aconfmgr: aceita outros
+  gerenciadores e outras distros, só trocando as listas.
+- Segredos com age. A chave fica em `~/.config/chezmoi/key.txt` e no Bitwarden (item `devenv-age-key`); tokens vêm
+  do `rbw` na hora. O disco não é cifrado: o age protege do repo, não de quem tiver o disco.
+- A versão da linguagem é a do projeto (rustup, Go, uv, mise), e a ferramenta do projeto vence a da lista. LSPs e
+  formatadores vêm do metapac, sem Mason, para ficarem declarados e atualizarem com o sistema.
+- O `metapac clean` remove o que não está na lista. Por isso o `machines/cachyos` guarda o que o instalador deixou,
+  e o `packages/mark-deps.sh` devolve as dependências a dependências depois de cada sync.
 
 ## Contribuindo
 

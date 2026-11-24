@@ -1,5 +1,5 @@
--- Formatar ao salvar, pelo conform. Cada linguagem usa o formatador da tabela
--- do ADR 0010 e, sem um, o do LSP. O conform prefere o formatador do projeto
+-- Formatar ao salvar, pelo conform. Cada linguagem usa o formatador de
+-- packages/groups/languages.toml e, sem um, o do LSP. O conform prefere o formatador do projeto
 -- (node_modules/.bin, por exemplo) ao da máquina.
 
 vim.pack.add(

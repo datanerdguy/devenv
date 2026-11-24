@@ -1,4 +1,4 @@
-# Toolchains, LSPs, formatadores e linters (ADR 0010). A ferramenta do projeto vence a daqui.
+# Toolchains, LSPs, formatadores e linters. A ferramenta do projeto vence a daqui.
 # Node, Erlang, Elixir, Lua e Java vêm do mise (no fim): a versão mais nova para usar fora de projeto; num projeto, a dele.
 # Não entram stylua, shellcheck e uv (repo.toml).
 

@@ -1,4 +1,4 @@
-// Atalhos. Mod é o Alt (ADR 0008): Alt cuida das janelas; Alt+Shift também abre apps e o sistema
+// Atalhos. Mod é o Alt: Alt cuida das janelas; Alt+Shift também abre apps e o sistema
 // (o Corne não tem Super na camada de uso normal).
 // Alt+Shift+/ mostra todos na tela.
 // Apps que precisam do PATH do fish (nvim do bob) abrem por `fish -c`.

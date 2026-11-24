@@ -44,7 +44,7 @@ docs: explica o fluxo de release
 | `feat!` ou `BREAKING CHANGE:` no corpo | Muda algo de forma incompatível | major (enquanto estiver em 0.x, sobe o minor) |
 | `docs`, `chore`, `ci`, `refactor`, `style`, `test`, `perf`, `build` | Resto | nenhum |
 
-Escopos sugeridos: a área (`base`, `shell`, `terminal`, `temas`, `nvim`, `tmux`, `desktop`, `agents`, `keyboard`), ou `ci`, `deps`, `adr`, `docs`, `repo`.
+Escopos sugeridos: a área (`base`, `shell`, `terminal`, `temas`, `nvim`, `tmux`, `desktop`, `agents`, `keyboard`), ou `ci`, `deps`, `docs`, `repo`.
 
 **Hooks locais.** Rode `just setup` uma vez: ele liga os hooks de `.githooks/`.
 
@@ -104,3 +104,9 @@ Em **Settings → Branches** (ou **Rules → Rulesets**), para `main` e `dev`:
 - Nos pacotes: o snap-pac tira um snapshot do btrfs a cada transação do pacman, então dá para voltar pelo snapper.
 - Nas configs e nas listas: `git checkout vX.Y.Z && just apply && just sync`.
 - No repo: `git revert` do commit (gera `revert: ...`) num PR para a `dev`.
+
+## Por que assim
+
+- commitizen, e não commitlint + semantic-release: valida, guia o commit, calcula a versão e escreve as notas num
+  binário só, sem trazer Node.
+- Sem release-please: ele faz commit de volta na `main`, o que complica o fluxo com a `dev`.

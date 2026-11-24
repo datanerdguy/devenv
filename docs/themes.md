@@ -1,6 +1,6 @@
 # Temas
 
-Um comando troca o tema do desktop inteiro de uma vez. O porquê está no [ADR 0013](adr/0013-themes-via-noctalia.md).
+Um comando troca o tema do desktop inteiro de uma vez.
 
 ## Trocar
 
@@ -61,3 +61,14 @@ destaque por família (o ciano no Nord, o verde no Everforest, a íris no Rosé 
 
 O papel de parede não muda com o tema. A pasta `wallpapers/` do repo fica ligada em `~/Pictures/Wallpapers`, que é
 a pasta do seletor do Noctalia. Coloque as imagens lá e escolha pelo Noctalia.
+
+## Por que assim
+
+- O Noctalia é o motor: já troca a paleta por comando e regenera a config dos apps por modelos. Um script próprio
+  pedia código novo a cada app.
+- As paletas saem dos temas oficiais do Ghostty: as prontas do Noctalia não têm o Everforest nem todas as variantes.
+- O `theme = noctalia` do Ghostty e o `include` do `~/.config/niri/noctalia.kdl` no niri ficam escritos no repo. Sem
+  eles, os scripts dos modelos editariam essas configs, que são links para o repo.
+- Pelo mesmo motivo, o lazygit e o tmux usam modelo nosso. Antes de ligar um modelo da comunidade, confira se o
+  script dele não edita um arquivo ligado ao repo.
+- A troca precisa do Noctalia aberto. Ele é a barra, então está sempre.

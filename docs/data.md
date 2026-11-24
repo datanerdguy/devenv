@@ -1,8 +1,7 @@
 # Dados
 
-Ferramentas para olhar arquivos, escrever SQL, falar com bancos e rodar os serviços de cada projeto. As decisões
-ficam no [ADR 0015](adr/0015-data.md). A máquina tem uma GPU de 2 GB e 7,6 GB de RAM: treino e LLM grande ficam na
-nuvem ou num servidor.
+Ferramentas para olhar arquivos, escrever SQL, falar com bancos e rodar os serviços de cada projeto.
+A máquina tem uma GPU de 2 GB e 7,6 GB de RAM: treino e LLM grande ficam na nuvem ou num servidor.
 
 ## No terminal
 
@@ -50,3 +49,11 @@ desenvolver.
 
 Ainda nada na máquina. Quando um projeto precisar (AWS, Kubernetes, Terraform...), a ferramenta entra nele, pelo
 `mise use` (a versão fica no `mise.toml` do projeto).
+
+## Por que assim
+
+- Podman, e não Docker: sem o grupo `docker`, que dá poder de root. Docker só se um projeto exigir de verdade.
+- O harlequin vem pelo uv: no AUR ele puxa muitas dependências Python.
+- Sem LLM local (ollama): nesta máquina só caberiam modelos pequenos e lentos.
+- Um programa que procura só `/var/run/docker.sock`, sem ler o `DOCKER_HOST`, precisa do caminho do socket do Podman
+  na config dele.

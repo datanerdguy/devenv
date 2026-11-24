@@ -1,7 +1,5 @@
 # Agentes e git
 
-O porquê de cada escolha está no [ADR 0011](adr/0011-agents-and-git.md).
-
 ## Onde fica cada coisa
 
 | No repo | Na máquina | Como |
@@ -41,3 +39,12 @@ Os pacotes ficam nos grupos `agents` (claude-code, bubblewrap, socat) e `git` (g
 - `lazygit` abre a interface no repo atual, com o delta nos diffs.
 - `git wt` é `git worktree`; `git last` mostra o último commit.
 - O login no GitHub é o do `gh` (`gh auth login`), por HTTPS.
+
+## Por que assim
+
+- O settings é mesclado, não ligado: o Claude grava nele (tema, plugins), e um link o faria escrever no repo.
+- O `claude-code` vem do pacman, com o auto-update desligado: só o sistema atualiza.
+- O pstack não usa Fable em nenhum papel, para poupar a cota do Pro.
+- Só o MCP `context7`: é remoto e não pede chave.
+- Nome e email do git ficam em texto: o email é o noreply do GitHub, já público em cada commit. Commits sem
+  assinatura, para não ter mais uma chave para guardar.

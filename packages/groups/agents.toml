@@ -1,4 +1,4 @@
-# Agentes de código. As configs ficam em agents/ (ADR 0011).
+# Agentes de código. As configs ficam em agents/.
 
 [arch]
 packages = [

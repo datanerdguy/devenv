@@ -2,7 +2,6 @@
 
 O tmux fica sem plugins e abre na hora. O sesh cuida das sessões por projeto, e o workmux abre uma janela por
 tarefa com o Claude. A config fica em `home/dot_config/tmux/tmux.conf`, e os pacotes ficam no grupo `tmux`.
-As decisões estão no [ADR 0014](adr/0014-tmux.md).
 
 O Ghostty abre o fish puro. Para entrar no tmux, rode `t`: ele mostra a lista de sessões e projetos e entra na
 escolhida (cria a sessão se ela não existir).
@@ -64,3 +63,11 @@ O `Ctrl-j/k/l/;` passa para o Neovim quando o painel tem a marca `@pane-is-vim`,
 ao sair (`lua/config/navigation.lua`). No Neovim, a tecla troca de janela; na última janela daquele lado, ela
 segue para o painel vizinho do tmux. Fora do Neovim, o `Ctrl-k` não apaga mais a linha no fish e o `Ctrl-j` não
 faz o papel do `Enter`.
+
+## Por que assim
+
+- Sem plugins nem TPM: somam tempo de abertura e coisas para atualizar, e o que dariam cabe em poucas linhas.
+- O Ghostty não abre direto no tmux: cada terminal ficaria preso a uma sessão, e um terminal rápido sairia mais
+  pesado.
+- O modelo do tema é nosso: o da comunidade roda um script que mexeria no `tmux.conf`, que é link para o repo.
+- Sem tokscale: a statusline do Claude e a barra do tmux já mostram a cota.

@@ -5,7 +5,7 @@ include "binds.kdl"
 include "rules.kdl"
 
 input {
-    // Alt cuida das janelas, como no i3 (ADR 0008). Dentro de um niri aninhado, Super.
+    // Alt cuida das janelas, como no i3. Dentro de um niri aninhado, Super.
     mod-key "Alt"
     mod-key-nested "Super"
 
