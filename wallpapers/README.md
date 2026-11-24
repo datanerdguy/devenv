@@ -1,8 +1,7 @@
 # Papéis de parede
 
-A pasta fica ligada em `~/Pictures/Wallpapers`, a do seletor do Noctalia. Imagens aqui ficam só na máquina (o
-`.gitignore` as ignora): o repo é público, e a maioria das imagens tem dono. Imagem livre (domínio público, licença
-aberta) entra no repo com `git add -f`, como a Grande Onda do Hokusai.
+A pasta fica ligada em `~/Pictures/Wallpapers`, a do seletor do Noctalia. Coloque aqui as imagens (PNG, JPG ou
+WebP), de preferência com até uns 5 MB cada.
 
 O monitor é 2560×1080 (21:9). Para reduzir e recortar uma imagem no tamanho dele:
 
