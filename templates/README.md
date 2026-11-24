@@ -22,4 +22,3 @@ cp -r ~/Projects/devenv/templates/common/. ~/Projects/devenv/templates/python/. 
 | `lua/` | `.stylua.toml` | stylua, igual ao do devenv |
 | `c/` | `.clang-format`, `.clang-tidy` | estilo do LLVM com 2 espaços, e os avisos do clang-tidy que o clangd mostra |
 
-O `just lint` confere que cada ferramenta aceita o seu arquivo (`tests/check-templates.sh`).
