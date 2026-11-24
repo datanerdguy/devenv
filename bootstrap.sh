@@ -75,6 +75,8 @@ fi
 # 5. Configs: links para o repo.
 say "Aplicando as configs (chezmoi)"
 chezmoi init --source "${repo}" --apply
+# O sandbox do Claude só libera escrita em pasta que já existe: os caches do Go e do cargo vêm criados.
+mkdir -p "${HOME}/.cache/go-build" "${HOME}/go/pkg/mod" "${HOME}/.cargo/git"
 
 # 6. Pacotes. O metapac sincroniza sempre nesta ordem: arch, cargo, mise, uv.
 say "Sincronizando os pacotes (metapac)"

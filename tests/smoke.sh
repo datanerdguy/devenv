@@ -104,7 +104,7 @@ check "${HOME}/.claude/CLAUDE.md -> agents/AGENTS.md" test "$(readlink -f "${HOM
 check "settings do Claude com sandbox e statusline" jq -e '.sandbox.enabled and .statusLine.command' "${HOME}/.claude/settings.json"
 check "MCP context7 no ~/.claude.json" jq -e '.mcpServers.context7.url' "${HOME}/.claude.json"
 check "${HOME}/.claude.json só para o dono (0600)" test "$(stat -c %a "${HOME}/.claude.json")" = 600
-# O sandbox só libera escrita em pasta que já existe: o chezmoi cria os caches vazios (.keep).
+# O sandbox só libera escrita em pasta que já existe: o bootstrap cria os caches vazios.
 for d in .cache/go-build go/pkg/mod .cargo/git; do
   check "cache ${HOME}/${d} existe para o sandbox" test -d "${HOME}/${d}"
 done

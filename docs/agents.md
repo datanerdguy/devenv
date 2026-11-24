@@ -30,7 +30,7 @@ Os pacotes ficam nos grupos `agents` (claude-code, bubblewrap, socat) e `git` (g
   Para liberar um domínio, adicione-o lá. Os caches das linguagens (uv, Go, cargo, npm) também são graváveis,
   em `sandbox.filesystem.allowWrite`. As pastas das toolchains (`~/.rustup`, mise, `~/go/bin`, `~/.cargo/bin`)
   não: instalar uma toolchain pede permissão, porque um binário trocado ali rodaria fora do sandbox. O sandbox
-  só libera pasta que já existe, então o chezmoi cria as que faltam vazias (`home/dot_cache/go-build/.keep` e afins).
+  só libera pasta que já existe, então o `bootstrap.sh` cria vazias as que faltam (`~/.cache/go-build` e afins).
 - **MCP:** `context7`, para a documentação de bibliotecas na versão do projeto.
 
 ## Git
