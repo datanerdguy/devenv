@@ -11,6 +11,11 @@ niri_overview_close_on_launch_enabled = true
 # Histórico de cópias (Alt+Shift+V): texto e imagens, os 30 últimos.
 clipboard_history_max_entries = 30
 
+# Painéis (launcher, central de controle...) translúcidos, para o blur do niri aparecer atrás. O padrão é "solid";
+# "soft" é o meio-termo.
+[shell.panel]
+transparency_mode = "glass"
+
 # Tema: uma das paletas de palettes/ (geradas por themes/generate.py). O comando `theme` troca; a escolha fica
 # no estado do Noctalia, por cima deste padrão. docs/themes.md.
 [theme]

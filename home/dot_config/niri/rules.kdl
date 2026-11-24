@@ -37,6 +37,15 @@ layer-rule {
     place-within-backdrop true
 }
 
+// O alternador de janelas (Alt+Tab) também com blur.
+layer-rule {
+    match namespace="noctalia-window-switcher"
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
 // Barra, notificações e painéis com blur do que está atrás, não do papel de parede.
 layer-rule {
     match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
