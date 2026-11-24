@@ -57,3 +57,8 @@ keyboard:
 # Commit guiado no padrão Conventional Commits
 commit:
     cz commit
+
+# Leva a main até a dev do GitHub (o que o CI testou). Só avança: se a main tiver algo que a dev não tem, recusa.
+promote:
+    git fetch origin
+    git push origin refs/remotes/origin/dev:refs/heads/main

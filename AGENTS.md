@@ -5,7 +5,7 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); o porquê de cada �
 
 ## Regras do projeto
 
-- **Idioma:** docs, comentários, mensagens de commit e títulos de PR em português (pt-BR), frases curtas e simples.
+- **Idioma:** docs, comentários, mensagens de commit em português (pt-BR), frases curtas e simples.
 - **Desempenho importa:** tudo leve. Antes de acrescentar uma ferramenta, veja se uma que já existe resolve.
 - **Pesquisar antes de criar:** área nova (ferramenta, módulo, fluxo) começa com opções comparadas e uma
   recomendação para o Lucas decidir. Não implemente uma área nova sem essa decisão.
@@ -34,12 +34,10 @@ pelo metapac (`packages/`). Comece pelo [README](README.md); o porquê de cada �
 
 ## Fluxo de git
 
-- Branch de trabalho (`feat/*`, `fix/*`, `chore/*`, `docs/*`) saindo da `dev` → PR para a `dev` (squash) →
-  PR `dev` → `main` (merge commit, título `chore(release): ...`). Detalhes em [docs/workflow.md](docs/workflow.md).
-- Conventional Commits, validados pelo commitizen. O título do PR também precisa passar (`cz check --message "<título>"`).
-- Rode `just setup` uma vez: os hooks de `.githooks/` rodam o lint e validam a mensagem.
-- Use o modelo de PR (`.github/pull_request_template.md`): O que muda, Como testei, Notas.
-- O Lucas faz o merge. Não mexa nas regras do repositório.
+- Trabalho direto na `dev`, com push, sem PR. Quando a `dev` estiver boa, `just promote` avança a `main` até ela.
+  Detalhes em [docs/workflow.md](docs/workflow.md).
+- Conventional Commits, validados pelo hook `commit-msg` (commitizen). Rode `just setup` uma vez para ligar os hooks.
+- O Lucas decide quando promover para a `main`. Não mexa nas regras do repositório.
 
 ## Comandos
 

@@ -1,9 +1,9 @@
-# CI: em todo PR e à mão. Roda no Arch (archlinux:latest), a base do CachyOS.
-# Não roda no push para dev e main: o que chega lá já passou pelo mesmo CI no PR.
+# CI: a cada push na dev e na main, e à mão. Roda no Arch (archlinux:latest), a base do CachyOS.
 name: ci
 
 on:
-  pull_request:
+  push:
+    branches: [dev, main]
   workflow_dispatch:
     inputs:
       full:
