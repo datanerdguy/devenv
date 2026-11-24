@@ -14,6 +14,7 @@ cp -r ~/Projects/devenv/templates/common/. ~/Projects/devenv/templates/python/. 
 | --- | --- | --- |
 | `common/` | `.editorconfig` | Indentação e 80 colunas em todo arquivo; o Neovim usa o limite na linha vertical |
 | `python/` | `pyproject.toml` | ruff (lint e formato, 80 colunas, regras `E W F I B UP SIM`) e o grupo `dev` com ruff e ty. Troque o nome e a versão |
+| `python-data/` | `pyproject.toml` | O mesmo do `python/`, com polars, duckdb e pyarrow, e o marimo para notebooks ([data.md](../docs/data.md)) |
 | `go/` | `.golangci.yml` | golangci-lint v2, com bugs comuns, segurança e estilo; gofumpt e goimports formatam |
 | `rust/` | `rustfmt.toml`, `lints.toml` | rustfmt em 80 colunas. O `lints.toml` vai colado no fim do `Cargo.toml`: clippy pedantic, sem `unsafe` |
 | `typescript/` | `.prettierrc.json`, `tsconfig.json` | prettier em 80 colunas (o Neovim só roda o prettier em projeto com config dele) e TypeScript estrito |

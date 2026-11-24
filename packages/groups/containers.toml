@@ -1,0 +1,9 @@
+# Containers pelo Podman: sem serviço rodando o tempo todo e sem root. Os bancos e serviços de cada projeto rodam
+# aqui, pelo compose.yaml dele. docs/data.md.
+
+[arch]
+packages = [
+  "podman",
+  "podman-docker", # o comando docker chama o podman
+  "podman-compose", # podman compose e o compose.yaml dos projetos
+]

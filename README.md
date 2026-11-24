@@ -44,13 +44,12 @@ wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
 templates/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja templates/README.md
 keyboard/         Corne (Vial), a fonte é corne/corne.vil
 agents/           Claude Code: regras globais, settings, statusline, MCP
-docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md e adr/
+docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md, data.md e adr/
 ```
 
 ## Áreas
 
-O devenv é refeito uma área por PR. Base, agentes, shell, tmux, desktop, teclado e temas estão prontos. Faltam
-Neovim e dados.
+O devenv foi refeito uma área por vez; todas estão prontas.
 
 | Área | Estado |
 | --- | --- |
@@ -60,8 +59,8 @@ Neovim e dados.
 | Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
 | Temas (`theme`, Alt+Shift+T) | pronta, veja [docs/themes.md](docs/themes.md) |
 | tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
-| Neovim | quase pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
-| Dados | a fazer |
+| Neovim | pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
+| Dados (Podman, duckdb, visidata, harlequin) | pronta, veja [docs/data.md](docs/data.md) |
 
 ## Contribuindo
 

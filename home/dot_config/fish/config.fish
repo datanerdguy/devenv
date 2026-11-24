@@ -7,6 +7,8 @@ set -gx DEVENV (path resolve (status filename) | path dirname | path dirname | p
 # mise pelos shims, não pelo `mise activate` (que roda o mise a cada prompt, uns 15 ms). Fica de fora o [env] do mise.toml.
 fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/.local/share/bob/nvim-bin ~/.local/share/mise/shims
 
+# Programas feitos para o Docker (compose, testcontainers, devcontainers) falam com o Podman pelo socket dele.
+set -gx DOCKER_HOST unix://$XDG_RUNTIME_DIR/podman/podman.sock
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 # bat segue as cores do terminal, então troca junto com o tema.

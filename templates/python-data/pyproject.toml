@@ -1,0 +1,20 @@
+# Python para dados: polars e duckdb, notebooks no marimo, ruff e ty. Troque o nome e a versão.
+# O marimo abre com `uv run marimo edit notebook.py`; o notebook é um .py comum, com diff limpo no git.
+[project]
+name = "meu-projeto"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["polars", "duckdb", "pyarrow"]
+
+[dependency-groups]
+dev = ["ruff", "ty", "marimo"]
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+# E/W: estilo do PEP 8. F: erros. I: imports. B: bugs comuns. UP: sintaxe nova. SIM: simplificar.
+select = ["E", "W", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.format]
+docstring-code-format = true

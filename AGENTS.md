@@ -71,5 +71,6 @@ Cada regra que já foi quebrada mais de uma vez tem uma checagem. As sem checage
 | Temas | `themes/generate.py`, `home/dot_config/noctalia/palettes/` e `templates/` | [docs/themes.md](docs/themes.md), [ADR 0013](docs/adr/0013-themes-via-noctalia.md) |
 | Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md), [docs/desktop.md](docs/desktop.md) |
 | Agentes e git | `agents/`, `home/dot_claude/`, `home/dot_config/git/` | [docs/agents.md](docs/agents.md), [ADR 0011](docs/adr/0011-agents-and-git.md) |
+| Dados e containers | `packages/groups/data.toml`, `packages/groups/containers.toml` | [docs/data.md](docs/data.md), [ADR 0015](docs/adr/0015-data.md) |
 | Modelos de projeto | `templates/` | [templates/README.md](templates/README.md) |
 | CI | `.github/workflows/` | [docs/workflow.md](docs/workflow.md) |

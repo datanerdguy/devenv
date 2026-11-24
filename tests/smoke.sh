@@ -25,6 +25,19 @@ check "${HOME}/.config/metapac -> ${repo}/packages" test "$(readlink -f "${HOME}
 check "asm-lsp em ${HOME}/.local/bin (chezmoi)" test -x "${HOME}/.local/bin/asm-lsp"
 check "rustup com rustc e rust-analyzer" rustup which rust-analyzer
 
+# Com o grupo data: os clientes de dados.
+if command -v duckdb >/dev/null; then
+  for cmd in vd harlequin psql; do
+    check "${cmd} no PATH (grupo data)" command -v "${cmd}"
+  done
+fi
+
+# Com o grupo containers: o docker chama o podman, e o socket liga pelo systemd do usuário (chezmoi).
+if command -v podman >/dev/null; then
+  check "docker -> podman" sh -c "docker --version | grep -qi podman"
+  check "podman.socket ligado pelo chezmoi" test -L "${HOME}/.config/systemd/user/sockets.target.wants/podman.socket"
+fi
+
 # Com o grupo languages: as versões globais do mise, para usar fora de projeto.
 if command -v mise >/dev/null; then
   for cmd in npm mix luarocks java; do

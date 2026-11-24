@@ -29,6 +29,7 @@ home/dot_config/nvim/
     diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
     format.lua          formatador de cada linguagem, ao salvar (conform)
     completion.lua      completar enquanto digita (blink.cmp)
+    csv.lua             CSV e TSV em colunas alinhadas (csvview)
     claude.lua          o Claude Code do painel do tmux conectado ao Neovim (claudecode.nvim)
   after/lsp/            ajuste de um servidor LSP, por cima do nvim-lspconfig
   nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack

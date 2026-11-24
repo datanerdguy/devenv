@@ -21,6 +21,8 @@ check() {
 have() { command -v "$1" >/dev/null; }
 
 if have ruff; then
+  check "python-data: pyproject.toml (ruff)" \
+    ruff check --config "${templates}/python-data/pyproject.toml" --no-cache --quiet "${templates}/python-data"
   check "python: pyproject.toml (ruff)" \
     ruff check --config "${templates}/python/pyproject.toml" --no-cache --quiet "${templates}/python"
 fi
