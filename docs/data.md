@@ -9,7 +9,7 @@ A máquina tem uma GPU de 2 GB e 7,6 GB de RAM: treino e LLM grande ficam na nuv
 | --- | --- |
 | `duckdb` | SQL direto em CSV, Parquet e JSON, sem servidor (`select * from 'dados.parquet'`) |
 | `vd arquivo` | Abre CSV, Parquet, JSON ou Excel como planilha (visidata): `q` sai, `[` e `]` ordenam, `F` conta valores |
-| `harlequin` | Editor de SQL no terminal, com as tabelas ao lado: `harlequin dados.duckdb`, ou `harlequin -a postgres <url>` |
+| `harlequin` | Editor de SQL no terminal, com as tabelas ao lado: `harlequin dados.duckdb`. No Postgres: `uvx --from 'harlequin[postgres]' harlequin -a postgres <url>` (o metapac não instala extras do uv) |
 | `psql` | Cliente do Postgres (só o cliente; o banco roda em container) |
 
 No Neovim, CSV e TSV abrem em colunas alinhadas (csvview), e `Tab` / `Shift-Tab` andam entre os campos.

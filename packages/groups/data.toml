@@ -5,10 +5,11 @@
 packages = [
   "duckdb", # SQL direto em CSV, Parquet e JSON, sem servidor
   "visidata", # vd: CSV, Parquet, JSON e Excel como planilha no terminal
+  "python-pyarrow", # o vd precisa dele para abrir Parquet
   "postgresql-libs", # psql, sem o servidor
 ]
 
 [uv]
 packages = [
-  "harlequin", # editor de SQL no terminal (duckdb e sqlite; Postgres com o adaptador)
+  "harlequin", # editor de SQL no terminal: duckdb e sqlite (o Postgres vem pelo uvx, docs/data.md)
 ]
