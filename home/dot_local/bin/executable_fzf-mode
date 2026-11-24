@@ -1,0 +1,14 @@
+#!/bin/sh
+# Modo normal no fzf, como no Vim: o Esc liga as teclas j, k, i e q; o i as desliga.
+# As teclas ficam no FZF_DEFAULT_OPTS (home/dot_config/fish/config.fish).
+# Uso, num bind do fzf: esc:transform(fzf-mode esc), i:transform(fzf-mode i).
+keys="j,k,i,q"
+case "$1" in
+  esc)
+    case "$FZF_PROMPT" in
+      "NORMAL "*) echo "abort" ;;
+      *) echo "rebind($keys)+change-prompt(NORMAL $FZF_PROMPT)" ;;
+    esac
+    ;;
+  i) echo "unbind($keys)+change-prompt(${FZF_PROMPT#NORMAL })" ;;
+esac

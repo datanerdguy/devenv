@@ -1,0 +1,5 @@
+# Estilo do Lua do repo (config do Neovim), usado pelo stylua ao salvar e no `just lint`.
+indent_type = "Spaces"
+indent_width = 2
+column_width = 80
+collapse_simple_statement = "Always"

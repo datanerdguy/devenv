@@ -1,52 +1,59 @@
-# Dados: bancos, CSV, Parquet e Excel
+# Dados
 
-Tudo no terminal, sem app gráfico. Cada ferramenta tem um papel:
+Ferramentas para olhar arquivos, escrever SQL, falar com bancos e rodar os serviços de cada projeto.
+A máquina tem uma GPU de 2 GB e 7,6 GB de RAM: treino e LLM grande ficam na nuvem ou num servidor.
 
-| Ferramenta | Para que | Comando |
-| --- | --- | --- |
-| [tabiew](https://github.com/shshemi/tabiew) | olhar um arquivo de tabela na hora, com SQL em cima | `tw arquivo.csv` |
-| [harlequin](https://harlequin.sh) | IDE de SQL: editor, árvore de tabelas e resultados | `harlequin` |
-| [DuckDB](https://duckdb.org) | SQL completo em arquivos e bancos; consultas salvas no projeto | `duckdb` |
-| pgcli / litecli | consulta rápida num Postgres / SQLite, com completion | `pgcli $DATABASE_URL` |
+## No terminal
 
-Vêm do módulo de CLI (`devenv.cli.enable`). Escolha e comparação com as alternativas (dadbod, VisiData, sqlit, rainfrog…):
-documento "Bancos e CSV no terminal" (2026-10-23).
-
-## Fluxos
-
-| Situação | Como |
+| Comando | Para quê |
 | --- | --- |
-| Chegou um CSV, Parquet ou planilha | `tw arquivo.xlsx`, ou `Enter` no yazi (tabelas abrem no tabiew; `O` mostra as outras opções) |
-| Pergunta rápida sobre o arquivo | dentro do tabiew, `:` abre a linha de comando: `q SELECT …` roda SQL na tabela aberta |
-| Juntar vários arquivos ou um arquivo grande | `duckdb -c "from 'dados/*.csv' select regiao, sum(valor) group by all"` |
-| Guardar o resultado | `duckdb -c "copy (from 'dados/*.csv') to 'dados.parquet'"` |
-| Análise que fica no projeto | consultas em `sql/*.sql`; no Neovim, `<leader>Dr` roda o arquivo (ou a seleção) e mostra o resultado num split |
-| Explorar um banco | `harlequin` (DuckDB em memória), `harlequin banco.duckdb`, `harlequin -a sqlite app.db`, `harlequin -a postgres "$DATABASE_URL"` |
-| Sem sair do Neovim | `<leader>Dh` harlequin, `<leader>Dt` tabiew, numa janela flutuante na raiz do projeto |
-| Algo mais visual | `duckdb -ui` abre um notebook local no navegador (as consultas rodam na sua máquina; a interface é baixada de ui.duckdb.org) |
+| `duckdb` | SQL direto em CSV, Parquet e JSON, sem servidor (`select * from 'dados.parquet'`) |
+| `vd arquivo` | Abre CSV, Parquet, JSON ou Excel como planilha (visidata): `q` sai, `[` e `]` ordenam, `F` conta valores |
+| `harlequin` | Editor de SQL no terminal, com as tabelas ao lado: `harlequin dados.duckdb`. No Postgres: `uvx --from 'harlequin[postgres]' harlequin -a postgres <url>` (o metapac não instala extras do uv) |
+| `psql` | Cliente do Postgres (só o cliente; o banco roda em container) |
 
-Caminhos relativos no SQL partem da raiz do projeto (a pasta com `.git`), tanto no terminal quanto no `<leader>Dr`.
+No Neovim, CSV e TSV abrem em colunas alinhadas (csvview), e `Tab` / `Shift-Tab` andam entre os campos.
 
-## Conexões e senhas
+## Containers (Podman)
 
-Senha de banco nunca vai para arquivo do repo. Guarde a URL como segredo e use pela variável:
+O Podman roda sem root e sem serviço ligado o tempo todo. O comando `docker` chama o `podman` (pacote
+`podman-docker`), e o `podman compose` lê o `compose.yaml` do projeto. Bancos (Postgres, Redis...) rodam assim, por
+projeto, e nunca instalados na máquina:
 
-```bash
-secrets edit                      # acrescente env/DATABASE_URL: postgres://usuario:senha@host/banco
+```yaml
+# compose.yaml do projeto
+services:
+  db:
+    image: docker.io/library/postgres:18
+    environment:
+      POSTGRES_PASSWORD: dev
+    ports: ["5432:5432"]
 ```
 
-```nix
-devenv.secrets.env = [ "DATABASE_URL" ];   # no host; vale depois do `just switch`
-```
+`podman compose up -d` sobe, `podman compose down` para. Programas feitos para o Docker (compose, testcontainers,
+devcontainers) falam com o Podman pelo socket dele: o chezmoi liga o `podman.socket` do systemd do usuário (só
+acorda quando alguém usa), e o fish aponta o `DOCKER_HOST` para ele.
 
-Depois: `pgcli "$DATABASE_URL"` ou `harlequin -a postgres "$DATABASE_URL"`. Detalhes em [secrets.md](secrets.md).
+## Python
 
-## No Neovim
+Nada global: cada projeto tem as bibliotecas dele, pelo `uv`. O modelo `templates/python-data/`
+([templates/README.md](../templates/README.md)) traz polars, duckdb e pyarrow, com marimo, ruff e ty para
+desenvolver.
 
-| Tecla | Ação |
+| Notebook | Quando |
 | --- | --- |
-| `<leader>Dr` | Rodar o `.sql` (ou a seleção) no DuckDB |
-| `<leader>Db` | Escolher o banco do DuckDB para o buffer (vazio = em memória) |
-| `<leader>Dh` / `<leader>Dt` | Harlequin / tabiew numa janela flutuante |
+| marimo (`uv run marimo edit nb.py`) | Padrão dos projetos novos: o notebook é um `.py`, com diff limpo no git, e roda como script |
+| Jupyter (`uv run --with jupyterlab jupyter lab`) | Projeto ou time que já usa `.ipynb` |
 
-Para fixar um banco para a sessão inteira: `:let g:duckdb = 'dados/analise.duckdb'`.
+## Nuvem e MLOps
+
+Ainda nada na máquina. Quando um projeto precisar (AWS, Kubernetes, Terraform...), a ferramenta entra nele, pelo
+`mise use` (a versão fica no `mise.toml` do projeto).
+
+## Por que assim
+
+- Podman, e não Docker: sem o grupo `docker`, que dá poder de root. Docker só se um projeto exigir de verdade.
+- O harlequin vem pelo uv: no AUR ele puxa muitas dependências Python.
+- Sem LLM local (ollama): nesta máquina só caberiam modelos pequenos e lentos.
+- Um programa que procura só `/var/run/docker.sock`, sem ler o `DOCKER_HOST`, precisa do caminho do socket do Podman
+  na config dele.

@@ -1,7 +1,0 @@
-.git
-.direnv
-.devenv
-.envrc.local
-.env
-bin
-tmp

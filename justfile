@@ -1,75 +1,64 @@
 # Atalhos do dia a dia. Rode `just` para ver a lista.
 
-# Host padrão; troque com DEVENV_HOST=outro-host just switch
-host := env("DEVENV_HOST", "fedora-laptop")
-
 default:
     @just --list
 
-# Aplica a configuração (ex.: just switch fedora-laptop)
-switch target=host:
-    home-manager switch --flake .#{{ target }}
+# Liga os hooks do git (lint antes do commit, mensagem no padrão)
+setup:
+    git config core.hooksPath .githooks
 
-# Constrói sem aplicar e mostra o que mudaria
-diff target=host:
-    nix build .#homeConfigurations.{{ target }}.activationPackage -o result
-    nvd diff ~/.local/state/nix/profiles/home-manager result
+# Aplica as configs de home/ (chezmoi)
+apply:
+    chezmoi apply
 
-# Atualiza as versões fixadas no flake.lock
-update:
-    nix flake update
+# Atualiza o sistema e instala o que falta nos grupos de packages/ (metapac)
+sync:
+    paru -Syu
+    metapac sync
+    packages/mark-deps.sh
 
-# Formata os arquivos .nix
-fmt:
-    nix fmt
+# Remove o que não está nos grupos: mostra a lista e pede confirmação
+clean:
+    metapac clean
 
-# Lint: formatação, Nix, shell scripts e workflows (o mesmo que o CI roda)
+# O que mudaria nas configs e o que está instalado fora dos grupos
+diff:
+    chezmoi diff
+    metapac unmanaged
+
+# Lint: scripts, workflows, grupos do metapac, mapa do teclado e, se instalados, niri, paletas, tmux e Neovim (o mesmo do CI)
 lint:
-    nix fmt -- --ci
-    statix check .
-    shellcheck bootstrap.sh system/*.sh tests/*.sh tests/nvim/*.sh agents/*.sh modules/theme/theme.sh modules/templates/new.sh modules/secrets/secrets.sh .githooks/*
-    actionlint
-    stylua --check --config-path config/nvim/.stylua.toml config/nvim tests/nvim
+    #!/usr/bin/env bash
+    set -euo pipefail
+    shellcheck bootstrap.sh .githooks/* tests/*.sh packages/*.sh agents/*.sh home/dot_local/bin/*
+    # Estilo do repo (.stylua.toml e .editorconfig), o mesmo que o Neovim aplica ao salvar.
+    if command -v stylua >/dev/null; then stylua --check home/dot_config/nvim tests/*.lua; fi
+    if command -v shfmt >/dev/null; then shfmt -d bootstrap.sh tests/*.sh packages/*.sh agents/*.sh home/dot_local/bin/*; fi
+    python3 packages/check.py
+    actionlint .github/workflows/*.yml
     python3 keyboard/render.py --check
+    # niri, paletas, tmux e Neovim só na máquina que tem cada um; no CI, quem confere é o smoke do CI completo.
+    # O niri escreve o log mesmo quando passa: só mostra se falhar (rodando de novo).
+    niri_config=home/dot_config/niri/config.kdl
+    if command -v niri >/dev/null; then niri validate -c $niri_config &>/dev/null || niri validate -c $niri_config; fi
+    if [ -d /usr/share/ghostty/themes ]; then python3 themes/generate.py --check; fi
+    if command -v tmux >/dev/null; then tests/check-tmux.sh home/dot_config/tmux/tmux.conf; fi
+    if command -v nvim >/dev/null; then tests/check-nvim.sh home/dot_config/nvim; fi
+    echo "lint ok"
 
-# Valida o flake inteiro
-check:
-    nix flake check
-
-# Testa a instalação do zero num container (ex.: just test-container ubuntu:24.04)
-test-container image="fedora:latest":
-    tests/container.sh {{ image }}
-
-# Commit guiado no padrão Conventional Commits
-commit:
-    cz commit
-
-# Atualiza o Neovim (bob) e os plugins (vim.pack, com revisão antes de aplicar)
-nvim-update:
-    bob update --all
-    nvim +PackUpdate
-
-# Testa a config do Neovim: carga de todos os plugins e tempo de abertura
-nvim-test:
-    DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua
-    tests/nvim/startup.sh
-
-# Atualiza só os agentes (Claude Code, Codex, Gemini CLI, opencode, workmux...)
-agents-update:
-    nix flake update llm-agents
-
-# Valida as configs do niri, sway, i3 e kanata e o mapa do teclado (o mesmo do CI)
-desktop-check:
-    nix build .#checks.x86_64-linux.desktop --no-link --print-build-logs
+# Ajustes feitos pela tela do Noctalia (Alt+Shift+,): o que quiser manter, copie para home/dot_config/noctalia/config.toml
+noctalia-diff:
+    @cat ~/.local/state/noctalia/settings.toml 2>/dev/null || echo "Nenhum ajuste feito pela tela do Noctalia."
 
 # Regenera as imagens das camadas e o keyboard/README.md depois de salvar o .vil no Vial
 keyboard:
     python3 keyboard/render.py
 
-# Mostra o que você mudou pela tela de ajustes do Noctalia (para trazer ao repo)
-noctalia-diff:
-    @cat ~/.local/state/noctalia/settings.toml 2>/dev/null || echo "Nenhum ajuste feito pela tela do Noctalia."
+# Commit guiado no padrão Conventional Commits
+commit:
+    cz commit
 
-# Lista as gerações (para rollback)
-generations:
-    home-manager generations
+# Leva a main até a dev do GitHub (o que o CI testou). Só avança: se a main tiver algo que a dev não tem, recusa.
+promote:
+    git fetch origin
+    git push origin refs/remotes/origin/dev:refs/heads/main

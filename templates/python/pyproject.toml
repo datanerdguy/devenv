@@ -1,0 +1,21 @@
+# Python: ruff (lint e formato) e ty (tipos). Troque o nome e a versão.
+[project]
+name = "meu-projeto"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = ["ruff", "ty"]
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+# E/W: estilo do PEP 8. F: erros (import sem uso, nome não definido).
+# I: ordem dos imports. B: bugs comuns. UP: sintaxe nova do Python.
+# SIM: código que dá para simplificar.
+select = ["E", "W", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.format]
+docstring-code-format = true

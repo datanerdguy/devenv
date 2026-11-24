@@ -3,7 +3,7 @@
 Uso: python3 keyboard/render.py          (gera keyboard/img/*.svg e keyboard/README.md; `just keyboard`)
      python3 keyboard/render.py --check  (falha se algo estiver desatualizado; usado no lint)
 
-O desenho é do keymap-drawer (https://github.com/caksoylar/keymap-drawer), que vem do devShell (`nix develop`).
+O desenho é do keymap-drawer (https://github.com/caksoylar/keymap-drawer), que vem do pacote `keymap-drawer` do grupo `repo`.
 Este script traduz o .vil para o formato dele, com as posições físicas do Corne v4.1 (keyboard/corne/layout.json).
 """
 
@@ -63,6 +63,11 @@ SHIFTED = {
 
 def layer_name(i):
     return f"Camada {i}"
+
+
+def image_name(layer: str) -> str:
+    """Nome do arquivo da imagem de uma camada: "Camada 2" vira layer-2."""
+    return "layer-" + layer.split()[-1]
 
 
 def key(code, macros):
@@ -158,8 +163,7 @@ def readme(keymap):
         "",
     ]
     for name in layers:
-        slug = name.lower().replace(" ", "-")
-        lines += [f"## {name}", "", f"![{name}](img/{slug}.svg)", ""]
+        lines += [f"## {name}", "", f"![{name}](img/{image_name(name)}.svg)", ""]
     if keymap["combos"]:
         lines += ["## Combos", "", "Teclas apertadas juntas.", "", "| Teclas | Resultado | Camada |", "| --- | --- | --- |"]
         for c in keymap["combos"]:
@@ -172,7 +176,7 @@ def readme(keymap):
 def draw(keymap, out_dir):
     exe = shutil.which("keymap")
     if not exe:
-        sys.exit("keymap-drawer não encontrado: rode dentro do `nix develop` (ou `just keyboard`).")
+        sys.exit("keymap-drawer não encontrado: instale o grupo `repo` (`just sync`).")
     out_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         src = Path(tmp) / "keymap.json"  # JSON também é YAML
@@ -180,8 +184,7 @@ def draw(keymap, out_dir):
         base = [exe, "-c", str(STYLE), "draw", str(src)]
         subprocess.run([*base, "-o", str(out_dir / "corne.svg")], check=True)
         for name in keymap["layers"]:
-            slug = name.lower().replace(" ", "-")
-            subprocess.run([*base, "-s", name, "-o", str(out_dir / f"{slug}.svg")], check=True)
+            subprocess.run([*base, "-s", name, "-o", str(out_dir / f"{image_name(name)}.svg")], check=True)
 
 
 def main():

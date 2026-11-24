@@ -1,0 +1,17 @@
+# O que o devenv precisa para existir: o bootstrap instala estes pacotes antes de tudo.
+# O paru fica fora: o bootstrap garante ele (no CachyOS vem do repo, no Arch é o paru-bin do AUR).
+
+[arch]
+packages = [
+  "chezmoi", # configs em links (home/)
+  "metapac", # este gerenciador de pacotes (AUR)
+  "age", # cifra os segredos do chezmoi
+  "rbw", # cliente do Bitwarden: traz a chave age e os tokens
+  "git",
+  "github-cli", # gh
+  # cargo para compilar o metapac do AUR (sem ele, o paru puxa o pacote rust, que conflita). O hook é idempotente.
+  { name = "rustup", hooks = { after_sync = ["sh", "-c", "rustup default stable && rustup component add rust-analyzer"] } },
+  "jq", # filtra e formata JSON (gh, APIs, scripts)
+  "ripgrep", # rg: busca em arquivos (os agentes contam com ele)
+  "go-yq", # yq: o mesmo para YAML e TOML
+]

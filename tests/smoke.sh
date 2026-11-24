@@ -1,129 +1,135 @@
 #!/usr/bin/env bash
-# Testes de fumaça: rodam depois do `home-manager switch` e conferem que o ambiente funciona.
+# Confere o que o bootstrap deve deixar pronto. Roda no CI depois do ./bootstrap.sh.
 set -euo pipefail
 
+export PATH="${HOME}/.local/bin:${PATH}"
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fail=0
+
+# check <o que> <comando...>: imprime ok ou FALTA e marca a falha.
 check() {
-  local name="$1"
+  local what="$1"
   shift
   if "$@" >/dev/null 2>&1; then
-    echo "ok    ${name}"
+    echo "ok: ${what}"
   else
-    echo "FALHA ${name}"
+    echo "FALTA: ${what}" >&2
     fail=1
   fi
 }
 
-export PATH="${HOME}/.nix-profile/bin:${HOME}/.local/state/nix/profile/bin:${PATH}"
-
-for bin in fish starship git delta lazygit gh rg fd fzf bat eza zoxide atuin direnv yazi jq duckdb harlequin tw pgcli litecli just; do
-  check "binário ${bin}" command -v "${bin}"
+for cmd in chezmoi metapac just cz; do
+  check "${cmd} no PATH" command -v "${cmd}"
 done
+check "${HOME}/.config/metapac -> ${repo}/packages" test "$(readlink -f "${HOME}/.config/metapac")" = "${repo}/packages"
+check "asm-lsp em ${HOME}/.local/bin (chezmoi)" test -x "${HOME}/.local/bin/asm-lsp"
+check "rustup com rustc e rust-analyzer" rustup which rust-analyzer
 
-check "fish inicia sem erro" fish -c 'exit 0'
-check "abreviação ll no fish" fish -i -c 'abbr --query ll'
-check "starship gera prompt" starship prompt
-check "git com branch padrão main" test "$(git config --global init.defaultBranch)" = main
-check "git usa delta nos diffs" sh -c 'git config --global pager.diff | grep -q delta'
-# Segredos (host ci: chave e arquivo de teste em tests/secrets). Sem systemd no container, roda o que o
-# serviço sops-nix rodaria no login.
-unit="${HOME}/.config/systemd/user/sops-nix.service"
-if [ -f "${unit}" ]; then
-  check "sops-nix abre os segredos" sh -c "$(sed -n 's/^ExecStart=//p' "${unit}")"
-  check "git usa o e-mail dos segredos" test "$(cd && git config user.email)" = ci-secrets@example.com
-  # shellcheck disable=SC2016 # a variável é expandida pelo fish
-  check "fish lê o token dos segredos" test "$(fish -c 'echo $DEVENV_TEST_TOKEN')" = segredo-de-teste
+# Com o grupo data: os clientes de dados.
+if command -v duckdb >/dev/null; then
+  for cmd in vd harlequin psql; do
+    check "${cmd} no PATH (grupo data)" command -v "${cmd}"
+  done
 fi
-check "config do ghostty" test -f "${HOME}/.config/ghostty/config"
-check "config do starship" test -f "${HOME}/.config/starship.toml"
-check "neovim instalado pelo bob" "${HOME}/.local/share/bob/nvim-bin/nvim" --version
-check "config do neovim ligada ao repo" test -f "${HOME}/.config/nvim/init.lua"
-for bin in lua-language-server basedpyright ruff gopls nixd tree-sitter stylua; do
-  check "ferramenta ${bin}" command -v "${bin}"
-done
-check "yazi abre tabelas no tabiew" grep -q 'tw %s1' "${HOME}/.config/yazi/yazi.toml"
-check "direnv com nix-direnv" test -f "${HOME}/.config/direnv/lib/hm-nix-direnv.sh"
 
-# Agentes e tmux
-for bin in claude codex gemini opencode workmux tokscale docs-mcp tmux sesh; do
-  check "binário ${bin}" command -v "${bin}"
+# Com o grupo containers: o docker chama o podman, e o socket liga pelo systemd do usuário (chezmoi).
+if command -v podman >/dev/null; then
+  check "docker -> podman" sh -c "docker --version | grep -qi podman"
+  check "podman.socket ligado pelo chezmoi" test -L "${HOME}/.config/systemd/user/sockets.target.wants/podman.socket"
+fi
+
+# Com o grupo languages: as versões globais do mise, para usar fora de projeto.
+if command -v mise >/dev/null; then
+  for cmd in npm mix luarocks java; do
+    check "${cmd} do mise, fora de projeto" mise which "${cmd}"
+  done
+fi
+
+# Com o grupo terminal.
+if command -v ghostty >/dev/null; then
+  check "config do Ghostty" ghostty +validate-config --config-file="${HOME}/.config/ghostty/config"
+  # Sem pipe direto: com pipefail, o grep -q sai cedo e o fc-list morre de SIGPIPE, o que conta como falha.
+  fonts="$(fc-list : family)"
+  check "fonte BlexMono Nerd Font" grep -q "BlexMono Nerd Font" <<<"${fonts}"
+  check "paletas dos temas batem com o gerador" python3 "${repo}/themes/generate.py" --check
+  check "tema inicial do Ghostty" test -f "${HOME}/.config/ghostty/themes/noctalia"
+fi
+
+# Com o grupo shell: a config carrega sem erro e o hook do fisher instalou o tide.
+if command -v fish >/dev/null; then
+  # shellcheck disable=SC2016 # a variável é do fish, não do bash
+  check "config do fish sem erro" fish -i -c 'test "$fish_key_bindings" = fish_vi_key_bindings'
+  check "tide pelo fisher" fish -c 'type -q tide'
+  check "comando theme" fish -c 'type -q theme'
+  # O modo normal do fzf: o fzf-mode está no PATH do fish e fecha a lista no segundo Esc.
+  check "modo normal do fzf (fzf-mode)" fish -c 'test (env FZF_PROMPT="NORMAL x" fzf-mode esc) = abort'
+  # Ctrl+G: com o fzf trocado por um filtro (que falha se a lista vier vazia) e o zoxide vazio, o fd tem que
+  # achar uma pasta do ~ para entrar.
+  # shellcheck disable=SC2016 # as variáveis são do fish, não do bash
+  check "Ctrl+G lista pastas e entra" fish -c 'set -x _ZO_DATA_DIR (mktemp -d)
+    function fzf; command fzf --filter=/ | read -l first; and echo $first; end
+    function commandline; end; cd /; _devenv_jump; test "$PWD" != /'
+fi
+
+# Com o grupo tmux: a config carrega sem erro, o tema inicial existe e o sesh lê a sua config.
+if command -v tmux >/dev/null; then
+  check "config do tmux" "${repo}/tests/check-tmux.sh" "${HOME}/.config/tmux/tmux.conf"
+  check "tema inicial do tmux" test -f "${HOME}/.config/tmux/noctalia.conf"
+  check "config do sesh" sesh list -c
+fi
+
+# Com o grupo desktop: as configs do niri e do Noctalia valem (o Noctalia só avisa, então aviso conta como falha).
+if command -v niri >/dev/null; then
+  check "config do niri" niri validate -c "${HOME}/.config/niri/config.kdl"
+  check "config do Noctalia sem aviso" sh -c "noctalia config validate '${HOME}/.config/noctalia/config.toml' 2>&1 | grep -q 'valid\$'"
+fi
+
+check "${HOME}/Pictures/Wallpapers -> wallpapers/" test "$(readlink -f "${HOME}/Pictures/Wallpapers")" = "${repo}/wallpapers"
+
+# Com o grupo teclado: o Vial e a regra udev que deixa ele falar com o Corne.
+if command -v Vial >/dev/null; then
+  check "regra udev do Vial" test -f /usr/lib/udev/rules.d/59-vial.rules
+fi
+
+# Com o grupo editor: o hook do bob deixou o nightly em uso.
+if command -v bob >/dev/null; then
+  check "Neovim nightly pelo bob" test -x "${HOME}/.local/share/bob/nvim-bin/nvim"
+  # Sem erro nem aviso, com o tema e com o comando de cada servidor LSP ligado.
+  check "Neovim abre com a config, o tema e os LSPs" env NVIM="${HOME}/.local/share/bob/nvim-bin/nvim" \
+    "${repo}/tests/check-nvim.sh" "${HOME}/.config/nvim"
+fi
+
+# Agentes: instruções, settings mesclado, statusline e MCP.
+check "${HOME}/.claude/CLAUDE.md -> agents/AGENTS.md" test "$(readlink -f "${HOME}/.claude/CLAUDE.md")" = "${repo}/agents/AGENTS.md"
+check "settings do Claude com sandbox e statusline" jq -e '.sandbox.enabled and .statusLine.command' "${HOME}/.claude/settings.json"
+check "MCP context7 no ~/.claude.json" jq -e '.mcpServers.context7.url' "${HOME}/.claude.json"
+check "${HOME}/.claude.json só para o dono (0600)" test "$(stat -c %a "${HOME}/.claude.json")" = 600
+# O sandbox só libera escrita em pasta que já existe: o chezmoi cria os caches vazios (.keep).
+for d in .cache/go-build go/pkg/mod .cargo/git; do
+  check "cache ${HOME}/${d} existe para o sandbox" test -d "${HOME}/${d}"
 done
-# O tmux sai com 0 mesmo com erro na config; o erro aparece na saída.
 # shellcheck disable=SC2329 # chamada pelo check
-tmux_config_ok() {
+statusline() {
   local out
-  out="$(tmux -L smoke -f /dev/null new-session -d \; source-file "${HOME}/.config/tmux/tmux.conf" \; kill-server 2>&1)"
-  [ -z "${out}" ]
+  out="$(bash "${HOME}/.claude/statusline.sh" <<<'{"model":{"display_name":"Sonnet"}}')" && [[ "${out}" == *Sonnet* ]]
 }
-check "tmux carrega a config sem erro" tmux_config_ok
-for f in .claude/settings.json .claude.json .gemini/settings.json .config/opencode/opencode.json; do
-  check "config ${f} é JSON válido" jq -e . "${HOME}/${f}"
-done
-check "config do codex é TOML válido" taplo check --no-schema "${HOME}/.codex/config.toml"
-check "statusline do claude configurada" jq -e '.statusLine.command' "${HOME}/.claude/settings.json"
-check "modelo padrão do claude é sonnet" jq -e '.model == "sonnet"' "${HOME}/.claude/settings.json"
-check "MCPs context7 e docs no claude" jq -e '.mcpServers.context7 and .mcpServers.docs' "${HOME}/.claude.json"
-for f in .config/agents/AGENTS.md .codex/AGENTS.md .gemini/AGENTS.md .config/opencode/AGENTS.md .claude/CLAUDE.md; do
-  check "instruções ${f}" test -s "${HOME}/${f}"
-done
-for s in route second-opinion workmux merge; do
-  check "skill ${s}" test -f "${HOME}/.agents/skills/${s}/SKILL.md"
-  check "skill ${s} no claude" test -f "${HOME}/.claude/skills/${s}/SKILL.md"
-done
-check "config do workmux" test -f "${HOME}/.config/workmux/config.yaml"
+check "statusline mostra o modelo" statusline
 
-# Desktop: configs ligadas ao repo (o CI liga sway e i3) e o kanata.
-for f in zathura/zathurarc niri/config.kdl niri/binds.kdl noctalia/devenv.toml sway/config i3/config devenv/wm-common.conf kanata/kanata.kbd; do
-  check "config ${f}" test -f "${HOME}/.config/${f}"
-done
-check "serviço do kanata" test -f "${HOME}/.config/systemd/user/kanata.service"
-check "serviço dos flatpaks" test -f "${HOME}/.config/systemd/user/flatpak-managed-install.service"
-check "config do flameshot" test -f "${HOME}/.config/flameshot/flameshot.ini"
-check "apps padrão (mimeapps)" grep -q zen_browser "${HOME}/.config/mimeapps.list"
-check "lançador do navegador" command -v devenv-browser
-for f in picom/picom.conf greenclip.toml; do
-  check "config ${f}" test -f "${HOME}/.config/${f}"
-done
-for bin in kanata Vial wl-copy greenclip dex xss-lock xclip; do
-  check "binário ${bin}" command -v "${bin}"
-done
-
-# Modelos de projeto: o `new` (a geração de cada modelo é testada no CI, em tests/templates.sh).
-check "comando new" new --help
-check "copier para o template-update" command -v copier
-
-# Temas: o switch aplica o padrão, e o `theme` troca e volta.
-check "comando theme" command -v theme
-check "tema atual aplicado" test -f "${HOME}/.local/state/devenv/theme/current/ghostty"
-check "ghostty lê o tema" grep -q 'devenv/theme/ghostty' "${HOME}/.config/ghostty/config"
-check "tmux lê o tema" grep -q 'devenv/theme/current/tmux.conf' "${HOME}/.config/tmux/tmux.conf"
-check "paletas no noctalia" test -f "${HOME}/.config/noctalia/palettes/Everforest.json"
-check "theme.toml do noctalia" test -f "${HOME}/.config/noctalia/theme.toml"
-check "papéis de parede do tema" test -n "$(ls "${HOME}/.local/share/devenv/themes/dracula/wallpapers")"
-# shellcheck disable=SC2329 # chamada pelo check
-theme_switch_ok() { theme dracula && [ "$(theme current)" = dracula ] && theme everforest; }
-check "theme troca e volta" theme_switch_ok
-check "btop com o tema" grep -q 'color_theme = "devenv"' "${HOME}/.config/btop/btop.conf"
-check "zathura inclui o tema" grep -q 'devenv/theme/current/zathurarc' "${HOME}/.config/zathura/zathurarc"
-check "flameshot com a cor do tema" grep -q '^uiColor=#a7c080' "${HOME}/.config/flameshot/flameshot.ini"
-check "semente do qt6ct" test -f "${HOME}/.config/qt6ct/qt6ct.conf"
-
-# Neovim: instala os plugins, carrega todos e mede a abertura.
-export PATH="${HOME}/.local/share/bob/nvim-bin:${PATH}"
-repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-log="$(mktemp)"
-if DEVENV_NVIM_TEST=1 nvim --headless -l "${repo_dir}/tests/nvim/check.lua" >"${log}" 2>&1; then
-  echo "ok    neovim carrega todos os plugins"
-else
-  echo "FALHA neovim carrega todos os plugins"
-  fail=1
+check "git com o delta de pager" test "$(git config --get core.pager)" = delta
+if command -v lazygit >/dev/null; then
+  check "delta instalado (o git usa de pager)" command -v delta
 fi
-grep -v '^vim.pack' "${log}" || true
-if "${repo_dir}/tests/nvim/startup.sh"; then
-  echo "ok    neovim abre dentro do limite"
-else
-  echo "FALHA neovim abre dentro do limite"
-  fail=1
+
+# Nenhum programa escreveu no repo pelos links do chezmoi. Só no CI, onde o checkout começa limpo.
+# Se falhar, a config precisa já ter a linha que o programa acrescenta (docs/themes.md).
+if [ -n "${CI:-}" ]; then
+  # Se o próprio git falhar, a checagem falha (não passa com a saída vazia).
+  # shellcheck disable=SC2329 # chamada pelo check
+  repo_clean() {
+    local out
+    out="$(git -C "${repo}" status --porcelain -- home agents)" && [ -z "${out}" ]
+  }
+  check "nada escreveu no repo pelos links" repo_clean
 fi
 
 exit "${fail}"

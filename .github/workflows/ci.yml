@@ -1,17 +1,15 @@
-# CI: roda em todo PR, toda semana e à mão (workflow_dispatch).
-# Não roda no push para dev e main: o que chega lá já passou pelo mesmo CI no PR, com a mesma árvore.
-# Num PR, cada job só faz o trabalho pesado se o PR mexe no que ele testa (job `changes`); os jobs sempre
-# aparecem, para as checagens obrigatórias das regras da branch não ficarem esperando.
-# As checagens que só fazem sentido em PR (origem e commits) ficam em pr.yml.
+# CI: a cada push na dev e na main, e à mão. Roda no Arch (archlinux:latest), a base do CachyOS.
 name: ci
 
 on:
-  pull_request:
+  push:
+    branches: [dev, main]
   workflow_dispatch:
-  # Toda segunda, depois da atualização do flake.lock: pega o que quebrou fora do repo
-  # (repositórios das distros, imagens, sites de download).
-  schedule:
-    - cron: "0 10 * * 1"
+    inputs:
+      full:
+        description: "Instala todos os grupos (o ci-full de packages/config.toml), não só base e repo"
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -21,176 +19,50 @@ permissions:
   contents: read
 
 jobs:
-  # O que o PR mudou. Fora de PR (semanal, à mão), tudo roda.
-  changes:
-    name: changes
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      pull-requests: read
-    outputs:
-      nix: ${{ steps.filter.outputs.nix == 'true' || github.event_name != 'pull_request' }}
-      system: ${{ steps.filter.outputs.system == 'true' || github.event_name != 'pull_request' }}
-      templates: ${{ steps.filter.outputs.templates == 'true' || github.event_name != 'pull_request' }}
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
-        id: filter
-        if: github.event_name == 'pull_request'
-        with:
-          filters: |
-            nix:
-              - "**/*.nix"
-              - flake.lock
-              - bootstrap.sh
-              - modules/**
-              - hosts/**
-              - config/**
-              - themes/**
-              - agents/**
-              - keyboard/**
-              - system/**
-              - tests/**
-              - .github/workflows/ci.yml
-            system:
-              - system/**
-              - tests/system.sh
-              - .github/workflows/ci.yml
-            templates:
-              - copier.yml
-              - templates/**
-              - modules/templates/**
-              - tests/templates.sh
-              - flake.lock
-              - .github/workflows/ci.yml
-
+  # O mesmo `just lint` do dia a dia.
   lint:
-    name: lint
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    container:
+      image: archlinux:latest
+      options: --hostname ci
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-      - uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
-      - name: Formatação, statix, shellcheck, actionlint e stylua
-        run: nix develop --command just lint
-
-  build:
-    name: build
-    needs: changes
-    runs-on: ubuntu-latest
-    # Com os caches no ar, leva uns 3 min. Passar disso quase sempre é o Codex sendo compilado porque o
-    # cache da numtide não respondeu: melhor falhar e rodar de novo do que esperar meia hora.
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        if: needs.changes.outputs.nix == 'true'
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-        if: needs.changes.outputs.nix == 'true'
-        with:
-          # Cache binário dos agentes (llm-agents.nix). Um cache que não conecta em 5 s é deixado de lado.
-          extra-conf: |
-            extra-substituters = https://cache.numtide.com
-            extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
-            connect-timeout = 5
-      - uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
-        if: needs.changes.outputs.nix == 'true'
-      - name: nix flake check
-        if: needs.changes.outputs.nix == 'true'
-        run: nix flake check --print-build-logs
-      - name: Build de todos os hosts
-        if: needs.changes.outputs.nix == 'true'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Instala as ferramentas
         run: |
-          for host in $(nix eval .#homeConfigurations --apply builtins.attrNames --json | jq -r '.[]'); do
-            echo "::group::$host"
-            nix build ".#homeConfigurations.$host.activationPackage" --print-build-logs
-            echo "::endgroup::"
-          done
-      - name: Nada a testar
-        if: needs.changes.outputs.nix != 'true'
-        run: echo "O PR não mexe em nada que este job testa."
+          pacman -Syu --noconfirm just shellcheck actionlint python uv stylua shfmt
+          uv tool install keymap-drawer==0.23.0 # a versão muda os SVGs; suba junto com o just keyboard
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Lint
+        run: just lint
 
-  # Pacotes de sistema (system/<distro>.sh), sem o Nix: confere nomes e repositórios.
-  system:
-    name: system (${{ matrix.image }})
-    needs: changes
+  # Máquina nova de verdade: o bootstrap com um usuário comum. No PR, o grupo `ci` do metapac (base e repo);
+  # à mão com full=true, o `ci-full` (todos os grupos menos debug e as máquinas, com os pacotes do AUR).
+  apply:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04", "archlinux:latest"]
+    timeout-minutes: ${{ inputs.full && 120 || 30 }}
+    container:
+      image: archlinux:latest
+      options: --hostname ${{ inputs.full && 'ci-full' || 'ci' }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        if: needs.changes.outputs.system == 'true'
-      - name: Roda o script da distro num container limpo
-        if: needs.changes.outputs.system == 'true'
-        run: tests/system.sh "${{ matrix.image }}"
-      - name: Nada a testar
-        if: needs.changes.outputs.system != 'true'
-        run: echo "O PR não mexe em nada que este job testa."
-
-  # Modelos de projeto: gera cada um com o `new` e roda o CI do projeto gerado (tests/templates.sh).
-  templates:
-    name: template (${{ matrix.case }})
-    needs: changes
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        case:
-          - python:lib
-          - python:api
-          - python:api:postgres
-          - python:llm
-          - python:data
-          - python:ml
-          - python:fastapi-htmx
-          - python:django
-          - python:streamlit
-          - go:cli
-          - go:service
-          - go:htmx
-          - rust:bin
-          - rust:lib
-          - elixir:phoenix
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        if: needs.changes.outputs.templates == 'true'
-        with:
-          fetch-depth: 0 # o copier lê o histórico do repo dos modelos
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-        if: needs.changes.outputs.templates == 'true'
-      - uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
-        if: needs.changes.outputs.templates == 'true'
-      - name: Gera o projeto, roda o just ci dele e gera a imagem Docker
-        if: needs.changes.outputs.templates == 'true'
-        run: tests/templates.sh "${{ matrix.case }}"
+      # O git vem antes do checkout: sem ele, o código chega sem o .git e o smoke não vê o que escreveu no repo.
+      - name: Instala o git e o sudo
+        run: pacman -Syu --noconfirm sudo git
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Cria um usuário com sudo sem senha
+        run: |
+          useradd --create-home dev
+          echo 'dev ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/dev
+          chown -R dev "$GITHUB_WORKSPACE"
+      # O token do workflow sobe o limite da API do GitHub: sem ele, o bob (Neovim nightly) e o mise esbarram nele.
+      - name: Bootstrap (sem rbw logado)
         env:
-          DEVENV_TEST_DOCKER: "1"
-      - name: Nada a testar
-        if: needs.changes.outputs.templates != 'true'
-        run: echo "O PR não mexe em nada que este job testa."
-
-  # Roda junto com o build (não depois): cada container instala tudo do zero de qualquer jeito.
-  install:
-    name: install (${{ matrix.image }})
-    needs: changes
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ["fedora:latest", "ubuntu:24.04", "ubuntu:26.04", "archlinux:latest"]
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        if: needs.changes.outputs.nix == 'true'
-      - name: Instala do zero num container limpo e roda os testes de fumaça
-        if: needs.changes.outputs.nix == 'true'
+          GITHUB_TOKEN: ${{ github.token }}
+        run: sudo -u dev -H env CI=true GITHUB_TOKEN="${GITHUB_TOKEN}" ./bootstrap.sh
+      # O segundo sync tem que passar sem fazer nada: valida a lista com tudo já instalado.
+      - name: Sync de novo
         env:
-          GITHUB_TOKEN: ${{ github.token }} # o bob usa para não estourar o limite da API do GitHub
-        run: tests/container.sh "${{ matrix.image }}"
-      - name: Nada a testar
-        if: needs.changes.outputs.nix != 'true'
-        run: echo "O PR não mexe em nada que este job testa."
+          GITHUB_TOKEN: ${{ github.token }}
+        run: sudo -u dev -H env GITHUB_TOKEN="${GITHUB_TOKEN}" metapac sync --no-confirm
+      - name: Smoke
+        run: sudo -u dev -H env CI=true tests/smoke.sh

@@ -1,0 +1,6 @@
+# Lazygit. As cores vêm do modelo do Noctalia (LG_CONFIG_FILE, no config.fish).
+git:
+  # Diffs pelo delta, como no `git diff`.
+  diffRenderers:
+    - type: stdinFilter
+      command: delta --dark --paging=never

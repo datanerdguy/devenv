@@ -1,0 +1,14 @@
+{{- /* Config do chezmoi, gerada no `chezmoi init`. */ -}}
+{{- $key := joinPath .chezmoi.homeDir ".config" "chezmoi" "key.txt" -}}
+# Arquivos viram links para o repo: editar o repo já vale.
+mode = "symlink"
+# O repo é a fonte; assim `chezmoi apply` e `chezmoi diff` acham os arquivos sem --source.
+sourceDir = {{ .chezmoi.workingTree | quote }}
+{{ if stat $key -}}
+{{- /* age só liga se a chave existir; sem ela o apply funciona do mesmo jeito. */ -}}
+encryption = "age"
+
+[age]
+identity = {{ $key | quote }}
+recipient = {{ include $key | regexFind "# public key: age1[a-z0-9]+" | trimPrefix "# public key: " | quote }}
+{{ end -}}

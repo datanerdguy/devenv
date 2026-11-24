@@ -1,0 +1,7 @@
+# Testar chamadas de API no terminal.
+
+[arch]
+packages = [
+  "posting", # cliente parecido com o Postman: coleções em YAML no projeto (AUR)
+  "xh", # chamadas rápidas, como o curl, com cores e JSON formatado
+]

@@ -1,0 +1,15 @@
+# Dados no terminal: olhar arquivos, escrever SQL e falar com bancos. Os bancos em si rodam em container, por
+# projeto (grupo containers), e as bibliotecas Python ficam em cada projeto (templates/python-data/).
+
+[arch]
+packages = [
+  "duckdb", # SQL direto em CSV, Parquet e JSON, sem servidor
+  "visidata", # vd: CSV, Parquet, JSON e Excel como planilha no terminal
+  "python-pyarrow", # o vd precisa dele para abrir Parquet
+  "postgresql-libs", # psql, sem o servidor
+]
+
+[uv]
+packages = [
+  "harlequin", # editor de SQL no terminal: duckdb e sqlite (o Postgres vem pelo uvx, docs/data.md)
+]

@@ -1,0 +1,10 @@
+# Debuggers (DAP). Tire o comentário do que for usar.
+
+# [arch]
+# packages = [
+#   "codelldb", # C, C++ e Rust
+#   "delve", # Go
+#   "python-debugpy", # Python
+#   "gdb",
+#   "lldb",
+# ]

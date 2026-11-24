@@ -1,64 +1,88 @@
 #!/usr/bin/env bash
-# Prepara uma máquina nova: pacotes de sistema da distro, Nix e o home-manager.
-# Uso: ./bootstrap.sh <host>     (ex.: ./bootstrap.sh fedora-laptop)
+# Põe o devenv de pé numa máquina nova: ./bootstrap.sh
+# Arch e derivadas (CachyOS, EndeavourOS...). Pode rodar de novo: o resultado é o mesmo.
+# Com CI definido (como no GitHub Actions), não pergunta nada.
 set -euo pipefail
 
-host="${1:?informe o host, ex.: ./bootstrap.sh fedora-laptop}"
-repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+key="${HOME}/.config/chezmoi/key.txt"
+yes_flag=()
+if [ -n "${CI:-}" ]; then yes_flag=(--noconfirm); fi
 
-# 1. Pacotes que precisam de root, pela distro.
+say() { printf '==> %s\n' "$*"; }
+
+if [ "${EUID}" -eq 0 ]; then
+  echo "Rode como seu usuário, não como root: o makepkg e o paru recusam o root." >&2
+  exit 1
+fi
+
+# O metapac pergunta antes de instalar: sem terminal (com pipe, como `| tee`), ele falha no meio.
+if [ -z "${CI:-}" ] && { [ ! -t 0 ] || [ ! -t 1 ]; }; then
+  echo "Rode num terminal, sem pipe: ./bootstrap.sh" >&2
+  exit 1
+fi
+
+# Sem entrada da máquina em packages/config.toml, o metapac não sabe o que instalar.
+host="$(cat /etc/hostname 2>/dev/null || uname -n)"
+if ! grep -q "^${host} = " "${repo}/packages/config.toml"; then
+  echo "A máquina '${host}' não está em [hostname_groups] de packages/config.toml. Acrescente uma linha para ela." >&2
+  exit 1
+fi
+
+# 1. Só Arch e derivadas.
 # shellcheck disable=SC1091
 . /etc/os-release
-# Derivadas (EndeavourOS, CachyOS, Manjaro, Nobara, Pop!_OS, Mint...) caem no script da distro-mãe pelo ID_LIKE.
-script=""
-for id in ${ID} ${ID_LIKE:-}; do
-  case "${id}" in
-    fedora) script=fedora ;;
-    ubuntu | debian) script=ubuntu ;;
-    arch) script=arch ;;
-    *) continue ;;
-  esac
-  break
-done
-if [ -n "${script}" ]; then
-  "${repo_dir}/system/${script}.sh"
+case " ${ID:-} ${ID_LIKE:-} " in
+  *" arch "*) ;;
+  *)
+    echo "Este bootstrap é para Arch e derivadas; esta máquina é '${ID:-desconhecida}'." >&2
+    exit 1
+    ;;
+esac
+
+# 2. paru: no CachyOS já vem; senão compila o paru-bin do AUR.
+if ! command -v paru >/dev/null; then
+  say "Instalando o paru (AUR)"
+  sudo pacman -Syu --needed "${yes_flag[@]}" base-devel git
+  tmp="$(mktemp -d)"
+  git clone --depth 1 https://aur.archlinux.org/paru-bin.git "${tmp}/paru-bin"
+  (cd "${tmp}/paru-bin" && makepkg -si --needed "${yes_flag[@]}")
+  rm -rf "${tmp}"
+fi
+
+# 3. O mínimo para o resto. O rustup vem antes (o cargo compila o metapac); sem ele, o paru instala o pacote
+# rust, que conflita. O jq vem antes porque os modify_ do chezmoi usam ele.
+say "Instalando rustup, chezmoi, metapac, age, rbw e jq"
+# -Syu, nunca só -Sy: banco novo sem os pacotes deixa o sistema pela metade (e banco velho dá 404).
+paru -Syu --needed "${yes_flag[@]}" rustup
+rustup default stable
+paru -S --needed "${yes_flag[@]}" chezmoi metapac age rbw jq
+
+# 4. Chave age: traz do Bitwarden se faltar. Sem rbw logado, segue sem ela.
+if [ ! -f "${key}" ]; then
+  say "Buscando a chave age no Bitwarden (item devenv-age-key)"
+  mkdir -p "$(dirname "${key}")"
+  tmp_key="$(umask 077 && mktemp "${key}.XXXXXX")"
+  if rbw get devenv-age-key >"${tmp_key}" 2>/dev/null && [ -s "${tmp_key}" ]; then
+    mv "${tmp_key}" "${key}"
+  else
+    rm -f "${tmp_key}"
+    echo "Aviso: rbw não está logado, ou o item não existe. Sem a chave age, segredos cifrados ficam de fora." >&2
+    echo "Depois: rbw login, rbw get devenv-age-key > ${key} (chmod 600) e ./bootstrap.sh de novo." >&2
+  fi
+fi
+
+# 5. Configs: links para o repo.
+say "Aplicando as configs (chezmoi)"
+chezmoi init --source "${repo}" --apply
+
+# 6. Pacotes. O metapac sincroniza sempre nesta ordem: arch, cargo, mise, uv.
+say "Sincronizando os pacotes (metapac)"
+if [ -n "${CI:-}" ]; then
+  metapac sync --no-confirm
 else
-  echo "Distro '${ID}' sem script em system/. Pulando pacotes de sistema."
+  metapac sync
 fi
-
-# 2. Nix (instalador da Determinate Systems: flakes ligados, desinstalação limpa).
-if ! command -v nix >/dev/null; then
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-  # shellcheck disable=SC1091
-  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-fi
-
-# Cache binário dos agentes (llm-agents.nix): sem ele, Codex e outros compilam do zero.
-# O instalador da Determinate lê ajustes locais de nix.custom.conf.
-nix_conf=/etc/nix/nix.custom.conf
-[ -f "${nix_conf}" ] || nix_conf=/etc/nix/nix.conf
-if ! grep -qs cache.numtide.com "${nix_conf}"; then
-  printf '%s\n' \
-    "extra-substituters = https://cache.numtide.com" \
-    "extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" |
-    sudo tee -a "${nix_conf}" >/dev/null
-  sudo systemctl restart nix-daemon 2>/dev/null || true
-fi
-
-# 3. Aplica a configuração do host.
-# O -b backup do home-manager guarda arquivos e pastas, mas para num link que não é dele (de um stow ou de
-# dotfiles antigas, ex.: ~/.config/nvim -> ~/dotfiles/nvim). Esses links viram <nome>.backup antes do switch.
-gen="$(nix build --no-link --print-out-paths "${repo_dir}#homeConfigurations.${host}.activationPackage")"
-while IFS= read -r -d '' file; do
-  target="${HOME}/${file}"
-  [ -L "${target}" ] || continue
-  case "$(readlink "${target}")" in /nix/store/*-home-manager-files/*) continue ;; esac
-  backup="${target}.backup"
-  if [ -e "${backup}" ] || [ -L "${backup}" ]; then backup="${target}.backup-$(date +%s)"; fi
-  echo "Link antigo em ${target} (-> $(readlink "${target}")): movido para ${backup}."
-  mv "${target}" "${backup}"
-done < <(cd "${gen}/home-files" && find . \( -type l -o -type f \) -printf '%P\0')
-
-nix run "${repo_dir}#home-manager" -- switch --flake "${repo_dir}#${host}" -b backup
-
-echo "Pronto. Abra um novo terminal (Ghostty) para entrar no fish."
+# O metapac marca as dependências como explícitas; aqui elas voltam a ser dependências.
+"${repo}/packages/mark-deps.sh"
+say "Pronto"

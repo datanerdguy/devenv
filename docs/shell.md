@@ -1,44 +1,67 @@
-# Shell e terminal
+# Shell (fish)
 
-O terminal é o Ghostty e o shell é o fish, com o prompt do starship. Scripts continuam em bash.
+A config fica em `home/dot_config/fish/`: `config.fish`, as funções em `functions/` e os plugins do fisher em
+`fish_plugins`. Os pacotes ficam no grupo `shell`.
 
-## Ghostty abre sempre o fish
-
-O `command` do Ghostty aponta para o fish do home-manager. Assim o terminal abre em fish
-mesmo que o seu shell de login seja outro (zsh, por exemplo), sem `chsh`.
-Fundo e cores vêm do tema atual: o padrão é **Everforest** com opacidade **0.85** (vidro).
-Para mudar: `theme <nome>` e `theme opacity <n>` ([themes.md](themes.md)).
-
-## Atalhos do fish
+## Atalhos
 
 | Atalho | O que faz |
 | --- | --- |
-| `Ctrl-K` | escolhe um arquivo da pasta (fzf, com preview) e abre no `nvim` |
-| `Ctrl-G` | escolhe uma subpasta (fzf, com preview) e entra nela |
-| `Ctrl-F` | aceita a sugestão |
-| `Ctrl-R` | histórico (atuin) |
-| `Alt-C` | entra numa pasta de qualquer nível (fzf) |
+| `Esc` | Modo normal do vi (cursor vermelho). `i` volta para a escrita (verde); `v` seleciona (amarelo) |
+| `Ctrl+G` | Vai para uma pasta: as que você mais usa (zoxide) primeiro, depois todas do `~` (fd). O que já está digitado vira a busca |
+| `Ctrl+R` | Busca no histórico (fzf) |
+| `Ctrl+T` | Cola o caminho de um arquivo (fzf) |
+| `Ctrl+O` ou `mf <busca>` | Busca nos manuais por nome ou assunto, com o manual ao lado; `Enter` abre no Neovim |
+| `z <parte do nome>` | Entra direto na pasta mais usada que combina (zoxide) |
+| `t` | Abre ou volta para uma sessão do tmux, pela lista do sesh ([tmux.md](tmux.md)) |
 
-O `Ctrl-G` era o `Ctrl-F` do zsh antigo; o `Ctrl-F` ficou com a sugestão do fish.
+Toda lista do fzf (as de cima, o `theme`, os links do tmux e as buscas do Neovim) tem modo normal, como no Vim: `Esc`
+para de escrever (o prompt mostra `NORMAL`), `j` / `k` andam, `i` volta a escrever, `q` ou `Esc` fecham. As teclas
+ficam no `FZF_DEFAULT_OPTS` (`config.fish`), e o script `fzf-mode` (`home/dot_local/bin/`) troca de modo.
+
+O cursor é sempre um bloco. As cores vêm de `devenv_cursor_insert`, `devenv_cursor_normal` e
+`devenv_cursor_visual` (hex sem `#`). O padrão é o Nord, até o comando `theme` trocar ([themes.md](themes.md)).
+
+## Manuais
+
+O `man` abre no Neovim. Dentro dele: `/palavra` busca e `n` vai para a próxima, `gO` mostra as seções, `K` sobre um
+nome abre aquele manual, `Ctrl+O` volta e `q` sai. Para exemplos curtos, `tldr <comando>` (o hook do grupo `shell`
+atualiza as páginas a cada `just sync`).
 
 ## Abreviações
 
-Digite o nome e aperte espaço: o fish expande para o comando.
+Viram o comando inteiro quando você aperta espaço, então o histórico guarda o comando de verdade.
 
-| Abreviação | Comando |
+| Abreviação | Vira |
 | --- | --- |
-| `l`, `la` | `eza -l` só com permissão e nome (`la` mostra os ocultos) |
-| `lt`, `lta` | o mesmo, com a data |
-| `lw`, `lwa` | o mesmo, com o tamanho |
-| `ll` | `eza -la --git`, pastas primeiro |
-| `tree` | `eza --tree --level=2` |
-| `g`, `gs`, `lg`, `v` | `git`, `git status -sb`, `lazygit`, `nvim` |
-| `ga`, `gaa`, `gb`, `gco`, `gcmsg`, `gd`, `gl`, `gp`, `gst` | `git add`, `add --all`, `branch`, `checkout`, `commit -m`, `diff`, `pull`, `push`, `status` |
+| `g`, `gs`, `ga`, `gc`, `gca` | `git`, `git status -sb`, `git add`, `git commit`, `git commit --amend` |
+| `gp`, `gl`, `gd`, `gds`, `gsw`, `glg` | push, pull, diff, diff --staged, switch, log em grafo |
+| `lg` | `lazygit` |
+| `v` | `nvim` |
+| `j`, `dv` | `just`; `just` do devenv de qualquer pasta (`dv sync`, `dv apply`) |
+| `..`, `...`, `....` | `cd ../`, `cd ../../`, e assim por diante |
+| `!!` | o último comando (ex.: `sudo !!`) |
 
-`pbcopy` e `pbpaste` são apelidos de `wl-copy` e `wl-paste`.
+`ns` guarda as notas de `~/notas` no GitHub (commit e push), de qualquer pasta.
 
-## O que não veio do zsh antigo
+`ls`, `ll`, `la` e `lt` são funções, não abreviações: a linha continua mostrando só `ls`, e por baixo roda o
+`eza` (lista, longa com git, com ocultos, em árvore).
 
-- Powerlevel10k, oh-my-zsh e os plugins de sugestão e de realce: o fish e o starship fazem o mesmo.
-- nvm, sdkman e pyenv: use o `uv`, o Nix e o `nix develop` de cada projeto.
-- Menu de completar com `h/j/k/l`: o fish usa Tab e as setas.
+## Prompt
+
+O tide no estilo Lean, em duas linhas: pasta e branch em cima, e à direita o status do último comando, o tempo
+dele quando passa de 3 s e as versões da linguagem do projeto (Python, Node, Rust, Go, Elixir...). Usa as 16 cores
+do terminal, então segue o tema. O prompt anterior encolhe depois de cada comando (transient). O hook do fisher no
+grupo `shell` reinstala o tide e refaz essa config a cada `just sync`.
+
+## Desempenho
+
+O fish interativo abre em uns 12 ms nesta máquina, contra 2 ms sem config nenhuma. Desses 10 ms, o `config.fish`
+custa 1,4 ms; o resto é o tide e a carga interativa do próprio fish (medido com `fish --profile-startup`).
+
+- A saída do `zoxide init` e do `fzf --fish` fica em cache em `~/.cache/fish/` e só é gerada de novo quando o
+  programa é atualizado.
+- O mise entra pelos shims, não pelo `mise activate`, que custava uns 15 ms a cada prompt. A versão continua
+  sendo a do projeto; só o `[env]` do `mise.toml` fica de fora. Fora de projeto, valem as globais: a versão mais
+  nova de Node (com npm), Erlang, Elixir, Lua (com luarocks) e Java.
+- As funções ficam em `functions/` e só carregam no primeiro uso.

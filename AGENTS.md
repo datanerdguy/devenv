@@ -1,61 +1,62 @@
 # devenv: instruções para agentes de código
 
-Este repo é o ambiente de desenvolvimento do Lucas: Nix flakes + home-manager por cima da distro
-(Fedora, Ubuntu, Arch), com desktop niri + Noctalia, Neovim, tmux, agentes e temas trocáveis.
-Comece pelo [README](README.md); as decisões e o porquê ficam em [`docs/adr/`](docs/adr/).
+Este repo é o ambiente de desenvolvimento do Lucas no CachyOS (Arch): configs pelo chezmoi (`home/`) e pacotes
+pelo metapac (`packages/`). Comece pelo [README](README.md); o porquê de cada área fica no doc dela.
 
 ## Regras do projeto
 
-- **Idioma:** docs, comentários, mensagens de commit e títulos de PR em português (pt-BR), frases curtas e simples.
-- **Desempenho importa:** tudo leve. Plugins do Neovim carregam sob demanda, e o CI mede a abertura
-  (`tests/nvim/startup.sh`). Antes de acrescentar uma ferramenta, veja se uma que já existe resolve.
+- **Idioma:** docs, comentários, mensagens de commit em português (pt-BR), frases curtas e simples.
+- **Desempenho importa:** tudo leve. Antes de acrescentar uma ferramenta, veja se uma que já existe resolve.
 - **Pesquisar antes de criar:** área nova (ferramenta, módulo, fluxo) começa com opções comparadas e uma
   recomendação para o Lucas decidir. Não implemente uma área nova sem essa decisão.
-- **Apps gráficos não vêm do Nix:** os que precisam da GPU vêm da distro (`system/<distro>.sh`) ou do Flathub
-  (`modules/apps`). Do Nix vêm CLIs, LSPs e configs. O Vial é a exceção.
-- **Segredos:** nunca no repo nem em texto plano. Vão cifrados em `secrets/<host>.yaml` (sops + age; [docs/secrets.md](docs/secrets.md)).
+- **Pacote novo vai no grupo certo do metapac** (`packages/groups/`): o comentário no topo de cada arquivo diz para
+  que serve o grupo. Grupo novo entra em uma máquina e no `ci-full` de `packages/config.toml`.
+  Um pacote aparece uma vez só entre todos os grupos. O que é só desta máquina fica em `machines/<máquina>`.
+- **Configs em `home/` são links para o repo** (editar já vale). O chezmoi cria os links no `just apply`.
+- **Versões por projeto:** rustup, Go, uv e mise (Node, Erlang/Elixir, Lua, Java) escolhem a versão dentro de cada
+  projeto. A ferramenta do projeto vence a da lista de pacotes. Fora de projeto, valem as versões globais mais
+  novas do mise (`packages/groups/languages.toml`).
+- **As áreas shell, terminal e temas, tmux e Neovim são do Lucas.** O agente só ajuda quando ele pedir.
+- **Segredos:** nunca no repo nem em texto plano. Cifrados com chezmoi + age; tokens pelo `rbw` na hora.
+  O disco não é cifrado, então arquivo com segredo fica com permissão 0600.
 - **Agentes:** assinatura Claude Pro, sem chave de API. Nada que dependa de API key paga.
-- **Documente tudo:** mudou algo que o usuário vê, atualize o doc da área em `docs/` (e o README se for uma área nova).
+- **Documente tudo:** mudou algo que o usuário vê, atualize o README e o doc da área.
+
+## Checagens
+
+- `just lint` (também no hook de commit e no CI): shellcheck, stylua e shfmt, os grupos do metapac
+  (`packages/check.py`), workflows, o mapa do teclado e, se instalados, niri, paletas, tmux e Neovim
+  (`tests/check-nvim.sh`: sem aviso ao abrir, LSPs instalados, parsers do treesitter e lua_ls sem aviso).
+- `tests/smoke.sh` (no CI, numa máquina nova): o bootstrap deixa tudo pronto, e nenhum programa escreve no repo
+  pelos links do chezmoi. Se um programa acrescenta uma linha na config dele, a linha já precisa estar no repo.
+- Uma checagem nova precisa falhar no erro que ela previne: rode contra o erro antes de confiar.
+- Docs dizem o que o código faz: confira no arquivo antes de escrever.
 
 ## Fluxo de git
 
-- Branch de trabalho (`feat/*`, `fix/*`, `chore/*`, `docs/*`) saindo da `dev` → PR para a `dev` (squash) →
-  PR `dev` → `main` (merge commit, título `chore(release): ...`). Detalhes em [docs/workflow.md](docs/workflow.md).
-- Conventional Commits, validados pelo commitizen. O título do PR também precisa passar (`cz check --message "<título>"`).
-- Faça commit dentro do `nix develop`: os hooks de `.githooks/` rodam o lint e validam a mensagem.
-- Use o modelo de PR (`.github/pull_request_template.md`): O que muda, Como testei, Notas.
-- O Lucas faz o merge. Não mexa nas regras do repositório.
+- Trabalho direto na `dev`, com push, sem PR. Quando a `dev` estiver boa, `just promote` avança a `main` até ela.
+  Detalhes em [docs/workflow.md](docs/workflow.md).
+- Conventional Commits, validados pelo hook `commit-msg` (commitizen). Rode `just setup` uma vez para ligar os hooks.
+- O Lucas decide quando promover para a `main`. Não mexa nas regras do repositório.
 
 ## Comandos
 
-| Comando | Para quê |
-| --- | --- |
-| `nix develop` | shell com todas as ferramentas do repo |
-| `just lint` | nixfmt, statix, shellcheck, actionlint, stylua e o gerador do teclado (igual ao CI) |
-| `just check` | `nix flake check` |
-| `just desktop-check` | valida as configs do niri, sway, i3 e kanata |
-| `just switch [host]` | aplica a configuração nesta máquina |
-| `just test-container <imagem>` | instalação do zero num container (ex.: `ubuntu:26.04`) |
-| `just keyboard` | refaz as imagens das camadas do Corne depois de mudar o `.vil` |
-
-Teste do Neovim: `DEVENV_NVIM_TEST=1 nvim --headless -l tests/nvim/check.lua` (carrega todos os plugins).
+`just --list` mostra todos (a tabela fica no [README](README.md)). Antes de dizer que terminou, rode `just lint`.
 
 ## Onde fica cada coisa
 
 | Área | Código | Doc |
 | --- | --- | --- |
-| Módulos do home-manager | `modules/<área>/default.nix` (opções em `devenv.<área>`) | README |
-| Máquinas | `hosts/<host>.nix` | README |
-| Root por distro | `bootstrap.sh`, `system/<distro>.sh` | [docs/desktop.md](docs/desktop.md) |
-| Neovim | `config/nvim/` (vim.pack, `lua/pcastr/plugins/*.lua`) | [docs/neovim.md](docs/neovim.md) |
-| Dados (SQL, CSV) | `modules/cli`, `config/nvim/lua/pcastr/data.lua` | [docs/data.md](docs/data.md) |
-| tmux | `modules/tmux/tmux.conf` | [docs/tmux.md](docs/tmux.md) |
-| Desktop | `config/niri`, `config/noctalia`, `config/sway`, `config/i3`, `config/wm` | [docs/desktop.md](docs/desktop.md), [docs/apps.md](docs/apps.md) |
-| Temas | `themes/<id>/palette.json`, `modules/theme` (comando `theme`) | [docs/themes.md](docs/themes.md) |
-| Agentes | `modules/agents`, `agents/` (o `agents/AGENTS.md` é o global, instalado em `~/.config/agents`) | [docs/agents.md](docs/agents.md) |
-| Modelos de projeto | `templates/`, `copier.yml`, `modules/templates` (comando `new`) | [docs/templates.md](docs/templates.md) |
-| Segredos | `modules/secrets`, `secrets/` | [docs/secrets.md](docs/secrets.md) |
-| Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md) |
-| CI | `.github/workflows/`, `tests/` | [docs/workflow.md](docs/workflow.md) |
-
-As configs em `config/` são links para o repo (editar já vale). Mudança em módulo Nix só vale depois do `just switch`.
+| Configs (chezmoi) | `home/`, `.chezmoiroot` | README |
+| Pacotes (metapac) | `packages/config.toml`, `packages/groups/` | [README](README.md) |
+| Máquina nova | `bootstrap.sh`, `tests/smoke.sh` | README |
+| Shell (fish) | `home/dot_config/fish/` | [docs/shell.md](docs/shell.md) |
+| Neovim | `home/dot_config/nvim/` | [docs/neovim.md](docs/neovim.md) |
+| tmux | `home/dot_config/tmux/`, `home/dot_config/sesh/`, `home/dot_config/workmux/` | [docs/tmux.md](docs/tmux.md) |
+| Desktop | `home/dot_config/niri/`, `home/dot_config/noctalia/` | [docs/desktop.md](docs/desktop.md) |
+| Temas | `themes/generate.py`, `home/dot_config/noctalia/palettes/` e `templates/` | [docs/themes.md](docs/themes.md) |
+| Teclado | `keyboard/` (`corne/corne.vil` é a fonte) | [keyboard/README.md](keyboard/README.md), [docs/desktop.md](docs/desktop.md) |
+| Agentes e git | `agents/`, `home/dot_claude/`, `home/dot_config/git/` | [docs/agents.md](docs/agents.md) |
+| Dados e containers | `packages/groups/data.toml`, `packages/groups/containers.toml` | [docs/data.md](docs/data.md) |
+| Modelos de projeto | `templates/` | [templates/README.md](templates/README.md) |
+| CI | `.github/workflows/` | [docs/workflow.md](docs/workflow.md) |

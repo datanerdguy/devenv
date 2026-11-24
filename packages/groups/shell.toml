@@ -1,0 +1,18 @@
+# Shell: fish e o que a config dele usa (home/dot_config/fish/).
+
+[arch]
+packages = [
+  "fish",
+  # Instala os plugins de home/dot_config/fish/fish_plugins (o tide) e configura o prompt sem perguntas.
+  # 16 cores: o prompt usa a paleta do terminal, então troca junto com o tema.
+  { name = "fisher", hooks = { after_sync = ["fish", "-c", "fisher update && tide configure --auto --style=Lean --prompt_colors='16 colors' --show_time=No --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=Yes"] } },
+  "fish-autopair", # fecha parênteses e aspas sozinho
+  "fzf", # Ctrl+R, Ctrl+T e a lista do Ctrl+G
+  "zoxide", # pastas que você mais usa
+  "fd", # busca de arquivos e pastas
+  "eza", # ls
+  "bat", # cat com cores e a prévia dos manuais no mf
+  "yazi", # arquivos no terminal (Alt+Shift+Y)
+  # tldr: exemplos curtos de cada comando. O hook baixa as páginas.
+  { name = "tealdeer", hooks = { after_sync = ["tldr", "--update"] } },
+]

@@ -1,0 +1,8 @@
+# Agentes de código. As configs ficam em agents/.
+
+[arch]
+packages = [
+  "claude-code", # atualiza pelo pacman (o auto-update do Claude fica desligado)
+  "bubblewrap", # sandbox do Bash do Claude
+  "socat", # ponte de rede do sandbox
+]

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
+  "model": "sonnet",
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh",
+    "padding": 0
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$TMUX\" ] || workmux register-agent"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$TMUX\" ] || workmux set-window-status working"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$TMUX\" ] || workmux set-window-status waiting"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$TMUX\" ] || workmux set-window-status working"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$TMUX\" ] || workmux set-window-status done"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "pstack@pstack-claude": true,
+    "mattpocock-skills@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "pstack-claude": {
+      "source": {
+        "source": "github",
+        "repo": "michael-denyer/pstack-claude"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "filesystem": {
+      "allowWrite": [
+        "~/.cache/uv",
+        "~/.cache/go-build",
+        "~/go/pkg/mod",
+        "~/.cargo/registry",
+        "~/.cargo/git",
+        "~/.npm"
+      ]
+    },
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "*.github.com",
+        "*.githubusercontent.com",
+        "crates.io",
+        "*.crates.io",
+        "static.rust-lang.org",
+        "pypi.org",
+        "files.pythonhosted.org",
+        "registry.npmjs.org",
+        "proxy.golang.org",
+        "sum.golang.org",
+        "hex.pm",
+        "*.hex.pm"
+      ]
+    }
+  },
+  "permissions": {
+    "deny": [
+      "Read(~/.config/chezmoi/key.txt)",
+      "Read(~/.ssh/**)",
+      "Read(~/.config/rbw/**)",
+      "Read(~/.local/share/rbw/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(**/.env)",
+      "Read(**/.env.*)"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+# Ghostty. Os atalhos entram na área do terminal.
+
+# Ctrl+Enter é tela cheia por padrão; fica livre para os programas (o niri já tem tela cheia).
+keybind = ctrl+enter=unbind
+
+font-family = "BlexMono Nerd Font"
+font-size = 17
+
+copy-on-select = clipboard
+# OSC 52 (programas no terminal e via SSH): escrever vai direto; ler pede confirmação.
+clipboard-write = allow
+clipboard-read = ask
+clipboard-trim-trailing-spaces = true
+
+# Cores: o Noctalia regrava themes/noctalia a cada `theme`; numa máquina nova, o chezmoi cria um com o Nord.
+theme = noctalia
+background-opacity = 0.8

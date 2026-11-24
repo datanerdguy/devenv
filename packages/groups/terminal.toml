@@ -1,0 +1,7 @@
+# Terminal: o Ghostty e a fonte.
+
+[arch]
+packages = [
+  "ghostty",
+  "ttf-ibmplex-mono-nerd", # BlexMono Nerd Font: a IBM Plex Mono com os ícones
+]

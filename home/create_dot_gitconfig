@@ -1,0 +1,2 @@
+# Config do git só desta máquina, fora do repo. O `gh auth setup-git` e o `git config --global` gravam aqui.
+# A config do devenv fica em ~/.config/git/config (link para o repo); o git lê as duas.

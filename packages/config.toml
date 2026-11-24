@@ -1,0 +1,21 @@
+# Config do metapac. O ~/.config/metapac é um link para esta pasta (chezmoi).
+
+# Gerenciadores que o metapac cuida, na ordem em que ele sincroniza (fixa, não depende desta lista).
+# Então o rustup (arch) já está pronto quando o cargo roda.
+enabled_backends = ["arch", "cargo", "mise", "uv"]
+
+# Cada máquina usa só os grupos da sua entrada em [hostname_groups].
+hostname_groups_enabled = true
+
+# O paru instala os pacotes do AUR (como o próprio metapac) junto com os dos repositórios.
+[arch]
+package_manager = "paru"
+
+# Grupos por máquina. O nome é o hostname e o caminho é relativo a groups/, sem o .toml.
+[hostname_groups]
+# O notebook do Lucas, com tudo.
+cachyos = ["base", "repo", "languages", "data", "api", "shell", "terminal", "tmux", "editor", "agents", "git", "desktop", "keyboard", "containers", "debug", "machines/cachyos"]
+# O container do CI (docker run --hostname ci): só o que o bootstrap e o lint precisam.
+ci = ["base", "repo"]
+# O CI completo, à mão (gh workflow run ci.yml -f full=true): testa a lista inteira.
+ci-full = ["base", "repo", "languages", "data", "api", "shell", "terminal", "tmux", "editor", "agents", "git", "desktop", "keyboard", "containers"]

@@ -1,0 +1,22 @@
+# Desktop: niri + Noctalia e o que os atalhos usam (home/dot_config/niri/, docs/desktop.md).
+# No lugar do meta-pacote cachyos-niri-noctalia: só o que a gente usa, explícito.
+
+[arch]
+packages = [
+  "niri",
+  "noctalia", # barra, launcher, notificações, bloqueio
+  "xwayland-satellite", # apps X11
+  "xdg-desktop-portal-gnome", # captura de tela e compartilhamento
+  "xdg-desktop-portal-gtk", # seletor de arquivos
+  "gnome-keyring", # senhas dos apps
+  "adw-gtk-theme", # tema dos apps GTK
+  "capitaine-cursors",
+  "noto-fonts",
+  "noto-fonts-emoji",
+  "zen-browser-bin", # navegador (Alt+Shift+B)
+  "satty", # anotar capturas (Alt+Shift+Print)
+  "grim", # captura para o satty
+  "wl-clipboard", # wl-copy e wl-paste: o clipboard do Wayland (satty e scripts)
+  "slurp", # seleção de área para o satty
+  "wayscriber-bin", # desenhar na tela (Alt+Shift+D)
+]

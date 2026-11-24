@@ -1,56 +1,73 @@
-# tmux + sesh
+# tmux
 
-tmux configurado do zero, **sem plugins** (abre na hora), e [sesh](https://github.com/joshmedeski/sesh) para sessões por projeto.
-Módulo: [`modules/tmux`](../modules/tmux/default.nix) (`devenv.tmux.enable`); atalhos em [`tmux.conf`](../modules/tmux/tmux.conf).
+O tmux fica sem plugins e abre na hora. O sesh cuida das sessões por projeto, e o workmux abre uma janela por
+tarefa com o Claude. A config fica em `home/dot_config/tmux/tmux.conf`, e os pacotes ficam no grupo `tmux`.
+
+O Ghostty abre o fish puro. Para entrar no tmux, rode `t`: ele mostra a lista de sessões e projetos e entra na
+escolhida (cria a sessão se ela não existir).
 
 ## Atalhos
 
-Prefixo: **`Ctrl-Space`**. Na tabela, `P` = prefixo.
+Prefixo: **`Ctrl-Space`**. Na tabela, `P` é o prefixo.
 
 | Tecla | O que faz |
 | --- | --- |
-| `Ctrl-h/j/k/l` | anda entre painéis do tmux **e** janelas do Neovim (sem prefixo) |
-| `P h/j/k/l` | anda entre painéis (o mesmo, com prefixo) |
-| `P H/J/K/L` | redimensiona (repete sem o prefixo; no Neovim, `Ctrl-setas`) |
-| `P \|` / `P -` | divide na vertical / horizontal, na pasta atual |
-| `P c` | nova janela na pasta atual |
-| `P p` / `P n` | janela anterior / próxima |
-| `P Tab` | última janela |
-| `P z` | zoom no painel |
-| `P x` | fecha o painel |
-| `P s` | **sesh**: lista de sessões e projetos (fzf) |
-| `P S` | volta para a sessão anterior |
+| `Ctrl-j/k/l/;` | Anda entre painéis do tmux e janelas do Neovim: esquerda, baixo, cima, direita (as teclas do niri, com Ctrl) |
+| `P j/k/l/;` | Anda entre painéis (o mesmo, com prefixo) |
+| `P H/J/K/L` | Redimensiona como no Vim: esquerda, baixo, cima, direita (repete sem o prefixo) |
+| `P Ctrl-l` | Limpa a tela do shell (o `Ctrl-l` sozinho anda para cima) |
+| `P \|` / `P -` | Divide na vertical / horizontal, na pasta atual |
+| `P c` | Janela nova na pasta atual |
+| `P p` / `P n` / `P Tab` | Janela anterior / próxima / última |
+| `P z` | Zoom no painel (a janela mostra 󰊓) |
+| `P x` | Fecha o painel |
+| `P s` | Sessões e projetos (sesh), a mesma lista do `t` |
+| `P S` | Volta para a sessão anterior |
 | `P g` | lazygit em popup |
-| `P a` | painel dos agentes (workmux dashboard) |
-| `P u` | uso e custo dos agentes (tokscale) |
-| `P t` | shell em popup |
-| `P v` | modo de cópia (vi: `v` seleciona, `Ctrl-v` bloco, `y` copia para o clipboard) |
-| `P Ctrl-l` | limpa a tela do shell (o `Ctrl-l` sozinho é navegação) |
-| `P r` | recarrega a config |
+| `P t` | Shell em popup |
+| `P a` | Painel dos agentes (workmux) |
+| `P u` | Links da tela num fzf; o `Enter` abre no navegador |
+| `P v` | Modo de cópia: `v` seleciona, `Ctrl-v` faz bloco, `y` copia para o clipboard do sistema |
+| `P Ctrl-l` | Limpa a tela do shell (o `Ctrl-l` sozinho anda entre painéis) |
+| `P r` | Recarrega a config |
 
-O mouse funciona (selecionar painel, rolar, redimensionar).
+O mouse funciona: seleciona painel, rola e redimensiona. Nenhum atalho usa Alt, porque o Alt é do niri
+([desktop.md](desktop.md)). Por causa do `Ctrl-k`, a busca nos manuais do fish fica no `Ctrl+O`
+([shell.md](shell.md)).
 
-Nenhum atalho usa Alt: ele é do niri ([desktop.md](desktop.md#atalhos-niri)).
+## Sessões (sesh)
 
-## Sessões com sesh
+A lista mostra as sessões abertas, as sessões fixas e os projetos do zoxide (as pastas que você mais visita).
+As sessões fixas ficam em `home/dot_config/sesh/sesh.toml`. Hoje há uma: `devenv`, que abre o Neovim no repo.
 
-`P s` abre a lista: sessões abertas, projetos do zoxide (as pastas que você mais visita) e as sessões configuradas.
-Escolher um projeto cria a sessão nele, ou volta para ela se já existir.
+## Agentes (workmux)
 
-Sessões fixas ficam em `programs.sesh.settings.session` no módulo. Hoje há uma: `devenv`, que abre o Neovim em `~/devenv`.
+`workmux add <branch>` cria um worktree e uma janela com o Claude em cima e um shell embaixo. A janela mostra o
+estado do agente (trabalhando, esperando você, terminou). Esse estado vem dos hooks do Claude em
+`agents/settings.json`, que só rodam dentro do tmux. `P a` abre o painel com todos os agentes.
 
-## Integração com o Neovim
+A config fica em `home/dot_config/workmux/config.yaml`. O workmux não copia o `.env` para o worktree: os segredos
+vêm do `rbw` na hora.
 
-O Neovim marca o painel com `@pane-is-vim` ao abrir (`lua/pcastr/plugins/editor.lua`). O tmux vê a marca e
-repassa `Ctrl-h/j/k/l` ao Neovim, que usa o smart-splits para mudar de janela ou sair para o painel vizinho na borda.
-Imagens (molten/image.nvim) passam pelo tmux com `allow-passthrough`.
+## Barra
 
-## Barra de status
+Fica no topo e mostra a sessão (amarela enquanto o prefixo está apertado), as janelas, a cota do Claude e a hora.
+A cota vem de `~/.cache/devenv/claude-usage`, que a statusline do Claude grava.
 
-No topo: sessão, janelas (com o ícone de status dos agentes do workmux), cota do Claude e hora.
-As cores seguem o tema atual ([themes.md](themes.md)): `theme <nome>` troca a barra na hora.
+As cores seguem o tema ([themes.md](themes.md)). O Noctalia gera `~/.config/tmux/noctalia.conf` a cada `theme` e
+recarrega o tmux aberto. Antes do primeiro `theme`, o chezmoi deixa um com o Nord.
 
-## Por que sem plugins
+## Neovim
 
-TPM e plugins como tmux-sensible, resurrect e catppuccin somam segundos de abertura e mais coisas para atualizar.
-O que eles dariam aqui é coberto por poucas linhas de config, pelo sesh (sessões) e pelo workmux (janelas dos agentes).
+O `Ctrl-j/k/l/;` passa para o Neovim quando o painel tem a marca `@pane-is-vim`, que o Neovim põe ao abrir e tira
+ao sair (`lua/config/navigation.lua`). No Neovim, a tecla troca de janela; na última janela daquele lado, ela
+segue para o painel vizinho do tmux. Fora do Neovim, o `Ctrl-k` não apaga mais a linha no fish e o `Ctrl-j` não
+faz o papel do `Enter`.
+
+## Por que assim
+
+- Sem plugins nem TPM: somam tempo de abertura e coisas para atualizar, e o que dariam cabe em poucas linhas.
+- O Ghostty não abre direto no tmux: cada terminal ficaria preso a uma sessão, e um terminal rápido sairia mais
+  pesado.
+- O modelo do tema é nosso: o da comunidade roda um script que mexeria no `tmux.conf`, que é link para o repo.
+- Sem tokscale: a statusline do Claude e a barra do tmux já mostram a cota.

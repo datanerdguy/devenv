@@ -1,307 +1,293 @@
 # Neovim
 
-Neovim nightly (0.13) instalado pelo [bob](https://github.com/MordechaiHadad/bob), com config em Lua escrita do zero em [`config/nvim`](../config/nvim). O módulo [`modules/nvim`](../modules/nvim/default.nix) liga a pasta em `~/.config/nvim` como link direto: editar o repo muda o editor na hora, sem `just switch`.
+O Neovim é o nightly 0.13, instalado pelo `bob` (grupo `editor`). A config fica em `home/dot_config/nvim/`.
 
-Princípios:
-
-- **Leve.** Só o tema, ícones, statusline e o snacks carregam na abertura; todo o resto carrega quando é usado (evento, tipo de arquivo, comando ou tecla). O CI falha se a abertura passar de 80 ms (mediana de 7 execuções; local fica em torno de 25 ms).
-- **Nativo primeiro.** `vim.pack` para plugins, `vim.lsp.config`/`vim.lsp.enable` para LSP, sem lazy.nvim nem mason-lspconfig.
-- **Reproduzível.** As versões dos plugins ficam em [`nvim-pack-lock.json`](../config/nvim/nvim-pack-lock.json), versionado no git.
+A regra é usar o que é nativo do Neovim primeiro; plugin só entra quando o nativo não cobre: os temas, a busca
+(fzf-lua, o mesmo fzf do shell), o explorer (oil), a config dos LSPs (nvim-lspconfig, lazydev e SchemaStore), os erros na tela
+(tiny-inline-diagnostic), os parsers do treesitter (nvim-treesitter), o formatar (conform), o completar (blink.cmp)
+e o Claude no editor (claudecode.nvim).
 
 ## Estrutura
 
 ```text
-config/nvim/
-  init.lua                 ordem de carga
-  nvim-pack-lock.json      versões travadas dos plugins (gerado pelo vim.pack)
-  lua/pcastr/
-    options.lua            opções do editor
-    keymaps.lua            atalhos gerais
-    data.lua               dados: harlequin, tabiew e SQL no DuckDB (sem plugin)
-    autocmds.lua           automações (destaque ao copiar, voltar à última posição...)
-    pack.lua               carga sob demanda + gerenciador :Pack
-    lsp.lua                servidores LSP e diagnósticos
-    theme.lua              colorscheme do tema atual (segue o comando `theme`)
-    plugins/
-      ui.lua               mini, snacks, which-key
-      editor.lua           treesitter, gitsigns, smart-splits
-      coding.lua           blink.cmp, tiny-inline-diagnostic, conform, nvim-lint, mason
-      ai.lua               sidekick (qualquer CLI de agente), claudecode
-      notebooks.lua        molten + image.nvim, marimo
-      notes.lua            obsidian.nvim (notas no cofre do Obsidian)
-      debug.lua            nvim-dap, dap-view, dap-python
+home/dot_config/nvim/
+  init.lua              a ordem em que os módulos carregam
+  lua/config/           o que é nativo, sem plugin
+    options.lua         líder (Espaço), números das linhas, linha na coluna 80, indentação, clipboard, busca, menu da linha de comando
+    cursor.lua          cursor em bloco, com a cor do modo igual à do fish
+    keymaps.lua         atalhos sem plugin (jk, <leader>w, <leader>R)
+    navigation.lua      Ctrl+j/k/l/; entre janelas do Neovim e painéis do tmux
+    watch.lua           segue um arquivo que o `theme` regrava (usado pelo cursor e pelo tema)
+    lsp_without.lua     tira de um servidor LSP os avisos que outro já dá (usado pelo ruff e pelo ty)
+  lua/plugins/          um arquivo por assunto: os plugins dele, a config e os atalhos
+    theme.lua           os temas e qual deles segue o desktop
+    search.lua          busca de arquivos, pastas e texto (fzf-lua)
+    notes.lua           notas em ~/notas: a do dia, nova com título e as buscas
+    explorer.lua        explorer de arquivos (oil)
+    lsp.lua             quais servidores LSP ligam e os atalhos deles (nvim-lspconfig, lazydev, SchemaStore)
+    treesitter.lua      realce e fold pela estrutura do código (nvim-treesitter)
+    diagnostics.lua     como os erros aparecem (tiny-inline-diagnostic)
+    format.lua          formatador de cada linguagem, ao salvar (conform)
+    completion.lua      completar enquanto digita (blink.cmp)
+    csv.lua             CSV e TSV em colunas alinhadas (csvview)
+    claude.lua          o Claude Code do painel do tmux conectado ao Neovim (claudecode.nvim)
+  after/lsp/            ajuste de um servidor LSP, por cima do nvim-lspconfig
+  nvim-pack-lock.json   versões dos plugins, gravada pelo vim.pack
 ```
 
-## Plugins
+O estilo do Lua fica no `.stylua.toml` e o dos scripts no `.editorconfig`, na raiz do repo. O Neovim formata assim
+ao salvar, e o `just lint` confere.
 
-| Plugin | Para que | Quando carrega |
-| --- | --- | --- |
-| everforest, rose-pine, catppuccin, dracula.nvim | temas; só o escolhido pelo `theme` carrega ([themes.md](themes.md)) | abertura |
-| mini.nvim | ícones, statusline, textobjects, surround, pares | abertura (ícones e statusline); o resto no primeiro arquivo |
-| snacks.nvim | picker, explorer, dashboard, terminal, lazygit, notificações, zen | abertura (cada módulo só roda quando chamado) |
-| which-key.nvim | mostra as teclas depois do `<leader>` | depois da interface abrir |
-| nvim-treesitter | realce, indentação e dobras | primeiro arquivo |
-| nvim-treesitter-context | fixa no topo a função ou classe atual | primeiro arquivo |
-| nvim-ts-autotag | fecha e renomeia a tag par (HTML, HEEx, templates) | arquivo HTML ou template |
-| gitsigns.nvim | marcas e ações de git por trecho | primeiro arquivo |
-| smart-splits.nvim | navegar entre janelas do Neovim e painéis do tmux | tecla |
-| nvim-lspconfig | configurações prontas dos servidores (só dados) | abertura |
-| mason.nvim | instalador de LSPs e ferramentas | `:Mason` |
-| blink.cmp | completion | modo de inserção, linha de comando ou arquivo |
-| tiny-inline-diagnostic.nvim | diagnóstico inline | primeiro diagnóstico |
-| conform.nvim | formatar ao salvar | ao salvar |
-| nvim-lint | linters extras | primeiro arquivo |
-| sidekick.nvim | terminal de agentes (Claude, Codex, Gemini, opencode) | tecla |
-| claudecode.nvim | integração de IDE do Claude Code | tecla ou comando |
-| molten-nvim + image.nvim | rodar células Jupyter no buffer | tecla |
-| obsidian.nvim | notas no cofre do Obsidian (links, nota do dia, modelos) | tecla, `:Obsidian` ou nota do cofre |
-| nvim-dap + dap-view + dap-python | debug | tecla |
+Assunto novo ganha um arquivo: em `lua/config/` se for nativo, em `lua/plugins/` se precisar de plugin (o
+`vim.pack.add` dele fica no próprio arquivo). Depois, uma linha `require` no `init.lua`. Para o que o Neovim já
+procura sozinho, use as pastas dele, criadas quando o primeiro arquivo entrar:
 
-## Gerenciador de plugins (:Pack)
+- `after/lsp/<servidor>.lua`: ajuste de um LSP, que vale por cima do nvim-lspconfig;
+- `after/ftplugin/<linguagem>.lua`: ajustes por tipo de arquivo (indentação, por exemplo).
 
-O `vim.pack` instala e atualiza, mas não mostra o estado. O [`pack.lua`](../config/nvim/lua/pcastr/pack.lua) acrescenta isso:
-
-| Comando | O que faz |
-| --- | --- |
-| `:Pack` (`<leader>pp`) | Lista os plugins: estado, versão, gatilho de carga e tempo de carga. A prévia mostra os últimos commits |
-| `:Pack!` (`<leader>pc`) | O mesmo, buscando atualizações na rede (mostra `↑` com a nova versão) |
-| `:PackUpdate [nomes]` (`<leader>pu`) | Atualiza; abre a revisão do `vim.pack` antes de aplicar (`:w` confirma, `:q` cancela) |
-| `:PackRestore [nomes]` | Volta os plugins às versões do `nvim-pack-lock.json` (sem rede) |
-| `:PackClean` | Remove plugins instalados que saíram da config |
-| `:PackStatus` (`<leader>ps`) | Resumo: quantos plugins, quantos carregados e o tempo total |
-
-Dentro do `:Pack`: `Alt-u` atualiza os selecionados, `Alt-U` atualiza todos, `Alt-x` remove, `Alt-c` busca atualizações.
-
-Estados: `●` carregado, `○` sob demanda (ainda não usado), `✗` instalado mas fora da config.
-
-Depois de atualizar, faça commit do `nvim-pack-lock.json`. Para voltar uma versão: `git checkout -- config/nvim/nvim-pack-lock.json` e `:PackRestore`.
-
-Vindo de outra config que também usava o `vim.pack`, os plugins dela ficam em `~/.local/share/nvim/site/pack/core`,
-e o devenv usa o que achar ali, mesmo de outra versão (ex.: `blink.cmp v2 requires "saghen/blink.lib"`). Mova a
-pasta para **fora** de `site/pack` (o Neovim lê todas as pastas ali dentro) e abra o Neovim: ele instala tudo pelo lockfile.
-
-### Acrescentar um plugin
-
-Escolha o arquivo em `plugins/` pelo assunto e acrescente uma entrada em `pack.add`:
-
-```lua
-pack.add({
-  {
-    src = gh("dono/plugin.nvim"),
-    version = vim.version.range("1.*"), -- opcional: tag, branch ou faixa semver
-    event = "BufReadPost",              -- carrega no evento
-    -- ft = { "python" },               -- ou no tipo de arquivo
-    -- cmd = { "Comando" },             -- ou no comando
-    -- keys = { { "<leader>x", fn, desc = "..." } }, -- ou na tecla
-    deps = { "outro-plugin" },          -- carrega antes deste
-    build = function(path) end,         -- roda depois de instalar ou atualizar
-    config = function() require("plugin").setup({}) end,
-  },
-})
-```
-
-Sem `event`, `ft`, `cmd` ou `keys` o plugin carrega na abertura; prefira sempre um gatilho. `keys = {}` faz o plugin carregar só como dependência de outro. Rode `just nvim-test` para conferir que tudo carrega e que a abertura continua rápida.
-
-## LSP
-
-Os servidores estão em [`lsp.lua`](../config/nvim/lua/pcastr/lsp.lua) e ligam sozinhos quando o executável existe. Três jeitos de instalar um servidor, do mais rápido ao mais reproduzível:
-
-1. `:Mason` e instale (fica em `~/.local/share/nvim/mason`). Bom para experimentar.
-2. No `flake.nix` do projeto, ativado pelo direnv. Bom para o que é do projeto (ex.: versão do Go).
-3. Em [`modules/nvim/default.nix`](../modules/nvim/default.nix), para toda máquina.
-
-O que o Nix ou o devShell instalam tem prioridade sobre o Mason. Para um servidor novo, acrescente o nome (do nvim-lspconfig, `:help lspconfig-all`) em `servers`.
-
-Já vêm pelo Nix: lua_ls, basedpyright, ruff, gopls, nixd, marksman, taplo, yamlls, html/css/json, bashls, dockerls, tailwindcss, ts_ls, mais stylua, gofumpt, goimports, nixfmt, shfmt, shellcheck, hadolint e actionlint. Rust usa o `rust-analyzer` do rustup (`rustup component add rust-analyzer`), para bater com o toolchain do projeto. Elixir (`expert`) vem pelo `:Mason`.
-
-| Comando | O que faz |
-| --- | --- |
-| `:LspServers` | Lista os servidores configurados e quais estão instalados |
-| `<leader>cl` | `:checkhealth vim.lsp` (servidores ligados no buffer) |
-| `<leader>cR` | Reinicia o LSP |
-| `:ConformInfo` | Formatadores do arquivo |
-
-Diagnósticos: o `virtual_text` nativo fica desligado e quem mostra inline é o tiny-inline-diagnostic, então nada se sobrepõe. Sinais na coluna e o float (`<leader>cd`) continuam nativos.
+O chezmoi liga cada arquivo, inclusive os das subpastas. Arquivo novo só aparece em `~/.config/nvim` depois do
+`just apply`; editar um que já existe vale na hora (`<leader>R` para o Neovim ler de novo).
 
 ## Atalhos
 
-O `<leader>` é **Espaço**. Aperte Espaço e espere para o which-key mostrar as opções; `<leader>?` mostra os atalhos do buffer atual.
+O `<leader>` é o **Espaço**.
 
-Toda `desc` de atalho segue `[Categoria] Ação`, ou `[Categoria/Sub] Ação` quando há subgrupo (ex.: `[LSP] Renomear símbolo`, `[Git/Hunk] Stage`, `[Agente/Claude Code] Abrir/fechar`). Atalho novo sempre leva `desc`, assim o which-key e o `<leader>fk` ficam agrupados por categoria.
-
-### Geral
-
-| Tecla | Ação |
+| Tecla | O que faz |
 | --- | --- |
-| `<leader>w` / `<leader>q` / `<leader>Q` | Salvar / fechar janela / sair |
-| `<leader>R` | Reiniciar o Neovim mantendo a sessão |
-| `jk` | Sair do modo de inserção |
-| `Esc` | Limpar destaque da busca |
-| `J` / `K` (no modo visual) | Mover a seleção |
-| `<leader>-` / `<leader>\|` / `<leader>=` | Dividir abaixo / à direita / igualar |
-| `Ctrl-h/j/k/l` | Ir para a janela (ou painel do tmux) ao lado |
-| `Ctrl-setas` | Redimensionar janela |
-| `Shift-h` / `Shift-l` / `<leader>bb` | Buffer anterior / próximo / último |
-| `<leader>bd` / `<leader>bo` | Fechar buffer / fechar os outros |
-| `]q` / `[q` | Próximo / anterior no quickfix |
-| `Ctrl-/` | Terminal flutuante |
-| `Esc Esc` | Sair do modo terminal |
-| `<leader>.` | Rascunho |
-| `<leader>yp` / `<leader>yP` / `<leader>yn` | Copiar caminho relativo / absoluto / nome do arquivo |
-| `<leader>yl` | Copiar `caminho:linha` (na seleção, `caminho:início-fim`), para colar num agente |
+| `<leader>ff` | Arquivos do projeto |
+| `<leader>fd` | Pastas do projeto; a escolhida abre no explorer |
+| `<leader>fz` | Pastas do zoxide (as que você mais usa, de qualquer projeto); abre no explorer |
+| `<leader>/` | Texto no arquivo atual, com a linha na prévia |
+| `<leader>fg` | Texto no projeto, enquanto digita |
+| `<leader>fw` | A palavra do cursor no projeto |
+| `<leader>fb` | Arquivos abertos |
+| `<leader>fr` | Arquivos recentes |
+| `<leader>fh` / `<leader>fk` | Ajuda do Neovim / atalhos |
+| `<leader>fe` / `<leader>fE` | Erros e avisos do arquivo / do projeto |
+| `<leader>fs` | Símbolos do projeto (funções, tipos), pelo LSP |
+| `<leader>f.` | Volta à última busca, como estava |
+| `-` ou `<leader>e` | Explorer na pasta do arquivo atual |
+| `<leader>E` | Explorer na raiz do projeto |
+| `jk` | Sai do modo de inserção, como o `Esc` |
+| `<leader>w` | Salva o arquivo (e formata) |
+| `y` / `d` / `p` | Usam o clipboard do sistema (o mesmo do navegador) |
+| `<leader>R` | Salva tudo e reinicia o Neovim, que lê a config de novo e volta com os mesmos arquivos |
+| `Ctrl-j/k/l/;` | Janela à esquerda, abaixo, acima, à direita (as teclas do niri, com Ctrl). Na borda, segue para o painel do tmux ([tmux.md](tmux.md#neovim)) |
 
-### Buscar (`<leader>f`) e explorer
+`nvim .` (ou `nvim <pasta>`) abre direto no explorer.
 
-Todas as buscas mostram arquivos ocultos. No picker, `Alt-h` alterna ocultos e `Alt-i` alterna os ignorados pelo git.
+## Buscar
 
-| Tecla | Ação |
+A busca é o fzf-lua: o mesmo `fzf` do shell, com prévia ao lado e as cores do tema. A busca é fuzzy (letras fora de
+ordem valem: `tmuxconf` acha `home/dot_config/tmux/tmux.conf`). Arquivos e pastas vêm do `fd` e o texto vem do
+`rg`: os ocultos aparecem, e o `.git` e o que o git ignora não.
+
+Dentro da busca:
+
+| Tecla | O que faz |
 | --- | --- |
-| `<leader><space>` | Busca inteligente de arquivos |
-| `<leader>/` | Texto no arquivo atual (linhas) |
-| `<leader>fg` | Texto no projeto |
-| `<leader>ff` | Arquivos |
-| `<leader>fw` | Palavra sob o cursor (ou seleção) |
-| `<leader>fb` / `<leader>fr` | Buffers / recentes |
-| `<leader>fh` / `<leader>fk` | Ajuda / atalhos |
-| `<leader>fc` / `<leader>fp` | Arquivos da config / projetos |
-| `<leader>fs` / `<leader>fS` | Símbolos do arquivo / do projeto |
-| `<leader>f.` | Reabrir a última busca |
-| `<leader>e` / `<leader>E` | Explorer na raiz do projeto (alterna) / explorer no arquivo atual |
+| `Enter` | Abre |
+| `Ctrl-v` / `Ctrl-s` / `Ctrl-t` | Abre ao lado / embaixo / numa aba |
+| `Tab` | Marca vários (o `Enter` abre todos) |
+| `Alt-q` | Manda os resultados para o quickfix (`]q` e `[q` andam entre eles) |
+| `Alt-h` / `Alt-i` | Mostra ou esconde os ocultos / o que o git ignora |
+| `Esc` | Modo normal (o prompt mostra `NORMAL`): `j` / `k` andam na lista, `i` volta a escrever, `q` ou `Esc` fecham. O mesmo de toda lista do fzf no shell ([shell.md](shell.md#atalhos)) |
+| `Ctrl-j` / `Ctrl-k` | Andam na lista sem sair do modo de escrever |
 
-No explorer: `Enter` abre, `a` cria (termine com `/` para pasta), `d` apaga, `r` renomeia, `c` copia, `m` move, `H` alterna ocultos, `?` mostra todas as teclas.
+Na linha de comando (`:`) e na busca com `/`, um menu fuzzy de sugestões aparece enquanto você digita. `Tab` e
+`Shift-Tab` andam no menu.
 
-### Código (`<leader>c`) e LSP
+## Notas
 
-| Tecla | Ação |
+As notas são arquivos Markdown em `~/notas`, um repo privado no GitHub. Os atalhos valem de qualquer pasta, e a nota
+abre numa janela flutuante por cima do que você está fazendo: anote e dê `q`, que salva, fecha e volta para onde
+estava. A nota escolhida nas buscas também abre assim. Nota nova começa com o título; o `ns`, no fish, guarda tudo no GitHub
+([shell.md](shell.md)). Fora do Neovim, `Alt+Shift+n` abre a nota do dia ([desktop.md](desktop.md)).
+
+| Tecla | O que faz |
 | --- | --- |
-| `gd` / `gD` / `gy` / `gr` | Definição / declaração / tipo / referências |
-| `K` | Documentação |
-| `]]` / `[[` | Próxima / anterior ocorrência da palavra |
-| `<leader>ca` | Ações de código |
-| `<leader>cr` | Renomear |
-| `<leader>cf` | Formatar |
-| `<leader>cd` | Diagnóstico da linha |
-| `]d` / `[d` | Próximo / anterior diagnóstico (nativo) |
+| `<leader>nn` | Nota do dia (`~/notas/AAAA-MM-DD.md`) |
+| `<leader>nc` | Nota nova: pergunta o título, e "Ideias do Neovim" vira `ideias-do-neovim.md` |
+| `<leader>nf` | Acha uma nota pelo nome, a mais recente primeiro |
+| `<leader>ng` | Busca um texto em todas as notas, enquanto você digita |
 
-Completion: `Tab` aceita (o primeiro item já vem marcado) e pula para o próximo campo do snippet, `Ctrl-n`/`Ctrl-p` escolhem, `Ctrl-Space` abre, `Ctrl-e` fecha.
+## Explorer (oil)
 
-### Diagnósticos e listas (`<leader>x`)
+O oil abre a pasta como um texto, e você mexe nos arquivos editando as linhas. Nada muda no disco até o `:w`, que
+mostra o que vai acontecer quando a mudança é grande.
 
-| Tecla | Ação |
+| Para | Faça |
 | --- | --- |
-| `<leader>xx` / `<leader>xb` | Diagnósticos do projeto / do arquivo |
-| `<leader>xq` | Quickfix |
-| `<leader>xt` | TODO, FIXME, HACK, NOTE |
+| Abrir | `Enter` (pasta ou arquivo); `Ctrl-s` / `Ctrl-h` abre ao lado / embaixo, `Ctrl-t` numa aba |
+| Subir uma pasta | `-` |
+| Renomear | Edite o nome (`cw`, `A`...) e `:w` |
+| Criar | Uma linha nova com o nome; com `/` no fim é pasta (`a/b/c.txt` cria as pastas no caminho). `:w` |
+| Copiar | `yy` no arquivo, vá até a outra pasta, `p` e `:w` |
+| Mover | `dd` no arquivo, vá até a outra pasta, `p` e `:w` |
+| Apagar | `dd` e `:w`. Vai para a lixeira (`g\` mostra a lixeira) |
+| Desfazer antes do `:w` | `u`, como num texto |
+| Prévia | `Ctrl-p` |
+| Ocultos | `g.` mostra ou esconde (começam à mostra) |
+| Abrir fora do Neovim | `gx` |
+| Ajuda | `g?` lista todas as teclas |
 
-### Git (`<leader>g`, `<leader>h`)
+Vários de uma vez também valem: `Vjj` e `d` ou `y` em várias linhas. Renomear ou mover um arquivo pelo oil avisa o
+LSP, que corrige os imports.
 
-| Tecla | Ação |
+## Tema
+
+O Neovim usa o tema do desktop ([themes.md](themes.md)): cada paleta do Noctalia abre o tema oficial equivalente.
+Quando o `theme` troca a paleta, os Neovims abertos trocam junto. O `plugins/theme.lua` lê a paleta escolhida em
+`~/.local/state/noctalia/settings.toml` e vigia esse arquivo; sem escolha (máquina nova), fica o Nord.
+
+O fundo é transparente: aparece o do Ghostty, com a mesma cor e a mesma opacidade (`background-opacity`). Janelas
+flutuantes e a barra de status ficam com o fundo do tema.
+
+| Paleta | Plugin |
 | --- | --- |
-| `<leader>gg` | Lazygit |
-| `<leader>gs` / `<leader>gl` / `<leader>gf` | Alterados / log / log do arquivo |
-| `<leader>gB` | Abrir no GitHub |
-| `]h` / `[h` | Próximo / anterior hunk |
-| `<leader>hs` / `<leader>hr` / `<leader>hS` | Stage / desfazer hunk / stage do arquivo |
-| `<leader>hp` / `<leader>hb` / `<leader>hd` | Ver hunk / blame / diff |
-| `ih` | Hunk como textobject (ex.: `dih`) |
+| `catppuccin-*` | `catppuccin/nvim` |
+| `kanagawa-*` | `rebelot/kanagawa.nvim` |
+| `rose-pine`, `rose-pine-moon` | `rose-pine/neovim` |
+| `everforest-*` | `sainnhe/everforest` (o contraste vai em `g:everforest_background`) |
+| `nord` | `gbprod/nord.nvim` (o oficial é de Vim e não cobre treesitter nem LSP) |
+| `dracula` | `Mofiqul/dracula.nvim` (pelo mesmo motivo) |
 
-### IA e agentes (`<leader>a`)
+Variante nova em `themes/generate.py` precisa de uma linha na tabela `themes` do `plugins/theme.lua`.
 
-| Tecla | Ação |
+## Plugins
+
+O gerenciador é o nativo, `vim.pack`. Na primeira vez, ele baixa os plugins sozinho. As versões ficam em
+`nvim-pack-lock.json`, no repo, então toda máquina instala as mesmas.
+
+| Comando | O que faz |
 | --- | --- |
-| `<leader>aa` | Abrir/fechar o terminal do agente |
-| `<leader>as` | Escolher o CLI (Claude, Codex, Gemini, opencode...) |
-| `<leader>at` / `<leader>af` / `<leader>av` | Mandar o trecho / arquivo / seleção |
-| `<leader>ap` | Prompts prontos |
-| `<leader>ad` | Encerrar a sessão |
-| `Ctrl-.` | Focar o agente |
-| `<leader>ac` | Claude Code (integração de IDE) |
-| `<leader>ab` / `<leader>ae` | Mandar arquivo / seleção ao Claude Code |
-| `<leader>ay` / `<leader>an` | Aceitar / recusar diff proposto |
-| `<leader>am` | Escolher o modelo |
+| `:packupdate` | Mostra as atualizações; `:write` confirma, `:quit` descarta. Depois, commit do `nvim-pack-lock.json` |
+| `:packdel <nome>` | Apaga um plugin que saiu da config |
 
-As sessões do sidekick rodam no tmux, então continuam vivas se o Neovim fechar.
+## LSP
 
-### Notebooks (`<leader>n`)
+Os servidores vêm do metapac (`packages/groups/languages.toml`),
+sem Mason. A config de cada um (comando, tipos de arquivo, raiz do projeto) vem do nvim-lspconfig, e o `plugins/lsp.lua`
+liga a lista. Um servidor só sobe quando um arquivo do tipo dele abre. No Python, o ty cuida dos tipos e da
+documentação, e o ruff do lint e das correções. O basedpyright fica instalado, mas desligado.
 
-| Tecla | Ação |
+O completar e a documentação enxergam as bibliotecas do projeto:
+
+- **Lua da config do Neovim:** o lazydev ensina ao lua_ls a API do Neovim (`vim.`, `vim.o.`, `vim.api.`...) e a de
+  cada plugin que o arquivo usa com `require`. O `vim.g.` é a exceção: ele guarda variáveis livres, sem lista do que
+  existe; as de cada plugin estão no `:help` dele.
+- **Python:** o ty lê o `.venv` do projeto (o do `uv`), então as bibliotecas instaladas nele aparecem.
+- **Go, Rust, TypeScript:** o gopls lê o `go.mod`, o rust-analyzer o `Cargo.toml` e o vtsls o `node_modules`.
+
+| Tecla | O que faz |
 | --- | --- |
-| `<leader>ni` | Iniciar kernel (molten) |
-| `<leader>nl` / `<leader>nv` / `<leader>ne` | Rodar linha / seleção / operador (ex.: `<leader>neip`) |
-| `<leader>nr` | Rodar a célula de novo |
-| `<leader>no` / `<leader>nh` | Abrir / esconder a saída |
-| `<leader>nd` / `<leader>nI` | Apagar célula / interromper kernel |
-| `<leader>nm` / `<leader>nM` | marimo: editar o notebook / rodar como app |
+| `K` | Documentação do que está no cursor |
+| `gd` | Definição |
+| `grr` / `gri` / `grt` | Referências / implementação / definição do tipo (no fzf, com prévia) |
+| `gO` | Símbolos do arquivo |
+| `grn` | Renomeia em todo o projeto |
+| `gra` | Ações de código (corrigir, importar...) |
+| `Ctrl-s` (no modo de inserção) | Assinatura da função |
+| `]d` / `[d` | Próximo erro / anterior |
+| `Ctrl-w d` | O erro inteiro numa janela |
+| `<leader>lf` | Formata (o arquivo ou a seleção) |
+| `<leader>lh` | Liga e desliga as dicas inline (tipos e nomes de parâmetros no meio do código) |
+| `<leader>lr` | Reinicia os servidores |
 
-O molten usa o kernel do projeto: tenha `ipykernel` nas dependências de dev (`uv add --dev ipykernel`) e registre com `uv run python -m ipykernel install --user --name <projeto>`. Imagens aparecem no Ghostty (protocolo do kitty). O marimo roda com `uvx`, sem instalar nada.
+`:checkhealth vim.lsp` mostra quais servidores estão ligados no arquivo atual. Servidor novo: o pacote em
+`languages.toml` e o nome (o do nvim-lspconfig) na lista `servers` do `plugins/lsp.lua`. O smoke confere que o comando de
+cada servidor da lista existe.
 
-### Notas (`<leader>z`)
+Regras de lint e de estilo ficam na config de cada projeto (`pyproject.toml`, `Cargo.toml`, `.golangci.yml`), para
+valer igual no Neovim, no CI e em outro editor. O `after/lsp/` só tem o que é do editor:
 
-Mesmo cofre do app Obsidian (`~/notes`, ou `$DEVENV_NOTES`). Detalhes em [apps.md](apps.md#notas-obsidian--neovim).
-
-| Tecla | Ação |
+| Servidor | Ajuste |
 | --- | --- |
-| `<leader>zn` | Nova nota (vai para `zettel/`, com ID de data e hora) |
-| `<leader>zz` / `<leader>zs` | Abrir nota pelo nome / buscar no texto |
-| `<leader>zd` / `<leader>zy` | Nota de hoje / de ontem (`diario/`) |
-| `<leader>zt` | Nova nota a partir de um modelo (zettel, conceito, diário) |
-| `<leader>zb` / `<leader>zl` / `<leader>z#` | Quem aponta para a nota / links dela / tags |
-| `<leader>zr` | Renomear, atualizando os links |
-| `<leader>zp` | Colar imagem do clipboard (vai para `anexos/`) |
-| `<leader>ze` / `<leader>zk` | Seleção vira nota nova / vira link para nota nova |
-| `<leader>zo` | Abrir a nota no app Obsidian |
+| `rust_analyzer` | Ao salvar, roda o `clippy` em vez do `cargo check` |
+| `gopls` | staticcheck, parâmetro sem uso, variável que esconde outra; estilo do gofumpt |
+| `clangd` | Avisos do clang-tidy; o completar não acrescenta `#include` sozinho |
+| `vtsls` | Usa o TypeScript do projeto (`node_modules`) quando ele existe |
+| `lua_ls` | Sem o formatador dele: quem formata é o stylua |
+| `ruff`, `ty` | Sem aviso repetido: o erro de sintaxe e o nome não definido ficam com o ty; a variável sem uso, com o ruff (que traz a correção). Vale em todo projeto |
+| `jsonls`, `yamlls` | Os formatos de centenas de arquivos (`package.json`, workflows do GitHub, `docker-compose.yml`...), pelo SchemaStore: completa as chaves e acusa a chave errada |
 
-Dentro de uma nota: `Enter` segue o link, marca a caixa ou abre as notas da tag; `]l` / `[l` pulam entre links; `[[` completa o nome de outra nota e `#` as tags.
+## Treesitter
 
-### Debug (`<leader>d`)
+O realce do código, o fold e o realce de uma linguagem dentro de outra (SQL numa string do Python, JS no HTML) vêm
+do treesitter, que é do Neovim. O nvim-treesitter só baixa e compila os parsers, com o `tree-sitter-cli` (grupo
+`editor`). As linguagens são as dos servidores do `plugins/lsp.lua`, então linguagem nova no LSP ganha o parser
+junto. Na primeira vez que o Neovim abre, ele compila todos (uns minutos); depois, só o que faltar. Linguagem sem
+parser fica com o realce antigo, por regex.
 
-| Tecla | Ação |
+| Tecla | O que faz |
 | --- | --- |
-| `<leader>db` | Breakpoint |
-| `<leader>dc` | Iniciar / continuar |
-| `<leader>di` / `<leader>do` / `<leader>dO` | Entrar / pular / sair |
-| `<leader>dr` / `<leader>du` | REPL / painel |
-| `<leader>dt` | Encerrar |
+| `zc` / `zo` | Fecha / abre o bloco do cursor (função, classe, `if`) |
+| `zM` / `zR` | Fecha / abre todos (o arquivo abre com tudo aberto) |
+| `za` | Fecha ou abre o bloco |
 
-Python usa o ambiente do projeto via uv (`debugpy` nas dependências de dev).
+O `:packupdate` do nvim-treesitter atualiza os parsers junto (`:TSUpdate`). `:checkhealth nvim-treesitter` mostra
+o que está instalado.
 
-### Dados (`<leader>D`)
+## Erros
 
-Sem plugin de banco: o Neovim abre as ferramentas do terminal numa janela flutuante e roda SQL no DuckDB. Fluxos em [data.md](data.md).
+Todo erro e aviso ganha um emoji na margem, e o número da linha fica com a cor dele: ⛔ erro, ⚠️ aviso, ℹ️
+informação, 💡 dica. Na linha do cursor, a mensagem aparece numa caixa ao lado do código, com o emoji e o servidor
+que a deu (tiny-inline-diagnostic); mensagem longa quebra em várias linhas. A barra de status mostra quantos há no
+arquivo (`⛔ 2 ⚠️ 1`), e o erro vem sempre antes do aviso.
 
-| Tecla | Ação |
+## Formatar
+
+O `:w` formata pelo conform, com o formatador de cada linguagem: stylua, ruff, gofumpt, rustfmt, `mix format`,
+clang-format, google-java-format, shfmt, `fish_indent`, tombi e `just --fmt`. Sem formatador na lista, vale o do
+LSP. O conform prefere o formatador do projeto (`node_modules/.bin`) ao da máquina.
+
+O prettier (JavaScript, TypeScript, HTML, CSS, JSON, YAML, Markdown) só roda em projeto que tem config dele
+(`.prettierrc` e afins). Sem isso, ele reescreveria os arquivos num estilo que não é o do projeto.
+
+## Completar
+
+O blink.cmp abre as sugestões enquanto você digita: do LSP, caminhos, snippets, palavras do arquivo e, no Lua, os
+módulos em `require("...")`, com a
+documentação ao lado. A assinatura da função aparece enquanto você escreve os argumentos.
+
+| Tecla | O que faz |
 | --- | --- |
-| `<leader>Dh` | Harlequin (IDE de SQL) na raiz do projeto |
-| `<leader>Dt` | Tabiew no arquivo atual (CSV, Parquet, Excel…) ou escolher um |
-| `<leader>Dr` | Rodar o arquivo `.sql` (ou a seleção) no DuckDB; o resultado abre num split abaixo |
-| `<leader>Db` | Escolher o banco do DuckDB do buffer (vazio = em memória) |
+| `Ctrl-n` / `Ctrl-p` | Próxima / anterior |
+| `Ctrl-y` | Aceita |
+| `Ctrl-e` | Fecha |
+| `Ctrl-Space` | Abre as sugestões (ou a documentação) |
+| `Ctrl-k` | Mostra ou esconde a assinatura da função |
+| `Tab` / `Shift-Tab` | Anda nos campos de um snippet |
 
-### Alternar (`<leader>u`)
+A linha de comando (`:`) fica com o menu nativo.
 
-| Tecla | Ação |
+## Cursor
+
+O cursor é sempre um bloco, e a cor diz o modo, igual ao fish: verde no de inserção, vermelho no normal e amarelo no
+visual. As cores vêm do mesmo arquivo que o Noctalia gera para o fish (`~/.local/state/devenv/fish-cursor.fish`), e
+mudam junto com o `theme`.
+
+## Números das linhas
+
+A linha do cursor mostra o número dela; as outras mostram a distância até o cursor, para pular com `5j` ou `3k`.
+
+## Arquivos
+
+O Neovim não cria swap (`.swp`) nem backup (`arquivo~`). O histórico fica com o git.
+
+## Reiniciar
+
+`<leader>R` é `:wall` seguido do `:restart` nativo. Ele salva a sessão (janelas e arquivos), fecha, abre um Neovim
+novo com a config relida e restaura a sessão. `ZR` faz o mesmo sem salvar os arquivos antes.
+
+## Claude
+
+O Claude Code roda num painel do tmux, ao lado do Neovim. O claudecode.nvim conecta os dois pelo mesmo protocolo da
+extensão do VS Code: no Claude, `/ide` escolhe este Neovim. Conectado, o Claude vê o arquivo aberto e a seleção, e a
+mudança que ele propõe abre no Neovim como diff: `:w` aceita (dá para editar antes), `:q` recusa.
+
+| Tecla | O que faz |
 | --- | --- |
-| `<leader>uw` / `<leader>us` / `<leader>ur` | Quebra de linha / corretor / número relativo |
-| `<leader>uh` / `<leader>ud` | Inlay hints (começam desligados) / diagnósticos |
-| `<leader>uf` | Formatar ao salvar |
-| `<leader>uz` / `<leader>un` | Modo zen / histórico de notificações |
-| `<leader>uc` / `[C` | Contexto no topo (função atual) / ir até ele |
-
-O corretor aceita as palavras de [`config/nvim/spell/tech.utf-8.add`](../config/nvim/spell/tech.utf-8.add): `zg` acrescenta a palavra sob o cursor e o arquivo vai para o git.
-
-## Versão do Neovim
-
-```bash
-bob use nightly     # padrão
-bob use stable      # se a nightly quebrar algo
-bob update --all    # ou: just nvim-update (atualiza também os plugins)
-bob rollback        # volta a nightly anterior
-```
-
-A versão instalada no primeiro switch é `devenv.nvim.version` no host.
-
-## Testes
-
-`just nvim-test` (e o CI, nos containers Fedora e Ubuntu):
-
-- [`tests/nvim/check.lua`](../tests/nvim/check.lua) instala os plugins pelo lockfile, carrega todos, abre arquivos de várias linguagens e falha em qualquer erro.
-- [`tests/nvim/startup.sh`](../tests/nvim/startup.sh) mede a abertura e falha acima do limite (`tests/nvim/startup.sh 50` para outro limite).
+| `<leader>as` | Manda a seleção (modo visual) ou, no explorer, o arquivo da linha. O foco vai para o painel do Claude |
+| `<leader>ab` | Manda o arquivo atual |
+| `<leader>aa` / `<leader>ad` | Aceita / recusa a mudança proposta |

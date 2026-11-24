@@ -1,0 +1,89 @@
+# Toolchains, LSPs, formatadores e linters. A ferramenta do projeto vence a daqui.
+# Node, Erlang, Elixir, Lua e Java vêm do mise (no fim): a versão mais nova para usar fora de projeto; num projeto, a dele.
+# Não entram stylua, shellcheck e uv (repo.toml).
+
+[arch]
+packages = [
+  # Rust: o rustup está em base.toml (o metapac precisa dele para ser compilado)
+
+  # Go
+  "go",
+  "gopls",
+  "gofumpt",
+  "golangci-lint",
+
+  # Python (o uv está em repo.toml)
+  "ruff", # formatador e linter
+  "ty", # LSP padrão
+  "basedpyright", # LSP de reserva
+
+  # TypeScript e JavaScript
+  "vtsls",
+  "typescript",
+  "prettier", # formata também HTML, CSS, JSON, YAML e Markdown
+  "eslint",
+
+  # Erlang
+  "elp",
+
+  # Lua (o stylua está em repo.toml)
+  "lua-language-server",
+  "selene",
+
+  # C e C++ (o clang traz o clangd e o clang-format)
+  "clang",
+  "cmake",
+  "ninja",
+
+  # Java
+  "jdtls",
+  "google-java-format",
+
+  # Assembly
+  "nasm",
+  # asm-lsp: binário do GitHub pelo chezmoi (home/.chezmoiexternal.toml). O do AUR e o do cargo não compilam
+  # com o OpenSSL 4, e ele não está no registro do mise.
+
+  # Web
+  "vscode-html-languageserver",
+  "vscode-css-languageserver",
+  "vscode-json-languageserver",
+  "superhtml",
+  "tailwindcss-language-server",
+  "yaml-language-server",
+
+  # Config e texto
+  "tombi", # TOML
+  "marksman", # Markdown
+  "markdownlint-cli2",
+
+  # Shell (o shellcheck está em repo.toml)
+  "bash-language-server",
+  "shfmt",
+  "fish-lsp",
+
+  # Docker e just
+  "dockerfile-language-server",
+  "hadolint-bin", # binário pronto; o "hadolint" compila Haskell (baixa o GHC, vários GB)
+  "just-lsp",
+
+  # Node, Erlang, Elixir, Lua e Java: a versão global (abaixo) e a que cada projeto pede
+  "mise",
+]
+
+[cargo]
+packages = [
+  "htmx-lsp", # htmx
+]
+
+# A versão global, para usar fora de projeto (mise use -g). Num projeto, o mise.toml dele vence.
+# O Erlang vem antes do Elixir, que precisa dele.
+[mise]
+packages = [
+  { name = "node", options = { version = "latest" } }, # traz npm e npx
+  { name = "erlang", options = { version = "latest" } }, # compila na primeira vez (uns minutos)
+  { name = "elixir", options = { version = "latest" } },
+  { name = "lua", options = { version = "latest" } }, # traz o luarocks
+  { name = "java", options = { version = "latest" } }, # OpenJDK (o jdtls usa o openjdk do sistema, dependência dele)
+  { name = "expert", options = { version = "latest" } }, # LSP do Elixir (o metapac só aceita nomes do registro do mise)
+]

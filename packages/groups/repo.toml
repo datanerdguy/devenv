@@ -1,0 +1,17 @@
+# Ferramentas para mexer neste repo (o que o `just lint` e o `just commit` usam).
+
+[arch]
+packages = [
+  "just", # comandos do dia a dia
+  "shellcheck", # lint dos scripts
+  "actionlint", # lint dos workflows do GitHub
+  "stylua", # formata o Lua (config do Neovim, quando ela chegar)
+  "python", # keyboard/render.py
+  "uv", # instala as ferramentas Python abaixo
+]
+
+[uv]
+packages = [
+  "commitizen", # cz: valida e cria os commits
+  "keymap-drawer", # desenha as camadas do teclado (keyboard/render.py)
+]

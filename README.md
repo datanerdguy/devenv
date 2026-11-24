@@ -1,93 +1,81 @@
 # devenv
 
-Ambiente de desenvolvimento reproduzível com **Nix flakes + home-manager**, para Fedora, Ubuntu, Arch e derivadas.
-
-Foco: ML/IA/LLM, dados, fluxo guiado pelo teclado (terminal, Neovim, niri), code agents. O plano completo está no documento de proposta; as decisões ficam em [`docs/adr/`](docs/adr/).
+O ambiente de desenvolvimento do Lucas no CachyOS (Arch). As configs vão pelo **chezmoi**, em links para este repo,
+e os pacotes pelo **metapac**, em listas. O porquê de cada área fica no doc dela, na seção "Por que assim".
 
 ## Máquina nova
 
 ```bash
 git clone https://github.com/datanerdguy/devenv ~/devenv
 cd ~/devenv
-./bootstrap.sh fedora-laptop
+./bootstrap.sh
 ```
 
-O bootstrap faz três coisas:
-
-1. Instala pela distro o que precisa de root (`system/<distro>.sh`): Ghostty, fish, bubblewrap (sandbox dos agentes), o desktop (niri + Noctalia), regras udev dos teclados e o driver NVIDIA se houver placa.
-2. Instala o Nix, se faltar.
-3. Aplica a configuração do host com o home-manager na versão fixada no `flake.lock`. O que estiver no caminho
-   (`.bashrc`, `~/.config/nvim`...) fica como `<nome>.backup`, inclusive links de dotfiles antigas (stow).
-
-Antes de rodar, ajuste o usuário em [`hosts/fedora-laptop.nix`](hosts/fedora-laptop.nix). Nome, e-mail e tokens ficam cifrados em `secrets/` ([`docs/secrets.md`](docs/secrets.md)).
+O bootstrap confere que a distro é Arch ou derivada, garante o `paru`, instala `rustup chezmoi metapac age rbw jq`, traz a
+chave age do Bitwarden (se o `rbw` estiver logado), aplica as configs e roda o `metapac sync`. Pode rodar de novo.
 
 ## Dia a dia
 
 | Comando | O que faz |
 | --- | --- |
-| `just switch` | Aplica a configuração |
-| `just diff` | Mostra o que mudaria, pacote a pacote, sem aplicar |
-| `just update` | Atualiza as versões fixadas no `flake.lock` |
-| `just lint` | Formatação, statix, shellcheck, actionlint e stylua (o mesmo do CI) |
-| `just check` | Valida o flake inteiro |
-| `just test-container` | Instala do zero num container e roda os testes |
+| `just setup` | Liga os hooks do git (lint antes do commit, mensagem no padrão) |
+| `just apply` | Aplica as configs de `home/` (`chezmoi apply`) |
+| `just sync` | Atualiza o sistema (`paru -Syu`), instala o que falta nos grupos de `packages/` (`metapac sync`) e marca as dependências como dependências (`packages/mark-deps.sh`) |
+| `just clean` | Remove o que não está nos grupos, depois de mostrar e pedir confirmação |
+| `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia, para trazer ao repo |
+| `just diff` | Mostra o que mudaria nas configs e o que está instalado fora dos grupos |
+| `just lint` | shellcheck, actionlint, o estilo do Lua e dos scripts, os grupos do metapac, o mapa do teclado e, se instalados, o niri, as paletas, o tmux e o Neovim (o mesmo do CI) |
+| `just keyboard` | Regenera as imagens das camadas depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
 | `just commit` | Commit guiado no padrão Conventional Commits |
-| `just nvim-update` | Atualiza o Neovim (bob) e os plugins (com revisão) |
-| `just nvim-test` | Testa a config do Neovim e o tempo de abertura |
-| `just agents-update` | Atualiza só os agentes de código |
-| `just desktop-check` | Valida as configs do niri, sway, i3 e kanata |
-| `just keyboard` | Regenera as imagens das camadas do teclado depois de salvar no Vial ([keyboard/](keyboard/README.md)) |
-| `just noctalia-diff` | Mostra os ajustes feitos pela tela do Noctalia |
-| `theme <nome>` | Troca o tema de tudo (`Super+T` mostra a lista) |
-| `new python meu-projeto api` | Cria um projeto pronto a partir dos modelos ([`docs/templates.md`](docs/templates.md)) |
-| `just generations` | Lista as gerações para rollback |
-
-## Contribuindo
-
-Mudanças vão para a branch `dev` por PR e só depois para a `main`. Commits seguem Conventional Commits (validados pelo commitizen). Todo PR passa por lint, build e instalação do zero em containers Fedora, Ubuntu e Arch. Detalhes em [`docs/workflow.md`](docs/workflow.md).
-
-Para trabalhar no repo: `nix develop` (ou `direnv allow`), que traz as ferramentas e liga os git hooks.
+| `just promote` | Leva a `main` até a `dev` do GitHub (só avança, nunca apaga) |
 
 ## Estrutura
 
 ```text
-flake.nix / flake.lock   entrada única, versões fixadas
-hosts/                   uma configuração por máquina (ci.nix é o host de teste)
-modules/                 módulos liga/desliga (devenv.<nome>.enable)
-  cli/                   ripgrep, fd, fzf, bat, eza, zoxide, atuin, direnv, yazi...
-  shell/                 fish + starship (bash continua como shell de login)
-  git/                   git, delta, lazygit, gh
-  terminal/              configuração do Ghostty
-  nvim/                  Neovim pelo bob, LSPs e ferramentas, link da config
-  tmux/                  tmux sem plugins + sesh
-  agents/                Claude Code, Codex, Gemini CLI, opencode, workmux, tokscale
-  local-models/          Ollama opcional (desligado por padrão)
-  desktop/               niri, Noctalia, sway/i3 opcionais, kanata, Vial
-  apps/                  Flatpaks (nix-flatpak), Flameshot, apps padrão
-  theme/                 comando `theme` (troca o tema de todos os apps)
-  templates/             comando `new` (cria projetos a partir dos modelos)
-themes/                  as paletas e os papéis de parede de cada tema
-templates/ + copier.yml  modelos de projeto (Python, Go, Rust e Phoenix)
-config/                  configs ligadas em ~/.config (nvim, niri, noctalia, sway, i3)
-keyboard/                layout do Corne (Vial), imagens das camadas e o gerador (render.py)
-agents/                  AGENTS.md, skills e scripts dos agentes
-system/                  scripts de root por distro
-tests/                   testes de fumaça, do Neovim, do desktop, dos modelos e instalação em container
-.githooks/               hooks de lint e de mensagem de commit
-.github/workflows/       CI, release e atualização semanal do flake.lock
-docs/                    fluxo de trabalho e ADRs (decisões e o porquê)
-AGENTS.md, CLAUDE.md     instruções para agentes de código que abrem este repo
+.chezmoiroot      aponta para home/
+home/             fonte do chezmoi: só links e templates
+packages/         metapac: config.toml (grupos de cada máquina) e groups/ (o topo de cada arquivo diz para que serve)
+bootstrap.sh      máquina nova
+justfile          comandos do dia a dia
+tests/            smoke.sh: o que o bootstrap deve deixar pronto (roda no CI)
+.github/          CI e modelo de PR
+themes/            gerador das paletas dos temas (generate.py)
+wallpapers/       papéis de parede (ligada em ~/Pictures/Wallpapers)
+templates/          configs para copiar num projeto novo (pyproject.toml, .golangci.yml...), veja templates/README.md
+keyboard/         Corne (Vial), a fonte é corne/corne.vil
+agents/           Claude Code: regras globais, settings, statusline, MCP
+docs/             workflow.md, agents.md, shell.md, tmux.md, neovim.md, desktop.md, themes.md e data.md
 ```
 
-## Fases
+## Áreas
 
-- [x] 1. Fundação: flake, home-manager, CLIs, git, fish, Ghostty
-- [x] 2. Neovim (bob nightly 0.13, vim.pack): veja [`docs/neovim.md`](docs/neovim.md)
-- [x] 3. tmux + sesh: veja [`docs/tmux.md`](docs/tmux.md)
-- [x] 4. Desktop: niri + Noctalia, sway/i3, kanata, Corne: veja [`docs/desktop.md`](docs/desktop.md) e [`docs/apps.md`](docs/apps.md)
-- [x] 5. Temas trocáveis (Everforest, Rosé Pine, Catppuccin, Dracula): veja [`docs/themes.md`](docs/themes.md)
-- [x] 6. Agentes: workmux, roteamento, métricas, docs MCP: veja [`docs/agents.md`](docs/agents.md)
-- [x] 7. Modelos de projeto (`new`): Python (lib, api, llm, data, ml, fastapi-htmx, django, streamlit), Go (cli, service, htmx), Rust (bin, lib) e Phoenix. Veja [`docs/templates.md`](docs/templates.md)
-- [x] 8. Portabilidade: Arch e derivadas, Ubuntu 26.04 no CI, segredos com sops-nix: veja [`docs/secrets.md`](docs/secrets.md)
-- [x] Shell e terminal: Ghostty abre o fish, atalhos fzf e abreviações: veja [`docs/shell.md`](docs/shell.md)
-- [x] Dados no terminal: harlequin, tabiew e DuckDB (também pelo Neovim): veja [`docs/data.md`](docs/data.md)
+O devenv foi refeito uma área por vez; todas estão prontas.
+
+| Área | Estado |
+| --- | --- |
+| Base (chezmoi, metapac, bootstrap, CI) | pronta |
+| Agentes e git (Claude Code, delta, lazygit) | pronta, veja [docs/agents.md](docs/agents.md) |
+| Desktop e teclado (niri, Noctalia, Vial) | pronta, veja [docs/desktop.md](docs/desktop.md) |
+| Shell (fish) | pronta, veja [docs/shell.md](docs/shell.md) |
+| Temas (`theme`, Alt+Shift+T) | pronta, veja [docs/themes.md](docs/themes.md) |
+| tmux (sesh, workmux) | pronta, veja [docs/tmux.md](docs/tmux.md) |
+| Neovim | pronta: nativo primeiro, busca, explorer, LSP, treesitter, Claude no editor, veja [docs/neovim.md](docs/neovim.md) |
+| Dados (Podman, duckdb, visidata, harlequin) | pronta, veja [docs/data.md](docs/data.md) |
+
+## Por que assim
+
+- Sem Nix: pesava nesta máquina e escondia as configs atrás de módulos. Aqui cada config é o arquivo do programa.
+- chezmoi, e não stow: além dos links, faz templates e segredos. metapac, e não decman ou aconfmgr: aceita outros
+  gerenciadores e outras distros, só trocando as listas.
+- Segredos com age. A chave fica em `~/.config/chezmoi/key.txt` e no Bitwarden (item `devenv-age-key`); tokens vêm
+  do `rbw` na hora. O disco não é cifrado: o age protege do repo, não de quem tiver o disco.
+- A versão da linguagem é a do projeto (rustup, Go, uv, mise), e a ferramenta do projeto vence a da lista. LSPs e
+  formatadores vêm do metapac, sem Mason, para ficarem declarados e atualizarem com o sistema.
+- O `metapac clean` remove o que não está na lista. Por isso o `machines/cachyos` guarda o que o instalador deixou,
+  e o `packages/mark-deps.sh` devolve as dependências a dependências depois de cada sync.
+
+## Contribuindo
+
+Mudanças vão direto para a `dev`, sem PR; o `just promote` leva a `dev` para a `main`. Commits no padrão
+Conventional Commits. Veja
+[`docs/workflow.md`](docs/workflow.md). Para trabalhar no repo, rode `just setup` uma vez.

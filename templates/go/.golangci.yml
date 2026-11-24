@@ -1,0 +1,17 @@
+# Go: golangci-lint (v2). O gofumpt formata; o gopls do Neovim já roda o
+# staticcheck enquanto você digita.
+version: "2"
+
+linters:
+  enable:
+    - bodyclose # corpo de resposta HTTP sem Close
+    - errorlint # comparação de erro sem errors.Is / errors.As
+    - gosec # problemas de segurança
+    - misspell # palavras em inglês com erro
+    - revive # estilo do Go
+    - unconvert # conversão de tipo desnecessária
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports

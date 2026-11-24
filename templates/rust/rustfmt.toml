@@ -1,0 +1,2 @@
+# Rust: rustfmt. O padrão dele é 100 colunas; aqui, 80.
+max_width = 80
